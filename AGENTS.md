@@ -18,7 +18,8 @@ Because of this, all code changes must prioritize:
 Top-level feature scripts live under:
 - `Actions/`
 - `BuildTools/` (local tooling that runs outside Streamer.bot)
-- `README.md` (current script reference, including per-script purpose and global var usage)
+- `README.md` (root index + operator workflow)
+- Feature READMEs under `Actions/**/README.md` (script references split by feature/subfeature)
 
 The repository uses a **feature → subfeature → scripts** hierarchy:
 - `Actions/<Feature Group>/<Subfeature>/script.cs`
@@ -75,7 +76,9 @@ In scope:
 - Implement/maintain local external tooling under `BuildTools/` (e.g., Mix It Up API scripts).
 - Make focused, minimal-risk fixes.
 - Improve readability and reliability without changing intended behavior.
-- Leverage `README.md` whenever current code context is needed (feature behavior, script purpose, and global variable usage).
+- Leverage the docs set whenever current code context is needed:
+  - root `README.md` for index/workflow,
+  - feature/subfeature READMEs under `Actions/**/README.md` for script behavior, purpose, and global variable usage.
 - Use thorough, beginner-friendly comments so logic is easy to follow.
 - Add or update inline comments where logic is non-obvious.
 - Document any manual sync steps needed in Streamer.bot or local terminal workflow.
@@ -208,6 +211,17 @@ For non-trivial scripts, include/update short header comments covering:
 - Required runtime variables
 - Key outputs/side effects
 - Any operator notes (cooldown, reset command, manual setup)
+
+When script behavior changes, update the matching feature README (`Actions/**/README.md`) using the standard sections:
+- Purpose
+- Expected Trigger / Input
+- Required Runtime Variables
+- Key Outputs / Side Effects
+- Mix It Up Actions
+- OBS Interactions
+- Wait Behavior
+- Chat / Log Output
+- Operator Notes
 
 ---
 
