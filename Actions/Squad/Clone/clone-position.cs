@@ -3,6 +3,18 @@ using System.Collections.Generic;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (Clone feature)
+    // Keep these names identical across:
+    // - Actions/Squad/Clone/clone-main.cs
+    // - Actions/Squad/Clone/clone-position.cs
+    // - Actions/Squad/Clone/clone-volley.cs
+    // - Actions/Twitch Integration/stream-start.cs
+    private const string VAR_CLONE_GAME_ACTIVE = "clone_game_active";
+    private const string VAR_CLONE_POSITIONS_COUNT = "clone_positions_count";
+    private const string VAR_CLONE_POSITIONS_OPEN = "clone_positions_open";
+    private const string VAR_CLONE_ROUND = "clone_round";
+    private const string VAR_CLONE_WINNERS = "clone_winners";
+
     /*
      * Purpose:
      * - Handles player position selection for the Clone mini-game (!rebel).
@@ -27,7 +39,7 @@ public class CPHInline
     public bool Execute()
     {
         // Ignore command if no active game.
-        bool active = (CPH.GetGlobalVar<bool?>("clone_game_active", false) ?? false);
+        bool active = (CPH.GetGlobalVar<bool?>(VAR_CLONE_GAME_ACTIVE, false) ?? false);
         if (!active)
             return true;
 
@@ -44,7 +56,7 @@ public class CPHInline
         if (string.IsNullOrWhiteSpace(userId))
             userId = user.ToLowerInvariant();
 
-        int positionsCount = (CPH.GetGlobalVar<int?>("clone_positions_count", false) ?? 5);
+        int positionsCount = (CPH.GetGlobalVar<int?>(VAR_CLONE_POSITIONS_COUNT, false) ?? 5);
 
         // Parse desired position robustly across trigger variants.
         int desiredPos = 0;
@@ -75,7 +87,7 @@ public class CPHInline
             return true;
 
         // Position must still be open.
-        var openPositions = ParseIntSet(CPH.GetGlobalVar<string>("clone_positions_open", false) ?? "");
+        var openPositions = ParseIntSet(CPH.GetGlobalVar<string>(VAR_CLONE_POSITIONS_OPEN, false) ?? "");
         if (!openPositions.Contains(desiredPos))
             return true;
 
@@ -105,12 +117,12 @@ public class CPHInline
 
         // Round-1 eligibility rule:
         // only users who participated during round 1 can win the event.
-        int round = (CPH.GetGlobalVar<int?>("clone_round", false) ?? 1);
+        int round = (CPH.GetGlobalVar<int?>(VAR_CLONE_ROUND, false) ?? 1);
         if (round == 1)
         {
-            var winners = ParseUserSet(CPH.GetGlobalVar<string>("clone_winners", false) ?? "");
+            var winners = ParseUserSet(CPH.GetGlobalVar<string>(VAR_CLONE_WINNERS, false) ?? "");
             winners.Add(userId);
-            CPH.SetGlobalVar("clone_winners", string.Join(",", winners), false);
+            CPH.SetGlobalVar(VAR_CLONE_WINNERS, string.Join(",", winners), false);
         }
 
         return true;

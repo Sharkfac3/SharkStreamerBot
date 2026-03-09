@@ -9,6 +9,9 @@ This folder contains Squad mini-game and interaction scripts.
 - `Pedro/README.md`
 - `Toothless/README.md`
 
+## Shared Constants
+- Cross-script key/timer/OBS sync reference: `Actions/SHARED-CONSTANTS.md`
+
 ---
 
 ## Script: `offering.cs`

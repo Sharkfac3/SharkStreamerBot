@@ -6,6 +6,21 @@ using System.Text.RegularExpressions;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (Bits feature)
+    // Keep shared names aligned across:
+    // - Actions/Twitch Integration/Bits/bits-tier-1.cs
+    // - Actions/Twitch Integration/Bits/bits-tier-2.cs
+    // - Actions/Twitch Integration/Bits/bits-tier-3.cs
+    // - Actions/Twitch Integration/Bits/bits-tier-4.cs
+    private const string ARG_MESSAGE = "message";
+    private const string ARG_RAW_INPUT = "rawInput";
+    private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
+    private const string CHEER_TOKEN_REGEX = @"\bcheer\d+\b";
+    private const string WHITESPACE_REGEX = @"\s+";
+    private const int WAIT_BASE_PREP_MS = 3000;
+    private const int WAIT_MS_PER_WORD = 400;
+    private const int WAIT_TAIL_BUFFER_MS = 500;
+
     /*
      * Purpose:
      * - Tier 4 (lowest) bits cheer bridge to Mix It Up command API.
@@ -45,10 +60,10 @@ public class CPHInline
         try
         {
             // 1) Read cheer text from Streamer.bot args.
-            string rawMessage = GetArg("message");
+            string rawMessage = GetArg(ARG_MESSAGE);
             if (string.IsNullOrWhiteSpace(rawMessage))
             {
-                rawMessage = GetArg("rawInput");
+                rawMessage = GetArg(ARG_RAW_INPUT);
             }
 
             // 2) Remove Cheer### tokens and normalize spaces.
@@ -63,7 +78,7 @@ public class CPHInline
             // 5) Send payload to Mix It Up.
             string payload = JsonSerializer.Serialize(new
             {
-                Platform = "Twitch",
+                Platform = MIXITUP_PLATFORM_TWITCH,
                 Arguments = finalMessage,
                 IgnoreRequirements = false
             });
@@ -115,8 +130,8 @@ public class CPHInline
             return string.Empty;
         }
 
-        string noCheerTokens = Regex.Replace(message, @"\bcheer\d+\b", "", RegexOptions.IgnoreCase);
-        string collapsedWhitespace = Regex.Replace(noCheerTokens, @"\s+", " ").Trim();
+        string noCheerTokens = Regex.Replace(message, CHEER_TOKEN_REGEX, "", RegexOptions.IgnoreCase);
+        string collapsedWhitespace = Regex.Replace(noCheerTokens, WHITESPACE_REGEX, " ").Trim();
         return collapsedWhitespace;
     }
 
@@ -149,12 +164,8 @@ public class CPHInline
     /// </summary>
     private int CalculateReadoutWaitMs(string message)
     {
-        const int basePrepMs = 3000;
-        const int msPerWord = 400;
-        const int tailBufferMs = 500;
-
         int wordCount = CountWords(message);
-        return basePrepMs + (wordCount * msPerWord) + tailBufferMs;
+        return WAIT_BASE_PREP_MS + (wordCount * WAIT_MS_PER_WORD) + WAIT_TAIL_BUFFER_MS;
     }
 
     /// <summary>

@@ -2,6 +2,14 @@ using System;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (Commanders)
+    // Keep these names aligned with:
+    // - Actions/Commanders/Captain Stretch/captain-stretch-redeem.cs
+    // - Actions/Commanders/The Director/the-director-redeem.cs
+    // - Actions/Commanders/Water Wizard/water-wizard-redeem.cs
+    private const string ARG_USER = "user";
+    private const string VAR_CURRENT_THE_DIRECTOR = "current_the_director";
+
     /*
      * Purpose:
      * - Assigns the current The Director commander slot to the redeeming user.
@@ -20,14 +28,14 @@ public class CPHInline
     {
         // Start with a safe default in case trigger does not include user.
         string user = string.Empty;
-        CPH.TryGetArg("user", out user);
+        CPH.TryGetArg(ARG_USER, out user);
 
         // If missing/blank, no-op safely.
         if (string.IsNullOrWhiteSpace(user))
             return true;
 
         // Save current commander owner for The Director slot.
-        CPH.SetGlobalVar("current_the_director", user, false);
+        CPH.SetGlobalVar(VAR_CURRENT_THE_DIRECTOR, user, false);
         return true;
     }
 }

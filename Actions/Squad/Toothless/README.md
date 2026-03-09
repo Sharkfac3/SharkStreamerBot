@@ -47,3 +47,4 @@ Runs Toothless rarity roll and first-time unlock handling.
 
 ### Operator Notes
 - Keep rarity variable names and Mix It Up IDs stable for continuity.
+- If shared keys/names change, sync with `Actions/SHARED-CONSTANTS.md` and `stream-start.cs`.

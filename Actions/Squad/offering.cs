@@ -3,6 +3,19 @@ using System.Collections.Generic;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (Offering/LotAT + shared boost keys)
+    // Keep these names identical across:
+    // - Actions/Squad/offering.cs
+    // - Actions/Squad/Toothless/toothless-main.cs
+    // - Actions/Twitch Integration/stream-start.cs
+    private const string VAR_LOTAT_ACTIVE = "lotat_active";
+    private const string VAR_LOTAT_ANNOUNCEMENT_SENT = "lotat_announcement_sent";
+    private const string VAR_LOTAT_OFFERING_STEAL_CHANCE = "lotat_offering_steal_chance";
+    private const string VAR_LOTAT_STEAL_MULTIPLIER = "lotat_steal_multiplier";
+    private const string PREFIX_BOOST = "boost_";
+    private const string MEMBER_TOOTHLESS = "toothless";
+    private const string MEMBER_DUCK = "duck";
+
     /*
      * Purpose:
      * - Handles !offering token input and applies per-user boost changes.
@@ -62,14 +75,14 @@ public class CPHInline
         // -------------------------------------------------
         // LotAT mode / one-time announcement
         // -------------------------------------------------
-        bool lotatActive = (CPH.GetGlobalVar<bool?>("lotat_active", false) ?? false);
+        bool lotatActive = (CPH.GetGlobalVar<bool?>(VAR_LOTAT_ACTIVE, false) ?? false);
 
         if (lotatActive)
         {
-            bool announced = (CPH.GetGlobalVar<bool?>("lotat_announcement_sent", false) ?? false);
+            bool announced = (CPH.GetGlobalVar<bool?>(VAR_LOTAT_ANNOUNCEMENT_SENT, false) ?? false);
             if (!announced)
             {
-                CPH.SetGlobalVar("lotat_announcement_sent", true, false);
+                CPH.SetGlobalVar(VAR_LOTAT_ANNOUNCEMENT_SENT, true, false);
                 CPH.SendMessage("📜 Legends of the ASCII Temple (LotAT) is ACTIVE — offerings may have… consequences.");
             }
         }
@@ -87,8 +100,8 @@ public class CPHInline
         // -------------------------------------------------
         // LotAT steal settings (with defensive clamps)
         // -------------------------------------------------
-        int stealChance = (CPH.GetGlobalVar<int?>("lotat_offering_steal_chance", false) ?? 15);
-        int stealMultiplier = (CPH.GetGlobalVar<int?>("lotat_steal_multiplier", false) ?? 1);
+        int stealChance = (CPH.GetGlobalVar<int?>(VAR_LOTAT_OFFERING_STEAL_CHANCE, false) ?? 15);
+        int stealMultiplier = (CPH.GetGlobalVar<int?>(VAR_LOTAT_STEAL_MULTIPLIER, false) ?? 1);
 
         stealChance = Clamp(stealChance, 0, 100);
         stealMultiplier = Math.Max(1, stealMultiplier);
@@ -108,7 +121,7 @@ public class CPHInline
         // -------------------------------------------------
         const int BOOST_CAP = 30;
 
-        string boostKey = $"boost_{offer.MemberId}_{userId}";
+        string boostKey = $"{PREFIX_BOOST}{offer.MemberId}_{userId}";
         int currentBoost = (CPH.GetGlobalVar<int?>(boostKey, false) ?? 0);
 
         int delta = offer.BoostAdd;
@@ -148,14 +161,14 @@ public class CPHInline
         offeringMap = new Dictionary<string, (string MemberId, int BoostAdd, string Flavor)>(StringComparer.OrdinalIgnoreCase);
 
         // Toothless offerings
-        AddOfferings("toothless",
+        AddOfferings(MEMBER_TOOTHLESS,
             ("sharkf4Rmp", 5, "🦐 A fancy shrimp offering slips into the dark..."),
             ("shrimp", 1, "🍤 A small shrimp is offered... something stirs."),
             ("fish", 1, "🐟 A fish is placed gently on the altar...")
         );
 
         // Duck offerings
-        AddOfferings("duck",
+        AddOfferings(MEMBER_DUCK,
             ("decoy", 1, "🦆 A decoy is placed upon the water... ripples spread.")
         );
 

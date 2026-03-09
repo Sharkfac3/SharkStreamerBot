@@ -7,6 +7,24 @@ using System.Text.Json;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (Clone feature)
+    // Keep these names identical across:
+    // - Actions/Squad/Clone/clone-main.cs
+    // - Actions/Squad/Clone/clone-position.cs
+    // - Actions/Squad/Clone/clone-volley.cs
+    // - Actions/Twitch Integration/stream-start.cs
+    private const string VAR_CLONE_UNLOCKED = "clone_unlocked";
+    private const string VAR_CLONE_GAME_ACTIVE = "clone_game_active";
+    private const string VAR_CLONE_ROUND = "clone_round";
+    private const string VAR_CLONE_POSITIONS_COUNT = "clone_positions_count";
+    private const string VAR_CLONE_POSITIONS_OPEN = "clone_positions_open";
+    private const string VAR_CLONE_POSITION_REMOVED_LAST = "clone_position_removed_last";
+    private const string VAR_CLONE_WINNERS = "clone_winners";
+    private const string VAR_CLONE_ROUND1_POOL = "clone_round1_pool";
+    private const string TIMER_CLONE_VOLLEY = "Clone - Volley Timer";
+    private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
+    private const string OBS_SOURCE_CLONE_DANCING = "Clone - Dancing";
+
     /*
      * Purpose:
      * - Resolves each Clone volley tick (timer-driven elimination round).
@@ -36,34 +54,30 @@ public class CPHInline
 
     public bool Execute()
     {
-        const string TIMER_NAME = "Clone - Volley Timer";
-        const string DISCO_SCENE = "Disco Party: Workspace";
-        const string CLONE_DANCING_SOURCE = "Clone - Dancing";
-
         // Guard: if game already ended, ensure timer is disabled and exit safely.
-        bool active = (CPH.GetGlobalVar<bool?>("clone_game_active", false) ?? false);
+        bool active = (CPH.GetGlobalVar<bool?>(VAR_CLONE_GAME_ACTIVE, false) ?? false);
         if (!active)
         {
-            CPH.DisableTimer(TIMER_NAME);
+            CPH.DisableTimer(TIMER_CLONE_VOLLEY);
             return true;
         }
 
         // Load persistent round state.
-        int positionsCount = (CPH.GetGlobalVar<int?>("clone_positions_count", false) ?? 5);
-        int round = (CPH.GetGlobalVar<int?>("clone_round", false) ?? 1);
-        List<int> openPositions = ParseIntList(CPH.GetGlobalVar<string>("clone_positions_open", false) ?? "");
+        int positionsCount = (CPH.GetGlobalVar<int?>(VAR_CLONE_POSITIONS_COUNT, false) ?? 5);
+        int round = (CPH.GetGlobalVar<int?>(VAR_CLONE_ROUND, false) ?? 1);
+        List<int> openPositions = ParseIntList(CPH.GetGlobalVar<string>(VAR_CLONE_POSITIONS_OPEN, false) ?? "");
 
         // Defensive fallback if open list becomes missing/corrupt.
         if (openPositions.Count == 0)
         {
             openPositions = Enumerable.Range(1, positionsCount).ToList();
-            CPH.SetGlobalVar("clone_positions_open", string.Join(",", openPositions), false);
+            CPH.SetGlobalVar(VAR_CLONE_POSITIONS_OPEN, string.Join(",", openPositions), false);
         }
 
         // Terminal safety: if list is already collapsed, end game cleanly.
         if (openPositions.Count <= 1)
         {
-            EndGame(TIMER_NAME);
+            EndGame(TIMER_CLONE_VOLLEY);
             return true;
         }
 
@@ -73,11 +87,11 @@ public class CPHInline
         // This enforces: only round-1 participants can ever be winners.
         if (round == 1)
         {
-            string poolCsv = CPH.GetGlobalVar<string>("clone_round1_pool", false) ?? "";
+            string poolCsv = CPH.GetGlobalVar<string>(VAR_CLONE_ROUND1_POOL, false) ?? "";
             if (string.IsNullOrWhiteSpace(poolCsv))
             {
-                string round1Csv = CPH.GetGlobalVar<string>("clone_winners", false) ?? "";
-                CPH.SetGlobalVar("clone_round1_pool", round1Csv, false);
+                string round1Csv = CPH.GetGlobalVar<string>(VAR_CLONE_WINNERS, false) ?? "";
+                CPH.SetGlobalVar(VAR_CLONE_ROUND1_POOL, round1Csv, false);
             }
         }
 
@@ -85,8 +99,8 @@ public class CPHInline
         int removedPosition = PickRandom(openPositions);
         openPositions.Remove(removedPosition);
 
-        CPH.SetGlobalVar("clone_position_removed_last", removedPosition, false);
-        CPH.SetGlobalVar("clone_positions_open", string.Join(",", openPositions), false);
+        CPH.SetGlobalVar(VAR_CLONE_POSITION_REMOVED_LAST, removedPosition, false);
+        CPH.SetGlobalVar(VAR_CLONE_POSITIONS_OPEN, string.Join(",", openPositions), false);
 
         // 2) Eliminate anyone standing in removed position.
         HashSet<string> removedUsers = ParseUserSet(CPH.GetGlobalVar<string>($"clone_pos_{removedPosition}", false) ?? "");
@@ -108,7 +122,7 @@ public class CPHInline
         }
 
         // 4) Winners = alive ∩ round1Pool.
-        HashSet<string> round1Pool = ParseUserSet(CPH.GetGlobalVar<string>("clone_round1_pool", false) ?? "");
+        HashSet<string> round1Pool = ParseUserSet(CPH.GetGlobalVar<string>(VAR_CLONE_ROUND1_POOL, false) ?? "");
         HashSet<string> winners = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (string uid in alive)
         {
@@ -116,13 +130,13 @@ public class CPHInline
                 winners.Add(uid);
         }
 
-        CPH.SetGlobalVar("clone_winners", string.Join(",", winners), false);
+        CPH.SetGlobalVar(VAR_CLONE_WINNERS, string.Join(",", winners), false);
 
         // Loss condition: no winner-eligible survivors while multiple positions still remain.
         if (winners.Count == 0)
         {
             CPH.SendMessage($"🧬 Position {removedPosition} has fallen! The Empire wipes out the rebellion... no survivors remain.");
-            EndGame(TIMER_NAME);
+            EndGame(TIMER_CLONE_VOLLEY);
             return true;
         }
 
@@ -131,23 +145,23 @@ public class CPHInline
         {
             CPH.SendMessage("🧬✅ The rebellion holds the final position… CLONE JOINS THE DISCO!");
 
-            CPH.SetGlobalVar("clone_unlocked", true, false);
-            CPH.ObsShowSource(DISCO_SCENE, CLONE_DANCING_SOURCE);
+            CPH.SetGlobalVar(VAR_CLONE_UNLOCKED, true, false);
+            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
 
             // Notify Mix It Up for unlock side-effects.
             TriggerMixItUpUnlock("clone");
 
-            EndGame(TIMER_NAME);
+            EndGame(TIMER_CLONE_VOLLEY);
             return true;
         }
 
         // Continue game.
         round += 1;
-        CPH.SetGlobalVar("clone_round", round, false);
+        CPH.SetGlobalVar(VAR_CLONE_ROUND, round, false);
         CPH.SendMessage($"🧬 Round {round}: Position {removedPosition} has fallen! You have 30 seconds to move — !rebel {string.Join("/", openPositions)}");
 
         // Re-enable timer for next volley (robust with one-shot timer configurations).
-        CPH.EnableTimer(TIMER_NAME);
+        CPH.EnableTimer(TIMER_CLONE_VOLLEY);
         return true;
     }
 
@@ -172,7 +186,7 @@ public class CPHInline
     /// </summary>
     private void EndGame(string timerName)
     {
-        CPH.SetGlobalVar("clone_game_active", false, false);
+        CPH.SetGlobalVar(VAR_CLONE_GAME_ACTIVE, false, false);
         CPH.DisableTimer(timerName);
     }
 

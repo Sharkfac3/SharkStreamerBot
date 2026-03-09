@@ -7,6 +7,19 @@ using System.Text.Json;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (Toothless feature)
+    // Keep these names identical across:
+    // - Actions/Squad/Toothless/toothless-main.cs
+    // - Actions/Squad/offering.cs
+    // - Actions/Twitch Integration/stream-start.cs
+    private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
+    private const string MEMBER_TOOTHLESS = "toothless";
+    private const string PREFIX_BOOST = "boost_";
+    private const string PREFIX_RARITY = "rarity_";
+    private const string VAR_LAST_ROLL = "last_roll";
+    private const string VAR_LAST_RARITY = "last_rarity";
+    private const string VAR_LAST_USER = "last_user";
+
     /*
      * Purpose:
      * - Handles Toothless roll logic, rarity unlocks, OBS reactions, and Mix It Up unlock callouts.
@@ -54,11 +67,8 @@ public class CPHInline
         Random rnd = new Random();
         int roll = rnd.Next(1, 101);
 
-        // Member key used for boost var naming.
-        string member = "toothless";
-
         // Optional favor/boost, tracked per user.
-        string boostKey = $"boost_{member}_{userId}";
+        string boostKey = $"{PREFIX_BOOST}{MEMBER_TOOTHLESS}_{userId}";
         int boost = (CPH.GetGlobalVar<int?>(boostKey, false) ?? 0);
         int boostedRoll = Math.Min(100, roll + boost);
 
@@ -76,7 +86,7 @@ public class CPHInline
         string rarity = rarityTable.First(r => boostedRoll <= r.MaxRoll).Name;
 
         // Unlock state key by rarity name.
-        string unlockFlagKey = $"rarity_{rarity}";
+        string unlockFlagKey = $"{PREFIX_RARITY}{rarity}";
         bool alreadyUnlocked = (CPH.GetGlobalVar<bool?>(unlockFlagKey, false) ?? false);
 
         if (!alreadyUnlocked)
@@ -88,9 +98,8 @@ public class CPHInline
             CPH.SetGlobalVar(boostKey, 0, false);
 
             // Make the unlocked variant visible in Disco workspace scene.
-            string dancingScene = "Disco Party: Workspace";
             string dancingSourceName = $"Toothless - Dancing - {rarity}";
-            CPH.ObsShowSource(dancingScene, dancingSourceName);
+            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, dancingSourceName);
 
             // Inform Mix It Up using per-rarity command mapping.
             TriggerMixItUpUnlock(rarity);
@@ -107,9 +116,9 @@ public class CPHInline
         }
 
         // Store latest roll info for diagnostics/overlays.
-        CPH.SetGlobalVar("last_roll", boostedRoll, false);
-        CPH.SetGlobalVar("last_rarity", rarity, false);
-        CPH.SetGlobalVar("last_user", user, false);
+        CPH.SetGlobalVar(VAR_LAST_ROLL, boostedRoll, false);
+        CPH.SetGlobalVar(VAR_LAST_RARITY, rarity, false);
+        CPH.SetGlobalVar(VAR_LAST_USER, user, false);
 
         return true;
     }

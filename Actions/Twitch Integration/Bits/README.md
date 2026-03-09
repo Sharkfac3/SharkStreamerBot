@@ -1,5 +1,7 @@
 # Bits Script Reference
 
+Shared constants reference: `Actions/SHARED-CONSTANTS.md`
+
 ## Script: `bits-tier-1.cs`
 
 ### Purpose

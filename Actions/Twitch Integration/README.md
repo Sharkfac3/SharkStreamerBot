@@ -26,6 +26,10 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 - Resets `clone_round` (int) to `0`.
 - Resets `clone_positions_open` (string) to empty.
 - Resets `clone_winners` (string) to empty.
+- Resets `pedro_game_enabled` (bool) to false.
+- Resets `pedro_mention_count` (int) to `0`.
+- Resets `pedro_unlocked` (bool) to false.
+- Resets `pedro_last_message_id` (string) to empty.
 
 ### Key Outputs / Side Effects
 - Reinitializes session state for stream start.
@@ -39,6 +43,7 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 - For each Toothless rarity source: hide → show → hide on `Disco Party: Workspace`.
 - Hides `Duck - Dancing` on `Disco Party: Workspace`.
 - Hides `Clone - Dancing` on `Disco Party: Workspace`.
+- Hides `Pedro - Dancing` on `Disco Party: Workspace`.
 
 ### Wait Behavior
 - None.
@@ -48,6 +53,7 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 
 ### Operator Notes
 - Keep this action early in stream startup order so downstream scripts see clean state.
+- Keep shared key/timer/OBS names aligned with `Actions/SHARED-CONSTANTS.md`.
 
 ## Bits Docs
 - See `Bits/README.md`.

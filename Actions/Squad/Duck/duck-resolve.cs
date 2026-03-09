@@ -5,6 +5,19 @@ using System.Text.Json;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (Duck feature)
+    // Keep these names identical across:
+    // - Actions/Squad/Duck/duck-main.cs
+    // - Actions/Squad/Duck/duck-call.cs
+    // - Actions/Squad/Duck/duck-resolve.cs
+    // - Actions/Twitch Integration/stream-start.cs
+    private const string VAR_DUCK_EVENT_ACTIVE = "duck_event_active";
+    private const string VAR_DUCK_QUACK_COUNT = "duck_quack_count";
+    private const string VAR_DUCK_UNLOCKED = "duck_unlocked";
+    private const string TIMER_DUCK_CALL_WINDOW = "Duck - Call Window";
+    private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
+    private const string OBS_SOURCE_DUCK_DANCING = "Duck - Dancing";
+
     /*
      * Purpose:
      * - Resolves Duck event when timer window ends.
@@ -30,23 +43,19 @@ public class CPHInline
 
     public bool Execute()
     {
-        const string TIMER_NAME = "Duck - Call Window";
-        const string DISCO_SCENE = "Disco Party: Workspace";
-        const string DUCK_SOURCE = "Duck - Dancing";
-
         // If timer fired after event ended, just ensure timer is off and exit.
-        bool active = (CPH.GetGlobalVar<bool?>("duck_event_active", false) ?? false);
+        bool active = (CPH.GetGlobalVar<bool?>(VAR_DUCK_EVENT_ACTIVE, false) ?? false);
         if (!active)
         {
-            CPH.DisableTimer(TIMER_NAME);
+            CPH.DisableTimer(TIMER_DUCK_CALL_WINDOW);
             return true;
         }
 
         // End event window now (no more quacks should count).
-        CPH.SetGlobalVar("duck_event_active", false, false);
-        CPH.DisableTimer(TIMER_NAME);
+        CPH.SetGlobalVar(VAR_DUCK_EVENT_ACTIVE, false, false);
+        CPH.DisableTimer(TIMER_DUCK_CALL_WINDOW);
 
-        int quacks = (CPH.GetGlobalVar<int?>("duck_quack_count", false) ?? 0);
+        int quacks = (CPH.GetGlobalVar<int?>(VAR_DUCK_QUACK_COUNT, false) ?? 0);
 
         // Success target is dynamic each round.
         Random rnd = new Random();
@@ -54,13 +63,13 @@ public class CPHInline
 
         if (quacks > roll)
         {
-            bool alreadyUnlocked = (CPH.GetGlobalVar<bool?>("duck_unlocked", false) ?? false);
+            bool alreadyUnlocked = (CPH.GetGlobalVar<bool?>(VAR_DUCK_UNLOCKED, false) ?? false);
 
             if (!alreadyUnlocked)
             {
                 // First-time unlock side effects.
-                CPH.SetGlobalVar("duck_unlocked", true, false);
-                CPH.ObsShowSource(DISCO_SCENE, DUCK_SOURCE);
+                CPH.SetGlobalVar(VAR_DUCK_UNLOCKED, true, false);
+                CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
                 TriggerMixItUpUnlock("duck");
 
                 CPH.SendMessage($"🦆✅ DUCK UNLOCKED! Quacks: {quacks} vs Roll: {roll} — Duck joins the disco!");

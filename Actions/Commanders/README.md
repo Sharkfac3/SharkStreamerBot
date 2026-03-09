@@ -15,3 +15,6 @@ This folder contains commander slot assignment scripts.
 - `Captain Stretch/README.md`
 - `The Director/README.md`
 - `Water Wizard/README.md`
+
+## Shared Constants
+- Cross-script key sync reference: `Actions/SHARED-CONSTANTS.md`

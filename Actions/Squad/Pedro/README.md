@@ -3,28 +3,54 @@
 ## Script: `pedro-main.cs`
 
 ### Purpose
-Placeholder/no-op action for Pedro.
+Handles all Pedro chat logic in one action:
+- Secret instant unlock phrase.
+- `!pedro` start command for mini-game.
+- Mention counting until unlock.
 
 ### Expected Trigger / Input
-- Any action trigger mapped to Pedro entry point.
+- One Streamer.bot action with chat triggers for:
+  - Message starts with `!pedro`, and/or
+  - Message contains `pedro`.
+- Reads `message` (fallback `rawInput`).
+- Optionally reads `msgId` to prevent double-processing the same chat line.
 
 ### Required Runtime Variables
-- None.
+- Reads/writes `pedro_game_enabled` (bool).
+- Reads/writes `pedro_mention_count` (int).
+- Reads/writes `pedro_unlocked` (bool).
+- Reads/writes `pedro_last_message_id` (string duplicate guard).
 
 ### Key Outputs / Side Effects
-- None.
+- `!pedro` enables Pedro mention mini-game.
+- Counts occurrences of `pedro` while game is enabled.
+- Unlocks Pedro at `100` mentions.
+- Secret command `!pedro x500liVePedro` forces unlock path immediately.
 
 ### Mix It Up Actions
-- None.
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Command ID constant in script:
+  - `MIXITUP_PEDRO_UNLOCK_COMMAND_ID` (currently placeholder)
+- Payload `Arguments`: `squad-unlock|pedro`
+- Triggered on unlock and on secret-force command.
 
 ### OBS Interactions
-- None.
+- On unlock, shows source `Pedro - Dancing` on `Disco Party: Workspace`.
 
 ### Wait Behavior
 - None.
 
 ### Chat / Log Output
-- None.
+- Announces mini-game start.
+- Announces progress when `!pedro` is used again during active game.
+- Announces unlock completion.
+- Logs warning if Mix It Up command ID is not configured.
 
 ### Operator Notes
-- Safe placeholder script. Extend here when Pedro feature logic is added.
+- Replace `MIXITUP_PEDRO_UNLOCK_COMMAND_ID` when the real ID is available.
+- Keep OBS scene/source names synced exactly: `Disco Party: Workspace` + `Pedro - Dancing`.
+- Suggested reset at stream start:
+  - `pedro_game_enabled = false`
+  - `pedro_mention_count = 0`
+  - `pedro_unlocked = false`
+  - `pedro_last_message_id = ""`

@@ -3,6 +3,46 @@ using System.Collections.Generic;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (shared across features)
+    // Keep these names identical across related feature scripts.
+    private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
+
+    // Duck
+    private const string VAR_DUCK_EVENT_ACTIVE = "duck_event_active";
+    private const string VAR_DUCK_QUACK_COUNT = "duck_quack_count";
+    private const string VAR_DUCK_CALLER = "duck_caller";
+    private const string VAR_DUCK_UNLOCKED = "duck_unlocked";
+    private const string OBS_SOURCE_DUCK_DANCING = "Duck - Dancing";
+    private const string TIMER_DUCK_CALL_WINDOW = "Duck - Call Window";
+
+    // Clone
+    private const string VAR_CLONE_UNLOCKED = "clone_unlocked";
+    private const string VAR_CLONE_GAME_ACTIVE = "clone_game_active";
+    private const string VAR_CLONE_ROUND = "clone_round";
+    private const string VAR_CLONE_POSITIONS_OPEN = "clone_positions_open";
+    private const string VAR_CLONE_WINNERS = "clone_winners";
+    private const string OBS_SOURCE_CLONE_DANCING = "Clone - Dancing";
+    private const string TIMER_CLONE_VOLLEY = "Clone - Volley Timer";
+
+    // Pedro
+    private const string VAR_PEDRO_GAME_ENABLED = "pedro_game_enabled";
+    private const string VAR_PEDRO_MENTION_COUNT = "pedro_mention_count";
+    private const string VAR_PEDRO_UNLOCKED = "pedro_unlocked";
+    private const string VAR_PEDRO_LAST_MESSAGE_ID = "pedro_last_message_id";
+    private const string OBS_SOURCE_PEDRO_DANCING = "Pedro - Dancing";
+
+    // Toothless
+    private const string PREFIX_RARITY = "rarity_";
+    private const string VAR_LAST_ROLL = "last_roll";
+    private const string VAR_LAST_RARITY = "last_rarity";
+    private const string VAR_LAST_USER = "last_user";
+
+    // LotAT
+    private const string VAR_LOTAT_ACTIVE = "lotat_active";
+    private const string VAR_LOTAT_ANNOUNCEMENT_SENT = "lotat_announcement_sent";
+    private const string VAR_LOTAT_OFFERING_STEAL_CHANCE = "lotat_offering_steal_chance";
+    private const string VAR_LOTAT_STEAL_MULTIPLIER = "lotat_steal_multiplier";
+
     /*
      * Purpose:
      * - Runs at stream start to reset shared state for Squad, LotAT, and Twitch integrations.
@@ -28,9 +68,6 @@ public class CPHInline
      */
     public bool Execute()
     {
-        // Central scene used by dancing sources.
-        const string DISCO_SCENE = "Disco Party: Workspace";
-
         // Toothless rarity list used for both source names and unlock flag keys.
         var toothlessRarities = new List<string>
         {
@@ -49,18 +86,18 @@ public class CPHInline
             string dancingSource = $"Toothless - Dancing - {rarity}";
 
             // Hide -> show -> hide sequence helps clear any stale visibility cache.
-            CPH.ObsHideSource(DISCO_SCENE, dancingSource);
-            CPH.ObsShowSource(DISCO_SCENE, dancingSource);
-            CPH.ObsHideSource(DISCO_SCENE, dancingSource);
+            CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, dancingSource);
+            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, dancingSource);
+            CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, dancingSource);
 
             // Clear unlock flags so each stream starts fresh.
-            CPH.SetGlobalVar($"rarity_{rarity}", false, false);
+            CPH.SetGlobalVar($"{PREFIX_RARITY}{rarity}", false, false);
         }
 
         // Reset latest-roll breadcrumbs used by overlays/debug.
-        CPH.SetGlobalVar("last_roll", 0, false);
-        CPH.SetGlobalVar("last_rarity", "", false);
-        CPH.SetGlobalVar("last_user", "", false);
+        CPH.SetGlobalVar(VAR_LAST_ROLL, 0, false);
+        CPH.SetGlobalVar(VAR_LAST_RARITY, "", false);
+        CPH.SetGlobalVar(VAR_LAST_USER, "", false);
 
         // Note: per-user boosts are stored as boost_<member>_<userId>.
         // We intentionally do not iterate/clear unknown user IDs here.
@@ -68,33 +105,43 @@ public class CPHInline
         // -------------------------------------------------
         // LotAT + offerings reset
         // -------------------------------------------------
-        CPH.SetGlobalVar("lotat_active", false, false);
-        CPH.SetGlobalVar("lotat_announcement_sent", false, false);
-        CPH.SetGlobalVar("lotat_offering_steal_chance", 0, false);
-        CPH.SetGlobalVar("lotat_steal_multiplier", 1, false);
+        CPH.SetGlobalVar(VAR_LOTAT_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_LOTAT_ANNOUNCEMENT_SENT, false, false);
+        CPH.SetGlobalVar(VAR_LOTAT_OFFERING_STEAL_CHANCE, 0, false);
+        CPH.SetGlobalVar(VAR_LOTAT_STEAL_MULTIPLIER, 1, false);
 
         // -------------------------------------------------
         // Duck reset
         // -------------------------------------------------
-        CPH.SetGlobalVar("duck_event_active", false, false);
-        CPH.SetGlobalVar("duck_quack_count", 0, false);
-        CPH.SetGlobalVar("duck_caller", "", false);
-        CPH.SetGlobalVar("duck_unlocked", false, false);
+        CPH.SetGlobalVar(VAR_DUCK_EVENT_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_DUCK_QUACK_COUNT, 0, false);
+        CPH.SetGlobalVar(VAR_DUCK_CALLER, "", false);
+        CPH.SetGlobalVar(VAR_DUCK_UNLOCKED, false, false);
 
-        CPH.ObsHideSource(DISCO_SCENE, "Duck - Dancing");
-        CPH.DisableTimer("Duck - Call Window");
+        CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
+        CPH.DisableTimer(TIMER_DUCK_CALL_WINDOW);
 
         // -------------------------------------------------
         // Clone reset
         // -------------------------------------------------
-        CPH.ObsHideSource(DISCO_SCENE, "Clone - Dancing");
-        CPH.SetGlobalVar("clone_unlocked", false, false);
-        CPH.SetGlobalVar("clone_game_active", false, false);
-        CPH.SetGlobalVar("clone_round", 0, false);
-        CPH.SetGlobalVar("clone_positions_open", "", false);
-        CPH.SetGlobalVar("clone_winners", "", false);
+        CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
+        CPH.SetGlobalVar(VAR_CLONE_UNLOCKED, false, false);
+        CPH.SetGlobalVar(VAR_CLONE_GAME_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_CLONE_ROUND, 0, false);
+        CPH.SetGlobalVar(VAR_CLONE_POSITIONS_OPEN, "", false);
+        CPH.SetGlobalVar(VAR_CLONE_WINNERS, "", false);
 
-        CPH.DisableTimer("Clone - Volley Timer");
+        CPH.DisableTimer(TIMER_CLONE_VOLLEY);
+
+        // -------------------------------------------------
+        // Pedro reset
+        // -------------------------------------------------
+        CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, false, false);
+        CPH.SetGlobalVar(VAR_PEDRO_MENTION_COUNT, 0, false);
+        CPH.SetGlobalVar(VAR_PEDRO_UNLOCKED, false, false);
+        CPH.SetGlobalVar(VAR_PEDRO_LAST_MESSAGE_ID, "", false);
+
+        CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
 
         return true;
     }

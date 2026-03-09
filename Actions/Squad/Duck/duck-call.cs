@@ -2,6 +2,15 @@ using System;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (Duck feature)
+    // Keep these names identical across:
+    // - Actions/Squad/Duck/duck-main.cs
+    // - Actions/Squad/Duck/duck-call.cs
+    // - Actions/Squad/Duck/duck-resolve.cs
+    // - Actions/Twitch Integration/stream-start.cs
+    private const string VAR_DUCK_EVENT_ACTIVE = "duck_event_active";
+    private const string VAR_DUCK_QUACK_COUNT = "duck_quack_count";
+
     /*
      * Purpose:
      * - Increments Duck event quack counter from chat activity.
@@ -20,7 +29,7 @@ public class CPHInline
     public bool Execute()
     {
         // Count quacks only during active event window.
-        bool active = (CPH.GetGlobalVar<bool?>("duck_event_active", false) ?? false);
+        bool active = (CPH.GetGlobalVar<bool?>(VAR_DUCK_EVENT_ACTIVE, false) ?? false);
         if (!active)
             return true;
 
@@ -39,8 +48,8 @@ public class CPHInline
         if (hits <= 0)
             return true;
 
-        int current = (CPH.GetGlobalVar<int?>("duck_quack_count", false) ?? 0);
-        CPH.SetGlobalVar("duck_quack_count", current + hits, false);
+        int current = (CPH.GetGlobalVar<int?>(VAR_DUCK_QUACK_COUNT, false) ?? 0);
+        CPH.SetGlobalVar(VAR_DUCK_QUACK_COUNT, current + hits, false);
 
         return true;
     }

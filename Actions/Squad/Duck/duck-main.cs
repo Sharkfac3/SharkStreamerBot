@@ -2,6 +2,17 @@ using System;
 
 public class CPHInline
 {
+    // SYNC CONSTANTS (Duck feature)
+    // Keep these names identical across:
+    // - Actions/Squad/Duck/duck-main.cs
+    // - Actions/Squad/Duck/duck-call.cs
+    // - Actions/Squad/Duck/duck-resolve.cs
+    // - Actions/Twitch Integration/stream-start.cs
+    private const string VAR_DUCK_EVENT_ACTIVE = "duck_event_active";
+    private const string VAR_DUCK_QUACK_COUNT = "duck_quack_count";
+    private const string VAR_DUCK_CALLER = "duck_caller";
+    private const string TIMER_DUCK_CALL_WINDOW = "Duck - Call Window";
+
     /*
      * Purpose:
      * - Starts the Duck mini-event (2-minute quack window).
@@ -21,10 +32,8 @@ public class CPHInline
      */
     public bool Execute()
     {
-        const string TIMER_NAME = "Duck - Call Window";
-
         // Prevent overlapping events.
-        bool active = (CPH.GetGlobalVar<bool?>("duck_event_active", false) ?? false);
+        bool active = (CPH.GetGlobalVar<bool?>(VAR_DUCK_EVENT_ACTIVE, false) ?? false);
         if (active)
         {
             CPH.SendMessage("🦆 Duck is already on the river... QUACK HARDER!");
@@ -32,16 +41,16 @@ public class CPHInline
         }
 
         // Reset event state for new run.
-        CPH.SetGlobalVar("duck_event_active", true, false);
-        CPH.SetGlobalVar("duck_quack_count", 0, false);
+        CPH.SetGlobalVar(VAR_DUCK_EVENT_ACTIVE, true, false);
+        CPH.SetGlobalVar(VAR_DUCK_QUACK_COUNT, 0, false);
 
         // Optional flavor: who called Duck.
         string user = "";
         CPH.TryGetArg("user", out user);
-        CPH.SetGlobalVar("duck_caller", user ?? "", false);
+        CPH.SetGlobalVar(VAR_DUCK_CALLER, user ?? "", false);
 
         // Start timer that will resolve event outcome.
-        CPH.EnableTimer(TIMER_NAME);
+        CPH.EnableTimer(TIMER_DUCK_CALL_WINDOW);
 
         // Notify chat.
         CPH.SendMessage("🦆 Duck has been called to the river! You have 2 minutes — spam **quack**!");
