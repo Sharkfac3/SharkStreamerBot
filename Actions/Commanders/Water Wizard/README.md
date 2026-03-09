@@ -3,16 +3,22 @@
 ## Script: `water-wizard-redeem.cs`
 
 ### Purpose
-Assigns the current Water Wizard commander slot occupant.
+Assigns the current Water Wizard commander slot occupant, finalizes the outgoing wizard's `!hail` score, and checks for a new all-time high score.
 
 ### Expected Trigger / Input
 - Redeem/action trigger for Water Wizard role assignment.
+- Reads `user`.
 
 ### Required Runtime Variables
-- Writes `current_water_wizard` (string username for the slot occupant).
+- Reads/writes `current_water_wizard`.
+- Reads/writes `water_wizard_hail_count`.
+- Reads/writes (persisted) `water_wizard_hail_high_score`.
+- Reads/writes (persisted) `water_wizard_hail_high_score_user`.
 
 ### Key Outputs / Side Effects
 - Updates active Water Wizard commander assignment.
+- Resets `water_wizard_hail_count` to `0` for the new wizard tenure.
+- If outgoing wizard beat the high score, announces the new record in chat.
 
 ### Mix It Up Actions
 - None.
@@ -24,10 +30,46 @@ Assigns the current Water Wizard commander slot occupant.
 - None.
 
 ### Chat / Log Output
-- None.
+- Announces new high score when record is beaten.
 
 ### Operator Notes
 - Keep variable key `current_water_wizard` unchanged to preserve existing integrations.
+- High score vars are intentionally persisted across Streamer.bot restarts.
+
+---
+
+## Script: `water-wizard-hail.cs`
+
+### Purpose
+Handles public `!hail` support calls for the current Water Wizard.
+
+### Expected Trigger / Input
+- Chat command/action trigger for `!hail`.
+- Reads `user`.
+
+### Required Runtime Variables
+- Reads `current_water_wizard`.
+- Reads/writes `water_wizard_hail_count`.
+
+### Key Outputs / Side Effects
+- Increments `water_wizard_hail_count` by 1 per valid `!hail`.
+- Blocks self-support (current Water Wizard cannot `!hail` themselves).
+- If no active Water Wizard exists, responds with guidance.
+
+### Mix It Up Actions
+- None currently.
+
+### OBS Interactions
+- None.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- Sends success/failure guidance messages in chat.
+
+### Operator Notes
+- Future Mix It Up hook can be added to the success path.
 
 ---
 

@@ -13,6 +13,11 @@ public class CPHInline
     private const string VAR_DUCK_CALLER = "duck_caller";
     private const string TIMER_DUCK_CALL_WINDOW = "Duck - Call Window";
 
+    // Shared mini-game lock (cross-feature).
+    private const string VAR_MINIGAME_ACTIVE = "minigame_active";
+    private const string VAR_MINIGAME_NAME = "minigame_name";
+    private const string MINIGAME_NAME_DUCK = "duck";
+
     /*
      * Purpose:
      * - Starts the Duck mini-event (2-minute quack window).
@@ -25,6 +30,7 @@ public class CPHInline
      * - duck_event_active
      * - duck_quack_count
      * - duck_caller
+     * - shared lock: minigame_active/minigame_name
      *
      * Key outputs/side effects:
      * - Enables timer: "Duck - Call Window"
@@ -32,7 +38,15 @@ public class CPHInline
      */
     public bool Execute()
     {
-        // Prevent overlapping events.
+        // Prevent overlap across all mini-games.
+        if (!TryAcquireMiniGameLock())
+        {
+            string activeGame = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "another mini-game";
+            CPH.SendMessage($"🎮 A mini-game is already running ({activeGame}). Finish it before starting Duck.");
+            return true;
+        }
+
+        // Prevent overlapping Duck events.
         bool active = (CPH.GetGlobalVar<bool?>(VAR_DUCK_EVENT_ACTIVE, false) ?? false);
         if (active)
         {
@@ -54,6 +68,23 @@ public class CPHInline
 
         // Notify chat.
         CPH.SendMessage("🦆 Duck has been called to the river! You have 2 minutes — spam **quack**!");
+        return true;
+    }
+
+    /// <summary>
+    /// Claims the shared mini-game lock when free.
+    /// Allows re-entry only for Duck itself.
+    /// </summary>
+    private bool TryAcquireMiniGameLock()
+    {
+        bool lockActive = (CPH.GetGlobalVar<bool?>(VAR_MINIGAME_ACTIVE, false) ?? false);
+        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
+
+        if (lockActive && !string.Equals(lockName, MINIGAME_NAME_DUCK, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, true, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, MINIGAME_NAME_DUCK, false);
         return true;
     }
 }

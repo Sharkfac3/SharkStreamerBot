@@ -9,6 +9,9 @@ Runs Toothless rarity roll and first-time unlock handling.
 - Command/redeem/action trigger that performs a Toothless roll.
 
 ### Required Runtime Variables
+- Reads/writes shared mini-game lock:
+  - `minigame_active`
+  - `minigame_name` (`toothless` during a roll)
 - Reads/writes `boost_toothless_<userId>` (consumed/reset to `0` only on first-time unlock).
 - Reads/writes `rarity_regular`.
 - Reads/writes `rarity_smol`.
@@ -21,6 +24,7 @@ Runs Toothless rarity roll and first-time unlock handling.
 
 ### Key Outputs / Side Effects
 - Determines rolled rarity and unlock status.
+- Claims shared mini-game lock during roll execution, then releases it.
 - Sets first-time unlock state for a rarity.
 
 ### Mix It Up Actions
@@ -42,6 +46,7 @@ Runs Toothless rarity roll and first-time unlock handling.
 - None.
 
 ### Chat / Log Output
+- Sends mini-game-in-progress warning if another mini-game owns the lock.
 - Sends new unlock message for first-time rarity unlocks.
 - Sends regular roll result message when rarity is already unlocked.
 

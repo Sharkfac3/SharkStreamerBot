@@ -19,6 +19,11 @@ public class CPHInline
     private const string VAR_CLONE_ROUND1_POOL = "clone_round1_pool";
     private const string TIMER_CLONE_VOLLEY = "Clone - Volley Timer";
 
+    // Shared mini-game lock (cross-feature).
+    private const string VAR_MINIGAME_ACTIVE = "minigame_active";
+    private const string VAR_MINIGAME_NAME = "minigame_name";
+    private const string MINIGAME_NAME_CLONE = "clone";
+
     /*
      * Purpose:
      * - Starts the Clone mini-game and initializes all runtime state.
@@ -30,6 +35,9 @@ public class CPHInline
      * Required runtime variables:
      * - Uses non-persisted global vars prefixed with clone_*
      *   (set here and consumed by clone-position + clone-volley scripts).
+     * - Uses shared lock vars:
+     *   - minigame_active
+     *   - minigame_name
      *
      * Key outputs/side effects:
      * - Enables timer: "Clone - Volley Timer"
@@ -45,7 +53,15 @@ public class CPHInline
         // If you want to scale game board size later, change this one value.
         int positionsCount = 5;
 
-        // Guard: do not start a second game while one is active.
+        // Guard: only one mini-game can run at a time.
+        if (!TryAcquireMiniGameLock())
+        {
+            string activeGame = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "another mini-game";
+            CPH.SendMessage($"🎮 A mini-game is already running ({activeGame}). Finish it before starting Clone.");
+            return true;
+        }
+
+        // Guard: do not start a second Clone game while one is active.
         bool active = (CPH.GetGlobalVar<bool?>(VAR_CLONE_GAME_ACTIVE, false) ?? false);
         if (active)
         {
@@ -89,6 +105,23 @@ public class CPHInline
         // Notify chat the game has begun.
         CPH.SendMessage($"🧬 CLONE EVENT: The Empire arrives! You have 30 seconds — pick a position: !rebel 1-{positionsCount}");
 
+        return true;
+    }
+
+    /// <summary>
+    /// Claims the shared mini-game lock when free.
+    /// Allows re-entry only for Clone itself.
+    /// </summary>
+    private bool TryAcquireMiniGameLock()
+    {
+        bool lockActive = (CPH.GetGlobalVar<bool?>(VAR_MINIGAME_ACTIVE, false) ?? false);
+        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
+
+        if (lockActive && !string.Equals(lockName, MINIGAME_NAME_CLONE, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, true, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, MINIGAME_NAME_CLONE, false);
         return true;
     }
 }

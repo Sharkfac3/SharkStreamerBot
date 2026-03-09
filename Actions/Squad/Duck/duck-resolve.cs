@@ -18,6 +18,11 @@ public class CPHInline
     private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
     private const string OBS_SOURCE_DUCK_DANCING = "Duck - Dancing";
 
+    // Shared mini-game lock (cross-feature).
+    private const string VAR_MINIGAME_ACTIVE = "minigame_active";
+    private const string VAR_MINIGAME_NAME = "minigame_name";
+    private const string MINIGAME_NAME_DUCK = "duck";
+
     /*
      * Purpose:
      * - Resolves Duck event when timer window ends.
@@ -29,11 +34,13 @@ public class CPHInline
      * - duck_event_active
      * - duck_quack_count
      * - duck_unlocked
+     * - shared lock: minigame_active/minigame_name
      *
      * Key outputs/side effects:
      * - Ends active event window.
      * - Compares quack power vs random roll.
      * - On first unlock: sets duck_unlocked, shows OBS source, triggers Mix It Up command.
+     * - Releases shared mini-game lock when event ends.
      */
 
     // Mix It Up unlock bridge for Duck unlock events.
@@ -48,6 +55,7 @@ public class CPHInline
         if (!active)
         {
             CPH.DisableTimer(TIMER_DUCK_CALL_WINDOW);
+            ReleaseMiniGameLockIfOwned();
             return true;
         }
 
@@ -85,7 +93,21 @@ public class CPHInline
             CPH.SendMessage($"🦆❌ Not enough quack power. Quacks: {quacks} vs Roll: {roll}");
         }
 
+        ReleaseMiniGameLockIfOwned();
         return true;
+    }
+
+    /// <summary>
+    /// Releases the shared lock only if Duck currently owns it.
+    /// </summary>
+    private void ReleaseMiniGameLockIfOwned()
+    {
+        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
+        if (!string.Equals(lockName, MINIGAME_NAME_DUCK, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
     }
 
     /// <summary>

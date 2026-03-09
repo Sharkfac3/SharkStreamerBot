@@ -16,6 +16,9 @@ Handles all Pedro chat logic in one action:
 - Optionally reads `msgId` to prevent double-processing the same chat line.
 
 ### Required Runtime Variables
+- Reads/writes shared mini-game lock:
+  - `minigame_active`
+  - `minigame_name` (`pedro` while this mini-game owns the lock)
 - Reads/writes `pedro_game_enabled` (bool).
 - Reads/writes `pedro_mention_count` (int).
 - Reads/writes `pedro_unlocked` (bool).
@@ -23,8 +26,10 @@ Handles all Pedro chat logic in one action:
 
 ### Key Outputs / Side Effects
 - `!pedro` enables Pedro mention mini-game.
+- Claims shared mini-game lock when Pedro starts.
 - Counts occurrences of `pedro` while game is enabled.
 - Unlocks Pedro at `100` mentions.
+- Releases shared mini-game lock on Pedro unlock.
 - Secret command `!pedro x500liVePedro` triggers only the Mix It Up command and does not unlock Pedro or enable the mini-game.
 
 ### Mix It Up Actions
@@ -41,6 +46,7 @@ Handles all Pedro chat logic in one action:
 - None.
 
 ### Chat / Log Output
+- Announces mini-game-in-progress warning if another mini-game owns the lock.
 - Announces mini-game start.
 - Announces progress when `!pedro` is used again during active game.
 - Announces unlock completion.

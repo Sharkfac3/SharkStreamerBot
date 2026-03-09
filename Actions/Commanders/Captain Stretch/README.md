@@ -3,16 +3,22 @@
 ## Script: `captain-stretch-redeem.cs`
 
 ### Purpose
-Assigns the current Captain Stretch commander slot occupant.
+Assigns the current Captain Stretch commander slot occupant, finalizes the outgoing captain's `!thank` score, and checks for a new all-time high score.
 
 ### Expected Trigger / Input
 - Redeem/action trigger for Captain Stretch role assignment.
+- Reads `user`.
 
 ### Required Runtime Variables
-- Writes `current_captain_stretch` (string username for the slot occupant).
+- Reads/writes `current_captain_stretch`.
+- Reads/writes `captain_stretch_thank_count`.
+- Reads/writes (persisted) `captain_stretch_thank_high_score`.
+- Reads/writes (persisted) `captain_stretch_thank_high_score_user`.
 
 ### Key Outputs / Side Effects
 - Updates active Captain Stretch commander assignment.
+- Resets `captain_stretch_thank_count` to `0` for the new captain tenure.
+- If outgoing captain beat the high score, announces the new record in chat.
 
 ### Mix It Up Actions
 - None.
@@ -24,10 +30,46 @@ Assigns the current Captain Stretch commander slot occupant.
 - None.
 
 ### Chat / Log Output
-- None.
+- Announces new high score when record is beaten.
 
 ### Operator Notes
 - Keep variable key `current_captain_stretch` unchanged to preserve existing integrations.
+- High score vars are intentionally persisted across Streamer.bot restarts.
+
+---
+
+## Script: `captain-stretch-thank.cs`
+
+### Purpose
+Handles public `!thank` support calls for the current Captain Stretch.
+
+### Expected Trigger / Input
+- Chat command/action trigger for `!thank`.
+- Reads `user`.
+
+### Required Runtime Variables
+- Reads `current_captain_stretch`.
+- Reads/writes `captain_stretch_thank_count`.
+
+### Key Outputs / Side Effects
+- Increments `captain_stretch_thank_count` by 1 per valid `!thank`.
+- Blocks self-support (current Captain Stretch cannot `!thank` themselves).
+- If no active Captain Stretch exists, responds with guidance.
+
+### Mix It Up Actions
+- None currently.
+
+### OBS Interactions
+- None.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- Sends success/failure guidance messages in chat.
+
+### Operator Notes
+- Future Mix It Up hook can be added to the success path.
 
 ---
 

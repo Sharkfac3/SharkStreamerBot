@@ -11,6 +11,21 @@ When you rename any value below, update **all listed scripts** before syncing to
 
 ---
 
+## Mini-game Lock (shared)
+- `VAR_MINIGAME_ACTIVE` = `minigame_active`
+- `VAR_MINIGAME_NAME` = `minigame_name`
+
+Used in:
+- `Actions/Squad/Clone/clone-main.cs`
+- `Actions/Squad/Clone/clone-volley.cs`
+- `Actions/Squad/Duck/duck-main.cs`
+- `Actions/Squad/Duck/duck-resolve.cs`
+- `Actions/Squad/Pedro/pedro-main.cs`
+- `Actions/Squad/Toothless/toothless-main.cs`
+- `Actions/Twitch Integration/stream-start.cs`
+
+---
+
 ## Duck (shared)
 - `VAR_DUCK_EVENT_ACTIVE` = `duck_event_active`
 - `VAR_DUCK_QUACK_COUNT` = `duck_quack_count`
@@ -94,11 +109,23 @@ Used in:
 - `VAR_CURRENT_CAPTAIN_STRETCH` = `current_captain_stretch`
 - `VAR_CURRENT_THE_DIRECTOR` = `current_the_director`
 - `VAR_CURRENT_WATER_WIZARD` = `current_water_wizard`
+- `VAR_CAPTAIN_STRETCH_THANK_COUNT` = `captain_stretch_thank_count`
+- `VAR_CAPTAIN_STRETCH_THANK_HIGH_SCORE` = `captain_stretch_thank_high_score` *(persisted)*
+- `VAR_CAPTAIN_STRETCH_THANK_HIGH_SCORE_USER` = `captain_stretch_thank_high_score_user` *(persisted)*
+- `VAR_THE_DIRECTOR_AWARD_COUNT` = `the_director_award_count`
+- `VAR_THE_DIRECTOR_AWARD_HIGH_SCORE` = `the_director_award_high_score` *(persisted)*
+- `VAR_THE_DIRECTOR_AWARD_HIGH_SCORE_USER` = `the_director_award_high_score_user` *(persisted)*
+- `VAR_WATER_WIZARD_HAIL_COUNT` = `water_wizard_hail_count`
+- `VAR_WATER_WIZARD_HAIL_HIGH_SCORE` = `water_wizard_hail_high_score` *(persisted)*
+- `VAR_WATER_WIZARD_HAIL_HIGH_SCORE_USER` = `water_wizard_hail_high_score_user` *(persisted)*
 
 Used in:
 - `Actions/Commanders/Captain Stretch/captain-stretch-redeem.cs`
+- `Actions/Commanders/Captain Stretch/captain-stretch-thank.cs`
 - `Actions/Commanders/The Director/the-director-redeem.cs`
+- `Actions/Commanders/The Director/the-director-award.cs`
 - `Actions/Commanders/Water Wizard/water-wizard-redeem.cs`
+- `Actions/Commanders/Water Wizard/water-wizard-hail.cs`
 
 ---
 
@@ -130,5 +157,5 @@ Used in:
    - Pedro start/mentions/unlock,
    - Toothless roll + first-time unlock,
    - Offering happy path + LotAT steal path,
-   - Commander redeems for all three slots,
+   - Commander redeems + !hail/!thank/!award scoring for all three slots,
    - Bits tiers 1-4 cheer forwarding + wait behavior.

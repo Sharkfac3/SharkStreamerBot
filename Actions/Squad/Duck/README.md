@@ -9,6 +9,9 @@ Starts the Duck event quack window.
 - Event/action trigger that starts the Duck mini-game.
 
 ### Required Runtime Variables
+- Reads/writes shared mini-game lock:
+  - `minigame_active`
+  - `minigame_name` (`duck` while this mini-game owns the lock)
 - Reads `duck_event_active` to prevent overlap.
 - Writes `duck_event_active` = `true`.
 - Writes `duck_quack_count` = `0`.
@@ -16,6 +19,7 @@ Starts the Duck event quack window.
 
 ### Key Outputs / Side Effects
 - Opens Duck event collection window.
+- Claims shared mini-game lock so no other mini-game can start.
 - Enables timer `Duck - Call Window`.
 
 ### Mix It Up Actions
@@ -28,6 +32,7 @@ Starts the Duck event quack window.
 - None.
 
 ### Chat / Log Output
+- Sends mini-game-in-progress warning if another mini-game owns the lock.
 - Sends already-active warning if event is already running.
 - Sends event start message for new event.
 
@@ -78,6 +83,9 @@ Ends Duck event and resolves success/failure.
 - Timer or follow-up action trigger after call window ends.
 
 ### Required Runtime Variables
+- Reads/writes shared mini-game lock:
+  - `minigame_active`
+  - `minigame_name` (released on resolve when owned by Duck)
 - Reads `duck_event_active` for guard behavior.
 - Writes `duck_event_active` = `false` when resolving.
 - Reads `duck_quack_count` for success comparison.
@@ -86,6 +94,7 @@ Ends Duck event and resolves success/failure.
 ### Key Outputs / Side Effects
 - Disables timer `Duck - Call Window` on guard/resolve paths.
 - Sets unlock state for Duck when successful.
+- Releases shared mini-game lock after resolve.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`

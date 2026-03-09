@@ -12,6 +12,9 @@ This folder contains Squad mini-game and interaction scripts.
 ## Shared Constants
 - Cross-script key/timer/OBS sync reference: `Actions/SHARED-CONSTANTS.md`
 
+## Helper Snippets
+- Reusable copy/paste patterns: `Actions/HELPER-SNIPPETS.md`
+
 ---
 
 ## Script: `offering.cs`

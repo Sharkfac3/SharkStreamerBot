@@ -3,16 +3,22 @@
 ## Script: `the-director-redeem.cs`
 
 ### Purpose
-Assigns the current The Director commander slot occupant.
+Assigns the current The Director commander slot occupant, finalizes the outgoing director's `!award` score, and checks for a new all-time high score.
 
 ### Expected Trigger / Input
 - Redeem/action trigger for The Director role assignment.
+- Reads `user`.
 
 ### Required Runtime Variables
-- Writes `current_the_director` (string username for the slot occupant).
+- Reads/writes `current_the_director`.
+- Reads/writes `the_director_award_count`.
+- Reads/writes (persisted) `the_director_award_high_score`.
+- Reads/writes (persisted) `the_director_award_high_score_user`.
 
 ### Key Outputs / Side Effects
 - Updates active The Director commander assignment.
+- Resets `the_director_award_count` to `0` for the new director tenure.
+- If outgoing director beat the high score, announces the new record in chat.
 
 ### Mix It Up Actions
 - None.
@@ -24,10 +30,46 @@ Assigns the current The Director commander slot occupant.
 - None.
 
 ### Chat / Log Output
-- None.
+- Announces new high score when record is beaten.
 
 ### Operator Notes
 - Keep variable key `current_the_director` unchanged to preserve existing integrations.
+- High score vars are intentionally persisted across Streamer.bot restarts.
+
+---
+
+## Script: `the-director-award.cs`
+
+### Purpose
+Handles public `!award` support calls for the current The Director.
+
+### Expected Trigger / Input
+- Chat command/action trigger for `!award`.
+- Reads `user`.
+
+### Required Runtime Variables
+- Reads `current_the_director`.
+- Reads/writes `the_director_award_count`.
+
+### Key Outputs / Side Effects
+- Increments `the_director_award_count` by 1 per valid `!award`.
+- Blocks self-support (current The Director cannot `!award` themselves).
+- If no active Director exists, responds with guidance.
+
+### Mix It Up Actions
+- None currently.
+
+### OBS Interactions
+- None.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- Sends success/failure guidance messages in chat.
+
+### Operator Notes
+- Future Mix It Up hook can be added to the success path.
 
 ---
 

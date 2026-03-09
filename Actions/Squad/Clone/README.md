@@ -9,6 +9,9 @@ Starts the Clone event and initializes clean game state.
 - Event/action trigger that starts the Clone mini-game.
 
 ### Required Runtime Variables
+- Reads/writes shared mini-game lock:
+  - `minigame_active`
+  - `minigame_name` (`clone` while this mini-game owns the lock)
 - Writes `clone_game_active` = `true`.
 - Writes `clone_positions_count` = `5`.
 - Writes `clone_round` = `1`.
@@ -21,6 +24,7 @@ Starts the Clone event and initializes clean game state.
 
 ### Key Outputs / Side Effects
 - Starts a fresh Clone run.
+- Claims shared mini-game lock so no other mini-game can start.
 - Enables timer `Clone - Volley Timer`.
 
 ### Mix It Up Actions
@@ -33,6 +37,7 @@ Starts the Clone event and initializes clean game state.
 - None.
 
 ### Chat / Log Output
+- Sends mini-game-in-progress warning if another mini-game owns the lock.
 - Sends already-active warning if `clone_game_active` is already `true`.
 - Sends Clone event start message.
 
@@ -88,6 +93,9 @@ Resolves each Clone volley timer tick by eliminating one open position.
 - Timer trigger (`Clone - Volley Timer`).
 
 ### Required Runtime Variables
+- Reads/writes shared mini-game lock:
+  - `minigame_active`
+  - `minigame_name` (released on Clone end when owned by Clone)
 - Reads `clone_game_active` as execution guard.
 - Reads `clone_positions_count` (fallback board size).
 - Reads/writes `clone_round` (increments on continue path).
@@ -104,6 +112,7 @@ Resolves each Clone volley timer tick by eliminating one open position.
 ### Key Outputs / Side Effects
 - Decides continue/loss/win path for each volley.
 - Disables timer on inactive/loss/win end paths.
+- Releases shared mini-game lock on loss/win end paths.
 - Re-enables timer on continue path.
 
 ### Mix It Up Actions

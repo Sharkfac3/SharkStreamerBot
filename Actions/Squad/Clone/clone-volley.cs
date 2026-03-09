@@ -25,6 +25,11 @@ public class CPHInline
     private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
     private const string OBS_SOURCE_CLONE_DANCING = "Clone - Dancing";
 
+    // Shared mini-game lock (cross-feature).
+    private const string VAR_MINIGAME_ACTIVE = "minigame_active";
+    private const string VAR_MINIGAME_NAME = "minigame_name";
+    private const string MINIGAME_NAME_CLONE = "clone";
+
     /*
      * Purpose:
      * - Resolves each Clone volley tick (timer-driven elimination round).
@@ -36,12 +41,14 @@ public class CPHInline
      * - clone_game_active, clone_round, clone_positions_open, clone_positions_count
      * - clone_pos_<n>, clone_player_pos_<userId>
      * - clone_winners, clone_round1_pool
+     * - shared lock: minigame_active/minigame_name
      *
      * Key outputs/side effects:
      * - Removes one open position per volley.
      * - Rebuilds alive/winners set deterministically from rosters.
      * - Ends game on loss/win.
      * - On win: sets clone_unlocked, shows OBS source, triggers Mix It Up unlock command.
+     * - On end: releases shared mini-game lock.
      */
 
     // RNG is static to reduce repeated seed patterns when actions run close together.
@@ -182,12 +189,26 @@ public class CPHInline
     }
 
     /// <summary>
-    /// Cleanly ends the game and disables future timer fires.
+    /// Cleanly ends the game, releases lock ownership, and disables future timer fires.
     /// </summary>
     private void EndGame(string timerName)
     {
         CPH.SetGlobalVar(VAR_CLONE_GAME_ACTIVE, false, false);
+        ReleaseMiniGameLockIfOwned();
         CPH.DisableTimer(timerName);
+    }
+
+    /// <summary>
+    /// Releases the shared lock only if Clone currently owns it.
+    /// </summary>
+    private void ReleaseMiniGameLockIfOwned()
+    {
+        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
+        if (!string.Equals(lockName, MINIGAME_NAME_CLONE, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
     }
 
     /// <summary>

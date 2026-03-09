@@ -16,6 +16,11 @@ public class CPHInline
     private const string OBS_SCENE_PEDRO = "Disco Party: Workspace";
     private const string OBS_SOURCE_PEDRO_DANCING = "Pedro - Dancing";
 
+    // Shared mini-game lock (cross-feature).
+    private const string VAR_MINIGAME_ACTIVE = "minigame_active";
+    private const string VAR_MINIGAME_NAME = "minigame_name";
+    private const string MINIGAME_NAME_PEDRO = "pedro";
+
     /*
      * Purpose:
      * - Handles all Pedro chat triggers in one action script:
@@ -34,12 +39,14 @@ public class CPHInline
      * - pedro_mention_count (int)
      * - pedro_unlocked (bool)
      * - pedro_last_message_id (string) for duplicate-trigger safety
+     * - shared lock: minigame_active/minigame_name
      *
      * Key outputs/side effects:
-     * - Enables mini-game on !pedro.
+     * - Enables mini-game on !pedro (only when no other mini-game is active).
      * - Counts "pedro" mentions until unlock threshold is reached.
      * - On unlock: shows OBS source "Pedro - Dancing" on the Disco workspace scene.
      * - On unlock: triggers Mix It Up command "Squad - Pedro - Unlock".
+     * - On unlock: releases shared mini-game lock.
      *
      * Operator notes:
      * - Replace MIXITUP_PEDRO_UNLOCK_COMMAND_ID when available.
@@ -165,6 +172,13 @@ public class CPHInline
 
         if (!enabled)
         {
+            if (!TryAcquireMiniGameLock())
+            {
+                string activeGame = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "another mini-game";
+                CPH.SendMessage($"🎮 A mini-game is already running ({activeGame}). Finish it before starting Pedro.");
+                return;
+            }
+
             CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, true, false);
 
             // Keep any existing count if operator paused/re-enabled manually.
@@ -190,6 +204,7 @@ public class CPHInline
 
         ShowPedroSourceOnConfiguredScenes();
         TriggerMixItUpUnlock();
+        ReleaseMiniGameLockIfOwned();
 
         CPH.SendMessage("💃✅ PEDRO UNLOCKED! Pedro joins the dance floor!");
     }
@@ -200,6 +215,36 @@ public class CPHInline
     private void ShowPedroSourceOnConfiguredScenes()
     {
         CPH.ObsShowSource(OBS_SCENE_PEDRO, OBS_SOURCE_PEDRO_DANCING);
+    }
+
+    /// <summary>
+    /// Claims the shared mini-game lock when free.
+    /// Allows re-entry only for Pedro itself.
+    /// </summary>
+    private bool TryAcquireMiniGameLock()
+    {
+        bool lockActive = (CPH.GetGlobalVar<bool?>(VAR_MINIGAME_ACTIVE, false) ?? false);
+        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
+
+        if (lockActive && !string.Equals(lockName, MINIGAME_NAME_PEDRO, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, true, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, MINIGAME_NAME_PEDRO, false);
+        return true;
+    }
+
+    /// <summary>
+    /// Releases the shared lock only if Pedro currently owns it.
+    /// </summary>
+    private void ReleaseMiniGameLockIfOwned()
+    {
+        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
+        if (!string.Equals(lockName, MINIGAME_NAME_PEDRO, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
     }
 
     /// <summary>

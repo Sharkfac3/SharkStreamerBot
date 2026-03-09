@@ -26,6 +26,9 @@ All script docs use the same template sections:
 - `Actions/Squad/Pedro/README.md`
 - `Actions/Squad/Toothless/README.md`
 
+### Reusable Patterns
+- `Actions/HELPER-SNIPPETS.md`
+
 ### Commanders
 - `Actions/Commanders/README.md`
 - `Actions/Commanders/Captain Stretch/README.md`

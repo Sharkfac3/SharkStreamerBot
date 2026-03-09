@@ -20,6 +20,11 @@ public class CPHInline
     private const string VAR_LAST_RARITY = "last_rarity";
     private const string VAR_LAST_USER = "last_user";
 
+    // Shared mini-game lock (cross-feature).
+    private const string VAR_MINIGAME_ACTIVE = "minigame_active";
+    private const string VAR_MINIGAME_NAME = "minigame_name";
+    private const string MINIGAME_NAME_TOOTHLESS = "toothless";
+
     /*
      * Purpose:
      * - Handles Toothless roll logic, rarity unlocks, OBS reactions, and Mix It Up unlock callouts.
@@ -32,11 +37,13 @@ public class CPHInline
      * - boost_toothless_<userId> (optional boost value)
      * - rarity_<rarityName> (unlock flags)
      * - last_roll / last_rarity / last_user (debug/display breadcrumbs)
+     * - shared lock: minigame_active/minigame_name
      *
      * Key outputs/side effects:
      * - Rolls rarity and resolves unlock state.
      * - Shows unlock media on current scene + dancing source on Disco scene.
      * - Triggers per-rarity Mix It Up command ID on first-time unlock.
+     * - Uses and then releases shared mini-game lock during each roll.
      */
 
     // Mix It Up unlock bridge for Toothless rarity unlock events.
@@ -59,68 +66,113 @@ public class CPHInline
         if (string.IsNullOrWhiteSpace(user))
             return true;
 
-        // Fallback if trigger did not include userId.
-        if (string.IsNullOrWhiteSpace(userId))
-            userId = user.ToLowerInvariant();
-
-        // Base roll: 1-100 inclusive.
-        Random rnd = new Random();
-        int roll = rnd.Next(1, 101);
-
-        // Optional favor/boost, tracked per user.
-        string boostKey = $"{PREFIX_BOOST}{MEMBER_TOOTHLESS}_{userId}";
-        int boost = (CPH.GetGlobalVar<int?>(boostKey, false) ?? 0);
-        int boostedRoll = Math.Min(100, roll + boost);
-
-        // Rarity bands are ordered from lowest threshold upward.
-        var rarityTable = new List<(string Name, int MaxRoll)>
+        // Prevent overlap with other mini-games.
+        if (!TryAcquireMiniGameLock())
         {
-            ("regular", 40),
-            ("smol", 70),
-            ("long", 88),
-            ("flight", 96),
-            ("party", 100)
-        };
-
-        // First matching MaxRoll determines rarity.
-        string rarity = rarityTable.First(r => boostedRoll <= r.MaxRoll).Name;
-
-        // Unlock state key by rarity name.
-        string unlockFlagKey = $"{PREFIX_RARITY}{rarity}";
-        bool alreadyUnlocked = (CPH.GetGlobalVar<bool?>(unlockFlagKey, false) ?? false);
-
-        if (!alreadyUnlocked)
-        {
-            // Persist first-time unlock.
-            CPH.SetGlobalVar(unlockFlagKey, true, false);
-
-            // Boost is consumed on successful new unlock.
-            CPH.SetGlobalVar(boostKey, 0, false);
-
-            // Make the unlocked variant visible in Disco workspace scene.
-            string dancingSourceName = $"Toothless - Dancing - {rarity}";
-            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, dancingSourceName);
-
-            // Inform Mix It Up using per-rarity command mapping.
-            TriggerMixItUpUnlock(rarity);
-
-            CPH.SendMessage($"🎉 NEW TOOTHLESS FORM! {rarity.ToUpper()} — {user} rolled {roll}" +
-                            (boost > 0 ? $" +{boost} favor = {boostedRoll}" : $" = {boostedRoll}"));
-        }
-        else
-        {
-            // Non-unlock roll feedback.
-            CPH.SendMessage($"{user} rolled {roll}" +
-                            (boost > 0 ? $" +{boost} favor = {boostedRoll}" : $" = {boostedRoll}") +
-                            $" — {rarity}");
+            string activeGame = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "another mini-game";
+            CPH.SendMessage($"🎮 A mini-game is already running ({activeGame}). Finish it before rolling Toothless.");
+            return true;
         }
 
-        // Store latest roll info for diagnostics/overlays.
-        CPH.SetGlobalVar(VAR_LAST_ROLL, boostedRoll, false);
-        CPH.SetGlobalVar(VAR_LAST_RARITY, rarity, false);
-        CPH.SetGlobalVar(VAR_LAST_USER, user, false);
+        try
+        {
+            // Fallback if trigger did not include userId.
+            if (string.IsNullOrWhiteSpace(userId))
+                userId = user.ToLowerInvariant();
 
+            // Base roll: 1-100 inclusive.
+            Random rnd = new Random();
+            int roll = rnd.Next(1, 101);
+
+            // Optional favor/boost, tracked per user.
+            string boostKey = $"{PREFIX_BOOST}{MEMBER_TOOTHLESS}_{userId}";
+            int boost = (CPH.GetGlobalVar<int?>(boostKey, false) ?? 0);
+            int boostedRoll = Math.Min(100, roll + boost);
+
+            // Rarity bands are ordered from lowest threshold upward.
+            var rarityTable = new List<(string Name, int MaxRoll)>
+            {
+                ("regular", 40),
+                ("smol", 70),
+                ("long", 88),
+                ("flight", 96),
+                ("party", 100)
+            };
+
+            // First matching MaxRoll determines rarity.
+            string rarity = rarityTable.First(r => boostedRoll <= r.MaxRoll).Name;
+
+            // Unlock state key by rarity name.
+            string unlockFlagKey = $"{PREFIX_RARITY}{rarity}";
+            bool alreadyUnlocked = (CPH.GetGlobalVar<bool?>(unlockFlagKey, false) ?? false);
+
+            if (!alreadyUnlocked)
+            {
+                // Persist first-time unlock.
+                CPH.SetGlobalVar(unlockFlagKey, true, false);
+
+                // Boost is consumed on successful new unlock.
+                CPH.SetGlobalVar(boostKey, 0, false);
+
+                // Make the unlocked variant visible in Disco workspace scene.
+                string dancingSourceName = $"Toothless - Dancing - {rarity}";
+                CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, dancingSourceName);
+
+                // Inform Mix It Up using per-rarity command mapping.
+                TriggerMixItUpUnlock(rarity);
+
+                CPH.SendMessage($"🎉 NEW TOOTHLESS FORM! {rarity.ToUpper()} — {user} rolled {roll}" +
+                                (boost > 0 ? $" +{boost} favor = {boostedRoll}" : $" = {boostedRoll}"));
+            }
+            else
+            {
+                // Non-unlock roll feedback.
+                CPH.SendMessage($"{user} rolled {roll}" +
+                                (boost > 0 ? $" +{boost} favor = {boostedRoll}" : $" = {boostedRoll}") +
+                                $" — {rarity}");
+            }
+
+            // Store latest roll info for diagnostics/overlays.
+            CPH.SetGlobalVar(VAR_LAST_ROLL, boostedRoll, false);
+            CPH.SetGlobalVar(VAR_LAST_RARITY, rarity, false);
+            CPH.SetGlobalVar(VAR_LAST_USER, user, false);
+
+            return true;
+        }
+        finally
+        {
+            ReleaseMiniGameLockIfOwned();
+        }
+    }
+
+    /// <summary>
+    /// Claims the shared mini-game lock when free.
+    /// Allows re-entry only for Toothless itself.
+    /// </summary>
+    private bool TryAcquireMiniGameLock()
+    {
+        bool lockActive = (CPH.GetGlobalVar<bool?>(VAR_MINIGAME_ACTIVE, false) ?? false);
+        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
+
+        if (lockActive && !string.Equals(lockName, MINIGAME_NAME_TOOTHLESS, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, true, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, MINIGAME_NAME_TOOTHLESS, false);
         return true;
+    }
+
+    /// <summary>
+    /// Releases the shared lock only if Toothless currently owns it.
+    /// </summary>
+    private void ReleaseMiniGameLockIfOwned()
+    {
+        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
+        if (!string.Equals(lockName, MINIGAME_NAME_TOOTHLESS, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
     }
 
     /// <summary>

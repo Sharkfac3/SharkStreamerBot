@@ -43,6 +43,10 @@ public class CPHInline
     private const string VAR_LOTAT_OFFERING_STEAL_CHANCE = "lotat_offering_steal_chance";
     private const string VAR_LOTAT_STEAL_MULTIPLIER = "lotat_steal_multiplier";
 
+    // Shared mini-game lock (cross-feature)
+    private const string VAR_MINIGAME_ACTIVE = "minigame_active";
+    private const string VAR_MINIGAME_NAME = "minigame_name";
+
     /*
      * Purpose:
      * - Runs at stream start to reset shared state for Squad, LotAT, and Twitch integrations.
@@ -56,6 +60,7 @@ public class CPHInline
      * - Writes/reset many global vars used by Squad mini-games and LotAT offering logic.
      *
      * Key outputs/side effects:
+     * - Clears global mini-game lock state.
      * - Resets Toothless rarity unlock flags + last roll tracking.
      * - Resets LotAT mode + offering steal settings.
      * - Resets Duck and Clone runtime state.
@@ -68,6 +73,10 @@ public class CPHInline
      */
     public bool Execute()
     {
+        // Clear shared lock so no stale mini-game blocks the new stream.
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
+
         // Toothless rarity list used for both source names and unlock flag keys.
         var toothlessRarities = new List<string>
         {
