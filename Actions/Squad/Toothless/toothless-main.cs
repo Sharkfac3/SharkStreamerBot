@@ -181,10 +181,19 @@ public class CPHInline
     private void TriggerMixItUpUnlock(string rarity)
     {
         string commandId = GetMixItUpCommandIdForRarity(rarity);
+        TriggerMixItUpCommand(commandId, "Squad Toothless");
+    }
+
+    /// <summary>
+    /// Generic Mix It Up command trigger helper.
+    /// </summary>
+    private bool TriggerMixItUpCommand(string commandId, string logPrefix, string arguments = "")
+    {
         if (string.IsNullOrWhiteSpace(commandId) ||
             commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
         {
-            return;
+            CPH.LogWarn($"[{logPrefix}] Mix It Up command ID is not configured.");
+            return false;
         }
 
         try
@@ -193,20 +202,25 @@ public class CPHInline
             string payload = JsonSerializer.Serialize(new
             {
                 Platform = "Twitch",
-                Arguments = "",
+                Arguments = arguments ?? "",
                 IgnoreRequirements = false
             });
 
             using var content = new StringContent(payload, Encoding.UTF8, "application/json");
             HttpResponseMessage response = MIXITUP_HTTP_CLIENT.PostAsync(url, content).GetAwaiter().GetResult();
+
             if (!response.IsSuccessStatusCode)
             {
-                CPH.LogWarn($"[Squad Toothless] Mix It Up unlock call failed ({rarity}): {(int)response.StatusCode} {response.ReasonPhrase}");
+                CPH.LogWarn($"[{logPrefix}] Mix It Up call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
+                return false;
             }
+
+            return true;
         }
         catch (Exception ex)
         {
-            CPH.LogError($"[Squad Toothless] Exception while calling Mix It Up unlock command ({rarity}): {ex}");
+            CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
+            return false;
         }
     }
 

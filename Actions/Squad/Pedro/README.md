@@ -54,6 +54,10 @@ Handles all Pedro chat logic in one action:
 
 ### Operator Notes
 - Replace `MIXITUP_PEDRO_UNLOCK_COMMAND_ID` when the real ID is available.
+- `pedro-main.cs` is the current reference implementation for helper-style patterns:
+  - mini-game lock helper
+  - message/rawInput helper
+  - generic Mix It Up trigger helper
 - Keep OBS scene/source names synced exactly: `Disco Party: Workspace` + `Pedro - Dancing`.
 - Suggested reset at stream start:
   - `pedro_game_enabled = false`

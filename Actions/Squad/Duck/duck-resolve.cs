@@ -78,7 +78,7 @@ public class CPHInline
                 // First-time unlock side effects.
                 CPH.SetGlobalVar(VAR_DUCK_UNLOCKED, true, false);
                 CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
-                TriggerMixItUpUnlock("duck");
+                TriggerMixItUpUnlock();
 
                 CPH.SendMessage($"🦆✅ DUCK UNLOCKED! Quacks: {quacks} vs Roll: {roll} — Duck joins the disco!");
             }
@@ -111,36 +111,50 @@ public class CPHInline
     }
 
     /// <summary>
-    /// Sends Duck unlock event to Mix It Up API.
+    /// Duck-specific wrapper that calls the generic Mix It Up helper.
     /// </summary>
-    private void TriggerMixItUpUnlock(string member)
+    private void TriggerMixItUpUnlock()
     {
-        if (string.IsNullOrWhiteSpace(MIXITUP_DUCK_UNLOCK_COMMAND_ID) ||
-            MIXITUP_DUCK_UNLOCK_COMMAND_ID.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
+        TriggerMixItUpCommand(MIXITUP_DUCK_UNLOCK_COMMAND_ID, "Squad Duck");
+    }
+
+    /// <summary>
+    /// Generic Mix It Up command trigger helper.
+    /// </summary>
+    private bool TriggerMixItUpCommand(string commandId, string logPrefix, string arguments = "")
+    {
+        if (string.IsNullOrWhiteSpace(commandId) ||
+            commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
         {
-            return;
+            CPH.LogWarn($"[{logPrefix}] Mix It Up command ID is not configured.");
+            return false;
         }
 
         try
         {
-            string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{MIXITUP_DUCK_UNLOCK_COMMAND_ID}";
+            string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{commandId}";
             string payload = JsonSerializer.Serialize(new
             {
                 Platform = "Twitch",
-                Arguments = "",
+                Arguments = arguments ?? "",
                 IgnoreRequirements = false
             });
 
             using var content = new StringContent(payload, Encoding.UTF8, "application/json");
             HttpResponseMessage response = MIXITUP_HTTP_CLIENT.PostAsync(url, content).GetAwaiter().GetResult();
+
             if (!response.IsSuccessStatusCode)
             {
-                CPH.LogWarn($"[Squad Duck] Mix It Up unlock call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
+                CPH.LogWarn($"[{logPrefix}] Mix It Up call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
+                return false;
             }
+
+            return true;
         }
         catch (Exception ex)
         {
-            CPH.LogError($"[Squad Duck] Exception while calling Mix It Up unlock command: {ex}");
+            CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
+            return false;
         }
     }
 }

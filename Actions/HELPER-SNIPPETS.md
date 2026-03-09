@@ -4,6 +4,9 @@ Purpose: reusable Streamer.bot C# snippet patterns for common tasks.
 
 These are intentionally small and beginner-friendly so you can copy/paste into any feature script (Squad or non-Squad).
 
+Reference implementation in repo:
+- `Actions/Squad/Pedro/pedro-main.cs`
+
 ---
 
 ## 1) Mini-game Lock Helper (Global, cross-feature)
@@ -190,9 +193,10 @@ private (string User, string UserId) GetSender()
 
 ---
 
-## Suggested rollout pattern for new mini-games
+## Required mini-game contract checklist
 1. Add lock constants + acquire/release methods.
 2. Acquire lock at the mini-game start action.
-3. Release lock on every terminal path (win/loss/timeout/cancel).
+3. Release lock on every terminal path (win/loss/timeout/cancel/manual stop/guard exits).
 4. Add chat feedback when blocked by another active mini-game.
-5. Add these vars to that feature README and `Actions/SHARED-CONSTANTS.md` if needed.
+5. For single-action mini-games, use `finally` to guarantee lock release.
+6. Add/update docs in feature README and `Actions/SHARED-CONSTANTS.md` when needed.

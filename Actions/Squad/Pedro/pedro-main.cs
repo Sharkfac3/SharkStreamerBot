@@ -47,6 +47,7 @@ public class CPHInline
      * - On unlock: shows OBS source "Pedro - Dancing" on the Disco workspace scene.
      * - On unlock: triggers Mix It Up command "Squad - Pedro - Unlock".
      * - On unlock: releases shared mini-game lock.
+     * - Includes reusable helper patterns (lock + message parsing + generic Mix It Up trigger).
      *
      * Operator notes:
      * - Replace MIXITUP_PEDRO_UNLOCK_COMMAND_ID when available.
@@ -248,37 +249,51 @@ public class CPHInline
     }
 
     /// <summary>
-    /// Calls Mix It Up command API for Pedro unlock side-effects.
+    /// Pedro-specific wrapper that calls the generic Mix It Up helper.
     /// </summary>
     private void TriggerMixItUpUnlock()
     {
-        if (string.IsNullOrWhiteSpace(MIXITUP_PEDRO_UNLOCK_COMMAND_ID) ||
-            MIXITUP_PEDRO_UNLOCK_COMMAND_ID.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
+        TriggerMixItUpCommand(MIXITUP_PEDRO_UNLOCK_COMMAND_ID, "Squad Pedro");
+    }
+
+    /// <summary>
+    /// Generic Mix It Up command trigger helper.
+    /// This is the shared pattern other scripts can copy.
+    /// </summary>
+    private bool TriggerMixItUpCommand(string commandId, string logPrefix, string arguments = "")
+    {
+        if (string.IsNullOrWhiteSpace(commandId) ||
+            commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
         {
-            CPH.LogWarn("[Squad Pedro] Mix It Up unlock command ID is not configured yet.");
-            return;
+            CPH.LogWarn($"[{logPrefix}] Mix It Up command ID is not configured.");
+            return false;
         }
 
         try
         {
-            string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{MIXITUP_PEDRO_UNLOCK_COMMAND_ID}";
+            string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{commandId}";
             string payload = JsonSerializer.Serialize(new
             {
                 Platform = "Twitch",
-                Arguments = "",
+                Arguments = arguments ?? "",
                 IgnoreRequirements = false
             });
 
             using var content = new StringContent(payload, Encoding.UTF8, "application/json");
             HttpResponseMessage response = MIXITUP_HTTP_CLIENT.PostAsync(url, content).GetAwaiter().GetResult();
+
             if (!response.IsSuccessStatusCode)
             {
-                CPH.LogWarn($"[Squad Pedro] Mix It Up unlock call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
+                CPH.LogWarn($"[{logPrefix}] Mix It Up call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
+                return false;
             }
+
+            return true;
         }
         catch (Exception ex)
         {
-            CPH.LogError($"[Squad Pedro] Exception while calling Mix It Up unlock command: {ex}");
+            CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
+            return false;
         }
     }
 

@@ -156,7 +156,7 @@ public class CPHInline
             CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
 
             // Notify Mix It Up for unlock side-effects.
-            TriggerMixItUpUnlock("clone");
+            TriggerMixItUpUnlock();
 
             EndGame(TIMER_CLONE_VOLLEY);
             return true;
@@ -258,37 +258,50 @@ public class CPHInline
     }
 
     /// <summary>
-    /// Sends Clone unlock event to Mix It Up command API.
-    /// Uses a fixed command ID dedicated to Clone unlock behavior.
+    /// Clone-specific wrapper that calls the generic Mix It Up helper.
     /// </summary>
-    private void TriggerMixItUpUnlock(string member)
+    private void TriggerMixItUpUnlock()
     {
-        if (string.IsNullOrWhiteSpace(MIXITUP_CLONE_UNLOCK_COMMAND_ID) ||
-            MIXITUP_CLONE_UNLOCK_COMMAND_ID.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
+        TriggerMixItUpCommand(MIXITUP_CLONE_UNLOCK_COMMAND_ID, "Squad Clone");
+    }
+
+    /// <summary>
+    /// Generic Mix It Up command trigger helper.
+    /// </summary>
+    private bool TriggerMixItUpCommand(string commandId, string logPrefix, string arguments = "")
+    {
+        if (string.IsNullOrWhiteSpace(commandId) ||
+            commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
         {
-            return;
+            CPH.LogWarn($"[{logPrefix}] Mix It Up command ID is not configured.");
+            return false;
         }
 
         try
         {
-            string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{MIXITUP_CLONE_UNLOCK_COMMAND_ID}";
+            string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{commandId}";
             string payload = JsonSerializer.Serialize(new
             {
                 Platform = "Twitch",
-                Arguments = "",
+                Arguments = arguments ?? "",
                 IgnoreRequirements = false
             });
 
             using var content = new StringContent(payload, Encoding.UTF8, "application/json");
             HttpResponseMessage response = MIXITUP_HTTP_CLIENT.PostAsync(url, content).GetAwaiter().GetResult();
+
             if (!response.IsSuccessStatusCode)
             {
-                CPH.LogWarn($"[Squad Clone] Mix It Up unlock call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
+                CPH.LogWarn($"[{logPrefix}] Mix It Up call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
+                return false;
             }
+
+            return true;
         }
         catch (Exception ex)
         {
-            CPH.LogError($"[Squad Clone] Exception while calling Mix It Up unlock command: {ex}");
+            CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
+            return false;
         }
     }
 }

@@ -39,6 +39,19 @@ All script docs use the same template sections:
 - `Actions/Twitch Integration/README.md`
 - `Actions/Twitch Integration/Bits/README.md`
 
+## Mini-game Contribution Contract (All Features)
+Any new mini-game (inside or outside `Actions/Squad/`) must follow this contract:
+1. Acquire global lock at mini-game start:
+   - `minigame_active = true`
+   - `minigame_name = <game_name>`
+2. If lock is owned by another game, do not start and send a clear blocked message.
+3. Release lock on **every** terminal path:
+   - win, loss, timeout, cancel, manual stop, resolve guard path.
+4. For single-action mini-games, release lock in a `finally` block.
+5. Keep lock vars/reset behavior synchronized with:
+   - `Actions/Twitch Integration/stream-start.cs`
+   - `Actions/HELPER-SNIPPETS.md`
+
 ## Commander Model Reminder
 - Three commander slots exist (Captain Stretch, The Director, Water Wizard).
 - All three can be active at the same time.

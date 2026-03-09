@@ -14,6 +14,7 @@ This folder contains Squad mini-game and interaction scripts.
 
 ## Helper Snippets
 - Reusable copy/paste patterns: `Actions/HELPER-SNIPPETS.md`
+- Required mini-game contract: see root `README.md` > "Mini-game Contribution Contract (All Features)"
 
 ---
 
