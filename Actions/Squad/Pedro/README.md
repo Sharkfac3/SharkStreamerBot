@@ -31,7 +31,7 @@ Handles all Pedro chat logic in one action:
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID constant in script:
   - `MIXITUP_PEDRO_UNLOCK_COMMAND_ID` (currently placeholder)
-- Payload `Arguments`: `squad-unlock|pedro`
+- Payload `Arguments`: empty string (`""`)
 - Triggered on unlock and on secret command.
 
 ### OBS Interactions

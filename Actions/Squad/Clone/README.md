@@ -109,7 +109,7 @@ Resolves each Clone volley timer tick by eliminating one open position.
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID: `4681be93-409a-4110-bfdb-7a7aa32df63a`
-- Payload `Arguments`: `squad-unlock|clone`
+- Payload `Arguments`: empty string (`""`)
 - Called only on win path.
 
 ### OBS Interactions

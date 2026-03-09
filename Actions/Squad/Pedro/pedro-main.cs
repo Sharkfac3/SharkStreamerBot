@@ -220,7 +220,7 @@ public class CPHInline
             string payload = JsonSerializer.Serialize(new
             {
                 Platform = "Twitch",
-                Arguments = "squad-unlock|pedro",
+                Arguments = "",
                 IgnoreRequirements = false
             });
 

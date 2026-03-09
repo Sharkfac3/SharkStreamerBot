@@ -90,7 +90,7 @@ Ends Duck event and resolves success/failure.
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID: `d311b1c1-943a-44cb-9749-b189d1dbd08b`
-- Payload `Arguments`: `squad-unlock|duck`
+- Payload `Arguments`: empty string (`""`)
 - Called only on first-time unlock.
 
 ### OBS Interactions

@@ -254,7 +254,7 @@ public class CPHInline
             string payload = JsonSerializer.Serialize(new
             {
                 Platform = "Twitch",
-                Arguments = $"squad-unlock|{member}",
+                Arguments = "",
                 IgnoreRequirements = false
             });
 
