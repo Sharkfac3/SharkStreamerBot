@@ -19,7 +19,7 @@ public class CPHInline
     /*
      * Purpose:
      * - Handles all Pedro chat triggers in one action script:
-     *   1) Secret instant unlock phrase.
+     *   1) Secret Mix It Up trigger phrase (does not change Pedro game state).
      *   2) !pedro command to enable Pedro mention mini-game.
      *   3) Mention counting while mini-game is enabled.
      *
@@ -67,9 +67,10 @@ public class CPHInline
         string trimmed = message.Trim();
 
         // 1) Secret override: !pedro x500liVePedro (case-insensitive).
+        // This ONLY triggers Mix It Up and does NOT alter Pedro mini-game/unlock state.
         if (IsSecretUnlockCommand(trimmed))
         {
-            UnlockPedro(forceMixItUpTrigger: true, announceIfAlreadyUnlocked: true);
+            TriggerMixItUpUnlock();
             return true;
         }
 
@@ -96,7 +97,7 @@ public class CPHInline
 
         if (newCount >= PEDRO_UNLOCK_THRESHOLD)
         {
-            UnlockPedro(forceMixItUpTrigger: true, announceIfAlreadyUnlocked: false);
+            UnlockPedro();
         }
 
         return true;
@@ -175,31 +176,22 @@ public class CPHInline
     }
 
     /// <summary>
-    /// Applies first-time unlock state and can also re-trigger Mix It Up by force (secret command path).
+    /// Applies first-time unlock state when mention threshold is reached.
     /// </summary>
-    private void UnlockPedro(bool forceMixItUpTrigger, bool announceIfAlreadyUnlocked)
+    private void UnlockPedro()
     {
         bool alreadyUnlocked = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_UNLOCKED, false) ?? false);
-
-        if (!alreadyUnlocked)
-        {
-            CPH.SetGlobalVar(VAR_PEDRO_UNLOCKED, true, false);
-            CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, false, false);
-            CPH.SetGlobalVar(VAR_PEDRO_MENTION_COUNT, PEDRO_UNLOCK_THRESHOLD, false);
-
-            ShowPedroSourceOnConfiguredScenes();
-            TriggerMixItUpUnlock();
-
-            CPH.SendMessage("💃✅ PEDRO UNLOCKED! Pedro joins the dance floor!");
+        if (alreadyUnlocked)
             return;
-        }
 
-        // Secret phrase can still force a Mix It Up retrigger for testing/recovery.
-        if (forceMixItUpTrigger)
-            TriggerMixItUpUnlock();
+        CPH.SetGlobalVar(VAR_PEDRO_UNLOCKED, true, false);
+        CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, false, false);
+        CPH.SetGlobalVar(VAR_PEDRO_MENTION_COUNT, PEDRO_UNLOCK_THRESHOLD, false);
 
-        if (announceIfAlreadyUnlocked)
-            CPH.SendMessage("💃 Pedro is already unlocked.");
+        ShowPedroSourceOnConfiguredScenes();
+        TriggerMixItUpUnlock();
+
+        CPH.SendMessage("💃✅ PEDRO UNLOCKED! Pedro joins the dance floor!");
     }
 
     /// <summary>

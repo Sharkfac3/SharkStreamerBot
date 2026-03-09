@@ -4,7 +4,7 @@
 
 ### Purpose
 Handles all Pedro chat logic in one action:
-- Secret instant unlock phrase.
+- Secret Mix It Up trigger phrase (no Pedro state changes).
 - `!pedro` start command for mini-game.
 - Mention counting until unlock.
 
@@ -25,14 +25,14 @@ Handles all Pedro chat logic in one action:
 - `!pedro` enables Pedro mention mini-game.
 - Counts occurrences of `pedro` while game is enabled.
 - Unlocks Pedro at `100` mentions.
-- Secret command `!pedro x500liVePedro` forces unlock path immediately.
+- Secret command `!pedro x500liVePedro` triggers only the Mix It Up command and does not unlock Pedro or enable the mini-game.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID constant in script:
   - `MIXITUP_PEDRO_UNLOCK_COMMAND_ID` (currently placeholder)
 - Payload `Arguments`: `squad-unlock|pedro`
-- Triggered on unlock and on secret-force command.
+- Triggered on unlock and on secret command.
 
 ### OBS Interactions
 - On unlock, shows source `Pedro - Dancing` on `Disco Party: Workspace`.
