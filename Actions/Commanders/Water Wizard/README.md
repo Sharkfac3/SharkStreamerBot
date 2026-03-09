@@ -73,3 +73,47 @@ Handles Water Wizard-only `!hydrate X` command usage.
 - Replace `MIXITUP_COMMAND_ID` placeholder before production use.
 - Wire this script to the `!hydrate` command trigger action.
 - Cooldown is role-specific and tracked globally by key `water_wizard_hydrate_next_allowed_utc`.
+
+---
+
+## Script: `water-wizard-orb.cs`
+
+### Purpose
+Handles Water Wizard-only `!orb` command usage.
+
+### Expected Trigger / Input
+- Chat command/action trigger for `!orb`.
+- Accepts optional text after the command (`0` to `30` words; reads `rawInput`, then fallback `message`).
+
+### Required Runtime Variables
+- Reads `current_water_wizard` (active Water Wizard username).
+- Reads/writes `water_wizard_orb_next_allowed_utc` (Unix timestamp, UTC, used for 5-minute cooldown).
+
+### Key Outputs / Side Effects
+- If caller **is** current Water Wizard and phrase is valid and off cooldown:
+  - Triggers Mix It Up command and forwards optional orb text (`0` to `30` words) as payload `Arguments`.
+  - Starts/refreshes 5-minute cooldown.
+- If caller **is not** current Water Wizard:
+  - If a Water Wizard is active, sends Twitch chat instruction to type `!hail` for encouragement.
+  - If no Water Wizard is active, encourages caller to redeem and become the Water Wizard.
+- If caller **is** current Water Wizard but is on cooldown:
+  - Sends cooldown remaining message in chat.
+
+### Mix It Up Actions
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Command ID in script: `REPLACE_WITH_WATER_WIZARD_ORB_COMMAND_ID` *(placeholder; must be replaced)*
+- Payload `Arguments`: validated orb text (optional, max 30 words)
+
+### OBS Interactions
+- None.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- Sends chat guidance/feedback for unauthorized use, invalid usage, and cooldown status.
+- Logs warning/error if Mix It Up call fails.
+
+### Operator Notes
+- Replace `MIXITUP_COMMAND_ID` placeholder before production use.
+- Wire this script to the `!orb` command trigger action.
