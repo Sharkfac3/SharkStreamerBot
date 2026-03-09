@@ -1,26 +1,33 @@
-using System; // Gives us access to built-in .NET types like DateTime.
+using System;
 
-// Streamer.bot expects a class named CPHInline for inline C# actions.
 public class CPHInline
 {
-    // Execute() is the entry point Streamer.bot calls when this action runs.
-    // Returning true tells Streamer.bot the action completed successfully.
+    /*
+     * Purpose:
+     * - Assigns the current Captain Stretch commander slot to the redeeming user.
+     *
+     * Expected trigger/input:
+     * - Commander redeem action for Captain Stretch.
+     * - Reads: user
+     *
+     * Required runtime variables:
+     * - Writes current_captain_stretch
+     *
+     * Key outputs/side effects:
+     * - Updates global var current_captain_stretch with latest valid username.
+     */
     public bool Execute()
     {
-        // Start with a safe default empty string in case the trigger has no user.
+        // Start with a safe default in case trigger does not include user.
         string user = string.Empty;
-
-        // Try to read the trigger argument named "user" into the variable above.
-        // If the argument is missing, user stays as empty string.
         CPH.TryGetArg("user", out user);
 
-        // Defensive check: if user is null/blank/whitespace, use a friendly fallback.
-        if (string.IsNullOrWhiteSpace(user)) return true; // No user to credit, but action still succeeds.
+        // If missing/blank, no-op safely.
+        if (string.IsNullOrWhiteSpace(user))
+            return true;
 
-        // Save who redeemed the commander so future messages can credit them.
+        // Save current commander owner for Captain Stretch slot.
         CPH.SetGlobalVar("current_captain_stretch", user, false);
-
-        // Explicit success return value for Streamer.bot action flow.
         return true;
     }
 }

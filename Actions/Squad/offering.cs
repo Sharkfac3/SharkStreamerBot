@@ -3,6 +3,33 @@ using System.Collections.Generic;
 
 public class CPHInline
 {
+    /*
+     * Purpose:
+     * - Handles !offering token input and applies per-user boost changes.
+     * - Supports optional LotAT steal behavior that can flip boosts negative.
+     *
+     * Expected trigger/input:
+     * - Chat command/action that passes user, userId, and rawInput.
+     * - rawInput should contain the offering token currently configured in offeringMap.
+     *
+     * Required runtime variables:
+     * - lotat_active (bool)
+     * - lotat_announcement_sent (bool)
+     * - lotat_offering_steal_chance (int 0..100)
+     * - lotat_steal_multiplier (int >= 1)
+     * - boost_<member>_<userId> (int)
+     *
+     * Key outputs/side effects:
+     * - Applies positive or negative delta to per-user boost key.
+     * - Clamps final boost to range 0..30.
+     * - Sends one-time LotAT active announcement when LotAT first used in a session.
+     * - Sends chat feedback describing result.
+     *
+     * Operator notes:
+     * - Add new offering tokens in BuildOfferingMap().
+     * - This script does not expose secrets and does not require persisted vars.
+     */
+
     // token -> (memberId, boostValue, flavor text)
     private Dictionary<string, (string MemberId, int BoostAdd, string Flavor)> offeringMap;
 
@@ -16,29 +43,30 @@ public class CPHInline
         CPH.TryGetArg("userId", out userId);
         CPH.TryGetArg("rawInput", out rawInput);
 
+        // If key inputs are missing, safely no-op.
         if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(rawInput))
             return true;
 
+        // Fallback userId for triggers that do not provide one.
         if (string.IsNullOrWhiteSpace(userId))
             userId = user.ToLowerInvariant();
 
-        // Extract token after !offering
+        // Extract token from command payload.
+        // Current workflow expects token in first split segment.
         string[] parts = rawInput.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         string token = parts.Length > 0 ? parts[0] : "";
 
         if (string.IsNullOrWhiteSpace(token))
             return true;
 
-        // =========================
-        // LotAT Mode Check
-        // =========================
+        // -------------------------------------------------
+        // LotAT mode / one-time announcement
+        // -------------------------------------------------
         bool lotatActive = (CPH.GetGlobalVar<bool?>("lotat_active", false) ?? false);
 
-        // Send announcement once per session
         if (lotatActive)
         {
             bool announced = (CPH.GetGlobalVar<bool?>("lotat_announcement_sent", false) ?? false);
-
             if (!announced)
             {
                 CPH.SetGlobalVar("lotat_announcement_sent", true, false);
@@ -46,20 +74,19 @@ public class CPHInline
             }
         }
 
-        // =========================
-        // Build Offering Map
-        // =========================
+        // Build lookup table for recognized offerings.
         BuildOfferingMap();
 
+        // Unknown token: flavor miss message, no state changes.
         if (!offeringMap.TryGetValue(token, out var offer))
         {
             CPH.SendMessage($"❓ {user} makes an offering... but nothing seems to notice.");
             return true;
         }
 
-        // =========================
-        // LotAT Steal Configuration
-        // =========================
+        // -------------------------------------------------
+        // LotAT steal settings (with defensive clamps)
+        // -------------------------------------------------
         int stealChance = (CPH.GetGlobalVar<int?>("lotat_offering_steal_chance", false) ?? 15);
         int stealMultiplier = (CPH.GetGlobalVar<int?>("lotat_steal_multiplier", false) ?? 1);
 
@@ -67,33 +94,30 @@ public class CPHInline
         stealMultiplier = Math.Max(1, stealMultiplier);
 
         bool stolen = false;
-
         if (lotatActive && stealChance > 0)
         {
             int roll = new Random().Next(1, 101);
             stolen = roll <= stealChance;
         }
 
-        // =========================
-        // Evil Table (weighted)
-        // =========================
+        // Weighted table for LotAT steal flavor output.
         var evilTable = BuildEvilTable();
 
-        // =========================
-        // Apply Boost
-        // =========================
-        const int boostCap = 30;
+        // -------------------------------------------------
+        // Apply boost delta
+        // -------------------------------------------------
+        const int BOOST_CAP = 30;
 
         string boostKey = $"boost_{offer.MemberId}_{userId}";
-        int currentBoost = (CPH.GetGlobalVar<int?> (boostKey, false) ?? 0);
+        int currentBoost = (CPH.GetGlobalVar<int?>(boostKey, false) ?? 0);
 
         int delta = offer.BoostAdd;
         string flavor;
 
         if (stolen)
         {
+            // On steal, invert to negative and apply multiplier.
             delta = -Math.Abs(delta) * stealMultiplier;
-
             var thief = PickWeighted(evilTable);
             flavor = thief.Flavor;
         }
@@ -103,7 +127,7 @@ public class CPHInline
         }
 
         int newBoost = currentBoost + delta;
-        newBoost = Math.Min(newBoost, boostCap);
+        newBoost = Math.Min(newBoost, BOOST_CAP);
         newBoost = Math.Max(newBoost, 0);
 
         CPH.SetGlobalVar(boostKey, newBoost, false);
@@ -117,9 +141,8 @@ public class CPHInline
     }
 
     // =====================================================
-    // Offering Map (add squad members here)
+    // Offering map configuration (easy place to add new tokens)
     // =====================================================
-
     private void BuildOfferingMap()
     {
         offeringMap = new Dictionary<string, (string MemberId, int BoostAdd, string Flavor)>(StringComparer.OrdinalIgnoreCase);
@@ -136,11 +159,7 @@ public class CPHInline
             ("decoy", 1, "🦆 A decoy is placed upon the water... ripples spread.")
         );
 
-        // Future squad members go here
-        // Example:
-        // AddOfferings("frog",
-        //     ("fly", 2, "🪰 Something buzzing disappears into the reeds...")
-        // );
+        // Future squad members can be added here.
     }
 
     private void AddOfferings(string memberId, params (string Token, int BoostAdd, string Flavor)[] offerings)
@@ -150,9 +169,8 @@ public class CPHInline
     }
 
     // =====================================================
-    // Evil Table
+    // LotAT steal flavor table (weighted)
     // =====================================================
-
     private List<(string Name, int Weight, string Flavor)> BuildEvilTable()
     {
         return new List<(string Name, int Weight, string Flavor)>
@@ -166,7 +184,6 @@ public class CPHInline
     private (string Name, int Weight, string Flavor) PickWeighted(List<(string Name, int Weight, string Flavor)> table)
     {
         int total = 0;
-
         foreach (var e in table)
             total += Math.Max(0, e.Weight);
 
@@ -183,6 +200,7 @@ public class CPHInline
                 return e;
         }
 
+        // Defensive fallback (should not be reached when total > 0).
         return table[0];
     }
 

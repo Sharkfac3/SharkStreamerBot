@@ -87,13 +87,7 @@ public class CPHInline
             // Boost is consumed on successful new unlock.
             CPH.SetGlobalVar(boostKey, 0, false);
 
-            // 1) Show/restart unlock media on whatever scene is currently live.
-            string currentScene = CPH.ObsGetCurrentScene();
-            string unlockSourceName = $"Toothless - Unlock - {rarity}";
-            CPH.ObsShowSource(currentScene, unlockSourceName);
-            CPH.ObsMediaRestart(currentScene, unlockSourceName);
-
-            // 2) Make the unlocked variant visible in Disco workspace scene.
+            // Make the unlocked variant visible in Disco workspace scene.
             string dancingScene = "Disco Party: Workspace";
             string dancingSourceName = $"Toothless - Dancing - {rarity}";
             CPH.ObsShowSource(dancingScene, dancingSourceName);
@@ -138,7 +132,7 @@ public class CPHInline
             string payload = JsonSerializer.Serialize(new
             {
                 Platform = "Twitch",
-                Arguments = $"squad-unlock|toothless|{rarity}",
+                Arguments = "",
                 IgnoreRequirements = false
             });
 
