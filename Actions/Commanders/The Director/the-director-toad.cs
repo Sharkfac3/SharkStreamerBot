@@ -20,7 +20,7 @@ public class CPHInline
     private const int TOAD_COOLDOWN_MINUTES = 5;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_DIRECTOR_TOAD_COMMAND_ID";
+    private const string MIXITUP_COMMAND_ID = "72622c77-8827-438a-9418-977d7bd03136";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
     private static readonly HttpClient Http = new HttpClient();

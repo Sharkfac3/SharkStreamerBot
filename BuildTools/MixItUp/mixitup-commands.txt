@@ -1,8 +1,8 @@
 Mix It Up Commands Export
-Command count: 94
+Command count: 74
 Pages fetched: 1
 Requested page size: 100
-Reported total count: 94
+Reported total count: 74
 First page command source: root['Commands']
 First page top-level keys: TotalCount, Commands
 
@@ -81,43 +81,15 @@ Command Summary:
 72. id=None | name=None | type=None | enabled=None
 73. id=None | name=None | type=None | enabled=None
 74. id=None | name=None | type=None | enabled=None
-75. id=None | name=None | type=None | enabled=None
-76. id=None | name=None | type=None | enabled=None
-77. id=None | name=None | type=None | enabled=None
-78. id=None | name=None | type=None | enabled=None
-79. id=None | name=None | type=None | enabled=None
-80. id=None | name=None | type=None | enabled=None
-81. id=None | name=None | type=None | enabled=None
-82. id=None | name=None | type=None | enabled=None
-83. id=None | name=None | type=None | enabled=None
-84. id=None | name=None | type=None | enabled=None
-85. id=None | name=None | type=None | enabled=None
-86. id=None | name=None | type=None | enabled=None
-87. id=None | name=None | type=None | enabled=None
-88. id=None | name=None | type=None | enabled=None
-89. id=None | name=None | type=None | enabled=None
-90. id=None | name=None | type=None | enabled=None
-91. id=None | name=None | type=None | enabled=None
-92. id=None | name=None | type=None | enabled=None
-93. id=None | name=None | type=None | enabled=None
-94. id=None | name=None | type=None | enabled=None
 
 Full JSON Payload (All Commands):
 [
   {
-    "ID": "08a15511-0ad3-4b1e-b56a-ced761795cd5",
-    "Name": "Uptime",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "0cde93ca-4be7-40f3-a19b-cbcf67665c3a",
-    "Name": "RL: Hail Water Wizard",
-    "Type": "Chat",
+    "ID": "0bdb0c8c-20eb-423e-bf59-e4e2f0b33217",
+    "Name": "Commander - Captain Stretch - Shrimp",
+    "Type": "Action Group",
     "IsEnabled": true,
-    "Unlocked": false,
+    "Unlocked": true,
     "GroupName": null
   },
   {
@@ -129,41 +101,9 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "1336a99c-5131-4630-8c20-15499a67502e",
-    "Name": "LAT: Interact",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "151c7617-585e-4243-b661-38aa81a86afe",
-    "Name": "Streamer Age",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "19547f52-f52e-4bfa-bee4-7a1390fee9d0",
     "Name": "Twitch Channel Subscription Gifted",
     "Type": "Event",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "1d115dcf-d903-489e-93dc-b53f78abde5d",
-    "Name": "LAT: hints",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "1d9c5816-b9c8-4269-8864-607d7a597ab8",
-    "Name": "LAT: Movie",
-    "Type": "Chat",
     "IsEnabled": true,
     "Unlocked": false,
     "GroupName": null
@@ -177,8 +117,24 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
+    "ID": "231c06fc-30f7-4891-974c-41db9b12c68e",
+    "Name": "Commander - The Director - Check Chat",
+    "Type": "Action Group",
+    "IsEnabled": true,
+    "Unlocked": true,
+    "GroupName": null
+  },
+  {
     "ID": "23f1afd1-7375-475d-afee-058ef4f7f68d",
     "Name": "Twitch - Bits - Tier 3",
+    "Type": "Action Group",
+    "IsEnabled": true,
+    "Unlocked": true,
+    "GroupName": null
+  },
+  {
+    "ID": "248ea7cf-e9c9-4fd1-add7-4b37e63dc805",
+    "Name": "Commander - Water Wizard - Hydrate",
     "Type": "Action Group",
     "IsEnabled": true,
     "Unlocked": true,
@@ -217,35 +173,19 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "2e7299e2-1902-4af4-8995-fb97b67c4eb7",
-    "Name": "Last Quote",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "30b18d17-32db-4756-82c2-c8163baff600",
-    "Name": "Magic 8 Ball",
-    "Type": "Pre-Made",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "33f43924-b79d-4baa-bbd4-95b4a06b0184",
-    "Name": "Xbox Game",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "3499fd20-3b69-4874-8089-a2b64a4e3691",
     "Name": "suggestion box",
     "Type": "Chat",
     "IsEnabled": true,
     "Unlocked": false,
+    "GroupName": null
+  },
+  {
+    "ID": "3bc35b73-da10-409e-bf4b-7ca59f980088",
+    "Name": "Commander - The Director - Redeem",
+    "Type": "Action Group",
+    "IsEnabled": true,
+    "Unlocked": true,
     "GroupName": null
   },
   {
@@ -257,66 +197,10 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "400a90a1-e3a7-4bd1-ba26-31993e6b1b42",
-    "Name": "Games",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "426b8196-250b-4ae3-bc02-ca1100d3781f",
-    "Name": "Follow Age",
-    "Type": "Pre-Made",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "4310f6c5-0c34-4296-8134-13ae3d7d6a53",
     "Name": "ultralight",
     "Type": "Twitch Bits",
     "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "432298ca-d169-450e-addd-d2179c753917",
-    "Name": "Mix It Up",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "43a74c34-ae6f-4d35-a2e3-cb276088b92b",
-    "Name": "RL: Directors Narration",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "44a5273f-e814-4f7c-869f-232f9d75d263",
-    "Name": "Set User Title",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "45646193-87f3-47ad-a050-3e0bb0059249",
-    "Name": "LAT: Pedro",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "45d495d2-1054-41b5-bb21-8d85578d1afd",
-    "Name": "porb",
-    "Type": "Chat",
-    "IsEnabled": false,
     "Unlocked": false,
     "GroupName": null
   },
@@ -337,33 +221,9 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "484edfc4-1e30-4256-8e80-46e04f82e48c",
-    "Name": "Title",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "4ba5abb8-1be8-4cc9-a91d-272b451c459d",
-    "Name": "Add Command",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "4d0e5b91-e1bf-4e2d-bce0-5b5ca8095873",
     "Name": "Twitch Channel Hype Train Ended",
     "Type": "Event",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "50bbafb4-712e-4208-984e-4bca6ad99952",
-    "Name": "RL: Captains Check Mag",
-    "Type": "Chat",
     "IsEnabled": false,
     "Unlocked": false,
     "GroupName": null
@@ -377,59 +237,11 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "57f623c4-e7bc-44c0-a302-1f3bbdafdbd9",
-    "Name": "Set Title",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "5927ab6f-ecce-4630-aca5-4d2af7c89041",
-    "Name": "Quote",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "5e33d14c-5142-41a0-8863-af11b69e602d",
-    "Name": "Commands",
-    "Type": "Pre-Made",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "60c642c8-b8da-4b9f-bf5b-e997d6bb1f22",
-    "Name": "RL: Who is Water Wizard ",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "623c2524-0509-45fb-a759-362edf2543b3",
     "Name": "Squad - Toothless - Regular - Unlock",
     "Type": "Action Group",
     "IsEnabled": true,
     "Unlocked": true,
-    "GroupName": null
-  },
-  {
-    "ID": "697b915b-6c80-46a9-80f2-6ab33eb3593a",
-    "Name": "RL: Directors Call Card Responses",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "6995b3f6-6d12-4ec3-ab45-e5afe9d793f1",
-    "Name": "RL: Directors Kit Idea",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
     "GroupName": null
   },
   {
@@ -441,19 +253,11 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "72e2a6d2-6c41-4281-a1fa-b922cc4019a4",
-    "Name": "LAT: Ponder",
-    "Type": "Chat",
+    "ID": "72622c77-8827-438a-9418-977d7bd03136",
+    "Name": "Commander - The Director - Toad",
+    "Type": "Action Group",
     "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "7344e0ed-fd25-4b61-96ad-62680de62ddf",
-    "Name": "RL: Captains Check Rig",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
+    "Unlocked": true,
     "GroupName": null
   },
   {
@@ -473,19 +277,11 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "8014df25-b2c5-4f9f-a743-c9dcf8522caf",
-    "Name": "Update Command",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "81a75320-59e7-4fe7-9396-d7e7775f7966",
-    "Name": "RL: Captains Check Bag ",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
+    "ID": "7efb1e03-58d7-439a-8144-e090d8786303",
+    "Name": "Commander - The Director - Hypno Toad",
+    "Type": "Action Group",
+    "IsEnabled": true,
+    "Unlocked": true,
     "GroupName": null
   },
   {
@@ -493,22 +289,6 @@ Full JSON Payload (All Commands):
     "Name": "Chat Message Received",
     "Type": "Event",
     "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "867d9caf-5257-4768-9eed-26f6e77e24df",
-    "Name": "RL: Captains Stretch",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "8753eebf-2569-48cc-b546-4457806e5706",
-    "Name": "Tabor Raid Join",
-    "Type": "Chat",
-    "IsEnabled": false,
     "Unlocked": false,
     "GroupName": null
   },
@@ -529,27 +309,19 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "925a917d-ae29-4927-bf99-8d8d29003db1",
-    "Name": "RL: Award Mr. Director",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "9876e40a-1b4b-4d16-9898-eb3da0502516",
-    "Name": "RL: Wizards Cast Eat",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "9c6aa6a4-ad68-4749-8206-7f4954f96674",
     "Name": "RL: Directors Secondary Primary",
     "Type": "Chat",
     "IsEnabled": true,
     "Unlocked": false,
+    "GroupName": null
+  },
+  {
+    "ID": "9d1eec79-eae7-40a0-b46d-fe92a775e1fa",
+    "Name": "Commander - Captain Stretch - Stretch",
+    "Type": "Action Group",
+    "IsEnabled": true,
+    "Unlocked": true,
     "GroupName": null
   },
   {
@@ -561,27 +333,19 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "a4f222ad-ef46-47a5-91d3-0d9e3cea8bae",
-    "Name": "Set Game",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
+    "ID": "a28f6866-c5e6-49ce-bd58-b52a76fcb2c8",
+    "Name": "Commander - Water Wizard - Orb",
+    "Type": "Action Group",
+    "IsEnabled": true,
+    "Unlocked": true,
     "GroupName": null
   },
   {
-    "ID": "b0dca251-8d56-45c2-9eea-70d7ed0333f6",
-    "Name": "RL: Wizards Cast Water",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "b16529cf-9e61-4e4e-a608-5402813b1cd7",
-    "Name": "Start Giveaway",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
+    "ID": "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39",
+    "Name": "Squad - Pedro - Unlock",
+    "Type": "Action Group",
+    "IsEnabled": true,
+    "Unlocked": true,
     "GroupName": null
   },
   {
@@ -593,19 +357,11 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "ba2031b4-e818-4a20-80bd-95c6da037939",
-    "Name": "RL: Wizards Hydrate",
-    "Type": "Chat",
+    "ID": "b6cf100f-aa07-47ea-b650-2715719ea434",
+    "Name": "Commander - Captain Stretch - Redeem",
+    "Type": "Action Group",
     "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "be5d9715-59b5-4463-bb0a-f8cdc24cfc94",
-    "Name": "RL: Who is Captain Stretch",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
+    "Unlocked": true,
     "GroupName": null
   },
   {
@@ -617,42 +373,10 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "c108e6f8-e5e6-4dd7-a893-9bf1db31a792",
-    "Name": "Link Account",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "c2407d41-502b-4c88-a9c2-e873ce93deaf",
     "Name": "RL: How to Captain",
     "Type": "Chat",
     "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "c464e27f-8da2-40fb-8856-82b312b354fb",
-    "Name": "RL: Thank Captain Stretch",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "c5a7a1ca-b50e-4663-a918-a299a41e747b",
-    "Name": "anime test",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "c5e61804-1df3-4df8-8ceb-9a7880cee539",
-    "Name": "Subscribe Age",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
     "Unlocked": false,
     "GroupName": null
   },
@@ -697,35 +421,11 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "cfbb33f2-c302-4509-8611-f1e442a5050d",
-    "Name": "LAT: Search",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "d285d207-f1ed-4c77-8085-6d788589b9a4",
-    "Name": "RL: Director Check Chat Reminder",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "d311b1c1-943a-44cb-9749-b189d1dbd08b",
     "Name": "Squad - Duck - Unlock",
     "Type": "Action Group",
     "IsEnabled": true,
     "Unlocked": true,
-    "GroupName": null
-  },
-  {
-    "ID": "d6023898-2ce6-494b-ae77-d0aec63e4d3a",
-    "Name": "Game",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
     "GroupName": null
   },
   {
@@ -737,34 +437,10 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "d9833f70-e839-493c-8660-83644048f483",
-    "Name": "RL: Directors Call Card",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "da26cb62-736b-42c6-bca9-36862a36c153",
-    "Name": "Add Quote",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "de9518a3-0092-4edc-9bf6-d8b19d2a77ef",
     "Name": "Encourage Participation",
     "Type": "Timer",
     "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "e182b32a-9c31-4a1b-a925-4199dab1cb13",
-    "Name": "RL: Wizards Orb",
-    "Type": "Chat",
-    "IsEnabled": true,
     "Unlocked": false,
     "GroupName": null
   },
@@ -785,14 +461,6 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "e8742bad-1190-4163-811f-0bbad2e762be",
-    "Name": "Disable Command",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
     "ID": "eb0ad013-b8bd-4757-bc8d-61160084df94",
     "Name": "Shark Explain: Ask Away",
     "Type": "Twitch Channel Points",
@@ -801,59 +469,11 @@ Full JSON Payload (All Commands):
     "GroupName": null
   },
   {
-    "ID": "f1380b79-c06a-47d9-be97-ec35bfe36b3b",
-    "Name": "debug",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "f677c914-7f11-4ba8-848a-e0a6112ed691",
-    "Name": "Mix It Up Commands",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "f694cd7b-2f05-4a0c-bf40-fda4c58312c9",
-    "Name": "RL: Captains Shrimp",
-    "Type": "Chat",
+    "ID": "f7ab01c0-780c-4f17-9020-835d91764a9c",
+    "Name": "Commander - Water Wizard - Redeem",
+    "Type": "Action Group",
     "IsEnabled": true,
-    "Unlocked": false,
+    "Unlocked": true,
     "GroupName": null
   },
-  {
-    "ID": "f79289e1-19e4-49aa-af45-1e0a30827732",
-    "Name": "Delete Quote",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "f9bb615e-5a56-4687-812a-8ab42a1a4d06",
-    "Name": "RL: Directors Toad",
-    "Type": "Chat",
-    "IsEnabled": true,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "fe42c0b0-ff91-4c7e-8e0e-5599bc6b5cfe",
-    "Name": "Steam Game",
-    "Type": "Pre-Made",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  },
-  {
-    "ID": "fee6caea-da53-4435-b888-4db0f4b6c9f7",
-    "Name": "RL: Who is Mr. Director",
-    "Type": "Chat",
-    "IsEnabled": false,
-    "Unlocked": false,
-    "GroupName": null
-  }
 ]

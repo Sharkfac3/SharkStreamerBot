@@ -14,6 +14,7 @@ public class CPHInline
     private const string VAR_THE_DIRECTOR_AWARD_COUNT = "the_director_award_count";
     private const string VAR_THE_DIRECTOR_AWARD_HIGH_SCORE = "the_director_award_high_score";
     private const string VAR_THE_DIRECTOR_AWARD_HIGH_SCORE_USER = "the_director_award_high_score_user";
+    private const string MIXITUP_COMMAND_ID = "3bc35b73-da10-409e-bf4b-7ca59f980088";
 
     /*
      * Purpose:

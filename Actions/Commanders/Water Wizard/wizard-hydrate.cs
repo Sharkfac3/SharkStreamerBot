@@ -22,7 +22,7 @@ public class CPHInline
     private const int HYDRATE_COOLDOWN_MINUTES = 5;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_WATER_WIZARD_HYDRATE_COMMAND_ID";
+    private const string MIXITUP_COMMAND_ID = "248ea7cf-e9c9-4fd1-add7-4b37e63dc805";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
     // Reuse one HttpClient instance for reliability/performance.

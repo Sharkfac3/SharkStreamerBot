@@ -14,6 +14,7 @@ public class CPHInline
     private const string VAR_WATER_WIZARD_HAIL_COUNT = "water_wizard_hail_count";
     private const string VAR_WATER_WIZARD_HAIL_HIGH_SCORE = "water_wizard_hail_high_score";
     private const string VAR_WATER_WIZARD_HAIL_HIGH_SCORE_USER = "water_wizard_hail_high_score_user";
+    private const string MIXITUP_COMMAND_ID = "f7ab01c0-780c-4f17-9020-835d91764a9c";
 
     /*
      * Purpose:
