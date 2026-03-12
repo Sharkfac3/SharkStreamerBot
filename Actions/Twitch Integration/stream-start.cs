@@ -129,11 +129,15 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_DUCK_UNLOCKED, false, false);
 
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
+        CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
+        CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
         CPH.DisableTimer(TIMER_DUCK_CALL_WINDOW);
 
         // -------------------------------------------------
         // Clone reset
         // -------------------------------------------------
+        CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
+        CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
         CPH.SetGlobalVar(VAR_CLONE_UNLOCKED, false, false);
         CPH.SetGlobalVar(VAR_CLONE_GAME_ACTIVE, false, false);
@@ -151,6 +155,8 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_PEDRO_UNLOCKED, false, false);
         CPH.SetGlobalVar(VAR_PEDRO_LAST_MESSAGE_ID, "", false);
 
+        CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
+        CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
         CPH.DisableTimer(TIMER_PEDRO_CALL_WINDOW);
 
