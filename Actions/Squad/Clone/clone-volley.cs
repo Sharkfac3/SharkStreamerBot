@@ -153,7 +153,9 @@ public class CPHInline
             CPH.SendMessage("🧬✅ The rebellion holds the final position… CLONE JOINS THE DISCO!");
 
             CPH.SetGlobalVar(VAR_CLONE_UNLOCKED, true, false);
-            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
+
+            // Use a small visibility refresh (hide -> show) to avoid stale OBS scene-item state.
+            ShowCloneDancingSource();
 
             // Notify Mix It Up for unlock side-effects.
             TriggerMixItUpUnlock();
@@ -196,6 +198,23 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_CLONE_GAME_ACTIVE, false, false);
         ReleaseMiniGameLockIfOwned();
         CPH.DisableTimer(timerName);
+    }
+
+    /// <summary>
+    /// Shows the Clone dancing source in OBS.
+    /// Uses hide -> show to avoid stale visibility cache behavior.
+    /// </summary>
+    private void ShowCloneDancingSource()
+    {
+        try
+        {
+            CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
+            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
+        }
+        catch (Exception ex)
+        {
+            CPH.LogError($"[Squad Clone] OBS show failed for '{OBS_SOURCE_CLONE_DANCING}' in scene '{OBS_SCENE_DISCO_WORKSPACE}': {ex}");
+        }
     }
 
     /// <summary>

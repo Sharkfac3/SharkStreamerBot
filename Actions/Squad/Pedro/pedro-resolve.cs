@@ -69,7 +69,10 @@ public class CPHInline
         if (mentions > PEDRO_MENTION_THRESHOLD)
         {
             CPH.SetGlobalVar(VAR_PEDRO_UNLOCKED, true, false);
-            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
+
+            // Use a small visibility refresh (hide -> show) to avoid stale OBS scene-item state.
+            ShowPedroDancingSource();
+
             TriggerMixItUpUnlock();
 
             CPH.SendMessage($"💃✅ PEDRO UNLOCKED! Mentions: {mentions} (needed more than {PEDRO_MENTION_THRESHOLD}).");
@@ -81,6 +84,23 @@ public class CPHInline
 
         ReleaseMiniGameLockIfOwned();
         return true;
+    }
+
+    /// <summary>
+    /// Shows the Pedro dancing source in OBS.
+    /// Uses hide -> show to avoid stale visibility cache behavior.
+    /// </summary>
+    private void ShowPedroDancingSource()
+    {
+        try
+        {
+            CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
+            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
+        }
+        catch (Exception ex)
+        {
+            CPH.LogError($"[Squad Pedro] OBS show failed for '{OBS_SOURCE_PEDRO_DANCING}' in scene '{OBS_SCENE_DISCO_WORKSPACE}': {ex}");
+        }
     }
 
     /// <summary>

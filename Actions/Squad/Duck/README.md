@@ -103,7 +103,8 @@ Ends Duck event and resolves success/failure.
 - Called only on first-time unlock.
 
 ### OBS Interactions
-- On first-time unlock: `ObsShowSource("Disco Party: Workspace", "Duck - Dancing")`.
+- On first-time unlock: visibility refresh `ObsHideSource("Disco Party: Workspace", "Duck - Dancing")` then `ObsShowSource(...)`.
+- Logs an error if OBS call throws (helps diagnose scene/source mismatch).
 
 ### Wait Behavior
 - None.

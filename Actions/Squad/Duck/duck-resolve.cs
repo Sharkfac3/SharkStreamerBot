@@ -77,7 +77,11 @@ public class CPHInline
             {
                 // First-time unlock side effects.
                 CPH.SetGlobalVar(VAR_DUCK_UNLOCKED, true, false);
-                CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
+
+                // Use a small visibility refresh (hide -> show) to avoid stale OBS scene-item state.
+                // Toothless stream-start reset uses the same pattern successfully.
+                ShowDuckDancingSource();
+
                 TriggerMixItUpUnlock();
 
                 CPH.SendMessage($"🦆✅ DUCK UNLOCKED! Quacks: {quacks} vs Roll: {roll} — Duck joins the disco!");
@@ -95,6 +99,23 @@ public class CPHInline
 
         ReleaseMiniGameLockIfOwned();
         return true;
+    }
+
+    /// <summary>
+    /// Shows the Duck dancing source in OBS.
+    /// Uses hide -> show to avoid stale visibility cache behavior.
+    /// </summary>
+    private void ShowDuckDancingSource()
+    {
+        try
+        {
+            CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
+            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
+        }
+        catch (Exception ex)
+        {
+            CPH.LogError($"[Squad Duck] OBS show failed for '{OBS_SOURCE_DUCK_DANCING}' in scene '{OBS_SCENE_DISCO_WORKSPACE}': {ex}");
+        }
     }
 
     /// <summary>

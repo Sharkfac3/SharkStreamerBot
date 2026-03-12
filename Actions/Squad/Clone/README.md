@@ -122,7 +122,8 @@ Resolves each Clone volley timer tick by eliminating one open position.
 - Called only on win path.
 
 ### OBS Interactions
-- On win: `ObsShowSource("Disco Party: Workspace", "Clone - Dancing")`.
+- On win: visibility refresh `ObsHideSource("Disco Party: Workspace", "Clone - Dancing")` then `ObsShowSource(...)`.
+- Logs an error if OBS call throws (helps diagnose scene/source mismatch).
 
 ### Wait Behavior
 - None.

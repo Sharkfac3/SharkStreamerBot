@@ -122,7 +122,8 @@ Ends Pedro event and resolves success/failure at timer end.
 
 ### OBS Interactions
 - On resolve success when mentions > 100:
-  - `ObsShowSource("Disco Party: Workspace", "Pedro - Dancing")`
+  - Visibility refresh `ObsHideSource("Disco Party: Workspace", "Pedro - Dancing")` then `ObsShowSource(...)`
+- Logs an error if OBS call throws (helps diagnose scene/source mismatch).
 
 ### Wait Behavior
 - None.
