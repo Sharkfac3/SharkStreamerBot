@@ -3,64 +3,133 @@
 ## Script: `pedro-main.cs`
 
 ### Purpose
-Handles all Pedro chat logic in one action:
-- Secret Mix It Up trigger phrase (no Pedro state changes).
-- `!pedro` start command for mini-game.
-- Mention counting until unlock.
+Handles the `!pedro` command entrypoint.
 
 ### Expected Trigger / Input
-- One Streamer.bot action with chat triggers for:
-  - Message starts with `!pedro`, and/or
-  - Message contains `pedro`.
-- Reads `message` (fallback `rawInput`).
-- Optionally reads `msgId` to prevent double-processing the same chat line.
+- Command trigger wired to `!pedro`.
+- Reads the trailing command message (`message`, fallback `rawInput`).
 
 ### Required Runtime Variables
 - Reads/writes shared mini-game lock:
   - `minigame_active`
   - `minigame_name` (`pedro` while this mini-game owns the lock)
-- Reads/writes `pedro_game_enabled` (bool).
-- Reads/writes `pedro_mention_count` (int).
-- Reads/writes `pedro_unlocked` (bool).
-- Reads/writes `pedro_last_message_id` (string duplicate guard).
+- Reads `pedro_game_enabled` to prevent overlap.
+- Writes `pedro_game_enabled` = `true` on normal game start.
+- Writes `pedro_mention_count` = `0` on normal game start.
 
 ### Key Outputs / Side Effects
-- `!pedro` enables Pedro mention mini-game.
-- Claims shared mini-game lock when Pedro starts.
-- Counts occurrences of `pedro` while game is enabled.
-- Unlocks Pedro at `100` mentions.
-- Releases shared mini-game lock on Pedro unlock.
-- Secret command `!pedro x500liVePedro` triggers only the Mix It Up command and does not unlock Pedro or enable the mini-game.
+- If command message is empty (`!pedro` only):
+  - Starts Pedro event collection window,
+  - Claims shared mini-game lock,
+  - Enables timer `Pedro - Call Window`.
+- If command message is exactly `x500livepedro`:
+  - Does **not** start mini-game,
+  - Does **not** claim lock,
+  - Calls Mix It Up Pedro unlock command only.
+- If command message is non-empty and not secret phrase:
+  - Does nothing.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID constant in script:
-  - `MIXITUP_PEDRO_UNLOCK_COMMAND_ID` (currently placeholder)
+- Command ID: `a43a1ecd-1607-4dc2-9ae2-fe96f0566f39`
 - Payload `Arguments`: empty string (`""`)
-- Triggered on unlock and on secret command.
+- Uses `IgnoreRequirements = false`
+- Called only when command message is exactly `x500livepedro`.
 
 ### OBS Interactions
-- On unlock, shows source `Pedro - Dancing` on `Disco Party: Workspace`.
+- None.
 
 ### Wait Behavior
 - None.
 
 ### Chat / Log Output
-- Announces mini-game-in-progress warning if another mini-game owns the lock.
-- Announces mini-game start.
-- Announces progress when `!pedro` is used again during active game.
-- Announces unlock completion.
-- Logs warning if Mix It Up command ID is not configured.
+- Sends mini-game-in-progress warning if another mini-game owns the lock.
+- Sends already-active warning if event is already running.
+- Sends event start message for new event.
+- Secret path is silent in chat (Mix It Up call only).
 
 ### Operator Notes
-- Replace `MIXITUP_PEDRO_UNLOCK_COMMAND_ID` when the real ID is available.
-- `pedro-main.cs` is the current reference implementation for helper-style patterns:
-  - mini-game lock helper
-  - message/rawInput helper
-  - generic Mix It Up trigger helper
-- Keep OBS scene/source names synced exactly: `Disco Party: Workspace` + `Pedro - Dancing`.
-- Suggested reset at stream start:
-  - `pedro_game_enabled = false`
-  - `pedro_mention_count = 0`
-  - `pedro_unlocked = false`
-  - `pedro_last_message_id = ""`
+- This script should be the direct command action for `!pedro`.
+
+---
+
+## Script: `pedro-call.cs`
+
+### Purpose
+Counts `pedro` occurrences in chat while Pedro event is active.
+
+### Expected Trigger / Input
+- Chat message trigger during active Pedro window.
+- Your setup uses a trigger for messages containing `pedro`.
+
+### Required Runtime Variables
+- Reads `pedro_game_enabled` as a gate.
+- Reads/writes `pedro_mention_count` (adds case-insensitive `pedro` hits in message text).
+
+### Key Outputs / Side Effects
+- Increments aggregate Pedro counter from incoming chat text.
+- Ignores explicit `!pedro` command lines so command behavior stays in `pedro-main.cs`.
+
+### Mix It Up Actions
+- None.
+
+### OBS Interactions
+- None.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- Reads incoming chat text (`message`, fallback `rawInput`).
+- Sends no chat output during counting.
+
+### Operator Notes
+- Keep trigger broad enough to capture normal chat lines while event is active.
+
+---
+
+## Script: `pedro-resolve.cs`
+
+### Purpose
+Ends Pedro event and resolves success/failure at timer end.
+
+### Expected Trigger / Input
+- Timer or follow-up action trigger after call window ends (`Pedro - Call Window`).
+
+### Required Runtime Variables
+- Reads/writes shared mini-game lock:
+  - `minigame_active`
+  - `minigame_name` (released on resolve when owned by Pedro)
+- Reads `pedro_game_enabled` for guard behavior.
+- Writes `pedro_game_enabled` = `false` when resolving.
+- Reads `pedro_mention_count` for threshold comparison.
+- Writes `pedro_unlocked` = `true` on successful resolve.
+
+### Key Outputs / Side Effects
+- Disables timer `Pedro - Call Window` on guard/resolve paths.
+- If mentions are greater than 100:
+  - Sets unlock state,
+  - Shows OBS source,
+  - Triggers Mix It Up unlock command.
+- Releases shared mini-game lock after resolve.
+
+### Mix It Up Actions
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Command ID: `a43a1ecd-1607-4dc2-9ae2-fe96f0566f39`
+- Payload `Arguments`: empty string (`""`)
+- Uses `IgnoreRequirements = false`
+- Called on resolve success when mentions > 100.
+
+### OBS Interactions
+- On resolve success when mentions > 100:
+  - `ObsShowSource("Disco Party: Workspace", "Pedro - Dancing")`
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- Sends unlock message on success.
+- Sends failure message when mentions are 100 or lower.
+
+### Operator Notes
+- Keep timer wiring so this script runs exactly once after the call window.

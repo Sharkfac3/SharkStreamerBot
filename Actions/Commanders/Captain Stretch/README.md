@@ -12,12 +12,15 @@ Assigns the current Captain Stretch commander slot occupant, finalizes the outgo
 ### Required Runtime Variables
 - Reads/writes `current_captain_stretch`.
 - Reads/writes `captain_stretch_thank_count`.
+- Reads/writes `captain_stretch_stretch_next_allowed_utc`.
+- Reads/writes `captain_stretch_shrimp_next_allowed_utc`.
 - Reads/writes (persisted) `captain_stretch_thank_high_score`.
 - Reads/writes (persisted) `captain_stretch_thank_high_score_user`.
 
 ### Key Outputs / Side Effects
 - Updates active Captain Stretch commander assignment.
 - Resets `captain_stretch_thank_count` to `0` for the new captain tenure.
+- Resets all Captain Stretch command cooldown vars so the new captain starts with no cooldown debt.
 - If outgoing captain beat the high score, announces the new record in chat.
 
 ### Mix It Up Actions

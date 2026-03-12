@@ -12,12 +12,15 @@ Assigns the current Water Wizard commander slot occupant, finalizes the outgoing
 ### Required Runtime Variables
 - Reads/writes `current_water_wizard`.
 - Reads/writes `water_wizard_hail_count`.
+- Reads/writes `water_wizard_hydrate_next_allowed_utc`.
+- Reads/writes `water_wizard_orb_next_allowed_utc`.
 - Reads/writes (persisted) `water_wizard_hail_high_score`.
 - Reads/writes (persisted) `water_wizard_hail_high_score_user`.
 
 ### Key Outputs / Side Effects
 - Updates active Water Wizard commander assignment.
 - Resets `water_wizard_hail_count` to `0` for the new wizard tenure.
+- Resets all Water Wizard command cooldown vars so the new wizard starts with no cooldown debt.
 - If outgoing wizard beat the high score, announces the new record in chat.
 
 ### Mix It Up Actions

@@ -14,7 +14,10 @@ public class CPHInline
     private const string VAR_THE_DIRECTOR_AWARD_COUNT = "the_director_award_count";
     private const string VAR_THE_DIRECTOR_AWARD_HIGH_SCORE = "the_director_award_high_score";
     private const string VAR_THE_DIRECTOR_AWARD_HIGH_SCORE_USER = "the_director_award_high_score_user";
-    private const string MIXITUP_COMMAND_ID = "3bc35b73-da10-409e-bf4b-7ca59f980088";
+
+    // The Director command cooldown tracking.
+    private const string VAR_THE_DIRECTOR_CHECKCHAT_NEXT_ALLOWED_UTC = "the_director_checkchat_next_allowed_utc";
+    private const string VAR_THE_DIRECTOR_TOAD_NEXT_ALLOWED_UTC = "the_director_toad_next_allowed_utc";
 
     /*
      * Purpose:
@@ -29,12 +32,15 @@ public class CPHInline
      * Required runtime variables:
      * - Reads/Writes current_the_director
      * - Reads/Writes the_director_award_count
+     * - Reads/Writes the_director_checkchat_next_allowed_utc
+     * - Reads/Writes the_director_toad_next_allowed_utc
      * - Reads/Writes (persisted) the_director_award_high_score
      * - Reads/Writes (persisted) the_director_award_high_score_user
      *
      * Key outputs/side effects:
      * - Updates global var current_the_director with latest valid username.
      * - Resets the_director_award_count to 0 for the new director tenure.
+     * - Resets The Director command cooldowns so the new director starts fresh.
      * - Announces new high score in chat when beaten.
      */
     public bool Execute()
@@ -69,6 +75,10 @@ public class CPHInline
 
         // Reset active tenure counter for the new director.
         CPH.SetGlobalVar(VAR_THE_DIRECTOR_AWARD_COUNT, 0, false);
+
+        // Reset all Director command cooldowns for the new tenure.
+        CPH.SetGlobalVar(VAR_THE_DIRECTOR_CHECKCHAT_NEXT_ALLOWED_UTC, 0L, false);
+        CPH.SetGlobalVar(VAR_THE_DIRECTOR_TOAD_NEXT_ALLOWED_UTC, 0L, false);
         return true;
     }
 }

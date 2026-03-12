@@ -8,53 +8,20 @@ public class CPHInline
     // SYNC CONSTANTS (Pedro feature)
     // Keep these names identical across:
     // - Actions/Squad/Pedro/pedro-main.cs
+    // - Actions/Squad/Pedro/pedro-call.cs
+    // - Actions/Squad/Pedro/pedro-resolve.cs
     // - Actions/Twitch Integration/stream-start.cs
     private const string VAR_PEDRO_GAME_ENABLED = "pedro_game_enabled";
     private const string VAR_PEDRO_MENTION_COUNT = "pedro_mention_count";
-    private const string VAR_PEDRO_UNLOCKED = "pedro_unlocked";
-    private const string VAR_PEDRO_LAST_MESSAGE_ID = "pedro_last_message_id";
-    private const string OBS_SCENE_PEDRO = "Disco Party: Workspace";
-    private const string OBS_SOURCE_PEDRO_DANCING = "Pedro - Dancing";
+    private const string TIMER_PEDRO_CALL_WINDOW = "Pedro - Call Window";
 
     // Shared mini-game lock (cross-feature).
     private const string VAR_MINIGAME_ACTIVE = "minigame_active";
     private const string VAR_MINIGAME_NAME = "minigame_name";
     private const string MINIGAME_NAME_PEDRO = "pedro";
 
-    /*
-     * Purpose:
-     * - Handles all Pedro chat triggers in one action script:
-     *   1) Secret Mix It Up trigger phrase (does not change Pedro game state).
-     *   2) !pedro command to enable Pedro mention mini-game.
-     *   3) Mention counting while mini-game is enabled.
-     *
-     * Expected trigger/input:
-     * - Chat message trigger wired to run when:
-     *   - message starts with "!pedro", OR
-     *   - message contains "pedro" anywhere.
-     * - Reads: message (fallback rawInput), optional msgId, optional user.
-     *
-     * Required runtime variables:
-     * - pedro_game_enabled (bool)
-     * - pedro_mention_count (int)
-     * - pedro_unlocked (bool)
-     * - pedro_last_message_id (string) for duplicate-trigger safety
-     * - shared lock: minigame_active/minigame_name
-     *
-     * Key outputs/side effects:
-     * - Enables mini-game on !pedro (only when no other mini-game is active).
-     * - Counts "pedro" mentions until unlock threshold is reached.
-     * - On unlock: shows OBS source "Pedro - Dancing" on the Disco workspace scene.
-     * - On unlock: triggers Mix It Up command "Squad - Pedro - Unlock".
-     * - On unlock: releases shared mini-game lock.
-     * - Includes reusable helper patterns (lock + message parsing + generic Mix It Up trigger).
-     *
-     * Operator notes:
-     * - Replace MIXITUP_PEDRO_UNLOCK_COMMAND_ID when available.
-     * - Pedro source scene is fixed to: "Disco Party: Workspace".
-     */
-
-    private const int PEDRO_UNLOCK_THRESHOLD = 100;
+    // Secret unlock text allowed through the !pedro command.
+    // Example: !pedro x500livepedro
     private const string PEDRO_SECRET_PHRASE = "x500livepedro";
 
     // Mix It Up unlock bridge for Pedro unlock events.
@@ -62,160 +29,94 @@ public class CPHInline
     private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
+    /*
+     * Purpose:
+     * - Handles the !pedro command entrypoint.
+     * - Starts Pedro mini-game only when !pedro has no trailing message.
+     * - If !pedro has the exact secret message, only triggers Mix It Up unlock command.
+     *
+     * Expected trigger/input:
+     * - Streamer.bot command trigger for !pedro
+     *
+     * Required runtime variables:
+     * - pedro_game_enabled
+     * - pedro_mention_count
+     * - shared lock: minigame_active/minigame_name
+     *
+     * Key outputs/side effects:
+     * - Empty message: starts Pedro call window + timer.
+     * - Secret message: calls Mix It Up unlock command only.
+     */
     public bool Execute()
     {
-        string message = GetMessageText();
-        if (string.IsNullOrWhiteSpace(message))
-            return true;
+        string pedroMessage = GetPedroCommandMessage();
 
-        // Guard against accidental double-processing when multiple triggers fire for the same message.
-        if (IsDuplicateMessage())
-            return true;
-
-        string trimmed = message.Trim();
-
-        // 1) Secret override: !pedro x500liVePedro (case-insensitive).
-        // This ONLY triggers Mix It Up and does NOT alter Pedro mini-game/unlock state.
-        if (IsSecretUnlockCommand(trimmed))
+        // Secret command path: do NOT start mini-game.
+        // We only bridge to Mix It Up as requested.
+        if (IsSecretPhrase(pedroMessage))
         {
             TriggerMixItUpUnlock();
             return true;
         }
 
-        // 2) !pedro enables the mini-game.
-        if (string.Equals(trimmed, "!pedro", StringComparison.OrdinalIgnoreCase))
+        // Any non-empty argument that is not the secret phrase should not start the mini-game.
+        if (!string.IsNullOrWhiteSpace(pedroMessage))
+            return true;
+
+        // Prevent overlap across all mini-games.
+        if (!TryAcquireMiniGameLock())
         {
-            HandlePedroStartCommand();
+            string activeGame = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "another mini-game";
+            CPH.SendMessage($"🎮 A mini-game is already running ({activeGame}). Finish it before starting Pedro.");
             return true;
         }
 
-        // 3) Normal mention counting only while game is active and still locked.
-        bool gameEnabled = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_GAME_ENABLED, false) ?? false);
-        bool unlocked = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_UNLOCKED, false) ?? false);
-        if (!gameEnabled || unlocked)
-            return true;
-
-        int hits = CountOccurrences(message, "pedro");
-        if (hits <= 0)
-            return true;
-
-        int currentCount = (CPH.GetGlobalVar<int?>(VAR_PEDRO_MENTION_COUNT, false) ?? 0);
-        int newCount = currentCount + hits;
-        CPH.SetGlobalVar(VAR_PEDRO_MENTION_COUNT, newCount, false);
-
-        if (newCount >= PEDRO_UNLOCK_THRESHOLD)
+        // Prevent overlapping Pedro events.
+        bool active = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_GAME_ENABLED, false) ?? false);
+        if (active)
         {
-            UnlockPedro();
+            CPH.SendMessage("💃 Pedro is already on the dance floor... summon harder!");
+            return true;
         }
 
+        // Reset event state for a new run.
+        CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, true, false);
+        CPH.SetGlobalVar(VAR_PEDRO_MENTION_COUNT, 0, false);
+
+        // Start timer that will resolve event outcome.
+        CPH.EnableTimer(TIMER_PEDRO_CALL_WINDOW);
+
+        // Notify chat.
+        CPH.SendMessage("💃 Pedro has entered the arena! You have 2 minutes — spam **pedro**!");
         return true;
     }
 
-    /// <summary>
-    /// Reads chat text from common trigger args with safe fallback.
-    /// </summary>
-    private string GetMessageText()
+    private string GetPedroCommandMessage()
     {
-        string text = "";
-        if (!CPH.TryGetArg("message", out text) || string.IsNullOrWhiteSpace(text))
-            CPH.TryGetArg("rawInput", out text);
+        // In command triggers, `message` is usually the text after !pedro.
+        string messageArg = "";
+        if (CPH.TryGetArg("message", out messageArg))
+            return (messageArg ?? "").Trim();
 
-        return text ?? "";
+        // Fallback for setups that pass only rawInput.
+        // We strip the !pedro prefix if present.
+        string rawInput = "";
+        if (!CPH.TryGetArg("rawInput", out rawInput))
+            return "";
+
+        rawInput = (rawInput ?? "").Trim();
+        if (rawInput.StartsWith("!pedro", StringComparison.OrdinalIgnoreCase))
+            return rawInput.Substring("!pedro".Length).Trim();
+
+        return rawInput;
     }
 
-    /// <summary>
-    /// Uses Twitch message ID when available to avoid handling the same chat line twice.
-    /// </summary>
-    private bool IsDuplicateMessage()
+    private bool IsSecretPhrase(string text)
     {
-        string msgId = "";
-        if (!CPH.TryGetArg("msgId", out msgId) || string.IsNullOrWhiteSpace(msgId))
+        if (string.IsNullOrWhiteSpace(text))
             return false;
 
-        string lastId = CPH.GetGlobalVar<string>(VAR_PEDRO_LAST_MESSAGE_ID, false) ?? "";
-        if (string.Equals(lastId, msgId, StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        CPH.SetGlobalVar(VAR_PEDRO_LAST_MESSAGE_ID, msgId, false);
-        return false;
-    }
-
-    /// <summary>
-    /// Validates exact secret command format: !pedro x500liVePedro (case-insensitive token check).
-    /// </summary>
-    private bool IsSecretUnlockCommand(string trimmedMessage)
-    {
-        if (string.IsNullOrWhiteSpace(trimmedMessage))
-            return false;
-
-        string[] parts = trimmedMessage.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        if (parts.Length != 2)
-            return false;
-
-        return string.Equals(parts[0], "!pedro", StringComparison.OrdinalIgnoreCase)
-            && string.Equals(parts[1], PEDRO_SECRET_PHRASE, StringComparison.OrdinalIgnoreCase);
-    }
-
-    /// <summary>
-    /// Handles "!pedro" command to start/announce mini-game state.
-    /// </summary>
-    private void HandlePedroStartCommand()
-    {
-        bool unlocked = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_UNLOCKED, false) ?? false);
-        if (unlocked)
-        {
-            CPH.SendMessage("💃 Pedro is already unlocked and dancing!");
-            return;
-        }
-
-        bool enabled = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_GAME_ENABLED, false) ?? false);
-        int count = (CPH.GetGlobalVar<int?>(VAR_PEDRO_MENTION_COUNT, false) ?? 0);
-
-        if (!enabled)
-        {
-            if (!TryAcquireMiniGameLock())
-            {
-                string activeGame = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "another mini-game";
-                CPH.SendMessage($"🎮 A mini-game is already running ({activeGame}). Finish it before starting Pedro.");
-                return;
-            }
-
-            CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, true, false);
-
-            // Keep any existing count if operator paused/re-enabled manually.
-            CPH.SendMessage($"🕺 Pedro mini-game is live! Mention 'pedro' in chat ({PEDRO_UNLOCK_THRESHOLD} total) to unlock him!");
-            return;
-        }
-
-        CPH.SendMessage($"🕺 Pedro hunt already active: {count}/{PEDRO_UNLOCK_THRESHOLD} mentions.");
-    }
-
-    /// <summary>
-    /// Applies first-time unlock state when mention threshold is reached.
-    /// </summary>
-    private void UnlockPedro()
-    {
-        bool alreadyUnlocked = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_UNLOCKED, false) ?? false);
-        if (alreadyUnlocked)
-            return;
-
-        CPH.SetGlobalVar(VAR_PEDRO_UNLOCKED, true, false);
-        CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, false, false);
-        CPH.SetGlobalVar(VAR_PEDRO_MENTION_COUNT, PEDRO_UNLOCK_THRESHOLD, false);
-
-        ShowPedroSourceOnConfiguredScenes();
-        TriggerMixItUpUnlock();
-        ReleaseMiniGameLockIfOwned();
-
-        CPH.SendMessage("💃✅ PEDRO UNLOCKED! Pedro joins the dance floor!");
-    }
-
-    /// <summary>
-    /// Shows "Pedro - Dancing" on the fixed Pedro scene.
-    /// </summary>
-    private void ShowPedroSourceOnConfiguredScenes()
-    {
-        CPH.ObsShowSource(OBS_SCENE_PEDRO, OBS_SOURCE_PEDRO_DANCING);
+        return string.Equals(text.Trim(), PEDRO_SECRET_PHRASE, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -236,19 +137,6 @@ public class CPHInline
     }
 
     /// <summary>
-    /// Releases the shared lock only if Pedro currently owns it.
-    /// </summary>
-    private void ReleaseMiniGameLockIfOwned()
-    {
-        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
-        if (!string.Equals(lockName, MINIGAME_NAME_PEDRO, StringComparison.OrdinalIgnoreCase))
-            return;
-
-        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
-        CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
-    }
-
-    /// <summary>
     /// Pedro-specific wrapper that calls the generic Mix It Up helper.
     /// </summary>
     private void TriggerMixItUpUnlock()
@@ -258,7 +146,6 @@ public class CPHInline
 
     /// <summary>
     /// Generic Mix It Up command trigger helper.
-    /// This is the shared pattern other scripts can copy.
     /// </summary>
     private bool TriggerMixItUpCommand(string commandId, string logPrefix, string arguments = "")
     {
@@ -295,28 +182,5 @@ public class CPHInline
             CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
             return false;
         }
-    }
-
-    /// <summary>
-    /// Returns number of non-overlapping occurrences of "word" in text (case-insensitive).
-    /// </summary>
-    private int CountOccurrences(string text, string word)
-    {
-        if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(word))
-            return 0;
-
-        int count = 0;
-        int index = 0;
-
-        string t = text.ToLowerInvariant();
-        string w = word.ToLowerInvariant();
-
-        while ((index = t.IndexOf(w, index, StringComparison.Ordinal)) != -1)
-        {
-            count++;
-            index += w.Length;
-        }
-
-        return count;
     }
 }

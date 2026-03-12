@@ -1,3 +1,8 @@
+---
+name: skills
+description: Overview of project skills, routing, and conventions for maintaining the .pi/skills directory.
+---
+
 # Pi Skills
 
 This project uses [pi skills](https://agentskills.io/specification) to break agent instructions into focused, on-demand modules. Instead of loading all project rules into every conversation, pi loads only the skills relevant to the current task.

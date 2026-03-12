@@ -12,12 +12,15 @@ Assigns the current The Director commander slot occupant, finalizes the outgoing
 ### Required Runtime Variables
 - Reads/writes `current_the_director`.
 - Reads/writes `the_director_award_count`.
+- Reads/writes `the_director_checkchat_next_allowed_utc`.
+- Reads/writes `the_director_toad_next_allowed_utc`.
 - Reads/writes (persisted) `the_director_award_high_score`.
 - Reads/writes (persisted) `the_director_award_high_score_user`.
 
 ### Key Outputs / Side Effects
 - Updates active The Director commander assignment.
 - Resets `the_director_award_count` to `0` for the new director tenure.
+- Resets all The Director command cooldown vars so the new director starts with no cooldown debt.
 - If outgoing director beat the high score, announces the new record in chat.
 
 ### Mix It Up Actions

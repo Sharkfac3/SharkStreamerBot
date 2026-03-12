@@ -30,6 +30,7 @@ public class CPHInline
     private const string VAR_PEDRO_UNLOCKED = "pedro_unlocked";
     private const string VAR_PEDRO_LAST_MESSAGE_ID = "pedro_last_message_id";
     private const string OBS_SOURCE_PEDRO_DANCING = "Pedro - Dancing";
+    private const string TIMER_PEDRO_CALL_WINDOW = "Pedro - Call Window";
 
     // Toothless
     private const string PREFIX_RARITY = "rarity_";
@@ -63,9 +64,9 @@ public class CPHInline
      * - Clears global mini-game lock state.
      * - Resets Toothless rarity unlock flags + last roll tracking.
      * - Resets LotAT mode + offering steal settings.
-     * - Resets Duck and Clone runtime state.
-     * - Hides Duck/Clone/Toothless dance sources in OBS.
-     * - Disables Duck and Clone timers to prevent stale timer fires.
+     * - Resets Duck, Clone, and Pedro runtime state.
+     * - Hides Duck/Clone/Pedro/Toothless dance sources in OBS.
+     * - Disables Duck, Clone, and Pedro timers to prevent stale timer fires.
      *
      * Operator notes:
      * - Keep scene/source names in sync with OBS.
@@ -151,6 +152,7 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_PEDRO_LAST_MESSAGE_ID, "", false);
 
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
+        CPH.DisableTimer(TIMER_PEDRO_CALL_WINDOW);
 
         return true;
     }

@@ -15,6 +15,10 @@ public class CPHInline
     private const string VAR_CAPTAIN_STRETCH_THANK_HIGH_SCORE = "captain_stretch_thank_high_score";
     private const string VAR_CAPTAIN_STRETCH_THANK_HIGH_SCORE_USER = "captain_stretch_thank_high_score_user";
 
+    // Captain Stretch command cooldown tracking.
+    private const string VAR_CAPTAIN_STRETCH_STRETCH_NEXT_ALLOWED_UTC = "captain_stretch_stretch_next_allowed_utc";
+    private const string VAR_CAPTAIN_STRETCH_SHRIMP_NEXT_ALLOWED_UTC = "captain_stretch_shrimp_next_allowed_utc";
+
     /*
      * Purpose:
      * - Assigns the current Captain Stretch commander slot to the redeeming user.
@@ -28,12 +32,15 @@ public class CPHInline
      * Required runtime variables:
      * - Reads/Writes current_captain_stretch
      * - Reads/Writes captain_stretch_thank_count
+     * - Reads/Writes captain_stretch_stretch_next_allowed_utc
+     * - Reads/Writes captain_stretch_shrimp_next_allowed_utc
      * - Reads/Writes (persisted) captain_stretch_thank_high_score
      * - Reads/Writes (persisted) captain_stretch_thank_high_score_user
      *
      * Key outputs/side effects:
      * - Updates global var current_captain_stretch with latest valid username.
      * - Resets captain_stretch_thank_count to 0 for the new captain tenure.
+     * - Resets Captain Stretch command cooldowns so the new captain starts fresh.
      * - Announces new high score in chat when beaten.
      */
     public bool Execute()
@@ -68,6 +75,10 @@ public class CPHInline
 
         // Reset active tenure counter for the new captain.
         CPH.SetGlobalVar(VAR_CAPTAIN_STRETCH_THANK_COUNT, 0, false);
+
+        // Reset all Captain Stretch command cooldowns for the new tenure.
+        CPH.SetGlobalVar(VAR_CAPTAIN_STRETCH_STRETCH_NEXT_ALLOWED_UTC, 0L, false);
+        CPH.SetGlobalVar(VAR_CAPTAIN_STRETCH_SHRIMP_NEXT_ALLOWED_UTC, 0L, false);
         return true;
     }
 }
