@@ -16,7 +16,7 @@ public class CPHInline
     private const string VAR_CURRENT_CAPTAIN_STRETCH = "current_captain_stretch";
     private const string VAR_CAPTAIN_STRETCH_NEXT_ALLOWED_UTC = "captain_stretch_stretch_next_allowed_utc";
 
-    private const int STRETCH_MAX_WORD_COUNT = 5;
+    private const int STRETCH_MAX_WORD_COUNT = 10;
     private const int STRETCH_COOLDOWN_MINUTES = 5;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";

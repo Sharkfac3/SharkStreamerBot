@@ -17,7 +17,7 @@ public class CPHInline
     private const string VAR_WIZARD_ORB_NEXT_ALLOWED_UTC = "water_wizard_orb_next_allowed_utc";
 
     private const int ORB_MAX_WORD_COUNT = 30;
-    private const int ORB_COOLDOWN_MINUTES = 5;
+    private const int ORB_COOLDOWN_MINUTES = 1;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_COMMAND_ID = "a28f6866-c5e6-49ce-bd58-b52a76fcb2c8";

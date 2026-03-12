@@ -17,7 +17,7 @@ public class CPHInline
     private const string VAR_DIRECTOR_TOAD_NEXT_ALLOWED_UTC = "the_director_toad_next_allowed_utc";
 
     private const int TOAD_MAX_WORD_COUNT = 30;
-    private const int TOAD_COOLDOWN_MINUTES = 5;
+    private const int TOAD_COOLDOWN_MINUTES = 1;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_COMMAND_ID = "72622c77-8827-438a-9418-977d7bd03136";

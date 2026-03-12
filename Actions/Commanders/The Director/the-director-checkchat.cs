@@ -16,8 +16,8 @@ public class CPHInline
     private const string VAR_CURRENT_THE_DIRECTOR = "current_the_director";
     private const string VAR_DIRECTOR_CHECKCHAT_NEXT_ALLOWED_UTC = "the_director_checkchat_next_allowed_utc";
 
-    private const int CHECKCHAT_MAX_WORD_COUNT = 10;
-    private const int CHECKCHAT_COOLDOWN_MINUTES = 5;
+    private const int CHECKCHAT_MAX_WORD_COUNT = 20;
+    private const int CHECKCHAT_COOLDOWN_MINUTES = 1;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_COMMAND_ID = "231c06fc-30f7-4891-974c-41db9b12c68e";
