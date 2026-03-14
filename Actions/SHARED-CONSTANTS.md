@@ -7,7 +7,13 @@ When you rename any value below, update **all listed scripts** before syncing to
 ---
 
 ## OBS
+- `OBS_SCENE_DISCO_GARAGE` = `Disco Party: Garage`
 - `OBS_SCENE_DISCO_WORKSPACE` = `Disco Party: Workspace`
+- `OBS_SCENE_DISCO_GAMER` = `Disco Party: Gamer`
+
+Used in:
+- `Actions/Twitch Integration/stream-start.cs`
+- `Actions/Twitch Integration/redeems/disco-party.cs`
 
 ---
 
@@ -22,6 +28,7 @@ Used in:
 - `Actions/Twitch Integration/modes/mode-garage.cs`
 - `Actions/Twitch Integration/modes/mode-workspace.cs`
 - `Actions/Twitch Integration/modes/mode-gamer.cs`
+- `Actions/Twitch Integration/redeems/disco-party.cs`
 
 ---
 

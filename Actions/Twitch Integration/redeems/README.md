@@ -42,3 +42,43 @@ Handles the `explain-current-task` channel point redeem by ensuring recording is
 ### Operator Notes
 - Replace `replace-with-actual-id-dyude-cmon` with the actual Mix It Up command ID.
 - Wire this script into the Streamer.bot action tied to your channel point redeem.
+
+---
+
+## Script: `disco-party.cs`
+
+### Purpose
+Handles the `disco party` channel point redeem by switching to the correct Disco Party OBS scene based on the current stream mode.
+
+### Expected Trigger / Input
+- Channel point redeem action for `disco party`.
+- No chat arguments required.
+
+### Required Runtime Variables
+- Reads `stream_mode`.
+
+### Key Outputs / Side Effects
+- If `stream_mode = garage`, switches to `Disco Party: Garage`.
+- If `stream_mode = workspace`, switches to `Disco Party: Workspace`.
+- If `stream_mode = gamer`, switches to `Disco Party: Gamer`.
+- If `stream_mode` is missing/unknown, logs a warning and falls back to `Disco Party: Workspace`.
+
+### Mix It Up Actions
+- None.
+
+### OBS Interactions
+- Switches current OBS scene using available CPH OBS scene methods.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- No chat output.
+- Logs warning messages if stream mode is unknown or OBS scene switching fails.
+
+### Operator Notes
+- Ensure the three OBS scenes exist with exact names:
+  - `Disco Party: Garage`
+  - `Disco Party: Workspace`
+  - `Disco Party: Gamer`
+- Wire this script into the Streamer.bot action tied to your `disco party` channel point redeem.
