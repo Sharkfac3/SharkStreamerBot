@@ -30,6 +30,7 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 - Resets `pedro_mention_count` (int) to `0`.
 - Resets `pedro_unlocked` (bool) to false.
 - Resets `pedro_last_message_id` (string) to empty.
+- Sets `stream_mode` (string) to `workspace`.
 
 ### Key Outputs / Side Effects
 - Reinitializes session state for stream start.
@@ -55,5 +56,11 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 - Keep this action early in stream startup order so downstream scripts see clean state.
 - Keep shared key/timer/OBS names aligned with `Actions/SHARED-CONSTANTS.md`.
 
+## Mode Scripts
+- See `modes/README.md`.
+
 ## Bits Docs
 - See `Bits/README.md`.
+
+## Redeem Scripts
+- See `redeems/README.md`.

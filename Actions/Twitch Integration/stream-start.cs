@@ -48,6 +48,10 @@ public class CPHInline
     private const string VAR_MINIGAME_ACTIVE = "minigame_active";
     private const string VAR_MINIGAME_NAME = "minigame_name";
 
+    // Stream mode (shared across Twitch integration and mode actions)
+    private const string VAR_STREAM_MODE = "stream_mode";
+    private const string MODE_WORKSPACE = "workspace";
+
     /*
      * Purpose:
      * - Runs at stream start to reset shared state for Squad, LotAT, and Twitch integrations.
@@ -65,6 +69,7 @@ public class CPHInline
      * - Resets Toothless rarity unlock flags + last roll tracking.
      * - Resets LotAT mode + offering steal settings.
      * - Resets Duck, Clone, and Pedro runtime state.
+     * - Sets stream mode to workspace as the default start-of-stream mode.
      * - Hides Duck/Clone/Pedro/Toothless dance sources in OBS.
      * - Disables Duck, Clone, and Pedro timers to prevent stale timer fires.
      *
@@ -77,6 +82,10 @@ public class CPHInline
         // Clear shared lock so no stale mini-game blocks the new stream.
         CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
+
+        // Default stream mode at stream start.
+        // This gives downstream actions/commands a known baseline mode.
+        CPH.SetGlobalVar(VAR_STREAM_MODE, MODE_WORKSPACE, false);
 
         // Toothless rarity list used for both source names and unlock flag keys.
         var toothlessRarities = new List<string>

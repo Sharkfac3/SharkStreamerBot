@@ -11,6 +11,20 @@ When you rename any value below, update **all listed scripts** before syncing to
 
 ---
 
+## Stream Mode (shared)
+- `VAR_STREAM_MODE` = `stream_mode`
+- `MODE_GARAGE` = `garage`
+- `MODE_WORKSPACE` = `workspace`
+- `MODE_GAMER` = `gamer`
+
+Used in:
+- `Actions/Twitch Integration/stream-start.cs`
+- `Actions/Twitch Integration/modes/mode-garage.cs`
+- `Actions/Twitch Integration/modes/mode-workspace.cs`
+- `Actions/Twitch Integration/modes/mode-gamer.cs`
+
+---
+
 ## Mini-game Lock (shared)
 - `VAR_MINIGAME_ACTIVE` = `minigame_active`
 - `VAR_MINIGAME_NAME` = `minigame_name`
@@ -167,6 +181,7 @@ Used in:
 2. Paste updated scripts into Streamer.bot actions.
 3. Run smoke tests:
    - stream-start reset,
+   - stream mode switching (garage/workspace/gamer),
    - Duck start/call/resolve,
    - Clone start/position/volley,
    - Pedro start/mentions/unlock,
