@@ -149,6 +149,9 @@ Handles The Director-only `!toad` command usage.
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID in script: `REPLACE_WITH_DIRECTOR_TOAD_COMMAND_ID` *(placeholder; must be replaced)*
 - Payload `Arguments`: validated `!toad` text (optional, max 30 words)
+- Payload `SpecialIdentifiers.type`:
+  - Default value: `"normal"`
+  - Random variant: `"hypno"` with a 1-in-10 chance
 
 ### OBS Interactions
 - None.

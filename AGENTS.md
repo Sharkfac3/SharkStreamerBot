@@ -17,6 +17,16 @@ Repository hierarchy: `Actions/<Feature Group>/<Subfeature>/script.cs`
 - `Actions/SHARED-CONSTANTS.md` — Canonical global variable / OBS / timer names
 - `Actions/HELPER-SNIPPETS.md` — Reusable C# copy/paste patterns
 
+### Mix It Up API Payload Convention (Run Command)
+When calling `POST /api/v2/commands/{commandId}` from Streamer.bot scripts:
+- Keep standard fields: `Platform`, `Arguments`, `IgnoreRequirements`.
+- Pass extra variables for Mix It Up command usage inside `SpecialIdentifiers` (not as top-level fields).
+- Example payload shape:
+  - `Platform = "Twitch"`
+  - `Arguments = "optional message text"`
+  - `SpecialIdentifiers = new { test = "True" }`
+  - `IgnoreRequirements = false`
+
 ---
 
 ## Skill Routing

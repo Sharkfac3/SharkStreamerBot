@@ -92,7 +92,11 @@ private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
 ### Reusable method
 ```csharp
-private bool TriggerMixItUpCommand(string commandId, string logPrefix, string arguments = "")
+private bool TriggerMixItUpCommand(
+    string commandId,
+    string logPrefix,
+    string arguments = "",
+    object specialIdentifiers = null)
 {
     if (string.IsNullOrWhiteSpace(commandId) ||
         commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
@@ -108,6 +112,9 @@ private bool TriggerMixItUpCommand(string commandId, string logPrefix, string ar
         {
             Platform = "Twitch",
             Arguments = arguments ?? "",
+            // Keep SpecialIdentifiers present by default.
+            // If no extra values are provided, send an empty object.
+            SpecialIdentifiers = specialIdentifiers ?? new { },
             IgnoreRequirements = false
         });
 
@@ -134,8 +141,15 @@ private bool TriggerMixItUpCommand(string commandId, string logPrefix, string ar
 ```csharp
 private const string MIXITUP_UNLOCK_COMMAND_ID = "REPLACE_WITH_UNLOCK_COMMAND_ID";
 
-// On unlock:
+// On unlock (no extra params): sends SpecialIdentifiers = {}
 TriggerMixItUpCommand(MIXITUP_UNLOCK_COMMAND_ID, "Squad Duck");
+
+// With extra params available in Mix It Up as special identifiers:
+TriggerMixItUpCommand(
+    MIXITUP_UNLOCK_COMMAND_ID,
+    "Squad Duck",
+    arguments: "hello chat",
+    specialIdentifiers: new { test = "True" });
 ```
 
 ---
