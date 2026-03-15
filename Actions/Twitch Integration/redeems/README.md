@@ -82,3 +82,4 @@ Handles the `disco party` channel point redeem by switching to the correct Disco
   - `Disco Party: Workspace`
   - `Disco Party: Gamer`
 - Wire this script into the Streamer.bot action tied to your `disco party` channel point redeem.
+
