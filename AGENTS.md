@@ -29,6 +29,7 @@ Repository hierarchy for runtime scripts: `Actions/<Feature Group>/script.cs` or
 - Use `Creative/` for art-generation, world-building, and other non-runtime scaffolding.
 
 ### Key References
+- `WORKING.md` — **Check first.** Active agent work, task queue, file conflict registry
 - `Actions/SHARED-CONSTANTS.md` — Canonical global variable / OBS / timer names
 - `Actions/HELPER-SNIPPETS.md` — Reusable C# copy/paste patterns
 - `Creative/Brand/BRAND-IDENTITY.md` — Brand vision, mission, values, and the neurodivergent metaphor
