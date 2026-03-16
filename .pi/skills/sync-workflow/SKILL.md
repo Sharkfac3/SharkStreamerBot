@@ -13,18 +13,18 @@ This repo is the source-of-truth for all script text. Streamer.bot actions are u
 
 ### For Streamer.bot Actions
 
-1. Update script file(s) in `Actions/<Feature Group>/<Subfeature>/...`.
+1. Update script file(s) in `Actions/<Feature Group>/...` or `Actions/<Feature Group>/<Action Folder>/...`.
 2. Provide a copy/paste mapping:
-   - Full file path (including subfeature folder).
+   - Full file path (including the action folder when present).
    - Target Streamer.bot action/group.
    - Any required UI variable/trigger changes.
 3. Paste updated scripts into Streamer.bot.
 4. Run smoke tests.
 
-### For BuildTools
+### For Tools / Creative work
 
-1. Update file(s) in `BuildTools/<Integration>/...`.
-2. Provide run instructions (command + expected output file path).
+1. Update file(s) in `Tools/<Integration>/...` or `Creative/...`.
+2. Provide run instructions for `Tools/` scripts, or note `N/A` for creative scaffolding moves/docs.
 
 ## Validation Checklists
 
@@ -41,7 +41,7 @@ This repo is the source-of-truth for all script text. Streamer.bot actions are u
 All of the above, plus:
 6. Test rollback/reset behavior.
 
-### BuildTools Scripts
+### Tools Scripts
 
 1. CLI help/syntax sanity check.
 2. Happy-path API call against expected local service (when available).

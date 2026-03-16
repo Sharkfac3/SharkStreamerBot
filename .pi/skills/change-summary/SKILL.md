@@ -13,7 +13,7 @@ After completing any code change in this repo, format the response using this te
 
 1. **Changed files** — Clear paths to every modified file.
 2. **Behavioral summary** — What changed, in operator-friendly language.
-3. **Streamer.bot paste targets** — Where each file should be pasted, or `N/A` for BuildTools-only changes.
+3. **Streamer.bot paste targets** — Where each file should be pasted, or `N/A` for `Tools/` / `Creative/` only changes.
 4. **Manual setup steps** — Any Streamer.bot UI changes needed (variables, trigger wiring, action ordering). Omit if none.
 5. **Validation checklist executed** — Which checks were run/confirmed.
 

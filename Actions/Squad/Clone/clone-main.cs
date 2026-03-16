@@ -9,7 +9,7 @@ public class CPHInline
     // - Actions/Squad/Clone/clone-main.cs
     // - Actions/Squad/Clone/clone-position.cs
     // - Actions/Squad/Clone/clone-volley.cs
-    // - Actions/Twitch Integration/stream-start.cs
+    // - Actions/Twitch Core Integrations/stream-start.cs
     private const string VAR_CLONE_GAME_ACTIVE = "clone_game_active";
     private const string VAR_CLONE_POSITIONS_COUNT = "clone_positions_count";
     private const string VAR_CLONE_ROUND = "clone_round";

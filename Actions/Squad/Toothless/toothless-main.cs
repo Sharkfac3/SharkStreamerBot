@@ -11,7 +11,7 @@ public class CPHInline
     // Keep these names identical across:
     // - Actions/Squad/Toothless/toothless-main.cs
     // - Actions/Squad/offering.cs
-    // - Actions/Twitch Integration/stream-start.cs
+    // - Actions/Twitch Core Integrations/stream-start.cs
     private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
     private const string MEMBER_TOOTHLESS = "toothless";
     private const string PREFIX_BOOST = "boost_";

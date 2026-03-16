@@ -7,11 +7,11 @@ description: Squad mini-game and chat interaction feature group. Covers Clone, D
 
 ## Scope
 
-Squad scripts handle chat-triggered mini-games and interaction behavior. Each subfeature is a self-contained mini-game or interaction module.
+Squad scripts handle chat-triggered mini-games and interaction behavior. Each action folder is a self-contained mini-game or interaction module.
 
-## Subfeatures
+## Action Folders
 
-| Subfeature | Path | Scripts |
+| Action Folder | Path | Scripts |
 |---|---|---|
 | Clone | `Actions/Squad/Clone/` | `clone-main.cs`, `clone-position.cs`, `clone-volley.cs` |
 | Duck | `Actions/Squad/Duck/` | `duck-main.cs`, `duck-call.cs`, `duck-resolve.cs` |
@@ -21,7 +21,7 @@ Squad scripts handle chat-triggered mini-games and interaction behavior. Each su
 
 ## Detailed Docs
 
-Each subfeature has its own README with full variable/trigger/OBS documentation:
+Each action folder has its own README with full variable/trigger/OBS documentation:
 
 - `Actions/Squad/Clone/README.md`
 - `Actions/Squad/Duck/README.md`
@@ -29,7 +29,7 @@ Each subfeature has its own README with full variable/trigger/OBS documentation:
 - `Actions/Squad/Toothless/README.md`
 - `Actions/Squad/README.md` (includes `offering.cs` docs)
 
-**Read the relevant subfeature README before making changes.**
+**Read the relevant action-folder README before making changes.**
 
 ## Shared Constants
 
@@ -52,4 +52,4 @@ All Squad scripts share global variable names, OBS sources, and timer names docu
 
 ## Stream-Start Reset
 
-`Actions/Twitch Integration/stream-start.cs` resets all Squad state at stream start. Any new Squad global variable must be added to that reset list and to `Actions/SHARED-CONSTANTS.md`.
+`Actions/Twitch Core Integrations/stream-start.cs` resets all Squad state at stream start. Any new Squad global variable must be added to that reset list and to `Actions/SHARED-CONSTANTS.md`.

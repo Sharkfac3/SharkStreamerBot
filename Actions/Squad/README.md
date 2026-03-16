@@ -3,7 +3,7 @@
 ## Scope
 This folder contains Squad mini-game and interaction scripts.
 
-## Subfeature Docs
+## Action Folder Docs
 - `Clone/README.md`
 - `Duck/README.md`
 - `Pedro/README.md`

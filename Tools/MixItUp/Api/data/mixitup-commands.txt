@@ -1,0 +1,88 @@
+Mix It Up Commands Export
+Command count: 77
+Action Group count: 22
+Pages fetched: 1
+Requested page size: 100
+Reported total count: 77
+First page command source: root['Commands']
+First page top-level keys: TotalCount, Commands
+
+Agent Lookup Workflow:
+1. Run get_commands.py to refresh this file before wiring a Mix It Up command ID into Actions/*.cs.
+2. Search the 'Action Group Lookup (Exact Name, Alphabetical)' section for the intended Mix It Up command name.
+3. If exact name is not found, search 'Action Group Lookup (Normalized Name)' for the closest candidate.
+4. If no matching Action Group exists here, treat the command ID as not yet available in Mix It Up.
+
+Action Group Lookup (Exact Name, Alphabetical):
+1. name=Commander - Captain Stretch - Redeem | id=b6cf100f-aa07-47ea-b650-2715719ea434 | enabled=True | unlocked=True | group=None
+2. name=Commander - Captain Stretch - Shrimp | id=0bdb0c8c-20eb-423e-bf59-e4e2f0b33217 | enabled=True | unlocked=True | group=None
+3. name=Commander - Captain Stretch - Stretch | id=9d1eec79-eae7-40a0-b46d-fe92a775e1fa | enabled=True | unlocked=True | group=None
+4. name=Commander - The Director - Check Chat | id=231c06fc-30f7-4891-974c-41db9b12c68e | enabled=True | unlocked=True | group=None
+5. name=Commander - The Director - Redeem | id=3bc35b73-da10-409e-bf4b-7ca59f980088 | enabled=True | unlocked=True | group=None
+6. name=Commander - The Director - Toad | id=72622c77-8827-438a-9418-977d7bd03136 | enabled=True | unlocked=True | group=None
+7. name=Commander - Water Wizard - Hydrate | id=248ea7cf-e9c9-4fd1-add7-4b37e63dc805 | enabled=True | unlocked=True | group=None
+8. name=Commander - Water Wizard - Orb | id=a28f6866-c5e6-49ce-bd58-b52a76fcb2c8 | enabled=True | unlocked=True | group=None
+9. name=Commander - Water Wizard - Redeem | id=f7ab01c0-780c-4f17-9020-835d91764a9c | enabled=True | unlocked=True | group=None
+10. name=Squad - Clone - Unlock | id=4681be93-409a-4110-bfdb-7a7aa32df63a | enabled=True | unlocked=True | group=None
+11. name=Squad - Duck - Unlock | id=d311b1c1-943a-44cb-9749-b189d1dbd08b | enabled=True | unlocked=True | group=None
+12. name=Squad - Pedro - Unlock | id=a43a1ecd-1607-4dc2-9ae2-fe96f0566f39 | enabled=True | unlocked=True | group=None
+13. name=Squad - Toothless - Flight - Unlock | id=2e0b400a-291c-4d8e-b97e-ced7c7b036e3 | enabled=True | unlocked=True | group=None
+14. name=Squad - Toothless - Long - Unlock | id=c00976c4-ddde-4f56-833a-7551fc106788 | enabled=True | unlocked=True | group=None
+15. name=Squad - Toothless - Party - Unlock | id=e57d1f2d-716d-41b2-bfbe-d9a8e7974ecb | enabled=True | unlocked=True | group=None
+16. name=Squad - Toothless - Regular - Unlock | id=623c2524-0509-45fb-a759-362edf2543b3 | enabled=True | unlocked=True | group=None
+17. name=Squad - Toothless - Smol - Unlock | id=46ab64e0-6682-442a-83fa-d7e265274919 | enabled=True | unlocked=True | group=None
+18. name=Twitch - Bits - Message Effects | id=28397ebb-7a68-4a52-b448-3044a811c008 | enabled=True | unlocked=True | group=None
+19. name=Twitch - Bits - On Screen Celebration | id=3b9123d2-8d22-40f0-ad9b-baf6530388ee | enabled=True | unlocked=True | group=None
+20. name=Twitch - Bits - Tier 3 | id=23f1afd1-7375-475d-afee-058ef4f7f68d | enabled=True | unlocked=True | group=None
+21. name=Twitch - Bits - Tier 4 | id=3a83b335-ae69-425c-b4d2-a52d1734a9f7 | enabled=True | unlocked=True | group=None
+22. name=Twitch - Bits- Gigantify Emote | id=29d47997-6075-412d-88a0-43619b59bcfd | enabled=True | unlocked=True | group=None
+
+Action Group Lookup (Normalized Name):
+1. normalized=commander captain stretch redeem | name=Commander - Captain Stretch - Redeem | id=b6cf100f-aa07-47ea-b650-2715719ea434
+2. normalized=commander captain stretch shrimp | name=Commander - Captain Stretch - Shrimp | id=0bdb0c8c-20eb-423e-bf59-e4e2f0b33217
+3. normalized=commander captain stretch stretch | name=Commander - Captain Stretch - Stretch | id=9d1eec79-eae7-40a0-b46d-fe92a775e1fa
+4. normalized=commander the director check chat | name=Commander - The Director - Check Chat | id=231c06fc-30f7-4891-974c-41db9b12c68e
+5. normalized=commander the director redeem | name=Commander - The Director - Redeem | id=3bc35b73-da10-409e-bf4b-7ca59f980088
+6. normalized=commander the director toad | name=Commander - The Director - Toad | id=72622c77-8827-438a-9418-977d7bd03136
+7. normalized=commander water wizard hydrate | name=Commander - Water Wizard - Hydrate | id=248ea7cf-e9c9-4fd1-add7-4b37e63dc805
+8. normalized=commander water wizard orb | name=Commander - Water Wizard - Orb | id=a28f6866-c5e6-49ce-bd58-b52a76fcb2c8
+9. normalized=commander water wizard redeem | name=Commander - Water Wizard - Redeem | id=f7ab01c0-780c-4f17-9020-835d91764a9c
+10. normalized=squad clone unlock | name=Squad - Clone - Unlock | id=4681be93-409a-4110-bfdb-7a7aa32df63a
+11. normalized=squad duck unlock | name=Squad - Duck - Unlock | id=d311b1c1-943a-44cb-9749-b189d1dbd08b
+12. normalized=squad pedro unlock | name=Squad - Pedro - Unlock | id=a43a1ecd-1607-4dc2-9ae2-fe96f0566f39
+13. normalized=squad toothless flight unlock | name=Squad - Toothless - Flight - Unlock | id=2e0b400a-291c-4d8e-b97e-ced7c7b036e3
+14. normalized=squad toothless long unlock | name=Squad - Toothless - Long - Unlock | id=c00976c4-ddde-4f56-833a-7551fc106788
+15. normalized=squad toothless party unlock | name=Squad - Toothless - Party - Unlock | id=e57d1f2d-716d-41b2-bfbe-d9a8e7974ecb
+16. normalized=squad toothless regular unlock | name=Squad - Toothless - Regular - Unlock | id=623c2524-0509-45fb-a759-362edf2543b3
+17. normalized=squad toothless smol unlock | name=Squad - Toothless - Smol - Unlock | id=46ab64e0-6682-442a-83fa-d7e265274919
+18. normalized=twitch bits gigantify emote | name=Twitch - Bits- Gigantify Emote | id=29d47997-6075-412d-88a0-43619b59bcfd
+19. normalized=twitch bits message effects | name=Twitch - Bits - Message Effects | id=28397ebb-7a68-4a52-b448-3044a811c008
+20. normalized=twitch bits on screen celebration | name=Twitch - Bits - On Screen Celebration | id=3b9123d2-8d22-40f0-ad9b-baf6530388ee
+21. normalized=twitch bits tier 3 | name=Twitch - Bits - Tier 3 | id=23f1afd1-7375-475d-afee-058ef4f7f68d
+22. normalized=twitch bits tier 4 | name=Twitch - Bits - Tier 4 | id=3a83b335-ae69-425c-b4d2-a52d1734a9f7
+
+Action Group Name -> ID Map (Exact Names):
+{
+  "Commander - Captain Stretch - Redeem": "b6cf100f-aa07-47ea-b650-2715719ea434",
+  "Commander - Captain Stretch - Shrimp": "0bdb0c8c-20eb-423e-bf59-e4e2f0b33217",
+  "Commander - Captain Stretch - Stretch": "9d1eec79-eae7-40a0-b46d-fe92a775e1fa",
+  "Commander - The Director - Check Chat": "231c06fc-30f7-4891-974c-41db9b12c68e",
+  "Commander - The Director - Redeem": "3bc35b73-da10-409e-bf4b-7ca59f980088",
+  "Commander - The Director - Toad": "72622c77-8827-438a-9418-977d7bd03136",
+  "Commander - Water Wizard - Hydrate": "248ea7cf-e9c9-4fd1-add7-4b37e63dc805",
+  "Commander - Water Wizard - Orb": "a28f6866-c5e6-49ce-bd58-b52a76fcb2c8",
+  "Commander - Water Wizard - Redeem": "f7ab01c0-780c-4f17-9020-835d91764a9c",
+  "Squad - Clone - Unlock": "4681be93-409a-4110-bfdb-7a7aa32df63a",
+  "Squad - Duck - Unlock": "d311b1c1-943a-44cb-9749-b189d1dbd08b",
+  "Squad - Pedro - Unlock": "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39",
+  "Squad - Toothless - Flight - Unlock": "2e0b400a-291c-4d8e-b97e-ced7c7b036e3",
+  "Squad - Toothless - Long - Unlock": "c00976c4-ddde-4f56-833a-7551fc106788",
+  "Squad - Toothless - Party - Unlock": "e57d1f2d-716d-41b2-bfbe-d9a8e7974ecb",
+  "Squad - Toothless - Regular - Unlock": "623c2524-0509-45fb-a759-362edf2543b3",
+  "Squad - Toothless - Smol - Unlock": "46ab64e0-6682-442a-83fa-d7e265274919",
+  "Twitch - Bits - Message Effects": "28397ebb-7a68-4a52-b448-3044a811c008",
+  "Twitch - Bits - On Screen Celebration": "3b9123d2-8d22-40f0-ad9b-baf6530388ee",
+  "Twitch - Bits - Tier 3": "23f1afd1-7375-475d-afee-058ef4f7f68d",
+  "Twitch - Bits - Tier 4": "3a83b335-ae69-425c-b4d2-a52d1734a9f7",
+  "Twitch - Bits- Gigantify Emote": "29d47997-6075-412d-88a0-43619b59bcfd"
+}

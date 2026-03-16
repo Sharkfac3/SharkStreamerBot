@@ -12,8 +12,8 @@ When you rename any value below, update **all listed scripts** before syncing to
 - `OBS_SCENE_DISCO_GAMER` = `Disco Party: Gamer`
 
 Used in:
-- `Actions/Twitch Integration/stream-start.cs`
-- `Actions/Twitch Integration/redeems/disco-party.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
+- `Actions/Twitch Channel Points/disco-party.cs`
 
 ---
 
@@ -24,11 +24,11 @@ Used in:
 - `MODE_GAMER` = `gamer`
 
 Used in:
-- `Actions/Twitch Integration/stream-start.cs`
-- `Actions/Twitch Integration/modes/mode-garage.cs`
-- `Actions/Twitch Integration/modes/mode-workspace.cs`
-- `Actions/Twitch Integration/modes/mode-gamer.cs`
-- `Actions/Twitch Integration/redeems/disco-party.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
+- `Actions/Voice Commands/mode-garage.cs`
+- `Actions/Voice Commands/mode-workspace.cs`
+- `Actions/Voice Commands/mode-gamer.cs`
+- `Actions/Twitch Channel Points/disco-party.cs`
 
 ---
 
@@ -43,7 +43,7 @@ Used in:
 - `Actions/Squad/Duck/duck-resolve.cs`
 - `Actions/Squad/Pedro/pedro-main.cs`
 - `Actions/Squad/Toothless/toothless-main.cs`
-- `Actions/Twitch Integration/stream-start.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
 
 ---
 
@@ -59,7 +59,7 @@ Used in:
 - `Actions/Squad/Duck/duck-main.cs`
 - `Actions/Squad/Duck/duck-call.cs`
 - `Actions/Squad/Duck/duck-resolve.cs`
-- `Actions/Twitch Integration/stream-start.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
 
 ---
 
@@ -79,7 +79,7 @@ Used in:
 - `Actions/Squad/Clone/clone-main.cs`
 - `Actions/Squad/Clone/clone-position.cs`
 - `Actions/Squad/Clone/clone-volley.cs`
-- `Actions/Twitch Integration/stream-start.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
 
 ---
 
@@ -95,7 +95,7 @@ Used in:
 - `Actions/Squad/Pedro/pedro-main.cs`
 - `Actions/Squad/Pedro/pedro-call.cs`
 - `Actions/Squad/Pedro/pedro-resolve.cs`
-- `Actions/Twitch Integration/stream-start.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
 
 ---
 
@@ -111,7 +111,7 @@ Used in:
 Used in:
 - `Actions/Squad/Toothless/toothless-main.cs`
 - `Actions/Squad/offering.cs`
-- `Actions/Twitch Integration/stream-start.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
 
 ---
 
@@ -124,7 +124,7 @@ Used in:
 
 Used in:
 - `Actions/Squad/offering.cs`
-- `Actions/Twitch Integration/stream-start.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
 
 ---
 
@@ -176,10 +176,10 @@ Used in:
 - `WAIT_TAIL_BUFFER_MS` = `500`
 
 Used in:
-- `Actions/Twitch Integration/Bits/bits-tier-1.cs`
-- `Actions/Twitch Integration/Bits/bits-tier-2.cs`
-- `Actions/Twitch Integration/Bits/bits-tier-3.cs`
-- `Actions/Twitch Integration/Bits/bits-tier-4.cs`
+- `Actions/Twitch Bits Integrations/bits-tier-1.cs`
+- `Actions/Twitch Bits Integrations/bits-tier-2.cs`
+- `Actions/Twitch Bits Integrations/bits-tier-3.cs`
+- `Actions/Twitch Bits Integrations/bits-tier-4.cs`
 
 ---
 

@@ -2,16 +2,31 @@
 
 ## Project Context
 
-This repository contains **Streamer.bot C# action scripts** and local **BuildTools** utilities. Scripts are **not auto-deployed** — each is manually copy/pasted into Streamer.bot actions.
+This repository is organized into four top-level domains:
+- `Actions/` — Streamer.bot C# runtime action source
+- `Tools/` — external/local utilities and integration tooling
+- `Creative/` — art, world-building, marketing, and related scaffolding
+- `Docs/` — architecture and workflow documentation
 
-Repository hierarchy: `Actions/<Feature Group>/<Subfeature>/script.cs`
+Scripts are **not auto-deployed** — each changed `Actions/` script is manually copy/pasted into Streamer.bot actions.
+
+Repository hierarchy for runtime scripts: `Actions/<Feature Group>/script.cs` or `Actions/<Feature Group>/<Action Folder>/script.cs`
 
 ### Feature Groups
 - `Actions/Squad/` — Chat mini-games (Clone, Duck, Pedro, Toothless, offering)
 - `Actions/Commanders/` — Commander role assignment + commander-specific commands
-- `Actions/Twitch Integration/` — Stream lifecycle, Bits forwarding, core Twitch glue
+- `Actions/Twitch Core Integrations/` — Stream start plus follow/subscription event integrations stored directly in the feature-group folder
+- `Actions/Twitch Channel Points/` — Channel point redeem scripts like Disco Party and Explain actions
+- `Actions/Twitch Hype Train/` — Hype train start, level-up, and end scripts
+- `Actions/Twitch Bits Integrations/` — Bits tier handlers and automatic bits reward integrations
+- `Actions/Voice Commands/` — Voice-command-driven mode and scene switching actions
 - `Actions/LotAT/` — Reserved / in-progress
-- `BuildTools/` — External terminal-run utilities (not pasted into Streamer.bot)
+
+### Routing notes
+- Keep `Actions/` focused on Streamer.bot runtime source only.
+- Mirror Streamer.bot action-group limits in the repo: feature-group folders under `Actions/` may contain scripts directly or one level of action folders, but those action folders should not contain additional subfolders.
+- Use `Tools/` for Mix It Up scripts, overlays, sync helpers, validators, and similar local tooling.
+- Use `Creative/` for art-generation, world-building, and other non-runtime scaffolding.
 
 ### Key References
 - `Actions/SHARED-CONSTANTS.md` — Canonical global variable / OBS / timer names
@@ -38,8 +53,9 @@ Load the listed skills based on the task at hand. `streamerbot-scripting` is the
 | Writing/editing any `.cs` script | `streamerbot-scripting` + relevant `feature-*` |
 | Squad mini-game work | `streamerbot-scripting` + `feature-squad` |
 | Commander role/command work | `streamerbot-scripting` + `feature-commanders` |
+| Voice command mode/scene work | `streamerbot-scripting` + `feature-voice-commands` |
 | Bits / stream-start / Twitch glue | `streamerbot-scripting` + `feature-twitch-integration` |
-| BuildTools / MixItUp / WorldBuilding | `buildtools` |
+| `Tools/` or `Creative/` work (Mix It Up / local tooling / WorldBuilding scaffolding) | `buildtools` |
 | Preparing change summary / paste targets | `change-summary` |
 | Syncing repo to Streamer.bot | `sync-workflow` |
 
@@ -63,8 +79,9 @@ Load the listed skills based on the task at hand. `streamerbot-scripting` is the
 ## Scope Boundaries
 
 **In scope:**
-- Implement/maintain C# scripts for Streamer.bot actions.
-- Implement/maintain local tooling under `BuildTools/`.
+- Implement/maintain C# scripts for Streamer.bot actions under `Actions/`.
+- Implement/maintain local tooling under `Tools/`.
+- Implement/maintain creative scaffolding under `Creative/` when explicitly requested.
 - Focused, minimal-risk fixes.
 - Readability/reliability improvements without changing intended behavior.
 - Thorough, beginner-friendly comments.

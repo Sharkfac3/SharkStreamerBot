@@ -10,7 +10,7 @@ public class CPHInline
     // - Actions/Squad/Pedro/pedro-main.cs
     // - Actions/Squad/Pedro/pedro-call.cs
     // - Actions/Squad/Pedro/pedro-resolve.cs
-    // - Actions/Twitch Integration/stream-start.cs
+    // - Actions/Twitch Core Integrations/stream-start.cs
     private const string VAR_PEDRO_GAME_ENABLED = "pedro_game_enabled";
     private const string VAR_PEDRO_MENTION_COUNT = "pedro_mention_count";
     private const string VAR_PEDRO_UNLOCKED = "pedro_unlocked";

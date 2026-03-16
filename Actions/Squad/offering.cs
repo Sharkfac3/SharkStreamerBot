@@ -7,7 +7,7 @@ public class CPHInline
     // Keep these names identical across:
     // - Actions/Squad/offering.cs
     // - Actions/Squad/Toothless/toothless-main.cs
-    // - Actions/Twitch Integration/stream-start.cs
+    // - Actions/Twitch Core Integrations/stream-start.cs
     private const string VAR_LOTAT_ACTIVE = "lotat_active";
     private const string VAR_LOTAT_ANNOUNCEMENT_SENT = "lotat_announcement_sent";
     private const string VAR_LOTAT_OFFERING_STEAL_CHANCE = "lotat_offering_steal_chance";

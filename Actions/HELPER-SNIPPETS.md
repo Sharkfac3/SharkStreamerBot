@@ -76,7 +76,7 @@ finally
 ```
 
 Operator note:
-- `Actions/Twitch Integration/stream-start.cs` should reset these globals at stream start.
+- `Actions/Twitch Core Integrations/stream-start.cs` should reset these globals at stream start.
 
 ---
 

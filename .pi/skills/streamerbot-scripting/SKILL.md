@@ -77,12 +77,13 @@ Any new mini-game must:
 2. Block with a clear chat message if another game owns the lock.
 3. Release lock on **every** terminal path (win, loss, timeout, cancel, manual stop, guard exit).
 4. For single-action mini-games, release lock in a `finally` block.
-5. Keep lock vars/reset behavior synchronized with `Actions/Twitch Integration/stream-start.cs`.
+5. Keep lock vars/reset behavior synchronized with `Actions/Twitch Core Integrations/stream-start.cs`.
 
 See `Actions/HELPER-SNIPPETS.md` for the full lock acquire/release snippets.
 
 ## File Naming Conventions
 
-- Scripts live under `Actions/<Feature Group>/<Subfeature>/`.
-- Use descriptive names: `<subfeature>-main.cs`, `<subfeature>-resolve.cs`, etc.
-- Do not move scripts between feature groups or subfeatures unless explicitly requested.
+- Scripts live under `Actions/<Feature Group>/` or `Actions/<Feature Group>/<Action Folder>/`.
+- Under `Actions/`, allow only one nested folder level beneath the feature group; do not create deeper folder trees.
+- Use descriptive names: `<action>-main.cs`, `<action>-resolve.cs`, etc.
+- Do not move scripts between feature groups or action folders unless explicitly requested.

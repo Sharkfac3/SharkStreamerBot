@@ -17,7 +17,7 @@ Commander scripts handle role assignment via Twitch redeems and commander-specif
 - Each commander has its own folder with redeem + command scripts.
 - Existing redeem/assignment behavior must be preserved unless a change is explicitly requested.
 
-## Subfeatures
+## Action Folders
 
 | Commander | Path | Scripts |
 |---|---|---|

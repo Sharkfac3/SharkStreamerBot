@@ -1,28 +1,33 @@
 ---
 name: feature-twitch-integration
-description: Stream lifecycle, stream-start reset, Bits cheer forwarding, and core Twitch integration glue. Load when working on any script under Actions/Twitch Integration/.
+description: Stream lifecycle, stream-start reset, Bits cheer forwarding, and core Twitch integration glue. Load when working on scripts under `Actions/Twitch Core Integrations/` or `Actions/Twitch Bits Integrations/`.
 ---
 
-# Feature: Twitch Integration
+# Feature: Twitch Integrations
 
 ## Scope
 
-Twitch Integration scripts handle stream lifecycle events and core Twitch behavior (bits, startup resets, etc.).
+These scripts handle stream lifecycle events and core Twitch behavior across startup resets and bits integrations.
 
 ## Scripts
 
 | Script | Path |
 |---|---|
-| Stream Start | `Actions/Twitch Integration/stream-start.cs` |
-| Bits Tier 1 | `Actions/Twitch Integration/Bits/bits-tier-1.cs` |
-| Bits Tier 2 | `Actions/Twitch Integration/Bits/bits-tier-2.cs` |
-| Bits Tier 3 | `Actions/Twitch Integration/Bits/bits-tier-3.cs` |
-| Bits Tier 4 | `Actions/Twitch Integration/Bits/bits-tier-4.cs` |
+| Stream Start | `Actions/Twitch Core Integrations/stream-start.cs` |
+| Follower New | `Actions/Twitch Core Integrations/follower-new.cs` |
+| Subscription New | `Actions/Twitch Core Integrations/subscription-new.cs` |
+| Subscription Renewed | `Actions/Twitch Core Integrations/subscription-renewed.cs` |
+| Subscription Gift Single | `Actions/Twitch Core Integrations/subscription-gift-single.cs` |
+| Subscription Gift Multiple | `Actions/Twitch Core Integrations/subscription-gift-multiple.cs` |
+| Bits Tier 1 | `Actions/Twitch Bits Integrations/bits-tier-1.cs` |
+| Bits Tier 2 | `Actions/Twitch Bits Integrations/bits-tier-2.cs` |
+| Bits Tier 3 | `Actions/Twitch Bits Integrations/bits-tier-3.cs` |
+| Bits Tier 4 | `Actions/Twitch Bits Integrations/bits-tier-4.cs` |
 
 ## Detailed Docs
 
-- `Actions/Twitch Integration/README.md` (stream-start docs)
-- `Actions/Twitch Integration/Bits/README.md` (bits tier docs)
+- `Actions/Twitch Core Integrations/README.md` (stream-start plus follow/subscription event docs)
+- `Actions/Twitch Bits Integrations/README.md` (bits tier docs)
 
 **Read the relevant README before making changes.**
 

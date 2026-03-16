@@ -7,7 +7,7 @@ public class CPHInline
     // - Actions/Squad/Duck/duck-main.cs
     // - Actions/Squad/Duck/duck-call.cs
     // - Actions/Squad/Duck/duck-resolve.cs
-    // - Actions/Twitch Integration/stream-start.cs
+    // - Actions/Twitch Core Integrations/stream-start.cs
     private const string VAR_DUCK_EVENT_ACTIVE = "duck_event_active";
     private const string VAR_DUCK_QUACK_COUNT = "duck_quack_count";
 
