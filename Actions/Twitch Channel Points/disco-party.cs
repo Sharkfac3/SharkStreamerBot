@@ -1,5 +1,3 @@
-using System;
-
 public class CPHInline
 {
     // Shared mode variable key.
@@ -46,10 +44,7 @@ public class CPHInline
             return true;
         }
 
-        if (!TrySetObsScene(targetScene))
-        {
-            CPH.LogWarn($"[Twitch Redeem: Disco Party] Failed to switch OBS scene to '{targetScene}'.");
-        }
+        CPH.ObsSetScene(targetScene);
 
         return true;
     }
@@ -71,45 +66,6 @@ public class CPHInline
             default:
                 CPH.LogWarn($"[Twitch Redeem: Disco Party] Unknown stream_mode '{mode}'. Falling back to workspace scene.");
                 return OBS_SCENE_DISCO_WORKSPACE;
-        }
-    }
-
-    /// <summary>
-    /// Tries common Streamer.bot OBS scene switch method names using reflection,
-    /// so this script remains resilient across API naming differences.
-    /// </summary>
-    private bool TrySetObsScene(string sceneName)
-    {
-        return TryInvokeStringArg("ObsSetCurrentScene", sceneName)
-            || TryInvokeStringArg("ObsSetScene", sceneName)
-            || TryInvokeStringArg("ObsSetProgramScene", sceneName);
-    }
-
-    /// <summary>
-    /// Calls a single-string-argument CPH method by name.
-    /// Returns false when the method does not exist or invocation fails.
-    /// </summary>
-    private bool TryInvokeStringArg(string methodName, string arg)
-    {
-        try
-        {
-            var method = CPH.GetType().GetMethod(methodName, new[] { typeof(string) });
-            if (method == null)
-                return false;
-
-            object result = method.Invoke(CPH, new object[] { arg });
-
-            // Respect bool success/failure return values when provided.
-            if (result is bool b)
-                return b;
-
-            // Void/non-bool return means invoke succeeded.
-            return true;
-        }
-        catch (Exception ex)
-        {
-            CPH.LogWarn($"[Twitch Redeem: Disco Party] OBS method '{methodName}' failed: {ex.Message}");
-            return false;
         }
     }
 }
