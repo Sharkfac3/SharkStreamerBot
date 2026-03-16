@@ -57,6 +57,14 @@ Scene scripts should:
 - Log warnings instead of failing hard.
 - Preserve existing OBS scene naming unless the operator explicitly asks to rename scenes.
 
+**OBS scene switching — confirmed correct call:**
+```csharp
+CPH.ObsSetScene(targetScene);
+```
+Do **not** use reflection-based fallbacks. `ObsSetCurrentScene` and `ObsSetProgramScene`
+do not exist in the Streamer.bot API. Reflection searching for a single-string overload
+of `ObsSetScene` silently fails because the real signature is `(string sceneName, int connection = 0)`.
+
 ## Editing Guidance
 
 - Prefer targeted edits over refactors across all voice command scripts.

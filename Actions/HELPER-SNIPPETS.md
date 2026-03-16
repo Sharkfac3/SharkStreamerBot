@@ -207,6 +207,46 @@ private (string User, string UserId) GetSender()
 
 ---
 
+## 4) OBS Scene Switching
+
+Use this when a script needs to switch the active OBS scene based on the current stream mode.
+
+**Confirmed correct method** (verified against Streamer.bot API docs):
+
+```csharp
+CPH.ObsSetScene(string sceneName, int connection = 0);
+```
+
+Do **not** use reflection to look up OBS scene methods. `ObsSetCurrentScene` and
+`ObsSetProgramScene` do not exist. Reflection searching for a `(string)` overload
+of `ObsSetScene` silently returns null — the real signature is `(string, int)`.
+
+### Example (mode-aware scene switch)
+
+```csharp
+private const string VAR_STREAM_MODE = "stream_mode";
+
+private string ResolveTargetScene(string mode)
+{
+    switch (mode)
+    {
+        case "garage":    return "Garage: Main";
+        case "gamer":     return "Gamer: Main";
+        case "workspace": return "Workspace: Main";
+        default:
+            CPH.LogWarn($"[Script] Unknown stream_mode '{mode}'. Falling back to workspace.");
+            return "Workspace: Main";
+    }
+}
+
+// In Execute():
+string mode = (CPH.GetGlobalVar<string>(VAR_STREAM_MODE, false) ?? string.Empty)
+    .Trim().ToLowerInvariant();
+CPH.ObsSetScene(ResolveTargetScene(mode));
+```
+
+---
+
 ## Required mini-game contract checklist
 1. Add lock constants + acquire/release methods.
 2. Acquire lock at the mini-game start action.

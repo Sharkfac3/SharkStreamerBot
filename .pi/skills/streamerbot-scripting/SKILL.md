@@ -81,6 +81,60 @@ Any new mini-game must:
 
 See `Actions/HELPER-SNIPPETS.md` for the full lock acquire/release snippets.
 
+## Verified CPH API Methods
+
+The following method signatures were confirmed against the official Streamer.bot docs
+(https://docs.streamer.bot/api/csharp/methods). Use these exact calls — do not substitute
+reflection-based fallbacks or guessed method names.
+
+### OBS Studio
+
+```csharp
+// Switch the active OBS scene.
+CPH.ObsSetScene(string sceneName, int connection = 0);
+
+// Show or hide a source within a scene.
+CPH.ObsShowSource(string scene, string source, int connection = 0);
+CPH.ObsHideSource(string scene, string source, int connection = 0);
+```
+
+> **Do not use reflection to call OBS methods.** Method names such as
+> `ObsSetCurrentScene` and `ObsSetProgramScene` do not exist. Reflection
+> searching for a `(string)` overload of `ObsSetScene` will also silently
+> fail because the actual signature is `(string, int)`.
+
+### Chat
+
+```csharp
+// Send a chat message. useBot and fallback default to true.
+CPH.SendMessage(string message, bool useBot = true, bool fallback = true);
+```
+
+### Global Variables
+
+```csharp
+CPH.GetGlobalVar<T>(string varName, bool persisted = true);
+CPH.SetGlobalVar(string varName, object value, bool persisted = true);
+CPH.UnsetGlobalVar(string varName, bool persisted = true);
+```
+
+### Timers
+
+```csharp
+CPH.EnableTimer(string timerName);
+CPH.DisableTimer(string timerName);
+```
+
+### Misc
+
+```csharp
+CPH.Wait(int milliseconds);
+CPH.LogWarn(string logLine);
+CPH.LogError(string logLine);
+```
+
+---
+
 ## File Naming Conventions
 
 - Scripts live under `Actions/<Feature Group>/` or `Actions/<Feature Group>/<Action Folder>/`.
