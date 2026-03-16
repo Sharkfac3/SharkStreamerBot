@@ -29,7 +29,9 @@ Now:
 | `feature-twitch-integration` | Stream lifecycle — stream-start reset, Bits cheer forwarding, TTS wait behavior, idempotency rules. Includes Cheer, Follow, and Sub trigger variable reference. |
 | `feature-hype-train` | Hype Train event scripts (start, level-up, end). Includes full trigger variable tables for all three events. |
 | `feature-channel-points` | Channel Point redeem scripts (Disco Party, Explain Current Task). Includes reward redemption trigger variable reference. |
-| `buildtools` | External tooling and creative-scaffolding routing for `Tools/` and `Creative/` work (MixItUp API, art, WorldBuilding). |
+| `buildtools` | External tooling for `Tools/` work — Mix It Up API command discovery, Python utilities, StreamerBot validators. |
+| `creative-art` | Art generation agents — character canon references, diffusion model prompt conventions, asset naming, output placement. |
+| `creative-worldbuilding` | Lore, canon, and CYOA story generation — Starship Shamples franchise, cast canon, JSON story schema, story vs. engine separation. |
 | `sync-workflow` | Repo-to-Streamer.bot paste process, validation checklists, commit note style. |
 | `change-summary` | Standard response format for code changes — paste targets, setup steps, validation output. **Terminal skill — loaded after every code change.** |
 
@@ -45,6 +47,9 @@ Now:
 | Work on Hype Train scripts | `streamerbot-scripting` → `feature-hype-train` → `change-summary` |
 | Work on Channel Point redeems | `streamerbot-scripting` → `feature-channel-points` → `change-summary` |
 | Modify MixItUp API script | `buildtools` → `change-summary` |
+| Generate character art prompts | `creative-art` |
+| Write a new Starship Shamples story | `creative-worldbuilding` |
+| Full story pipeline (content + C# engine) | `creative-worldbuilding` → `streamerbot-scripting` → `change-summary` |
 | Prepare a sync to Streamer.bot | `sync-workflow` |
 
 ## Adding a New Skill

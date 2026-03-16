@@ -58,7 +58,10 @@ Load the listed skills based on the task at hand. `streamerbot-scripting` is the
 | Bits scripts OR `stream-start.cs` OR core Twitch event scripts | `streamerbot-scripting` + `feature-twitch-integration` |
 | Hype Train scripts | `streamerbot-scripting` + `feature-hype-train` |
 | Channel Point redeem scripts | `streamerbot-scripting` + `feature-channel-points` |
-| `Tools/` or `Creative/` work (Mix It Up / local tooling / WorldBuilding scaffolding) | `buildtools` |
+| `Tools/` work (Mix It Up API, Python utilities, StreamerBot validators) | `buildtools` |
+| Art generation / diffusion model prompts / character assets | `creative-art` |
+| Lore, canon, CYOA story generation, franchise development | `creative-worldbuilding` |
+| Full story pipeline (story JSON + C# engine) | `creative-worldbuilding` → `streamerbot-scripting` → `change-summary` |
 | Preparing change summary / paste targets | `change-summary` |
 | Syncing repo to Streamer.bot | `sync-workflow` |
 
