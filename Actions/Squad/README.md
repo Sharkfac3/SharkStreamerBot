@@ -54,3 +54,24 @@ Handles offering tokens and applies boost changes, including optional LotAT stea
 ### Operator Notes
 - Keep token/member naming aligned with existing chat commands.
 - Preserve boost key format (`boost_<member>_<userId>`) for compatibility.
+
+---
+
+## Trigger Variables
+
+Access in C# via `CPH.TryGetArg("variableName", out T value)`.
+
+### Chat Message (primary trigger for all Squad mini-games)
+
+Squad games are triggered via Twitch → Chat → Message (or a Command trigger for `!` commands).
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the user who sent the message |
+| `userId` | string | Twitch user ID — canonical player identifier in all Squad games |
+| `message` | string | Full chat message text |
+| `rawInput` | string | Fallback if `message` is empty |
+| `msgId` | string | Unique message ID — use for duplicate detection (Pedro uses this) |
+| `input0` | string | First word after the command trigger (if using a Command trigger) |
+
+> `userId` is the preferred player key — stable even if a user changes their display name. Clone, Duck, Pedro, and Offering all key roster/state entries on `userId`.

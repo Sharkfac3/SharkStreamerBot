@@ -17,7 +17,7 @@ Squad scripts handle chat-triggered mini-games and interaction behavior. Each ac
 | Duck | `Actions/Squad/Duck/` | `duck-main.cs`, `duck-call.cs`, `duck-resolve.cs` |
 | Pedro | `Actions/Squad/Pedro/` | `pedro-main.cs` |
 | Toothless | `Actions/Squad/Toothless/` | `toothless-main.cs` |
-| Offering | `Actions/Squad/` | `offering.cs` |
+| Offering | `Actions/Squad/` | `offering.cs` — also implements the LotAT (League of Awesome Treasures) steal mechanic; reads LotAT state vars reset by `stream-start.cs` |
 
 ## Detailed Docs
 
@@ -56,19 +56,6 @@ All Squad scripts share global variable names, OBS sources, and timer names docu
 
 ## Trigger Variables
 
-Access in C# via `CPH.TryGetArg("variableName", out T value)`.
+Full trigger variable reference: `Actions/Squad/README.md`
 
-### Chat Message (primary trigger for all Squad mini-games)
-
-Squad games are triggered via Twitch → Chat → Message (or a Command trigger for `!` commands).
-
-| Variable | Type | Notes |
-|---|---|---|
-| `user` | string | Display name of the user who sent the message |
-| `userId` | string | Twitch user ID — used as the canonical player identifier in all Squad games |
-| `message` | string | Full chat message text |
-| `rawInput` | string | Fallback if `message` is empty |
-| `msgId` | string | Unique message ID — use for duplicate detection (Pedro uses this) |
-| `input0` | string | First word after the command trigger (if using a Command trigger) |
-
-> `userId` is the preferred player key — it is stable even if a user changes their display name. Clone, Duck, Pedro, and Offering all key roster/state entries on `userId`.
+> `userId` is the preferred player key — stable even if a user changes their display name. Clone, Duck, Pedro, and Offering all key roster/state entries on `userId`.

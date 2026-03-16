@@ -5,12 +5,6 @@ description: Twitch Hype Train event scripts (start, level-up, end). Load when w
 
 # Feature: Hype Train
 
-## When to Load
-
-Load this skill for any work under `Actions/Twitch Hype Train/`.
-Always pair it with `streamerbot-scripting` for `.cs` edits.
-Load `change-summary` after making changes.
-
 ## Scope
 
 | Script | Path | Trigger |
@@ -40,64 +34,4 @@ When expanding a script to use trigger variables, add them to `BuildArguments()`
 
 ## Trigger Variables
 
-Variable names confirmed from official Streamer.bot docs.
-Access in C# via `CPH.TryGetArg("variableName", out T value)`.
-
-### Hype Train Start
-
-| Variable | Type | Description |
-|---|---|---|
-| `level` | number | Current hype train level |
-| `percent` | number | Completion % of current level (e.g. 80) |
-| `percentDecimal` | number | Completion as decimal (e.g. 0.8) |
-| `trainType` | string | `regular`, `treasure`, or `golden_kappa` |
-| `isGoldenKappaTrain` | bool | Whether this is a Golden Kappa Train |
-| `isTreasureTrain` | bool | Whether this is a Treasure Train |
-| `isSharedTrain` | bool | Whether this is a Shared Chat Hype Train |
-| `startedAt` | DateTime | When the train started |
-| `expiresAt` | DateTime | When the train expires |
-| `duration` | number | Train duration in seconds |
-| `allTimeHighLevel` | number | All-time peak level for this train type |
-| `allTimeHighTotal` | number | All-time peak points for this train type |
-| `id` | string | Unique hype train ID |
-| `top.bits.user` | string | Top cheerer display name |
-| `top.bits.userId` | number | Top cheerer user ID |
-| `top.bits.userName` | string | Top cheerer login name |
-| `top.bits.total` | number | Bits from top cheerer |
-| `top.subscription.user` | string | Top gift sub giver display name |
-| `top.subscription.userId` | number | Top gift sub giver user ID |
-| `top.subscription.total` | number | Gift sub points from top giver |
-| `top.other.user` | string | Top other contributor display name |
-| `top.other.userId` | number | Top other contributor user ID |
-| `top.other.total` | number | Points from top other contributor |
-
-### Hype Train Level Up
-
-Same variables as Start, plus:
-
-| Variable | Type | Description |
-|---|---|---|
-| `prevLevel` | number | The level before this level-up |
-
-### Hype Train End
-
-| Variable | Type | Description |
-|---|---|---|
-| `level` | number | Final level reached |
-| `percent` | number | Final completion % |
-| `percentDecimal` | number | Final completion as decimal |
-| `trainType` | string | `regular`, `treasure`, or `golden_kappa` |
-| `isGoldenKappaTrain` | bool | Whether this was a Golden Kappa Train |
-| `isTreasureTrain` | bool | Whether this was a Treasure Train |
-| `isSharedTrain` | bool | Whether this was a Shared Chat Hype Train |
-| `startedAt` | DateTime | When the train started |
-| `id` | string | Unique hype train ID |
-| `top.bits.user` | string | Top cheerer display name |
-| `top.bits.userId` | number | Top cheerer user ID |
-| `top.bits.total` | number | Bits from top cheerer |
-| `top.subscription.user` | string | Top gift sub giver display name |
-| `top.subscription.userId` | number | Top gift sub giver user ID |
-| `top.subscription.total` | number | Gift sub points from top giver |
-| `top.other.user` | string | Top other contributor display name |
-| `top.other.userId` | number | Top other contributor user ID |
-| `top.other.total` | number | Points from top other contributor |
+Full trigger variable reference for all three events: `Actions/Twitch Hype Train/README.md`

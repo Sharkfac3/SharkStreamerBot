@@ -29,6 +29,7 @@ When editing features that track state:
 - Preserve existing key names unless migration is explicitly requested.
 - Consider concurrent triggers and re-entry edge cases.
 - Add reset paths for long-running sessions (especially mini-games/CYOA).
+- **Any new global variable added to any feature must also be reset in `Actions/Twitch Core Integrations/stream-start.cs` and added to `Actions/SHARED-CONSTANTS.md`.**
 
 ## Safety
 
@@ -66,8 +67,8 @@ When script behavior changes, update the matching feature README (`Actions/**/RE
 
 Before writing new utility code, check these references for existing patterns:
 
-- `Actions/HELPER-SNIPPETS.md` — Mini-game lock, Mix It Up API helper, chat input helpers, sender helpers.
-- `Actions/SHARED-CONSTANTS.md` — Canonical global variable names, OBS source/scene names, timer names. When renaming any value, update **all listed scripts** before syncing.
+- `Actions/HELPER-SNIPPETS.md` — Copy/paste code patterns (mini-game lock, Mix It Up API, OBS scene switching, chat input helpers). **Copy these snippets verbatim into your script — do not rewrite them.**
+- `Actions/SHARED-CONSTANTS.md` — Canonical string names for global variables, OBS sources, and timers. **Look up names here; do not hardcode string literals.** When renaming any value, update **all listed scripts** before syncing.
 
 ## Mini-game Contribution Contract
 
@@ -81,57 +82,11 @@ Any new mini-game must:
 
 See `Actions/HELPER-SNIPPETS.md` for the full lock acquire/release snippets.
 
-## Verified CPH API Methods
+## CPH API Methods
 
-The following method signatures were confirmed against the official Streamer.bot docs
-(https://docs.streamer.bot/api/csharp/methods). Use these exact calls — do not substitute
-reflection-based fallbacks or guessed method names.
+Verified method signatures are in `Actions/HELPER-SNIPPETS.md` § 5. Use those exact calls.
 
-### OBS Studio
-
-```csharp
-// Switch the active OBS scene.
-CPH.ObsSetScene(string sceneName, int connection = 0);
-
-// Show or hide a source within a scene.
-CPH.ObsShowSource(string scene, string source, int connection = 0);
-CPH.ObsHideSource(string scene, string source, int connection = 0);
-```
-
-> **Do not use reflection to call OBS methods.** Method names such as
-> `ObsSetCurrentScene` and `ObsSetProgramScene` do not exist. Reflection
-> searching for a `(string)` overload of `ObsSetScene` will also silently
-> fail because the actual signature is `(string, int)`.
-
-### Chat
-
-```csharp
-// Send a chat message. useBot and fallback default to true.
-CPH.SendMessage(string message, bool useBot = true, bool fallback = true);
-```
-
-### Global Variables
-
-```csharp
-CPH.GetGlobalVar<T>(string varName, bool persisted = true);
-CPH.SetGlobalVar(string varName, object value, bool persisted = true);
-CPH.UnsetGlobalVar(string varName, bool persisted = true);
-```
-
-### Timers
-
-```csharp
-CPH.EnableTimer(string timerName);
-CPH.DisableTimer(string timerName);
-```
-
-### Misc
-
-```csharp
-CPH.Wait(int milliseconds);
-CPH.LogWarn(string logLine);
-CPH.LogError(string logLine);
-```
+> **Do not use reflection to call OBS methods.** `ObsSetCurrentScene` and `ObsSetProgramScene` do not exist. Reflection searching for a `(string)` overload of `ObsSetScene` silently fails — the real signature is `(string sceneName, int connection = 0)`.
 
 ---
 

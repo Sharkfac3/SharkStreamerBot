@@ -5,12 +5,6 @@ description: Voice-command-driven mode and OBS scene switching actions under `Ac
 
 # Voice Commands Feature Skill
 
-## When to Load
-
-Load this skill for any work under `Actions/Voice Commands/`.
-Always pair it with `streamerbot-scripting` for `.cs` edits.
-Load `change-summary` after making changes.
-
 ## Feature Scope
 
 This feature group is intentionally small and state-light:
@@ -57,13 +51,7 @@ Scene scripts should:
 - Log warnings instead of failing hard.
 - Preserve existing OBS scene naming unless the operator explicitly asks to rename scenes.
 
-**OBS scene switching — confirmed correct call:**
-```csharp
-CPH.ObsSetScene(targetScene);
-```
-Do **not** use reflection-based fallbacks. `ObsSetCurrentScene` and `ObsSetProgramScene`
-do not exist in the Streamer.bot API. Reflection searching for a single-string overload
-of `ObsSetScene` silently fails because the real signature is `(string sceneName, int connection = 0)`.
+**OBS scene switching:** Use `CPH.ObsSetScene(targetScene)` — see `streamerbot-scripting` for the reflection gotcha.
 
 ## Editing Guidance
 
@@ -75,12 +63,3 @@ of `ObsSetScene` silently fails because the real signature is `(string sceneName
   3. this skill if the new pattern becomes part of normal routing knowledge.
 - Do not assume shared helper files can be referenced at runtime by Streamer.bot actions.
 
-## Token-Use Optimization Notes
-
-Use this skill as the primary context source for voice-command work so the agent does **not** need to reread every file just to recover:
-- current mode names,
-- scene naming rules,
-- fallback behavior, and
-- which files belong to the feature.
-
-Only open the individual action files when changing their behavior or validating an implementation detail.

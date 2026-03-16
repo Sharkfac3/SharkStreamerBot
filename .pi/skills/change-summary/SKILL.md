@@ -25,26 +25,25 @@ After completing any code change in this repo, format the response using this te
 - Highlight any breaking change **before** implementation.
 - If requirements are ambiguous for live behavior, ask before proceeding.
 
-## Example
+## Template
 
 ```
 ### Changed files
-- `Actions/Squad/Duck/duck-main.cs`
-- `Actions/Squad/Duck/README.md`
+- `<path>`
 
 ### Behavioral summary
-Added cooldown guard to prevent Duck mini-game from triggering within 30s of last completion.
+<what changed, operator-friendly>
 
 ### Streamer.bot paste targets
 | File | Action/Group |
 |---|---|
-| `Actions/Squad/Duck/duck-main.cs` | Squad > Duck Start |
+| `<path>` | <Group > Action> |
 
 ### Manual setup steps
-None.
+<steps or "None">
 
 ### Validation checklist
-- [x] Syntax check
-- [x] Happy path (duck triggered, resolved)
-- [x] Edge case (rapid re-trigger within cooldown)
+- [ ] Syntax check
+- [ ] Happy path
+- [ ] Edge case
 ```

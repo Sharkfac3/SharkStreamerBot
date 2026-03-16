@@ -41,12 +41,13 @@ This repo is the source-of-truth for all script text. Streamer.bot actions are u
 All of the above, plus:
 6. Test rollback/reset behavior.
 
-### Tools Scripts
+### Tools / Creative Scripts
 
 1. CLI help/syntax sanity check.
 2. Happy-path API call against expected local service (when available).
 3. Verify output file is written and readable.
 4. Verify at least one edge case (service offline, malformed response, empty result set, pagination boundary).
+5. For `Creative/` moves/docs: paste target is `N/A`.
 
 ## Commit Notes
 

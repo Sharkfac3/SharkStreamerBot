@@ -88,6 +88,32 @@ Handles the `Explain: Current Task` channel point redeem by ensuring recording i
 
 ---
 
+---
+
+## Trigger Variables
+
+Access in C# via `CPH.TryGetArg("variableName", out T value)`.
+
+### Channel Reward Redemption
+
+Both scripts are triggered via Twitch → Channel Reward → Reward Redemption.
+
+| Variable | Type | Description |
+|---|---|---|
+| `user` | string | Display name of the redeeming user |
+| `userId` | string | Twitch user ID of the redeeming user |
+| `rewardName` | string | Name of the channel point reward |
+| `rewardId` | string | Unique identifier for the reward |
+| `rewardCost` | number | Point cost of the reward |
+| `rewardPrompt` | string | Description/prompt text of the reward |
+| `rawInput` | string | Text entered by the user (only if reward has text input enabled) |
+| `rawInputEscaped` | string | Same as `rawInput` with special characters escaped |
+| `redemptionId` | string | Unique identifier for this specific redemption |
+| `counter` | number | Total number of times this reward has been redeemed |
+| `userCounter` | number | Number of times this user has redeemed this reward |
+
+---
+
 ## Known Gap
 - `Explain: Ask Away` exists in Streamer.bot, but there is currently no matching repo script under `Actions/Twitch Channel Points/` yet.
 - Once that action is exported into the repo, place it in this folder so the project stays aligned with Streamer.bot.

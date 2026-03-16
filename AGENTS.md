@@ -51,10 +51,11 @@ Load the listed skills based on the task at hand. `streamerbot-scripting` is the
 | Task | Skills to load |
 |---|---|
 | Writing/editing any `.cs` script | `streamerbot-scripting` + relevant `feature-*` |
-| Squad mini-game work | `streamerbot-scripting` + `feature-squad` |
-| Commander role/command work | `streamerbot-scripting` + `feature-commanders` |
+| Squad mini-game work (Clone, Duck, Pedro, Toothless, offering) | `streamerbot-scripting` + `feature-squad` |
+| Adding a new Squad mini-game | `streamerbot-scripting` + `feature-squad` + read `Actions/HELPER-SNIPPETS.md` mini-game contract |
+| Commander role/command work (Captain Stretch, The Director, Water Wizard) | `streamerbot-scripting` + `feature-commanders` |
 | Voice command mode/scene work | `streamerbot-scripting` + `feature-voice-commands` |
-| Bits / stream-start / Twitch glue | `streamerbot-scripting` + `feature-twitch-integration` |
+| Bits scripts OR `stream-start.cs` OR core Twitch event scripts | `streamerbot-scripting` + `feature-twitch-integration` |
 | Hype Train scripts | `streamerbot-scripting` + `feature-hype-train` |
 | Channel Point redeem scripts | `streamerbot-scripting` + `feature-channel-points` |
 | `Tools/` or `Creative/` work (Mix It Up / local tooling / WorldBuilding scaffolding) | `buildtools` |
