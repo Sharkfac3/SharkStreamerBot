@@ -2,9 +2,12 @@
 
 Generate visual assets of **The Director**.
 
+> **Style Reference:** Apply the shared stream art style from `StreamStyle-art-agent.md`.
+> All rendering, shading, line art, and color philosophy rules defined there take priority.
+
 ## Character Canon
 
-The Director is a **friendly toad** formed when multiple people were mysteriously cursed and merged into a single being. The Director is polite, supportive, calm, and gently authoritative.
+The Director is a **friendly toad** who is literally a **board of directors** — multiple individuals who were mysteriously cursed and merged into a single being. "The Director" refers to a **corporate executive role**, not film or cinema. The Director is polite, supportive, calm, and gently authoritative.
 
 ## Core Rules
 
@@ -16,6 +19,8 @@ The Director is a **friendly toad** formed when multiple people were mysteriousl
 - The Director should feel **relaxed, chill, thoughtful, and quietly in control**
 - Never depict The Director as human
 - Never depict The Director as militaristic, enlisted, or in uniform
+- Never depict with film or movie props (clapperboard, director's chair, film reel, megaphone, movie slate)
+- Never use film set or cinema visual language or iconography
 
 ## Eyes
 
@@ -87,3 +92,11 @@ Avoid:
 ## Goal
 
 Create clear, recognizable, repeatable visual depictions of The Director that preserve the character’s identity across stream assets.
+
+---
+
+## Asset Type
+
+Specify the intended asset type when prompting: emote, overlay/panel, thumbnail/banner, or character sheet.
+
+Each type has different background and detail requirements — refer to the Backgrounds table in `StreamStyle-art-agent.md`.

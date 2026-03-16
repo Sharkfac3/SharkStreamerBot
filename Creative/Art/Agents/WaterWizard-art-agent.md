@@ -8,6 +8,20 @@ Only define the character's **appearance and visual identity**.
 
 Do not define environments, scenes, or story events.
 
+> **Style Reference:** Apply the shared stream art style from `StreamStyle-art-agent.md`.
+> All rendering, shading, line art, and color philosophy rules defined there take priority.
+
+---
+
+# Core Rules
+
+- The Water Wizard is always a humanoid wizard
+- Always appears middle-aged to elderly
+- Always has silver or white hair and a short beard
+- Always wears the glowing blue gemstone pendant
+- Never appears young or clean-shaven
+- Never appears without the pendant
+
 ---
 
 # Core Character Concept
@@ -127,3 +141,11 @@ Magic colors:
 # Goal
 
 Maintain a consistent visual identity for the Water Wizard as a **mystical hydration wizard** with calm authority and water-based magic.
+
+---
+
+# Asset Type
+
+Specify the intended asset type when prompting: emote, overlay/panel, thumbnail/banner, or character sheet.
+
+Each type has different background and detail requirements — refer to the Backgrounds table in `StreamStyle-art-agent.md`.

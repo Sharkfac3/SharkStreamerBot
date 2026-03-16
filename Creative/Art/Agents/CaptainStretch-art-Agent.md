@@ -8,6 +8,19 @@ Only define the character's **appearance and visual identity**.
 
 Do not define environments, scenes, or story events.
 
+> **Style Reference:** Apply the shared stream art style from `StreamStyle-art-agent.md`.
+> All rendering, shading, line art, and color philosophy rules defined there take priority.
+
+---
+
+# Core Rules
+
+- Captain Stretch is always a humanoid shrimp
+- Always has upright, excellent posture
+- Always wears a naval captain uniform
+- Never appears slouched or casual
+- Never appears without crustacean features (antennae, exoskeleton)
+
 ---
 
 # Core Character Concept
@@ -102,3 +115,11 @@ His expressions should convey leadership and command presence.
 # Goal
 
 Maintain a consistent visual identity for Captain Stretch as a **humanoid shrimp captain with confident posture and commanding presence**.
+
+---
+
+# Asset Type
+
+Specify the intended asset type when prompting: emote, overlay/panel, thumbnail/banner, or character sheet.
+
+Each type has different background and detail requirements — refer to the Backgrounds table in `StreamStyle-art-agent.md`.
