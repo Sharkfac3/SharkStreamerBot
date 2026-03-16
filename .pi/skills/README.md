@@ -26,7 +26,9 @@ Now:
 | `feature-squad` | Squad mini-games — Clone, Duck, Pedro, Toothless, offering. Action-folder map, shared constants, behavioral expectations. |
 | `feature-commanders` | Commander role system — Captain Stretch, The Director, Water Wizard. 3-slot model, support commands, high score tracking. |
 | `feature-voice-commands` | Voice-command mode and OBS scene switching actions. Canonical `stream_mode` values, scene naming, fallback rules. |
-| `feature-twitch-integration` | Stream lifecycle — stream-start reset, Bits cheer forwarding, TTS wait behavior, idempotency rules. |
+| `feature-twitch-integration` | Stream lifecycle — stream-start reset, Bits cheer forwarding, TTS wait behavior, idempotency rules. Includes Cheer, Follow, and Sub trigger variable reference. |
+| `feature-hype-train` | Hype Train event scripts (start, level-up, end). Includes full trigger variable tables for all three events. |
+| `feature-channel-points` | Channel Point redeem scripts (Disco Party, Explain Current Task). Includes reward redemption trigger variable reference. |
 | `buildtools` | External tooling and creative-scaffolding routing for `Tools/` and `Creative/` work (MixItUp API, art, WorldBuilding). |
 | `sync-workflow` | Repo-to-Streamer.bot paste process, validation checklists, commit note style. |
 | `change-summary` | Standard response format for code changes — paste targets, setup steps, validation output. **Terminal skill — loaded after every code change.** |
@@ -40,6 +42,8 @@ Now:
 | Fix a Duck mini-game bug | `streamerbot-scripting` → `feature-squad` → `change-summary` |
 | Add a new Commander command | `streamerbot-scripting` → `feature-commanders` → `change-summary` |
 | Update stream-start reset | `streamerbot-scripting` → `feature-twitch-integration` → `change-summary` |
+| Work on Hype Train scripts | `streamerbot-scripting` → `feature-hype-train` → `change-summary` |
+| Work on Channel Point redeems | `streamerbot-scripting` → `feature-channel-points` → `change-summary` |
 | Modify MixItUp API script | `buildtools` → `change-summary` |
 | Prepare a sync to Streamer.bot | `sync-workflow` |
 

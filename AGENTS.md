@@ -55,6 +55,8 @@ Load the listed skills based on the task at hand. `streamerbot-scripting` is the
 | Commander role/command work | `streamerbot-scripting` + `feature-commanders` |
 | Voice command mode/scene work | `streamerbot-scripting` + `feature-voice-commands` |
 | Bits / stream-start / Twitch glue | `streamerbot-scripting` + `feature-twitch-integration` |
+| Hype Train scripts | `streamerbot-scripting` + `feature-hype-train` |
+| Channel Point redeem scripts | `streamerbot-scripting` + `feature-channel-points` |
 | `Tools/` or `Creative/` work (Mix It Up / local tooling / WorldBuilding scaffolding) | `buildtools` |
 | Preparing change summary / paste targets | `change-summary` |
 | Syncing repo to Streamer.bot | `sync-workflow` |

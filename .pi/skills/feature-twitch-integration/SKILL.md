@@ -56,3 +56,46 @@ Shared Bits constants are in `Actions/SHARED-CONSTANTS.md`.
 - Preserve existing operator workflow unless asked to change it.
 - For external TTS/readout integrations, include queue-safe timing/wait behavior so rapid triggers do not overlap/cut off active readouts.
 - Keep `stream-start.cs` early in stream startup order so downstream scripts see clean state.
+
+## Trigger Variables
+
+Access in C# via `CPH.TryGetArg("variableName", out T value)`.
+
+### Cheer (Bits)
+
+These scripts are triggered under Twitch → Chat → Cheer.
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the cheering user |
+| `userId` | string | Twitch user ID |
+| `message` | string | Full chat message including `CheerXXX` tokens |
+| `rawInput` | string | Same as `message` — use as fallback when `message` is empty |
+| `bits` | number | Amount of bits cheered (use to determine tier thresholds) |
+
+> Scripts strip `CheerXXX` tokens from `message` before forwarding to Mix It Up.
+> Tier thresholds (1–4) are defined in `Actions/SHARED-CONSTANTS.md`.
+
+### Follow
+
+Triggered under Twitch → Channel → Follow. No follow-specific variables beyond the shared user fields.
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the new follower |
+| `userId` | string | Twitch user ID |
+
+### Subscription (New)
+
+Triggered under Twitch → Subscriptions → Subscription.
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the subscriber |
+| `userId` | string | Twitch user ID |
+| `tier` | string | `prime`, `tier 1`, `tier 2`, or `tier 3` |
+| `isMultiMonth` | bool | Whether this is a multi-month subscription |
+| `multiMonthDuration` | number | Total months in the multi-month subscription |
+| `multiMonthTenure` | number | Months already completed |
+
+> The sub/re-sub/gift-sub scripts are currently stubs — `BuildArguments()` and `BuildSpecialIdentifiers()` are empty placeholders. Expand them when event field contracts are finalized.

@@ -53,3 +53,22 @@ All Squad scripts share global variable names, OBS sources, and timer names docu
 ## Stream-Start Reset
 
 `Actions/Twitch Core Integrations/stream-start.cs` resets all Squad state at stream start. Any new Squad global variable must be added to that reset list and to `Actions/SHARED-CONSTANTS.md`.
+
+## Trigger Variables
+
+Access in C# via `CPH.TryGetArg("variableName", out T value)`.
+
+### Chat Message (primary trigger for all Squad mini-games)
+
+Squad games are triggered via Twitch → Chat → Message (or a Command trigger for `!` commands).
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the user who sent the message |
+| `userId` | string | Twitch user ID — used as the canonical player identifier in all Squad games |
+| `message` | string | Full chat message text |
+| `rawInput` | string | Fallback if `message` is empty |
+| `msgId` | string | Unique message ID — use for duplicate detection (Pedro uses this) |
+| `input0` | string | First word after the command trigger (if using a Command trigger) |
+
+> `userId` is the preferred player key — it is stable even if a user changes their display name. Clone, Duck, Pedro, and Offering all key roster/state entries on `userId`.

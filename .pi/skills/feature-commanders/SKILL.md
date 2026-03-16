@@ -65,3 +65,31 @@ Commander globals are documented in `Actions/SHARED-CONSTANTS.md`. Key variables
 - Protect against invalid or missing inputs.
 - Preserve backward compatibility for existing chat commands.
 - Do not rename triggers/commands that chat depends on unless explicitly requested.
+
+## Trigger Variables
+
+Access in C# via `CPH.TryGetArg("variableName", out T value)`.
+
+### Channel Reward Redemption (commander role redeems)
+
+Commander role assignment is triggered via Twitch → Channel Reward → Reward Redemption.
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the redeeming user — becomes the new commander |
+| `userId` | string | Twitch user ID |
+| `rewardName` | string | Name of the channel point reward |
+| `rewardId` | string | Unique reward identifier |
+| `rawInput` | string | Optional user text input (if the reward prompts for it) |
+
+### Chat Message (support commands: !thank, !award, !hail)
+
+Commander support commands are triggered via Twitch → Chat → Message or a Command trigger.
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the user running the command |
+| `userId` | string | Twitch user ID |
+| `message` | string | Full chat message |
+| `rawInput` | string | Fallback if `message` is empty |
+| `msgId` | string | Unique message ID — use for duplicate detection |
