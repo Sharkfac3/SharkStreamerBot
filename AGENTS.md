@@ -31,6 +31,10 @@ Repository hierarchy for runtime scripts: `Actions/<Feature Group>/script.cs` or
 ### Key References
 - `Actions/SHARED-CONSTANTS.md` — Canonical global variable / OBS / timer names
 - `Actions/HELPER-SNIPPETS.md` — Reusable C# copy/paste patterns
+- `Creative/Brand/BRAND-IDENTITY.md` — Brand vision, mission, values, and the neurodivergent metaphor
+- `Creative/Brand/BRAND-VOICE.md` — Tone and language conventions per context
+- `Creative/Brand/CHARACTER-CODEX.md` — Unified canonical character reference
+- `Docs/ONBOARDING.md` — Start here if new to the project
 
 ### Mix It Up API Payload Convention (Run Command)
 When calling `POST /api/v2/commands/{commandId}` from Streamer.bot scripts:
@@ -64,6 +68,12 @@ Load the listed skills based on the task at hand. `streamerbot-scripting` is the
 | Full story pipeline (story JSON + C# engine) | `creative-worldbuilding` → `streamerbot-scripting` → `change-summary` |
 | Preparing change summary / paste targets | `change-summary` |
 | Syncing repo to Streamer.bot | `sync-workflow` |
+| Any chat bot output text, follow/sub/bits/raid messages | `brand-steward` |
+| Stream titles, descriptions, community posts, announcements | `brand-steward` |
+| Reviewing new story or lore for canon consistency | `brand-canon-guardian` |
+| Adding new characters, world elements, or mechanics | `brand-canon-guardian` |
+| Planning story content tied to a real build session | `content-strategy` → `creative-worldbuilding` |
+| Writing stream titles/descriptions for a specific build | `content-strategy` → `brand-steward` |
 
 ### Chaining Example
 

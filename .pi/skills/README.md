@@ -32,6 +32,9 @@ Now:
 | `buildtools` | External tooling for `Tools/` work — Mix It Up API command discovery, Python utilities, StreamerBot validators. |
 | `creative-art` | Art generation agents — character canon references, diffusion model prompt conventions, asset naming, output placement. |
 | `creative-worldbuilding` | Lore, canon, and CYOA story generation — Starship Shamples franchise, cast canon, JSON story schema, story vs. engine separation. |
+| `brand-steward` | Brand consistency for all public-facing output — voice, tone, values, and the neurodivergent metaphor. **Load before writing any chat text, stream titles, or community messaging.** |
+| `brand-canon-guardian` | Audits new content against established Starship Shamples canon. Load when adding new characters, extending lore, or reviewing stories for consistency. |
+| `content-strategy` | Connects Starship Shamples story content to real build sessions. Load when planning stories tied to a specific project or writing build-specific stream content. |
 | `sync-workflow` | Repo-to-Streamer.bot paste process, validation checklists, commit note style. |
 | `change-summary` | Standard response format for code changes — paste targets, setup steps, validation output. **Terminal skill — loaded after every code change.** |
 
@@ -48,8 +51,12 @@ Now:
 | Work on Channel Point redeems | `streamerbot-scripting` → `feature-channel-points` → `change-summary` |
 | Modify MixItUp API script | `buildtools` → `change-summary` |
 | Generate character art prompts | `creative-art` |
-| Write a new Starship Shamples story | `creative-worldbuilding` |
+| Write a new Starship Shamples story | `creative-worldbuilding` → `brand-canon-guardian` |
+| Write a story tied to a specific build session | `content-strategy` → `creative-worldbuilding` → `brand-canon-guardian` |
 | Full story pipeline (content + C# engine) | `creative-worldbuilding` → `streamerbot-scripting` → `change-summary` |
+| Write chat bot output text (follow, sub, bits, raid) | `brand-steward` |
+| Write stream titles or community posts | `brand-steward` |
+| Review new lore or character for canon | `brand-canon-guardian` |
 | Prepare a sync to Streamer.bot | `sync-workflow` |
 
 ## Adding a New Skill
