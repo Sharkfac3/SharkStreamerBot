@@ -30,6 +30,7 @@ Repository hierarchy for runtime scripts: `Actions/<Feature Group>/script.cs` or
 
 ### Key References
 - `WORKING.md` — **Check first.** Active agent work, task queue, file conflict registry
+- `Docs/AGENT-WORKFLOW.md` — When to commit direct vs. use a branch; merge review template
 - `Actions/SHARED-CONSTANTS.md` — Canonical global variable / OBS / timer names
 - `Actions/HELPER-SNIPPETS.md` — Reusable C# copy/paste patterns
 - `Creative/Brand/BRAND-IDENTITY.md` — Brand vision, mission, values, and the neurodivergent metaphor

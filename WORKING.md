@@ -3,6 +3,8 @@
 > **All agents: check this file before starting any task. Update it when you begin and when you finish.**
 >
 > This is the shared signal board for all contributors — human, pi, claude, diffusion, or otherwise. It prevents two agents from editing the same files at the same time and gives the operator a live snapshot of project state.
+>
+> For contribution rules (when to commit direct vs. use a branch, merge review template): see `Docs/AGENT-WORKFLOW.md`.
 
 ---
 

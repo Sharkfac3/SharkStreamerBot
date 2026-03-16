@@ -93,7 +93,7 @@ This project uses [pi skills](https://agentskills.io/specification). Instead of 
 - `.pi/skills/` contains the skill files
 - `.pi/skills/README.md` lists all available skills
 
-Always check `AGENTS.md` before starting work to confirm you have the right skills loaded. Always check `WORKING.md` before starting work to confirm no other agent is editing the files you need.
+Always check `AGENTS.md` before starting work to confirm you have the right skills loaded. Always check `WORKING.md` before starting work to confirm no other agent is editing the files you need. Always check `Docs/AGENT-WORKFLOW.md` to confirm whether your task warrants a direct commit or a worktree branch.
 
 ---
 
@@ -120,6 +120,7 @@ This is an incubator-style project: open knowledge sharing, community co-creatio
 ## See Also
 
 - `WORKING.md` — Active agent work and task queue (check before starting anything)
+- `Docs/AGENT-WORKFLOW.md` — How to contribute: direct vs. branch, merge review template
 - `AGENTS.md` — Skill routing and scope boundaries
 - `README.md` — Repo structure overview
 - `Creative/Brand/BRAND-IDENTITY.md` — Why this all exists
