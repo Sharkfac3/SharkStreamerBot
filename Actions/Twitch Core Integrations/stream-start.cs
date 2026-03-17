@@ -28,8 +28,9 @@ public class CPHInline
     private const string VAR_PEDRO_GAME_ENABLED = "pedro_game_enabled";
     private const string VAR_PEDRO_MENTION_COUNT = "pedro_mention_count";
     private const string VAR_PEDRO_UNLOCKED = "pedro_unlocked";
+    private const string VAR_PEDRO_NEXT_ALLOWED_UTC = "pedro_next_allowed_utc";
+    private const string VAR_PEDRO_SECRET_UNLOCK_ACTIVE = "pedro_secret_unlock_active";
     private const string VAR_PEDRO_LAST_MESSAGE_ID = "pedro_last_message_id";
-    private const string VAR_PEDRO_SECRET_NEXT_ALLOWED_UTC = "pedro_secret_next_allowed_utc";
     private const string OBS_SOURCE_PEDRO_DANCING = "Pedro - Dancing";
     private const string TIMER_PEDRO_CALL_WINDOW = "Pedro - Call Window";
 
@@ -163,8 +164,9 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, false, false);
         CPH.SetGlobalVar(VAR_PEDRO_MENTION_COUNT, 0, false);
         CPH.SetGlobalVar(VAR_PEDRO_UNLOCKED, false, false);
+        CPH.SetGlobalVar(VAR_PEDRO_NEXT_ALLOWED_UTC, "", false);
+        CPH.SetGlobalVar(VAR_PEDRO_SECRET_UNLOCK_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_PEDRO_LAST_MESSAGE_ID, "", false);
-        CPH.SetGlobalVar(VAR_PEDRO_SECRET_NEXT_ALLOWED_UTC, 0L, false);
 
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
         CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -14,6 +15,7 @@ public class CPHInline
     private const string VAR_PEDRO_GAME_ENABLED = "pedro_game_enabled";
     private const string VAR_PEDRO_MENTION_COUNT = "pedro_mention_count";
     private const string VAR_PEDRO_UNLOCKED = "pedro_unlocked";
+    private const string VAR_PEDRO_NEXT_ALLOWED_UTC = "pedro_next_allowed_utc";
     private const string TIMER_PEDRO_CALL_WINDOW = "Pedro - Call Window";
     private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
     private const string OBS_SOURCE_PEDRO_DANCING = "Pedro - Dancing";
@@ -35,6 +37,9 @@ public class CPHInline
     // straight through the unlock moment.
     private const int PEDRO_RESOLVE_SUCCESS_WAIT_MS = 28000;
 
+    // The normal Pedro mini-game can only be started again 5 minutes after a resolve.
+    private const int PEDRO_PLAY_COOLDOWN_MINUTES = 5;
+
     /*
      * Purpose:
      * - Resolves Pedro event when timer window ends.
@@ -46,10 +51,12 @@ public class CPHInline
      * - pedro_game_enabled
      * - pedro_mention_count
      * - pedro_unlocked
+     * - pedro_next_allowed_utc
      * - shared lock: minigame_active/minigame_name
      *
      * Key outputs/side effects:
      * - Ends active event window.
+     * - Sets the next allowed normal Pedro start time to 5 minutes after this resolve.
      * - If mentions are greater than 100: shows OBS source, triggers Mix It Up command,
      *   and waits 28 seconds before finishing the resolve action.
      * - Releases shared mini-game lock when event ends.
@@ -68,6 +75,9 @@ public class CPHInline
         // End event window now (no more mention counting should happen).
         CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, false, false);
         CPH.DisableTimer(TIMER_PEDRO_CALL_WINDOW);
+
+        // Whether Pedro unlocks or not, the normal mini-game should stay on cooldown for 5 minutes.
+        SetPedroNextAllowedUtc(DateTime.UtcNow.AddMinutes(PEDRO_PLAY_COOLDOWN_MINUTES));
 
         int mentions = (CPH.GetGlobalVar<int?>(VAR_PEDRO_MENTION_COUNT, false) ?? 0);
 
@@ -92,6 +102,15 @@ public class CPHInline
 
         ReleaseMiniGameLockIfOwned();
         return true;
+    }
+
+    /// <summary>
+    /// Stores the next allowed normal Pedro start time as a UTC timestamp string.
+    /// </summary>
+    private void SetPedroNextAllowedUtc(DateTime nextAllowedUtc)
+    {
+        string value = nextAllowedUtc.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
+        CPH.SetGlobalVar(VAR_PEDRO_NEXT_ALLOWED_UTC, value, false);
     }
 
     /// <summary>

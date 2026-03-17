@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -13,7 +14,9 @@ public class CPHInline
     // - Actions/Twitch Core Integrations/stream-start.cs
     private const string VAR_PEDRO_GAME_ENABLED = "pedro_game_enabled";
     private const string VAR_PEDRO_MENTION_COUNT = "pedro_mention_count";
-    private const string VAR_PEDRO_SECRET_NEXT_ALLOWED_UTC = "pedro_secret_next_allowed_utc";
+    private const string VAR_PEDRO_UNLOCKED = "pedro_unlocked";
+    private const string VAR_PEDRO_NEXT_ALLOWED_UTC = "pedro_next_allowed_utc";
+    private const string VAR_PEDRO_SECRET_UNLOCK_ACTIVE = "pedro_secret_unlock_active";
     private const string TIMER_PEDRO_CALL_WINDOW = "Pedro - Call Window";
 
     // Shared mini-game lock (cross-feature).
@@ -30,11 +33,9 @@ public class CPHInline
     private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
-    // Secret redeem pacing.
-    // We keep the redeem silent, but we still want it to respect a short cooldown
-    // so repeated redeems cannot spam the unlock path back-to-back.
-    private const int PEDRO_SECRET_WAIT_MS = 28000;
-    private const int PEDRO_SECRET_COOLDOWN_SECONDS = 28;
+    // Every successful Pedro unlock command trigger should hold the action open long enough
+    // for the Mix It Up sequence to play out.
+    private const int PEDRO_UNLOCK_WAIT_MS = 28000;
 
     /*
      * Purpose:
@@ -48,39 +49,73 @@ public class CPHInline
      * Required runtime variables:
      * - pedro_game_enabled
      * - pedro_mention_count
-     * - pedro_secret_next_allowed_utc
+     * - pedro_unlocked
+     * - pedro_next_allowed_utc
+     * - pedro_secret_unlock_active
      * - shared lock: minigame_active/minigame_name
      *
      * Key outputs/side effects:
-     * - Empty message: starts Pedro call window + timer.
-     * - Secret message: calls Mix It Up unlock command only, waits 28 seconds,
-     *   and starts a silent 28-second cooldown when the unlock bridge succeeds.
+     * - Empty message: starts Pedro call window + timer when Pedro is not unlocked and not on cooldown.
+     * - Secret message: calls Mix It Up unlock command, waits 28 seconds on success,
+     *   and blocks overlapping secret unlock runs until the active secret sequence finishes.
      */
     public bool Execute()
     {
         string pedroMessage = GetPedroCommandMessage();
 
         // Secret command path: do NOT start mini-game.
-        // We only bridge to Mix It Up as requested, but now we also enforce
-        // a short silent cooldown and hold this action for 28 seconds.
+        // We only bridge to Mix It Up as requested, and we still allow this path
+        // even if Pedro is already unlocked or the normal game is on cooldown.
         if (IsSecretPhrase(pedroMessage))
         {
-            if (IsSecretRedeemOnCooldown())
-                return true;
-
-            bool triggered = TriggerMixItUpUnlock();
-            if (triggered)
+            if (!TryAcquireSecretUnlockGuard())
             {
-                StartSecretRedeemCooldown();
-                CPH.Wait(PEDRO_SECRET_WAIT_MS);
+                CPH.SendMessage("💃 Pedro's secret unlock is already playing. Let this one finish first.");
+                return true;
+            }
+
+            try
+            {
+                bool unlockTriggered = TriggerMixItUpUnlock();
+                if (unlockTriggered)
+                    CPH.Wait(PEDRO_UNLOCK_WAIT_MS);
+            }
+            finally
+            {
+                ReleaseSecretUnlockGuard();
             }
 
             return true;
         }
 
         // Any non-empty argument that is not the secret phrase should not start the mini-game.
+        // Give chat a slightly cryptic nudge so the command feels in-world instead of error-like.
         if (!string.IsNullOrWhiteSpace(pedroMessage))
+        {
+            CPH.SendMessage("🦝 Pedro rattles a wrench inside the walls, then goes quiet. That phrase wasn't the one he was listening for.");
             return true;
+        }
+
+        // Once Pedro is unlocked, the normal mini-game should stay unavailable for the rest of the stream.
+        bool unlocked = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_UNLOCKED, false) ?? false);
+        if (unlocked)
+        {
+            CPH.SendMessage("💃 Pedro is already unlocked, so this mini-game is resting for the rest of the stream.");
+            return true;
+        }
+
+        // Respect the 5-minute replay cooldown after the previous Pedro game resolved.
+        DateTime? nextAllowedUtc = GetPedroNextAllowedUtc();
+        if (nextAllowedUtc.HasValue && DateTime.UtcNow < nextAllowedUtc.Value)
+        {
+            TimeSpan remaining = nextAllowedUtc.Value - DateTime.UtcNow;
+            if (remaining < TimeSpan.Zero)
+                remaining = TimeSpan.Zero;
+
+            int secondsRemaining = (int)Math.Ceiling(remaining.TotalSeconds);
+            CPH.SendMessage($"💃 Pedro needs a breather. Try again in about {secondsRemaining} seconds.");
+            return true;
+        }
 
         // Prevent overlap across all mini-games.
         if (!TryAcquireMiniGameLock())
@@ -94,6 +129,7 @@ public class CPHInline
         bool active = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_GAME_ENABLED, false) ?? false);
         if (active)
         {
+            ReleaseMiniGameLockIfOwned();
             CPH.SendMessage("💃 Pedro is already on the dance floor... summon harder!");
             return true;
         }
@@ -139,24 +175,25 @@ public class CPHInline
     }
 
     /// <summary>
-    /// Returns true when the secret redeem is still inside its silent cooldown window.
-    /// We intentionally do not send chat output here because the secret path is meant
-    /// to stay invisible to chat.
+    /// Secret unlock runs are intentionally single-file so two users cannot fire the
+    /// Mix It Up unlock sequence on top of each other.
     /// </summary>
-    private bool IsSecretRedeemOnCooldown()
+    private bool TryAcquireSecretUnlockGuard()
     {
-        long nowUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        long nextAllowedUtc = CPH.GetGlobalVar<long?>(VAR_PEDRO_SECRET_NEXT_ALLOWED_UTC, false) ?? 0;
-        return nextAllowedUtc > nowUtc;
+        bool active = (CPH.GetGlobalVar<bool?>(VAR_PEDRO_SECRET_UNLOCK_ACTIVE, false) ?? false);
+        if (active)
+            return false;
+
+        CPH.SetGlobalVar(VAR_PEDRO_SECRET_UNLOCK_ACTIVE, true, false);
+        return true;
     }
 
     /// <summary>
-    /// Starts the secret redeem cooldown after the Mix It Up unlock bridge succeeds.
+    /// Clears the secret unlock guard once the Mix It Up sequence finishes or errors.
     /// </summary>
-    private void StartSecretRedeemCooldown()
+    private void ReleaseSecretUnlockGuard()
     {
-        long nextAllowedUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + PEDRO_SECRET_COOLDOWN_SECONDS;
-        CPH.SetGlobalVar(VAR_PEDRO_SECRET_NEXT_ALLOWED_UTC, nextAllowedUtc, false);
+        CPH.SetGlobalVar(VAR_PEDRO_SECRET_UNLOCK_ACTIVE, false, false);
     }
 
     /// <summary>
@@ -174,6 +211,43 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, true, false);
         CPH.SetGlobalVar(VAR_MINIGAME_NAME, MINIGAME_NAME_PEDRO, false);
         return true;
+    }
+
+    /// <summary>
+    /// Reads the next allowed Pedro start time from the shared cooldown variable.
+    /// Empty/invalid values are treated as no cooldown.
+    /// </summary>
+    private DateTime? GetPedroNextAllowedUtc()
+    {
+        string rawValue = CPH.GetGlobalVar<string>(VAR_PEDRO_NEXT_ALLOWED_UTC, false) ?? "";
+        if (string.IsNullOrWhiteSpace(rawValue))
+            return null;
+
+        if (DateTime.TryParse(
+                rawValue,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal,
+                out DateTime parsedUtc))
+        {
+            return parsedUtc;
+        }
+
+        CPH.LogWarn($"[Squad Pedro] Invalid cooldown timestamp in '{VAR_PEDRO_NEXT_ALLOWED_UTC}': '{rawValue}'.");
+        return null;
+    }
+
+    /// <summary>
+    /// Releases the shared lock only if Pedro currently owns it.
+    /// This is mainly used for defensive guard exits after the lock has been claimed.
+    /// </summary>
+    private void ReleaseMiniGameLockIfOwned()
+    {
+        string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
+        if (!string.Equals(lockName, MINIGAME_NAME_PEDRO, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
     }
 
     /// <summary>

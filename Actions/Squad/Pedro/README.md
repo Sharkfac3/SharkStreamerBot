@@ -14,23 +14,28 @@ Handles the `!pedro` command entrypoint.
   - `minigame_active`
   - `minigame_name` (`pedro` while this mini-game owns the lock)
 - Reads `pedro_game_enabled` to prevent overlap.
+- Reads `pedro_unlocked` to block the normal mini-game after Pedro has been unlocked.
+- Reads `pedro_next_allowed_utc` to enforce the 5-minute replay cooldown.
+- Reads/writes `pedro_secret_unlock_active` to serialize the secret unlock path.
 - Writes `pedro_game_enabled` = `true` on normal game start.
 - Writes `pedro_mention_count` = `0` on normal game start.
-- Reads/writes `pedro_secret_next_allowed_utc` to enforce a silent secret-redeem cooldown.
 
 ### Key Outputs / Side Effects
 - If command message is empty (`!pedro` only):
   - Starts Pedro event collection window,
   - Claims shared mini-game lock,
-  - Enables timer `Pedro - Call Window`.
+  - Enables timer `Pedro - Call Window`,
+  - Only when Pedro is not already unlocked and not on the 5-minute replay cooldown.
 - If command message is exactly `x500livepedro`:
   - Does **not** start mini-game,
-  - Does **not** claim lock,
+  - Does **not** claim the normal mini-game lock,
+  - Uses a dedicated secret-unlock guard so only one secret run can play at a time,
   - Calls Mix It Up Pedro unlock command,
-  - Starts a silent 28-second cooldown when that unlock call succeeds,
-  - Waits 28 seconds before finishing the action.
+  - Waits 28 seconds after a successful command call,
+  - Still works even if Pedro is already unlocked.
 - If command message is non-empty and not secret phrase:
-  - Does nothing.
+  - Does not start the mini-game,
+  - Sends a cryptic in-world hint that the phrase was not the one Pedro was listening for.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
@@ -43,14 +48,19 @@ Handles the `!pedro` command entrypoint.
 - None.
 
 ### Wait Behavior
-- Secret phrase path waits 28 seconds after the Mix It Up unlock command succeeds.
+- Secret phrase path waits 28 seconds after a successful Mix It Up unlock command call.
+- While that secret wait is active, additional secret phrase attempts are blocked so the Mix It Up unlock sequence cannot overlap with itself.
 - Normal Pedro game start path does not wait.
+- Cooldown/unlocked/ignored-input guard paths do not wait.
 
 ### Chat / Log Output
 - Sends mini-game-in-progress warning if another mini-game owns the lock.
 - Sends already-active warning if event is already running.
+- Sends unlocked warning if Pedro has already been unlocked this stream.
+- Sends cooldown warning if Pedro is still on the 5-minute replay cooldown.
 - Sends event start message for new event.
-- Secret path is silent in chat, including when it is on cooldown.
+- Sends a cryptic invalid-phrase warning for non-secret `!pedro <text>` usage.
+- Sends a secret-path warning if another secret unlock sequence is already playing.
 
 ### Operator Notes
 - This script should be the direct command action for `!pedro`.
@@ -108,9 +118,11 @@ Ends Pedro event and resolves success/failure at timer end.
 - Writes `pedro_game_enabled` = `false` when resolving.
 - Reads `pedro_mention_count` for threshold comparison.
 - Writes `pedro_unlocked` = `true` on successful resolve.
+- Writes `pedro_next_allowed_utc` = current UTC + 5 minutes on every real resolve.
 
 ### Key Outputs / Side Effects
 - Disables timer `Pedro - Call Window` on guard/resolve paths.
+- Sets a 5-minute replay cooldown on every real resolve.
 - If mentions are greater than 100:
   - Sets unlock state,
   - Shows OBS source,
@@ -140,3 +152,4 @@ Ends Pedro event and resolves success/failure at timer end.
 
 ### Operator Notes
 - Keep timer wiring so this script runs exactly once after the call window.
+- After Pedro unlocks, the normal `!pedro` mini-game should stay unavailable until the next stream reset.
