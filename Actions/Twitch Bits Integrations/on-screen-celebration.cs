@@ -9,9 +9,9 @@ public class CPHInline
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
-    // Placeholder command ID for the on-screen celebration bits purchase flow.
-    // Replace this with the real Mix It Up command ID when ready.
-    private const string MIXITUP_ON_SCREEN_CELEBRATION_COMMAND_ID = "replace-this-with-bits-on-screen-celebration";
+    // Verified Mix It Up command ID from Tools/MixItUp/Api/data/mixitup-commands.txt
+    // Action Group: Twitch - Bits - On Screen Celebration
+    private const string MIXITUP_ON_SCREEN_CELEBRATION_COMMAND_ID = "3b9123d2-8d22-40f0-ad9b-baf6530388ee";
 
     // Reuse one HttpClient instance for reliability.
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();

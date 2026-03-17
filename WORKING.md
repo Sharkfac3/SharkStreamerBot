@@ -30,6 +30,9 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-17 | pi | Patch verified Mix It Up command IDs into bits integrations | uncommitted |
+| 2026-03-17 | pi | Update bits tiers to use messageStripped and remove cheer token stripping | uncommitted |
+| 2026-03-17 | pi | Investigate/fix bits redeem message forwarding to Mix It Up | uncommitted |
 | 2026-03-16 | claude | Merge brand foundation layer | 5171db7 |
 | 2026-03-16 | claude | Optimize agent scaffolding for token efficiency | 2275465 |
 

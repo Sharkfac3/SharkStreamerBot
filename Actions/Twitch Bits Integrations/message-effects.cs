@@ -5,17 +5,21 @@ using System.Text.Json;
 
 public class CPHInline
 {
-    // Trigger arg name exposed by Streamer.bot for automatic rewards that include
-    // free-form user-entered text. The docs describe this as the redeeming user's input.
+    // Trigger arg names we have seen used by Streamer.bot-style reward flows.
+    // The automatic bits reward appears to provide free-form user text under different
+    // keys depending on trigger wiring/version, so we check several safe fallbacks.
     private const string ARG_USER_INPUT = "userInput";
+    private const string ARG_INPUT0 = "input0";
+    private const string ARG_MESSAGE = "message";
+    private const string ARG_RAW_INPUT = "rawInput";
 
     // Mix It Up API constants.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
-    // Placeholder command ID for the message effects bits purchase flow.
-    // Replace this with the real Mix It Up command ID when ready.
-    private const string MIXITUP_MESSAGE_EFFECTS_COMMAND_ID = "replace-this-id-with-bits-message-effects";
+    // Verified Mix It Up command ID from Tools/MixItUp/Api/data/mixitup-commands.txt
+    // Action Group: Twitch - Bits - Message Effects
+    private const string MIXITUP_MESSAGE_EFFECTS_COMMAND_ID = "28397ebb-7a68-4a52-b448-3044a811c008";
 
     // Reuse one HttpClient instance for reliability.
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
@@ -23,13 +27,15 @@ public class CPHInline
     /*
      * Purpose:
      * - Handles the Twitch automatic reward redemption for the message effects bits purchase.
-     * - Reads the user's entered message from Streamer.bot's userInput arg.
+     * - Reads the user's entered message from Streamer.bot using a fallback chain
+     *   (userInput -> input0 -> message -> rawInput).
      * - Forwards that message to a Mix It Up command using the standard payload shape.
      *
      * Expected trigger/input:
      * - Streamer.bot action wired to:
      *   Twitch -> Channel Reward -> Automatic Reward Redemption
-     * - Streamer.bot should provide userInput for this reward type.
+     * - Streamer.bot may expose the entered message under userInput, input0,
+     *   message, or rawInput depending on trigger wiring/version.
      *
      * Required runtime variables:
      * - None.
@@ -46,11 +52,18 @@ public class CPHInline
      */
     public bool Execute()
     {
-        string userInput = GetArg(ARG_USER_INPUT);
+        string inputSource = string.Empty;
+        string userInput = GetUserInput(out inputSource);
 
         if (string.IsNullOrWhiteSpace(userInput))
         {
-            CPH.LogWarn("[Twitch Automatic Reward: Message Effects] No userInput value was provided by Streamer.bot.");
+            CPH.LogWarn("[Twitch Automatic Reward: Message Effects] No message input was provided by Streamer.bot. Checked userInput, input0, message, and rawInput.");
+        }
+        else if (!string.Equals(inputSource, ARG_USER_INPUT, StringComparison.Ordinal))
+        {
+            // Temporary diagnostic: if a fallback arg is the real source, keep one clear log line
+            // so the operator can confirm which trigger field Streamer.bot is actually populating.
+            CPH.LogWarn($"[Twitch Automatic Reward: Message Effects] Using fallback arg '{inputSource}' for redeem text.");
         }
 
         TriggerMixItUpCommand(
@@ -61,6 +74,29 @@ public class CPHInline
         );
 
         return true;
+    }
+
+    /// <summary>
+    /// Reads the redeem text using a defensive fallback chain.
+    /// This helps when different Streamer.bot reward triggers expose the same user-entered
+    /// text under different argument names.
+    /// </summary>
+    private string GetUserInput(out string sourceArg)
+    {
+        string[] candidateArgs = new[] { ARG_USER_INPUT, ARG_INPUT0, ARG_MESSAGE, ARG_RAW_INPUT };
+
+        foreach (string argName in candidateArgs)
+        {
+            string value = GetArg(argName);
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                sourceArg = argName;
+                return value;
+            }
+        }
+
+        sourceArg = string.Empty;
+        return string.Empty;
     }
 
     /// <summary>

@@ -2,7 +2,6 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
 public class CPHInline
 {
@@ -12,11 +11,10 @@ public class CPHInline
     // - Actions/Twitch Bits Integrations/bits-tier-2.cs
     // - Actions/Twitch Bits Integrations/bits-tier-3.cs
     // - Actions/Twitch Bits Integrations/bits-tier-4.cs
+    private const string ARG_MESSAGE_STRIPPED = "messageStripped";
     private const string ARG_MESSAGE = "message";
     private const string ARG_RAW_INPUT = "rawInput";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
-    private const string CHEER_TOKEN_REGEX = @"\bcheer\d+\b";
-    private const string WHITESPACE_REGEX = @"\s+";
     private const int WAIT_BASE_PREP_MS = 3000;
     private const int WAIT_MS_PER_WORD = 400;
     private const int WAIT_TAIL_BUFFER_MS = 500;
@@ -27,14 +25,14 @@ public class CPHInline
      *
      * Expected trigger/input:
      * - Streamer.bot Trigger: Twitch -> Chat -> Cheer (Tier 2 action wiring).
-     * - Reads: message (fallback: rawInput).
+     * - Reads: messageStripped (fallback: message, then rawInput).
      *
      * Required runtime variables:
      * - None.
      *
      * Key outputs/side effects:
-     * - POSTs sanitized cheer text to Mix It Up REST API command endpoint.
-     * - Removes CheerXXX tokens before forwarding.
+     * - POSTs cheer text to Mix It Up REST API command endpoint.
+     * - Prefers Streamer.bot's messageStripped value so CheerXXX tokens are already removed.
      * - Limits forwarded text to 250 words.
      * - Waits based on text length so TTS can finish before next queue item.
      *
@@ -60,16 +58,18 @@ public class CPHInline
         try
         {
             // 1) Read cheer text from Streamer.bot args.
-            string rawMessage = GetArg(ARG_MESSAGE);
-            if (string.IsNullOrWhiteSpace(rawMessage))
+            // We prefer messageStripped because Streamer.bot already removes CheerXXX tokens for us.
+            string cleanedMessage = GetArg(ARG_MESSAGE_STRIPPED);
+            if (string.IsNullOrWhiteSpace(cleanedMessage))
             {
-                rawMessage = GetArg(ARG_RAW_INPUT);
+                cleanedMessage = GetArg(ARG_MESSAGE);
+            }
+            if (string.IsNullOrWhiteSpace(cleanedMessage))
+            {
+                cleanedMessage = GetArg(ARG_RAW_INPUT);
             }
 
-            // 2) Remove Cheer### tokens and normalize spaces.
-            string cleanedMessage = SanitizeCheerMessage(rawMessage);
-
-            // 3) Enforce tier cap (Tier 2 => first 250 words only).
+            // 2) Enforce tier cap (Tier 2 => first 250 words only).
             string finalMessage = LimitToWordCount(cleanedMessage, MAX_WORDS);
 
             // 4) Build endpoint URL for Mix It Up command trigger.
@@ -117,22 +117,6 @@ public class CPHInline
         }
 
         return string.Empty;
-    }
-
-    /// <summary>
-    /// Removes all Cheer### tokens (case-insensitive),
-    /// then normalizes whitespace to a single space.
-    /// </summary>
-    private string SanitizeCheerMessage(string message)
-    {
-        if (string.IsNullOrWhiteSpace(message))
-        {
-            return string.Empty;
-        }
-
-        string noCheerTokens = Regex.Replace(message, CHEER_TOKEN_REGEX, "", RegexOptions.IgnoreCase);
-        string collapsedWhitespace = Regex.Replace(noCheerTokens, WHITESPACE_REGEX, " ").Trim();
-        return collapsedWhitespace;
     }
 
     /// <summary>

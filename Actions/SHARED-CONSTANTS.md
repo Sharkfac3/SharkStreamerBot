@@ -166,11 +166,10 @@ Used in:
 ---
 
 ## Bits (shared)
+- `ARG_MESSAGE_STRIPPED` = `messageStripped`
 - `ARG_MESSAGE` = `message`
 - `ARG_RAW_INPUT` = `rawInput`
 - `MIXITUP_PLATFORM_TWITCH` = `Twitch`
-- `CHEER_TOKEN_REGEX` = `\bcheer\d+\b`
-- `WHITESPACE_REGEX` = `\s+`
 - `WAIT_BASE_PREP_MS` = `3000`
 - `WAIT_MS_PER_WORD` = `400`
 - `WAIT_TAIL_BUFFER_MS` = `500`

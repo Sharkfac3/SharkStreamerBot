@@ -8,19 +8,20 @@ Shared constants reference: `Actions/SHARED-CONSTANTS.md`
 Forwards Tier 1 cheer text to Mix It Up with sanitization and TTS pacing wait.
 
 ### Expected Trigger / Input
-- Tier 1 cheer trigger with message text (`message` fallback `rawInput`).
+- Tier 1 cheer trigger with message text (`messageStripped` fallback `message` then `rawInput`).
 
 ### Required Runtime Variables
 - None.
 
 ### Key Outputs / Side Effects
-- Sanitizes cheer text and forwards it to Mix It Up.
+- Forwards cheer text to Mix It Up.
+- Prefers Streamer.bot's `messageStripped` value so cheer tokens are already removed.
 - Applies pacing wait to reduce overlap/cutoff.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID: `REPLACE_WITH_TIER_1_COMMAND_ID` *(placeholder in script; not configured yet)*
-- Payload `Arguments`: sanitized full cheer text (Cheer tokens removed, no word cap)
+- Payload `Arguments`: full cheer text from `messageStripped` when available (no word cap)
 
 ### OBS Interactions
 - None.
@@ -43,19 +44,20 @@ Forwards Tier 1 cheer text to Mix It Up with sanitization and TTS pacing wait.
 Forwards Tier 2 cheer text to Mix It Up with a 250-word cap.
 
 ### Expected Trigger / Input
-- Tier 2 cheer trigger with message text (`message` fallback `rawInput`).
+- Tier 2 cheer trigger with message text (`messageStripped` fallback `message` then `rawInput`).
 
 ### Required Runtime Variables
 - None.
 
 ### Key Outputs / Side Effects
-- Sanitizes cheer text, caps to 250 words, forwards to Mix It Up.
+- Forwards cheer text, caps to 250 words, and sends it to Mix It Up.
+- Prefers Streamer.bot's `messageStripped` value so cheer tokens are already removed.
 - Applies pacing wait to reduce overlap/cutoff.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID: `REPLACE_WITH_TIER_2_COMMAND_ID` *(placeholder in script; not configured yet)*
-- Payload `Arguments`: sanitized cheer text capped to first 250 words
+- Payload `Arguments`: cheer text from `messageStripped` when available, capped to first 250 words
 
 ### OBS Interactions
 - None.
@@ -78,19 +80,20 @@ Forwards Tier 2 cheer text to Mix It Up with a 250-word cap.
 Forwards Tier 3 cheer text to Mix It Up with a 100-word cap.
 
 ### Expected Trigger / Input
-- Tier 3 cheer trigger with message text (`message` fallback `rawInput`).
+- Tier 3 cheer trigger with message text (`messageStripped` fallback `message` then `rawInput`).
 
 ### Required Runtime Variables
 - None.
 
 ### Key Outputs / Side Effects
-- Sanitizes cheer text, caps to 100 words, forwards to Mix It Up.
+- Forwards cheer text, caps to 100 words, and sends it to Mix It Up.
+- Prefers Streamer.bot's `messageStripped` value so cheer tokens are already removed.
 - Applies pacing wait to reduce overlap/cutoff.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID: `23f1afd1-7375-475d-afee-058ef4f7f68d`
-- Payload `Arguments`: sanitized cheer text capped to first 100 words
+- Payload `Arguments`: cheer text from `messageStripped` when available, capped to first 100 words
 
 ### OBS Interactions
 - None.
@@ -113,19 +116,20 @@ Forwards Tier 3 cheer text to Mix It Up with a 100-word cap.
 Forwards Tier 4 cheer text to Mix It Up with a 10-word cap.
 
 ### Expected Trigger / Input
-- Tier 4 cheer trigger with message text (`message` fallback `rawInput`).
+- Tier 4 cheer trigger with message text (`messageStripped` fallback `message` then `rawInput`).
 
 ### Required Runtime Variables
 - None.
 
 ### Key Outputs / Side Effects
-- Sanitizes cheer text, caps to 10 words, forwards to Mix It Up.
+- Forwards cheer text, caps to 10 words, and sends it to Mix It Up.
+- Prefers Streamer.bot's `messageStripped` value so cheer tokens are already removed.
 - Applies pacing wait to reduce overlap/cutoff.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_TIER_4_COMMAND_ID` *(placeholder in script; not configured yet)*
-- Payload `Arguments`: sanitized cheer text capped to first 10 words
+- Command ID: `3a83b335-ae69-425c-b4d2-a52d1734a9f7`
+- Payload `Arguments`: cheer text from `messageStripped` when available, capped to first 10 words
 
 ### OBS Interactions
 - None.
@@ -138,7 +142,7 @@ Forwards Tier 4 cheer text to Mix It Up with a 10-word cap.
 - Sends no chat output.
 
 ### Operator Notes
-- Replace placeholder command ID before production use.
+- Current command ID is configured from the saved Mix It Up command export.
 
 ---
 
@@ -165,7 +169,7 @@ Handles the `gigantify emote` automatic reward redemption by calling a Mix It Up
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `replace-this-with-bit-gigantify-emote` *(placeholder; replace with the real ID when ready)*
+- Command ID: `29d47997-6075-412d-88a0-43619b59bcfd`
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = "whos that emote?"`
@@ -183,7 +187,7 @@ Handles the `gigantify emote` automatic reward redemption by calling a Mix It Up
 - Logs warning/error messages when the Mix It Up call fails.
 
 ### Operator Notes
-- Replace `replace-this-with-bit-gigantify-emote` with the actual Mix It Up command ID when available.
+- Current command ID is configured from the saved Mix It Up command export.
 - Wire this script to `Twitch -> Channel Reward -> Automatic Reward Redemption`.
 - Filter the action so it only runs for the `gigantify emote` automatic reward.
 
@@ -192,25 +196,29 @@ Handles the `gigantify emote` automatic reward redemption by calling a Mix It Up
 ## Script: `message-effects.cs`
 
 ### Purpose
-Handles the `message effects` automatic reward redemption by forwarding the redeeming user's `userInput` text to a Mix It Up command.
+Handles the `message effects` automatic reward redemption by forwarding the redeeming user's entered text to a Mix It Up command.
 
 ### Expected Trigger / Input
 - Streamer.bot trigger: `Twitch -> Channel Reward -> Automatic Reward Redemption`.
-- Streamer.bot should provide:
+- Streamer.bot may provide the entered text under one of these args, depending on trigger wiring/version:
   - `userInput`
+  - `input0`
+  - `message`
+  - `rawInput`
 
 ### Required Runtime Variables
 - None.
 
 ### Key Outputs / Side Effects
 - Calls Mix It Up Run Command API for the message effects flow.
-- Sends the trimmed `userInput` value in `Arguments`.
+- Sends the first non-empty value found in `userInput`, `input0`, `message`, or `rawInput` in `Arguments`.
 - Sends an empty `SpecialIdentifiers` object for now.
-- Logs a warning if `userInput` is missing or blank.
+- Logs a warning if none of those args are populated.
+- Logs which fallback arg was used when the text does not come from `userInput`.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `replace-this-id-with-bits-message-effects` *(placeholder; replace with the real ID when available)*
+- Command ID: `28397ebb-7a68-4a52-b448-3044a811c008`
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = "<userInput text>"`
@@ -228,7 +236,7 @@ Handles the `message effects` automatic reward redemption by forwarding the rede
 - Logs warning/error messages when the Mix It Up call fails or when `userInput` is blank.
 
 ### Operator Notes
-- Replace `replace-this-id-with-bits-message-effects` with the actual Mix It Up command ID when available.
+- Current command ID is configured from the saved Mix It Up command export.
 - Wire this script to `Twitch -> Channel Reward -> Automatic Reward Redemption`.
 - Filter the action so it only runs for the `message effects` automatic reward.
 
@@ -252,7 +260,7 @@ Handles the `on screen celebration` automatic reward redemption by calling a Mix
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `replace-this-with-bits-on-screen-celebration` *(placeholder; replace with the real ID when available)*
+- Command ID: `3b9123d2-8d22-40f0-ad9b-baf6530388ee`
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
@@ -270,6 +278,6 @@ Handles the `on screen celebration` automatic reward redemption by calling a Mix
 - Logs warning/error messages when the Mix It Up call fails.
 
 ### Operator Notes
-- Replace `replace-this-with-bits-on-screen-celebration` with the actual Mix It Up command ID when available.
+- Current command ID is configured from the saved Mix It Up command export.
 - Wire this script to `Twitch -> Channel Reward -> Automatic Reward Redemption`.
 - Filter the action so it only runs for the `on screen celebration` automatic reward.

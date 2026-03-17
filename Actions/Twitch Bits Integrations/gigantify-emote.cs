@@ -15,9 +15,9 @@ public class CPHInline
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
-    // Placeholder command ID for the gigantify emote automatic reward flow.
-    // Replace this with the real Mix It Up command ID when ready.
-    private const string MIXITUP_GIGANTIFY_EMOTE_COMMAND_ID = "replace-this-with-bit-gigantify-emote";
+    // Verified Mix It Up command ID from Tools/MixItUp/Api/data/mixitup-commands.txt
+    // Action Group: Twitch - Bits- Gigantify Emote
+    private const string MIXITUP_GIGANTIFY_EMOTE_COMMAND_ID = "29d47997-6075-412d-88a0-43619b59bcfd";
 
     // This action should always send the same message payload and the standard type.
     private const string MIXITUP_MESSAGE = "whos that emote?";
