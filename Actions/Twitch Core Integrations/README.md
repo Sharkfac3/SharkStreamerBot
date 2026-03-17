@@ -33,12 +33,14 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 - Resets `pedro_mention_count` (int) to `0`.
 - Resets `pedro_unlocked` (bool) to false.
 - Resets `pedro_last_message_id` (string) to empty.
+- Resets `pedro_secret_next_allowed_utc` (long) to `0`.
 - Sets `stream_mode` (string) to `workspace`.
 
 ### Key Outputs / Side Effects
 - Reinitializes session state for stream start.
 - Disables timer `Duck - Call Window`.
 - Disables timer `Clone - Volley Timer`.
+- Disables timer `Pedro - Call Window`.
 
 ### Mix It Up Actions
 - None.

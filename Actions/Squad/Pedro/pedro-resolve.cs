@@ -31,6 +31,10 @@ public class CPHInline
     private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
+    // Match the secret redeem pacing so Pedro's successful resolve does not rush
+    // straight through the unlock moment.
+    private const int PEDRO_RESOLVE_SUCCESS_WAIT_MS = 28000;
+
     /*
      * Purpose:
      * - Resolves Pedro event when timer window ends.
@@ -46,7 +50,8 @@ public class CPHInline
      *
      * Key outputs/side effects:
      * - Ends active event window.
-     * - If mentions are greater than 100: shows OBS source and triggers Mix It Up command.
+     * - If mentions are greater than 100: shows OBS source, triggers Mix It Up command,
+     *   and waits 28 seconds before finishing the resolve action.
      * - Releases shared mini-game lock when event ends.
      */
     public bool Execute()
@@ -73,7 +78,10 @@ public class CPHInline
             // Use a small visibility refresh (hide -> show) to avoid stale OBS scene-item state.
             ShowPedroDancingSource();
 
-            TriggerMixItUpUnlock();
+            bool unlockTriggered = TriggerMixItUpUnlock();
+
+            if (unlockTriggered)
+                CPH.Wait(PEDRO_RESOLVE_SUCCESS_WAIT_MS);
 
             CPH.SendMessage($"💃✅ PEDRO UNLOCKED! Mentions: {mentions} (needed more than {PEDRO_MENTION_THRESHOLD}).");
         }
@@ -119,9 +127,9 @@ public class CPHInline
     /// <summary>
     /// Pedro-specific wrapper that calls the generic Mix It Up helper.
     /// </summary>
-    private void TriggerMixItUpUnlock()
+    private bool TriggerMixItUpUnlock()
     {
-        TriggerMixItUpCommand(MIXITUP_PEDRO_UNLOCK_COMMAND_ID, "Squad Pedro");
+        return TriggerMixItUpCommand(MIXITUP_PEDRO_UNLOCK_COMMAND_ID, "Squad Pedro");
     }
 
     /// <summary>

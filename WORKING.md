@@ -30,6 +30,8 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-17 | pi | Add Pedro resolve wait | uncommitted |
+| 2026-03-17 | pi | Add Pedro secret redeem wait + cooldown | uncommitted |
 | 2026-03-17 | pi | Patch verified Mix It Up command IDs into bits integrations | uncommitted |
 | 2026-03-17 | pi | Update bits tiers to use messageStripped and remove cheer token stripping | uncommitted |
 | 2026-03-17 | pi | Investigate/fix bits redeem message forwarding to Mix It Up | uncommitted |

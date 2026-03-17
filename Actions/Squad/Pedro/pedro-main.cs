@@ -13,6 +13,7 @@ public class CPHInline
     // - Actions/Twitch Core Integrations/stream-start.cs
     private const string VAR_PEDRO_GAME_ENABLED = "pedro_game_enabled";
     private const string VAR_PEDRO_MENTION_COUNT = "pedro_mention_count";
+    private const string VAR_PEDRO_SECRET_NEXT_ALLOWED_UTC = "pedro_secret_next_allowed_utc";
     private const string TIMER_PEDRO_CALL_WINDOW = "Pedro - Call Window";
 
     // Shared mini-game lock (cross-feature).
@@ -29,6 +30,12 @@ public class CPHInline
     private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
+    // Secret redeem pacing.
+    // We keep the redeem silent, but we still want it to respect a short cooldown
+    // so repeated redeems cannot spam the unlock path back-to-back.
+    private const int PEDRO_SECRET_WAIT_MS = 28000;
+    private const int PEDRO_SECRET_COOLDOWN_SECONDS = 28;
+
     /*
      * Purpose:
      * - Handles the !pedro command entrypoint.
@@ -41,21 +48,33 @@ public class CPHInline
      * Required runtime variables:
      * - pedro_game_enabled
      * - pedro_mention_count
+     * - pedro_secret_next_allowed_utc
      * - shared lock: minigame_active/minigame_name
      *
      * Key outputs/side effects:
      * - Empty message: starts Pedro call window + timer.
-     * - Secret message: calls Mix It Up unlock command only.
+     * - Secret message: calls Mix It Up unlock command only, waits 28 seconds,
+     *   and starts a silent 28-second cooldown when the unlock bridge succeeds.
      */
     public bool Execute()
     {
         string pedroMessage = GetPedroCommandMessage();
 
         // Secret command path: do NOT start mini-game.
-        // We only bridge to Mix It Up as requested.
+        // We only bridge to Mix It Up as requested, but now we also enforce
+        // a short silent cooldown and hold this action for 28 seconds.
         if (IsSecretPhrase(pedroMessage))
         {
-            TriggerMixItUpUnlock();
+            if (IsSecretRedeemOnCooldown())
+                return true;
+
+            bool triggered = TriggerMixItUpUnlock();
+            if (triggered)
+            {
+                StartSecretRedeemCooldown();
+                CPH.Wait(PEDRO_SECRET_WAIT_MS);
+            }
+
             return true;
         }
 
@@ -120,6 +139,27 @@ public class CPHInline
     }
 
     /// <summary>
+    /// Returns true when the secret redeem is still inside its silent cooldown window.
+    /// We intentionally do not send chat output here because the secret path is meant
+    /// to stay invisible to chat.
+    /// </summary>
+    private bool IsSecretRedeemOnCooldown()
+    {
+        long nowUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        long nextAllowedUtc = CPH.GetGlobalVar<long?>(VAR_PEDRO_SECRET_NEXT_ALLOWED_UTC, false) ?? 0;
+        return nextAllowedUtc > nowUtc;
+    }
+
+    /// <summary>
+    /// Starts the secret redeem cooldown after the Mix It Up unlock bridge succeeds.
+    /// </summary>
+    private void StartSecretRedeemCooldown()
+    {
+        long nextAllowedUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + PEDRO_SECRET_COOLDOWN_SECONDS;
+        CPH.SetGlobalVar(VAR_PEDRO_SECRET_NEXT_ALLOWED_UTC, nextAllowedUtc, false);
+    }
+
+    /// <summary>
     /// Claims the shared mini-game lock when free.
     /// Allows re-entry only for Pedro itself.
     /// </summary>
@@ -139,9 +179,9 @@ public class CPHInline
     /// <summary>
     /// Pedro-specific wrapper that calls the generic Mix It Up helper.
     /// </summary>
-    private void TriggerMixItUpUnlock()
+    private bool TriggerMixItUpUnlock()
     {
-        TriggerMixItUpCommand(MIXITUP_PEDRO_UNLOCK_COMMAND_ID, "Squad Pedro");
+        return TriggerMixItUpCommand(MIXITUP_PEDRO_UNLOCK_COMMAND_ID, "Squad Pedro");
     }
 
     /// <summary>

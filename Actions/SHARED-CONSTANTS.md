@@ -88,6 +88,7 @@ Used in:
 - `VAR_PEDRO_MENTION_COUNT` = `pedro_mention_count`
 - `VAR_PEDRO_UNLOCKED` = `pedro_unlocked`
 - `VAR_PEDRO_LAST_MESSAGE_ID` = `pedro_last_message_id`
+- `VAR_PEDRO_SECRET_NEXT_ALLOWED_UTC` = `pedro_secret_next_allowed_utc`
 - `OBS_SOURCE_PEDRO_DANCING` = `Pedro - Dancing`
 - `TIMER_PEDRO_CALL_WINDOW` = `Pedro - Call Window`
 

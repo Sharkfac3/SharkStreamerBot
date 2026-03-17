@@ -16,6 +16,7 @@ Handles the `!pedro` command entrypoint.
 - Reads `pedro_game_enabled` to prevent overlap.
 - Writes `pedro_game_enabled` = `true` on normal game start.
 - Writes `pedro_mention_count` = `0` on normal game start.
+- Reads/writes `pedro_secret_next_allowed_utc` to enforce a silent secret-redeem cooldown.
 
 ### Key Outputs / Side Effects
 - If command message is empty (`!pedro` only):
@@ -25,7 +26,9 @@ Handles the `!pedro` command entrypoint.
 - If command message is exactly `x500livepedro`:
   - Does **not** start mini-game,
   - Does **not** claim lock,
-  - Calls Mix It Up Pedro unlock command only.
+  - Calls Mix It Up Pedro unlock command,
+  - Starts a silent 28-second cooldown when that unlock call succeeds,
+  - Waits 28 seconds before finishing the action.
 - If command message is non-empty and not secret phrase:
   - Does nothing.
 
@@ -40,13 +43,14 @@ Handles the `!pedro` command entrypoint.
 - None.
 
 ### Wait Behavior
-- None.
+- Secret phrase path waits 28 seconds after the Mix It Up unlock command succeeds.
+- Normal Pedro game start path does not wait.
 
 ### Chat / Log Output
 - Sends mini-game-in-progress warning if another mini-game owns the lock.
 - Sends already-active warning if event is already running.
 - Sends event start message for new event.
-- Secret path is silent in chat (Mix It Up call only).
+- Secret path is silent in chat, including when it is on cooldown.
 
 ### Operator Notes
 - This script should be the direct command action for `!pedro`.
@@ -110,7 +114,8 @@ Ends Pedro event and resolves success/failure at timer end.
 - If mentions are greater than 100:
   - Sets unlock state,
   - Shows OBS source,
-  - Triggers Mix It Up unlock command.
+  - Triggers Mix It Up unlock command,
+  - Waits 28 seconds before the resolve action finishes.
 - Releases shared mini-game lock after resolve.
 
 ### Mix It Up Actions
@@ -126,7 +131,8 @@ Ends Pedro event and resolves success/failure at timer end.
 - Logs an error if OBS call throws (helps diagnose scene/source mismatch).
 
 ### Wait Behavior
-- None.
+- On successful unlock resolve, waits 28 seconds after the Mix It Up unlock command succeeds.
+- Failure/guard paths do not wait.
 
 ### Chat / Log Output
 - Sends unlock message on success.
