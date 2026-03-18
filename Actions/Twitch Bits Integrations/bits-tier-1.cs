@@ -11,6 +11,7 @@ public class CPHInline
     // - Actions/Twitch Bits Integrations/bits-tier-2.cs
     // - Actions/Twitch Bits Integrations/bits-tier-3.cs
     // - Actions/Twitch Bits Integrations/bits-tier-4.cs
+    // - Actions/Twitch Bits Integrations/message-effects.cs
     private const string ARG_MESSAGE_STRIPPED = "messageStripped";
     private const string ARG_MESSAGE = "message";
     private const string ARG_RAW_INPUT = "rawInput";
@@ -40,14 +41,14 @@ public class CPHInline
      */
 
     // Mix It Up local API base URL (default local host/port for Mix It Up app).
-    private const string MIXITUP_BASE_URL = "http://localhost:8911";
+    private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
 
     // Placeholder command ID for this tier.
     // IMPORTANT: Replace before using in production.
     private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_TIER_1_COMMAND_ID";
 
     // Reuse one HttpClient instance (best practice for repeated HTTP calls).
-    private static readonly HttpClient Http = new HttpClient();
+    private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
     public bool Execute()
     {
@@ -65,29 +66,17 @@ public class CPHInline
                 finalMessage = GetArg(ARG_RAW_INPUT);
             }
 
-            // 3) Build endpoint URL for Mix It Up command trigger.
-            string url = $"{MIXITUP_BASE_URL.TrimEnd('/')}/api/v2/commands/{MIXITUP_COMMAND_ID}";
+            // 2) Forward the cheer text to Mix It Up.
+            bool mixItUpTriggered = TriggerMixItUpReadout(
+                MIXITUP_COMMAND_ID,
+                "Bits Tier 1",
+                finalMessage
+            );
 
-            // 4) Send payload to Mix It Up.
-            // Per Mix It Up runCommand API, text must be sent in "Arguments".
-            string payload = JsonSerializer.Serialize(new
+            // 3) Only wait when Mix It Up accepted the request.
+            // This keeps the Streamer.bot action queue moving when the API call fails.
+            if (mixItUpTriggered)
             {
-                Platform = MIXITUP_PLATFORM_TWITCH,
-                Arguments = finalMessage,
-                IgnoreRequirements = false
-            });
-            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = Http.PostAsync(url, content).GetAwaiter().GetResult();
-
-            // 5) On failure: log warning (do not throw). Keep action flow stable.
-            if (!response.IsSuccessStatusCode)
-            {
-                CPH.LogWarn($"[Bits Tier 1] Mix It Up call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
-            }
-            else
-            {
-                // 6) On success: wait long enough for Mix It Up prep + speech.
-                // This helps prevent overlap when many cheers fire quickly.
                 int waitMs = CalculateReadoutWaitMs(finalMessage);
                 CPH.Wait(waitMs);
             }
@@ -114,6 +103,41 @@ public class CPHInline
         }
 
         return string.Empty;
+    }
+
+    /// <summary>
+    /// Sends a readout-style request to Mix It Up using the standard payload shape.
+    /// This helper is intentionally kept in sync with the other bits-tier scripts so
+    /// all cheer readouts follow the same API and waiting behavior.
+    /// </summary>
+    private bool TriggerMixItUpReadout(string commandId, string logPrefix, string arguments)
+    {
+        if (string.IsNullOrWhiteSpace(commandId) ||
+            commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
+        {
+            CPH.LogWarn($"[{logPrefix}] Mix It Up command ID is not configured.");
+            return false;
+        }
+
+        string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{commandId}";
+        string payload = JsonSerializer.Serialize(new
+        {
+            Platform = MIXITUP_PLATFORM_TWITCH,
+            Arguments = arguments ?? string.Empty,
+            SpecialIdentifiers = new { },
+            IgnoreRequirements = false
+        });
+
+        using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = MIXITUP_HTTP_CLIENT.PostAsync(url, content).GetAwaiter().GetResult();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            CPH.LogWarn($"[{logPrefix}] Mix It Up call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>

@@ -31,7 +31,7 @@ Handles the `!pedro` command entrypoint.
   - Does **not** claim the normal mini-game lock,
   - Uses a dedicated secret-unlock guard so only one secret run can play at a time,
   - Calls Mix It Up Pedro unlock command,
-  - Waits 28 seconds after a successful command call,
+  - Waits 31 seconds after a successful command call,
   - Still works even if Pedro is already unlocked.
 - If command message is non-empty and not secret phrase:
   - Does not start the mini-game,
@@ -48,7 +48,8 @@ Handles the `!pedro` command entrypoint.
 - None.
 
 ### Wait Behavior
-- Secret phrase path waits 28 seconds after a successful Mix It Up unlock command call.
+- Secret phrase path waits 31 seconds after a successful Mix It Up unlock command call.
+- That 31-second wait is intentionally composed as `3000ms` Mix It Up startup buffer + `28000ms` Pedro dance duration.
 - While that secret wait is active, additional secret phrase attempts are blocked so the Mix It Up unlock sequence cannot overlap with itself.
 - Normal Pedro game start path does not wait.
 - Cooldown/unlocked/ignored-input guard paths do not wait.
@@ -127,7 +128,7 @@ Ends Pedro event and resolves success/failure at timer end.
   - Sets unlock state,
   - Shows OBS source,
   - Triggers Mix It Up unlock command,
-  - Waits 28 seconds before the resolve action finishes.
+  - Waits 31 seconds before the resolve action finishes.
 - Releases shared mini-game lock after resolve.
 
 ### Mix It Up Actions
@@ -143,7 +144,7 @@ Ends Pedro event and resolves success/failure at timer end.
 - Logs an error if OBS call throws (helps diagnose scene/source mismatch).
 
 ### Wait Behavior
-- On successful unlock resolve, waits 28 seconds after the Mix It Up unlock command succeeds.
+- On successful unlock resolve, waits 31 seconds after the Mix It Up unlock command succeeds.
 - Failure/guard paths do not wait.
 
 ### Chat / Log Output

@@ -126,7 +126,9 @@ Resolves each Clone volley timer tick by eliminating one open position.
 - Logs an error if OBS call throws (helps diagnose scene/source mismatch).
 
 ### Wait Behavior
-- None.
+- On win, waits 11 seconds after the Mix It Up unlock command succeeds.
+- That 11-second wait is intentionally composed as `3000ms` Mix It Up startup buffer + `8000ms` Clone unlock playtime.
+- Continue, loss, and inactive-guard paths do not wait.
 
 ### Chat / Log Output
 - Sends loss message when no winner-eligible survivors remain.

@@ -59,6 +59,14 @@ public class CPHInline
     private const string MIXITUP_CLONE_UNLOCK_COMMAND_ID = "4681be93-409a-4110-bfdb-7a7aa32df63a";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
+    // Shared unlock pacing rule:
+    // Mix It Up usually needs a small startup window before the visible unlock payoff begins.
+    // Clone's unlock sequence plays for 8 seconds, so we keep the startup buffer separate
+    // from the effect duration to make the total 11-second wait obvious.
+    private const int WAIT_MIXITUP_UNLOCK_STARTUP_MS = 3000;
+    private const int CLONE_UNLOCK_DURATION_MS = 8000;
+    private const int CLONE_UNLOCK_WAIT_MS = WAIT_MIXITUP_UNLOCK_STARTUP_MS + CLONE_UNLOCK_DURATION_MS;
+
     public bool Execute()
     {
         // Guard: if game already ended, ensure timer is disabled and exit safely.
@@ -158,7 +166,10 @@ public class CPHInline
             ShowCloneDancingSource();
 
             // Notify Mix It Up for unlock side-effects.
-            TriggerMixItUpUnlock();
+            bool unlockTriggered = TriggerMixItUpUnlock();
+
+            if (unlockTriggered)
+                CPH.Wait(CLONE_UNLOCK_WAIT_MS);
 
             EndGame(TIMER_CLONE_VOLLEY);
             return true;
@@ -279,9 +290,9 @@ public class CPHInline
     /// <summary>
     /// Clone-specific wrapper that calls the generic Mix It Up helper.
     /// </summary>
-    private void TriggerMixItUpUnlock()
+    private bool TriggerMixItUpUnlock()
     {
-        TriggerMixItUpCommand(MIXITUP_CLONE_UNLOCK_COMMAND_ID, "Squad Clone");
+        return TriggerMixItUpCommand(MIXITUP_CLONE_UNLOCK_COMMAND_ID, "Squad Clone");
     }
 
     /// <summary>
@@ -320,6 +331,11 @@ public class CPHInline
         catch (Exception ex)
         {
             CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
+            return false;
+        }
+    }
+}
+ogPrefix}] Exception while calling Mix It Up: {ex}");
             return false;
         }
     }

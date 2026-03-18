@@ -14,6 +14,7 @@ This feature group is intentionally small and state-light:
 - `scene-chat.cs`
 - `scene-main.cs`
 - `scene-housekeeping.cs`
+- `scene-dance.cs`
 - `README.md`
 
 ## Shared Contract
@@ -34,6 +35,11 @@ Current expected mappings:
 - `garage` -> `Garage: Chat` / `Garage: Main` / `Garage: Housekeeping`
 - `workspace` -> `Workspace: Chat` / `Workspace: Main` / `Workspace: Housekeeping`
 - `gamer` -> `Gamer: Chat` / `Gamer: Main` / `Gamer: Housekeeping`
+
+Custom dance mapping:
+- `garage` -> `Disco Party: Garage`
+- `workspace` -> `Disco Party: Workspace`
+- `gamer` -> `Disco Party: Gamer`
 
 ## Behavioral Expectations
 

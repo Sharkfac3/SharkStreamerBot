@@ -140,6 +140,7 @@ private bool TriggerMixItUpCommand(
 ### Example usage
 ```csharp
 private const string MIXITUP_UNLOCK_COMMAND_ID = "REPLACE_WITH_UNLOCK_COMMAND_ID";
+private const int WAIT_MIXITUP_UNLOCK_STARTUP_MS = 3000;
 
 // On unlock (no extra params): sends SpecialIdentifiers = {}
 TriggerMixItUpCommand(MIXITUP_UNLOCK_COMMAND_ID, "Squad Duck");
@@ -150,6 +151,30 @@ TriggerMixItUpCommand(
     "Squad Duck",
     arguments: "hello chat",
     specialIdentifiers: new { test = "True" });
+```
+
+### Unlock pacing guidance
+When a script triggers a **Mix It Up unlock command** and then waits for the unlock sequence to finish,
+include a **3000ms startup buffer** before the effect's own duration.
+
+Why:
+- Mix It Up usually needs a short startup window before the visible/audible payoff actually begins.
+- Without that buffer, Streamer.bot can release locks or finish an action a little too early.
+- This matters most for **Squad unlock flows** (Pedro, Duck, Clone, future mini-games), but the same rule is a good default for any unlock/reveal flow driven by Mix It Up.
+
+Default rule:
+- Wait time = `WAIT_MIXITUP_UNLOCK_STARTUP_MS` + effect/animation/TTS duration.
+- If you intentionally skip the startup buffer for a specific feature, document the reason in that feature's README.
+
+Example:
+```csharp
+private const int WAIT_MIXITUP_UNLOCK_STARTUP_MS = 3000;
+private const int PEDRO_DANCE_DURATION_MS = 28000;
+private const int PEDRO_UNLOCK_WAIT_MS = WAIT_MIXITUP_UNLOCK_STARTUP_MS + PEDRO_DANCE_DURATION_MS;
+
+bool unlockTriggered = TriggerMixItUpCommand(MIXITUP_UNLOCK_COMMAND_ID, "Squad Pedro");
+if (unlockTriggered)
+    CPH.Wait(PEDRO_UNLOCK_WAIT_MS);
 ```
 
 ---

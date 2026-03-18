@@ -107,7 +107,9 @@ Ends Duck event and resolves success/failure.
 - Logs an error if OBS call throws (helps diagnose scene/source mismatch).
 
 ### Wait Behavior
-- None.
+- On first-time unlock, waits 21 seconds after the Mix It Up unlock command succeeds.
+- That 21-second wait is intentionally composed as `3000ms` Mix It Up startup buffer + `18000ms` Duck unlock playtime.
+- Success-but-already-unlocked, failure, and guard paths do not wait.
 
 ### Chat / Log Output
 - Sends unlock message (first-time unlock).

@@ -48,6 +48,14 @@ public class CPHInline
     private const string MIXITUP_DUCK_UNLOCK_COMMAND_ID = "d311b1c1-943a-44cb-9749-b189d1dbd08b";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
+    // Shared unlock pacing rule:
+    // Mix It Up usually needs a small startup window before the visible unlock payoff begins.
+    // Duck's unlock sequence plays for 18 seconds, so we keep the startup buffer separate
+    // from the effect duration to make the total 21-second wait obvious.
+    private const int WAIT_MIXITUP_UNLOCK_STARTUP_MS = 3000;
+    private const int DUCK_UNLOCK_DURATION_MS = 18000;
+    private const int DUCK_UNLOCK_WAIT_MS = WAIT_MIXITUP_UNLOCK_STARTUP_MS + DUCK_UNLOCK_DURATION_MS;
+
     public bool Execute()
     {
         // If timer fired after event ended, just ensure timer is off and exit.
@@ -82,7 +90,10 @@ public class CPHInline
                 // Toothless stream-start reset uses the same pattern successfully.
                 ShowDuckDancingSource();
 
-                TriggerMixItUpUnlock();
+                bool unlockTriggered = TriggerMixItUpUnlock();
+
+                if (unlockTriggered)
+                    CPH.Wait(DUCK_UNLOCK_WAIT_MS);
 
                 CPH.SendMessage($"🦆✅ DUCK UNLOCKED! Quacks: {quacks} vs Roll: {roll} — Duck joins the disco!");
             }
@@ -134,9 +145,9 @@ public class CPHInline
     /// <summary>
     /// Duck-specific wrapper that calls the generic Mix It Up helper.
     /// </summary>
-    private void TriggerMixItUpUnlock()
+    private bool TriggerMixItUpUnlock()
     {
-        TriggerMixItUpCommand(MIXITUP_DUCK_UNLOCK_COMMAND_ID, "Squad Duck");
+        return TriggerMixItUpCommand(MIXITUP_DUCK_UNLOCK_COMMAND_ID, "Squad Duck");
     }
 
     /// <summary>
@@ -175,6 +186,11 @@ public class CPHInline
         catch (Exception ex)
         {
             CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
+            return false;
+        }
+    }
+}
+r($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
             return false;
         }
     }

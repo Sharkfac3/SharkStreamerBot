@@ -43,7 +43,9 @@ Runs Toothless rarity roll and first-time unlock handling.
 - Current script does **not** restart unlock media on current scene.
 
 ### Wait Behavior
-- None.
+- On first-time rarity unlock, waits 19 seconds after the Mix It Up unlock command succeeds.
+- That 19-second wait is intentionally composed as `3000ms` Mix It Up startup buffer + `16000ms` Toothless unlock playtime.
+- Non-unlock rolls and blocked-by-other-mini-game paths do not wait.
 
 ### Chat / Log Output
 - Sends mini-game-in-progress warning if another mini-game owns the lock.

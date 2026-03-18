@@ -33,9 +33,13 @@ public class CPHInline
     private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
-    // Match the secret redeem pacing so Pedro's successful resolve does not rush
-    // straight through the unlock moment.
-    private const int PEDRO_RESOLVE_SUCCESS_WAIT_MS = 28000;
+    // Shared unlock pacing rule:
+    // Mix It Up usually needs a small startup window before the visible unlock payoff begins.
+    // Keep the startup buffer and Pedro's dance duration separate so this resolve path stays
+    // synchronized with the secret redeem path without relying on a single magic number.
+    private const int WAIT_MIXITUP_UNLOCK_STARTUP_MS = 3000;
+    private const int PEDRO_DANCE_DURATION_MS = 28000;
+    private const int PEDRO_RESOLVE_SUCCESS_WAIT_MS = WAIT_MIXITUP_UNLOCK_STARTUP_MS + PEDRO_DANCE_DURATION_MS;
 
     // The normal Pedro mini-game can only be started again 5 minutes after a resolve.
     private const int PEDRO_PLAY_COOLDOWN_MINUTES = 5;
@@ -58,7 +62,7 @@ public class CPHInline
      * - Ends active event window.
      * - Sets the next allowed normal Pedro start time to 5 minutes after this resolve.
      * - If mentions are greater than 100: shows OBS source, triggers Mix It Up command,
-     *   and waits 28 seconds before finishing the resolve action.
+     *   and waits 31 seconds before finishing the resolve action.
      * - Releases shared mini-game lock when event ends.
      */
     public bool Execute()

@@ -33,9 +33,13 @@ public class CPHInline
     private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
-    // Every successful Pedro unlock command trigger should hold the action open long enough
-    // for the Mix It Up sequence to play out.
-    private const int PEDRO_UNLOCK_WAIT_MS = 28000;
+    // Shared unlock pacing rule:
+    // Mix It Up usually needs a small startup window before the visible unlock payoff begins.
+    // We keep the startup buffer and Pedro's dance duration separate so the intent stays clear
+    // and both Pedro scripts can stay aligned without magic-number drift.
+    private const int WAIT_MIXITUP_UNLOCK_STARTUP_MS = 3000;
+    private const int PEDRO_DANCE_DURATION_MS = 28000;
+    private const int PEDRO_UNLOCK_WAIT_MS = WAIT_MIXITUP_UNLOCK_STARTUP_MS + PEDRO_DANCE_DURATION_MS;
 
     /*
      * Purpose:
@@ -56,7 +60,7 @@ public class CPHInline
      *
      * Key outputs/side effects:
      * - Empty message: starts Pedro call window + timer when Pedro is not unlocked and not on cooldown.
-     * - Secret message: calls Mix It Up unlock command, waits 28 seconds on success,
+     * - Secret message: calls Mix It Up unlock command, waits 31 seconds on success,
      *   and blocks overlapping secret unlock runs until the active secret sequence finishes.
      */
     public bool Execute()

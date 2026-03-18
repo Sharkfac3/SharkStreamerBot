@@ -13,9 +13,15 @@ public class CPHInline
     private const string ARG_MESSAGE = "message";
     private const string ARG_RAW_INPUT = "rawInput";
 
+    // SYNC CONSTANTS (Bits feature)
+    // Keep readout pacing aligned with the cheer-tier scripts.
+    private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
+    private const int WAIT_BASE_PREP_MS = 3000;
+    private const int WAIT_MS_PER_WORD = 400;
+    private const int WAIT_TAIL_BUFFER_MS = 500;
+
     // Mix It Up API constants.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
     // Verified Mix It Up command ID from Tools/MixItUp/Api/data/mixitup-commands.txt
     // Action Group: Twitch - Bits - Message Effects
@@ -30,6 +36,7 @@ public class CPHInline
      * - Reads the user's entered message from Streamer.bot using a fallback chain
      *   (userInput -> input0 -> message -> rawInput).
      * - Forwards that message to a Mix It Up command using the standard payload shape.
+     * - Waits after a successful call so TTS/message-effect readouts do not overlap as easily.
      *
      * Expected trigger/input:
      * - Streamer.bot action wired to:
@@ -44,34 +51,48 @@ public class CPHInline
      * - POSTs to the Mix It Up command endpoint.
      * - Sends Arguments = the trimmed userInput value.
      * - Sends SpecialIdentifiers = { } for now.
+     * - Uses the same 3000ms + 400ms/word + 500ms pacing wait as the bits-tier cheer scripts.
      * - Logs warnings/errors instead of throwing, so the action queue stays stable.
      *
      * Operator notes:
-     * - Replace the placeholder Mix It Up command ID before production use.
+     * - Current Mix It Up command ID is configured.
      * - Filter the action so it only runs for the message effects bits purchase.
      */
     public bool Execute()
     {
-        string inputSource = string.Empty;
-        string userInput = GetUserInput(out inputSource);
-
-        if (string.IsNullOrWhiteSpace(userInput))
+        try
         {
-            CPH.LogWarn("[Twitch Automatic Reward: Message Effects] No message input was provided by Streamer.bot. Checked userInput, input0, message, and rawInput.");
-        }
-        else if (!string.Equals(inputSource, ARG_USER_INPUT, StringComparison.Ordinal))
-        {
-            // Temporary diagnostic: if a fallback arg is the real source, keep one clear log line
-            // so the operator can confirm which trigger field Streamer.bot is actually populating.
-            CPH.LogWarn($"[Twitch Automatic Reward: Message Effects] Using fallback arg '{inputSource}' for redeem text.");
-        }
+            string inputSource = string.Empty;
+            string userInput = GetUserInput(out inputSource);
 
-        TriggerMixItUpCommand(
-            MIXITUP_MESSAGE_EFFECTS_COMMAND_ID,
-            "Twitch Automatic Reward: Message Effects",
-            arguments: userInput,
-            specialIdentifiers: new { }
-        );
+            if (string.IsNullOrWhiteSpace(userInput))
+            {
+                CPH.LogWarn("[Twitch Automatic Reward: Message Effects] No message input was provided by Streamer.bot. Checked userInput, input0, message, and rawInput.");
+            }
+            else if (!string.Equals(inputSource, ARG_USER_INPUT, StringComparison.Ordinal))
+            {
+                // Temporary diagnostic: if a fallback arg is the real source, keep one clear log line
+                // so the operator can confirm which trigger field Streamer.bot is actually populating.
+                CPH.LogWarn($"[Twitch Automatic Reward: Message Effects] Using fallback arg '{inputSource}' for redeem text.");
+            }
+
+            bool mixItUpTriggered = TriggerMixItUpReadout(
+                MIXITUP_MESSAGE_EFFECTS_COMMAND_ID,
+                "Twitch Automatic Reward: Message Effects",
+                userInput
+            );
+
+            // Only pause the action when Mix It Up actually accepted the request.
+            if (mixItUpTriggered)
+            {
+                int waitMs = CalculateReadoutWaitMs(userInput);
+                CPH.Wait(waitMs);
+            }
+        }
+        catch (Exception ex)
+        {
+            CPH.LogError($"[Twitch Automatic Reward: Message Effects] Exception while calling Mix It Up: {ex}");
+        }
 
         return true;
     }
@@ -111,48 +132,62 @@ public class CPHInline
     }
 
     /// <summary>
-    /// Triggers a Mix It Up command via local API.
-    /// Uses the required payload convention for Streamer.bot scripts:
-    /// Platform, Arguments, SpecialIdentifiers, IgnoreRequirements.
+    /// Triggers a Mix It Up readout-style command via local API.
+    /// Uses the same payload convention and success/failure behavior as the bits-tier scripts.
     /// </summary>
-    private bool TriggerMixItUpCommand(
-        string commandId,
-        string logPrefix,
-        string arguments,
-        object specialIdentifiers)
+    private bool TriggerMixItUpReadout(string commandId, string logPrefix, string arguments)
     {
-        if (string.IsNullOrWhiteSpace(commandId))
+        if (string.IsNullOrWhiteSpace(commandId) ||
+            commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
         {
             CPH.LogWarn($"[{logPrefix}] Mix It Up command ID is not configured.");
             return false;
         }
 
-        try
+        string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{commandId}";
+        string payload = JsonSerializer.Serialize(new
         {
-            string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{commandId}";
-            string payload = JsonSerializer.Serialize(new
-            {
-                Platform = MIXITUP_PLATFORM_TWITCH,
-                Arguments = arguments ?? string.Empty,
-                SpecialIdentifiers = specialIdentifiers ?? new { },
-                IgnoreRequirements = false
-            });
+            Platform = MIXITUP_PLATFORM_TWITCH,
+            Arguments = arguments ?? string.Empty,
+            SpecialIdentifiers = new { },
+            IgnoreRequirements = false
+        });
 
-            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = MIXITUP_HTTP_CLIENT.PostAsync(url, content).GetAwaiter().GetResult();
+        using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = MIXITUP_HTTP_CLIENT.PostAsync(url, content).GetAwaiter().GetResult();
 
-            if (!response.IsSuccessStatusCode)
-            {
-                CPH.LogWarn($"[{logPrefix}] Mix It Up call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
-                return false;
-            }
-
-            return true;
-        }
-        catch (Exception ex)
+        if (!response.IsSuccessStatusCode)
         {
-            CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
+            CPH.LogWarn($"[{logPrefix}] Mix It Up call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
             return false;
         }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Estimates wait duration for TTS so queue items don't overlap.
+    /// Formula:
+    /// - 3000ms prep time
+    /// - 400ms per word
+    /// - 500ms tail buffer
+    /// </summary>
+    private int CalculateReadoutWaitMs(string message)
+    {
+        int wordCount = CountWords(message);
+        return WAIT_BASE_PREP_MS + (wordCount * WAIT_MS_PER_WORD) + WAIT_TAIL_BUFFER_MS;
+    }
+
+    /// <summary>
+    /// Counts words by splitting on spaces and ignoring empty entries.
+    /// </summary>
+    private int CountWords(string message)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            return 0;
+        }
+
+        return message.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
     }
 }

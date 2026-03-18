@@ -203,7 +203,44 @@ Switches OBS to the `Housekeeping` scene that matches the current `stream_mode`.
 
 ---
 
+## Script: `scene-dance.cs`
+
+### Purpose
+Switches OBS to the disco-party scene that matches the current `stream_mode`.
+
+### Expected Trigger / Input
+- Voice command, button, hotkey, or chained action.
+
+### Required Runtime Variables
+- Reads `stream_mode`.
+
+### Key Outputs / Side Effects
+- `stream_mode = "garage"` -> OBS scene `Disco Party: Garage`
+- `stream_mode = "workspace"` -> OBS scene `Disco Party: Workspace`
+- `stream_mode = "gamer"` -> OBS scene `Disco Party: Gamer`
+- Unknown/empty mode falls back to `Disco Party: Workspace`
+
+### Mix It Up Actions
+- None.
+
+### OBS Interactions
+- Switches the current OBS scene using common Streamer.bot OBS scene setter methods.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- No chat output.
+- Logs a warning if the mode is unknown or OBS scene switching fails.
+
+### Operator Notes
+- Assumes the matching OBS scenes already exist with exact names.
+- This action uses the custom `Disco Party: <Mode>` scene naming instead of the normal `<Mode>: <Section>` pattern.
+
+---
+
 ## General Operator Notes
 - The mode scripts in this folder are the backbone for voice-command flows that depend on the current stream context.
 - Keep `stream_mode` usage aligned with `Actions/Twitch Core Integrations/stream-start.cs`, `Actions/Twitch Channel Points/disco-party.cs`, and any future voice-command actions.
-- Shared scene scripts in this folder assume OBS scene names follow the exact `<Mode>: <Section>` convention, such as `Garage: Chat`, `Workspace: Main`, and `Gamer: Housekeeping`.
+- Shared scene scripts in this folder usually assume OBS scene names follow the exact `<Mode>: <Section>` convention, such as `Garage: Chat`, `Workspace: Main`, and `Gamer: Housekeeping`.
+- `scene-dance.cs` is the exception and uses `Disco Party: Garage`, `Disco Party: Workspace`, and `Disco Party: Gamer`.

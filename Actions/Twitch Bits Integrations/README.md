@@ -16,6 +16,7 @@ Forwards Tier 1 cheer text to Mix It Up with sanitization and TTS pacing wait.
 ### Key Outputs / Side Effects
 - Forwards cheer text to Mix It Up.
 - Prefers Streamer.bot's `messageStripped` value so cheer tokens are already removed.
+- Uses the standardized bits readout helper/payload shape (`Platform`, `Arguments`, empty `SpecialIdentifiers`, `IgnoreRequirements`).
 - Applies pacing wait to reduce overlap/cutoff.
 
 ### Mix It Up Actions
@@ -52,6 +53,7 @@ Forwards Tier 2 cheer text to Mix It Up with a 250-word cap.
 ### Key Outputs / Side Effects
 - Forwards cheer text, caps to 250 words, and sends it to Mix It Up.
 - Prefers Streamer.bot's `messageStripped` value so cheer tokens are already removed.
+- Uses the standardized bits readout helper/payload shape (`Platform`, `Arguments`, empty `SpecialIdentifiers`, `IgnoreRequirements`).
 - Applies pacing wait to reduce overlap/cutoff.
 
 ### Mix It Up Actions
@@ -88,6 +90,7 @@ Forwards Tier 3 cheer text to Mix It Up with a 100-word cap.
 ### Key Outputs / Side Effects
 - Forwards cheer text, caps to 100 words, and sends it to Mix It Up.
 - Prefers Streamer.bot's `messageStripped` value so cheer tokens are already removed.
+- Uses the standardized bits readout helper/payload shape (`Platform`, `Arguments`, empty `SpecialIdentifiers`, `IgnoreRequirements`).
 - Applies pacing wait to reduce overlap/cutoff.
 
 ### Mix It Up Actions
@@ -124,6 +127,7 @@ Forwards Tier 4 cheer text to Mix It Up with a 10-word cap.
 ### Key Outputs / Side Effects
 - Forwards cheer text, caps to 10 words, and sends it to Mix It Up.
 - Prefers Streamer.bot's `messageStripped` value so cheer tokens are already removed.
+- Uses the standardized bits readout helper/payload shape (`Platform`, `Arguments`, empty `SpecialIdentifiers`, `IgnoreRequirements`).
 - Applies pacing wait to reduce overlap/cutoff.
 
 ### Mix It Up Actions
@@ -213,6 +217,8 @@ Handles the `message effects` automatic reward redemption by forwarding the rede
 - Calls Mix It Up Run Command API for the message effects flow.
 - Sends the first non-empty value found in `userInput`, `input0`, `message`, or `rawInput` in `Arguments`.
 - Sends an empty `SpecialIdentifiers` object for now.
+- Uses the same standardized bits readout helper/payload shape as the cheer-tier scripts.
+- Waits after a successful Mix It Up call so TTS/message-effect readouts are less likely to overlap.
 - Logs a warning if none of those args are populated.
 - Logs which fallback arg was used when the text does not come from `userInput`.
 
@@ -229,7 +235,7 @@ Handles the `message effects` automatic reward redemption by forwarding the rede
 - None.
 
 ### Wait Behavior
-- None.
+- Wait after successful Mix It Up call: `3000ms + 400ms per word + 500ms buffer`.
 
 ### Chat / Log Output
 - No chat output.

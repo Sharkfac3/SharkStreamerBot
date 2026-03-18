@@ -176,6 +176,17 @@ Used in:
 - `WAIT_MS_PER_WORD` = `400`
 - `WAIT_TAIL_BUFFER_MS` = `500`
 
+## Mix It Up Unlock Pacing (shared guidance)
+- `WAIT_MIXITUP_UNLOCK_STARTUP_MS` = `3000`
+
+Use in:
+- Any `Actions/Squad/**` unlock flow that triggers a Mix It Up command and then waits for an unlock animation, dance, TTS, or other time-based payoff.
+- Other non-Squad unlock/reveal flows when the wait should include Mix It Up startup time before the visible/audible effect begins.
+
+Operator rule:
+- Default to including this extra `3000ms` startup buffer whenever a script triggers a Mix It Up unlock command and then waits for the unlock moment to finish.
+- If a future flow proves it does **not** need the startup buffer, document that exception in the feature README instead of silently omitting it.
+
 Used in:
 - `Actions/Twitch Bits Integrations/bits-tier-1.cs`
 - `Actions/Twitch Bits Integrations/bits-tier-2.cs`

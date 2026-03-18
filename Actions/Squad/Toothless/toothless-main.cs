@@ -55,6 +55,14 @@ public class CPHInline
     private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY = "e57d1f2d-716d-41b2-bfbe-d9a8e7974ecb";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
+    // Shared unlock pacing rule:
+    // Mix It Up usually needs a small startup window before the visible unlock payoff begins.
+    // All Toothless unlock commands currently play for 16 seconds, so the roll should hold
+    // the mini-game lock for a full 19 seconds when a first-time unlock fires.
+    private const int WAIT_MIXITUP_UNLOCK_STARTUP_MS = 3000;
+    private const int TOOTHLESS_UNLOCK_DURATION_MS = 16000;
+    private const int TOOTHLESS_UNLOCK_WAIT_MS = WAIT_MIXITUP_UNLOCK_STARTUP_MS + TOOTHLESS_UNLOCK_DURATION_MS;
+
     public bool Execute()
     {
         // Required caller identity.
@@ -119,7 +127,10 @@ public class CPHInline
                 CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, dancingSourceName);
 
                 // Inform Mix It Up using per-rarity command mapping.
-                TriggerMixItUpUnlock(rarity);
+                bool unlockTriggered = TriggerMixItUpUnlock(rarity);
+
+                if (unlockTriggered)
+                    CPH.Wait(TOOTHLESS_UNLOCK_WAIT_MS);
 
                 CPH.SendMessage($"🎉 NEW TOOTHLESS FORM! {rarity.ToUpper()} — {user} rolled {roll}" +
                                 (boost > 0 ? $" +{boost} favor = {boostedRoll}" : $" = {boostedRoll}"));
@@ -178,10 +189,10 @@ public class CPHInline
     /// <summary>
     /// Triggers the per-rarity Mix It Up command when a new rarity unlock occurs.
     /// </summary>
-    private void TriggerMixItUpUnlock(string rarity)
+    private bool TriggerMixItUpUnlock(string rarity)
     {
         string commandId = GetMixItUpCommandIdForRarity(rarity);
-        TriggerMixItUpCommand(commandId, "Squad Toothless");
+        return TriggerMixItUpCommand(commandId, "Squad Toothless");
     }
 
     /// <summary>
@@ -236,6 +247,11 @@ public class CPHInline
             case "long": return MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_LONG;
             case "flight": return MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT;
             case "party": return MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY;
+            default: return string.Empty;
+        }
+    }
+}
+return MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY;
             default: return string.Empty;
         }
     }
