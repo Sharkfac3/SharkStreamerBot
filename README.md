@@ -5,8 +5,15 @@ This repo stores:
 - **local/external tooling** in `Tools/`
 - **creative scaffolding** in `Creative/`
 - **architecture/workflow docs** in `Docs/`
+- **agent skill/knowledge tree** in `.agents/`
 
 > Important: scripts are not auto-deployed. After edits, copy/paste each changed script into its matching Streamer.bot action.
+
+## Agent Entry Point
+
+**All agents start here:** `.agents/ENTRY.md`
+
+It identifies the available roles, how to navigate context on demand, and where shared project knowledge lives. Read it before any task.
 
 ## Top-level routing
 
@@ -14,6 +21,7 @@ This repo stores:
 - `Tools/` — Mix It Up utilities, Streamer.bot support tooling, overlays, validators, and related local scripts.
 - `Creative/` — art-generation, world-building, marketing, and other reusable creative scaffolding.
 - `Docs/` — architecture and workflow documentation.
+- `.agents/` — shared agent knowledge tree (roles, skills, living context). Agent-agnostic — used by all agents.
 
 ## Documentation Standard
 

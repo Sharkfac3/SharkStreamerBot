@@ -1,72 +1,64 @@
 ---
 name: skills
-description: Overview of project skills, routing, and conventions for maintaining the .pi/skills directory.
+description: Overview of Pi's role-based skill tree and routing conventions for this project.
 ---
 
 # Pi Skills
 
-This project uses [pi skills](https://agentskills.io/specification) to break agent instructions into focused, on-demand modules. Instead of loading all project rules into every conversation, pi loads only the skills relevant to the current task.
+Pi uses a role-based skill tree. Skills are organized by job role — each role maps to a domain in `.agents/roles/`. Pi's SKILL.md files are thin routing wrappers; the full knowledge content lives in `.agents/`.
 
-## Why Skills?
+## How to Use
 
-The original `AGENTS.md` was a single ~300-line file covering everything from C# scripting rules to commit formatting. Every task loaded all of it, regardless of relevance.
+1. Identify the role for your task from the routing table below
+2. Load the role's SKILL.md — it will point you to `.agents/roles/<role>/`
+3. Always load `role.md` and `skills/core.md` from that agent role first
+4. Navigate into sub-skills only as the task demands
+5. For meta-operations on the agent tree itself: load `meta/SKILL.md`
 
-Now:
-- `AGENTS.md` is a ~66-line **routing table** that maps tasks to skills.
-- Each skill is a self-contained instruction set loaded only when needed.
-- A typical task loads 2-3 skills (~120-150 lines) instead of the full 300+.
+## Roles
 
-**No runtime code was changed.** This is purely an organizational change to how the agent receives instructions.
+| Role | SKILL.md | When to Activate |
+|---|---|---|
+| `streamerbot-dev` | `streamerbot-dev/SKILL.md` | Any `.cs` script work under `Actions/` |
+| `lotat-tech` | `lotat-tech/SKILL.md` | LotAT engine, JSON schema, technical pipeline |
+| `lotat-writer` | `lotat-writer/SKILL.md` | LotAT adventures, narrative, lore, worldbuilding |
+| `art-director` | `art-director/SKILL.md` | Art generation, diffusion prompts, stream visuals |
+| `brand-steward` | `brand-steward/SKILL.md` | Chat text, titles, canon review, content strategy |
+| `ops` | `ops/SKILL.md` | Change summaries, sync, validation, tooling |
+| `meta` | `meta/SKILL.md` | Navigating or updating the `.agents/` tree |
 
-## Available Skills
+## Routing Table
 
-| Skill | Description |
+| Task | Load |
 |---|---|
-| `streamerbot-scripting` | Core C# scripting rules for Streamer.bot runtime. Compatibility, state management, safety, commenting standards, reusable patterns. **Base skill for all `.cs` work.** |
-| `feature-squad` | Squad mini-games — Clone, Duck, Pedro, Toothless, offering. Action-folder map, shared constants, behavioral expectations. |
-| `feature-commanders` | Commander role system — Captain Stretch, The Director, Water Wizard. 3-slot model, support commands, high score tracking. |
-| `feature-voice-commands` | Voice-command mode and OBS scene switching actions. Canonical `stream_mode` values, scene naming, fallback rules. |
-| `feature-twitch-integration` | Stream lifecycle — stream-start reset, Bits cheer forwarding, TTS wait behavior, idempotency rules. Includes Cheer, Follow, and Sub trigger variable reference. |
-| `feature-hype-train` | Hype Train event scripts (start, level-up, end). Includes full trigger variable tables for all three events. |
-| `feature-channel-points` | Channel Point redeem scripts (Disco Party, Explain Current Task). Includes reward redemption trigger variable reference. |
-| `buildtools` | External tooling for `Tools/` work — Mix It Up API command discovery, Python utilities, StreamerBot validators. |
-| `creative-art` | Art generation agents — character canon references, diffusion model prompt conventions, asset naming, output placement. |
-| `creative-worldbuilding` | Lore, canon, and CYOA story generation — Starship Shamples franchise, cast canon, JSON story schema, story vs. engine separation. |
-| `brand-steward` | Brand consistency for all public-facing output — voice, tone, values, and the neurodivergent metaphor. **Load before writing any chat text, stream titles, or community messaging.** |
-| `brand-canon-guardian` | Audits new content against established Starship Shamples canon. Load when adding new characters, extending lore, or reviewing stories for consistency. |
-| `content-strategy` | Connects Starship Shamples story content to real build sessions. Load when planning stories tied to a specific project or writing build-specific stream content. |
-| `sync-workflow` | Repo-to-Streamer.bot paste process, validation checklists, commit note style. |
-| `change-summary` | Standard response format for code changes — paste targets, setup steps, validation output. **Terminal skill — loaded after every code change.** |
+| Any `.cs` script work | `streamerbot-dev/SKILL.md` |
+| Squad mini-game (Clone, Duck, Pedro, Toothless) | `streamerbot-dev/SKILL.md` → `streamerbot-dev/squad/SKILL.md` |
+| Commander scripts | `streamerbot-dev/SKILL.md` → `streamerbot-dev/commanders/SKILL.md` |
+| Twitch events, bits, channel points, hype train | `streamerbot-dev/SKILL.md` → `streamerbot-dev/twitch/SKILL.md` |
+| Voice command mode/scene scripts | `streamerbot-dev/SKILL.md` → `streamerbot-dev/voice-commands/SKILL.md` |
+| LotAT C# engine work | `streamerbot-dev/SKILL.md` + `lotat-tech/SKILL.md` |
+| LotAT story JSON or schema | `lotat-tech/SKILL.md` |
+| Write a new LotAT adventure | `lotat-writer/SKILL.md` |
+| Review story for canon | `lotat-writer/SKILL.md` → `lotat-writer/canon-guardian/SKILL.md` |
+| Art generation / diffusion prompts | `art-director/SKILL.md` |
+| Chat bot text, stream titles, announcements | `brand-steward/SKILL.md` |
+| Canon audit (new characters, lore) | `brand-steward/SKILL.md` → `brand-steward/canon-guardian/SKILL.md` |
+| Story tied to a specific build session | `brand-steward/SKILL.md` → `brand-steward/content-strategy/SKILL.md` |
+| Sync to Streamer.bot | `ops/SKILL.md` → `ops/sync/SKILL.md` |
+| After any code change | `ops/change-summary/SKILL.md` ← always terminal |
+| Run validation | `ops/SKILL.md` → `ops/validation/SKILL.md` |
+| Navigate .agents/ tree | `meta/agents-navigate/SKILL.md` |
+| Add/update .agents/ content | `meta/agents-update/SKILL.md` |
 
-## Routing
+## Adding a New Role
 
-`AGENTS.md` contains the routing table that maps tasks to skills. Examples:
+1. Follow `meta/agents-update/SKILL.md` to add the role to `.agents/`
+2. Create `.pi/skills/<new-role>/SKILL.md` — thin wrapper pointing to `.agents/roles/<new-role>/`
+3. Add a row to this README's routing table
+4. Update `AGENTS.md` at repo root
 
-| Task | Skills loaded |
-|---|---|
-| Fix a Duck mini-game bug | `streamerbot-scripting` → `feature-squad` → `change-summary` |
-| Add a new Commander command | `streamerbot-scripting` → `feature-commanders` → `change-summary` |
-| Update stream-start reset | `streamerbot-scripting` → `feature-twitch-integration` → `change-summary` |
-| Work on Hype Train scripts | `streamerbot-scripting` → `feature-hype-train` → `change-summary` |
-| Work on Channel Point redeems | `streamerbot-scripting` → `feature-channel-points` → `change-summary` |
-| Modify MixItUp API script | `buildtools` → `change-summary` |
-| Generate character art prompts | `creative-art` |
-| Write a new Starship Shamples story | `creative-worldbuilding` → `brand-canon-guardian` |
-| Write a story tied to a specific build session | `content-strategy` → `creative-worldbuilding` → `brand-canon-guardian` |
-| Full story pipeline (content + C# engine) | `creative-worldbuilding` → `streamerbot-scripting` → `change-summary` |
-| Write chat bot output text (follow, sub, bits, raid) | `brand-steward` |
-| Write stream titles or community posts | `brand-steward` |
-| Review new lore or character for canon | `brand-canon-guardian` |
-| Prepare a sync to Streamer.bot | `sync-workflow` |
+## Naming Rules
 
-## Adding a New Skill
-
-1. Create a folder under `.pi/skills/<skill-name>/`.
-2. Add a `SKILL.md` with required frontmatter (`name`, `description`) and instructions.
-3. Add a row to the routing table in `AGENTS.md`.
-4. Add a row to the table above.
-
-### Naming Rules
-- Lowercase letters, numbers, hyphens only.
-- No leading/trailing hyphens, no consecutive hyphens.
-- Folder name must match the `name` field in frontmatter.
+- Role folder names: lowercase, hyphens, match `.agents/roles/<role>` naming
+- Sub-skill folders: match the sub-skill path in `.agents/`
+- SKILL.md frontmatter `name` field: `<role>` or `<role>/<sub-skill>`

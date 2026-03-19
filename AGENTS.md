@@ -1,111 +1,54 @@
 # AGENTS.md
 
-## Project Context
+## Start Here
 
-This repository is organized into four top-level domains:
-- `Actions/` — Streamer.bot C# runtime action source
-- `Tools/` — external/local utilities and integration tooling
-- `Creative/` — art, world-building, marketing, and related scaffolding
-- `Docs/` — architecture and workflow documentation
+Read `.agents/ENTRY.md` — it is the universal entry point for all agents (Claude, Pi, or any future agent).
 
-Scripts are **not auto-deployed** — each changed `Actions/` script is manually copy/pasted into Streamer.bot actions.
+`.agents/ENTRY.md` contains:
+- Project description
+- Full roles table
+- Navigation guide to shared context and role skill trees
 
-Repository hierarchy for runtime scripts: `Actions/<Feature Group>/script.cs` or `Actions/<Feature Group>/<Action Folder>/script.cs`
+## Quick Role Routing
 
-### Feature Groups
-- `Actions/Squad/` — Chat mini-games (Clone, Duck, Pedro, Toothless, offering)
-- `Actions/Commanders/` — Commander role assignment + commander-specific commands
-- `Actions/Twitch Core Integrations/` — Stream start plus follow/subscription event integrations stored directly in the feature-group folder
-- `Actions/Twitch Channel Points/` — Channel point redeem scripts like Disco Party and Explain actions
-- `Actions/Twitch Hype Train/` — Hype train start, level-up, and end scripts
-- `Actions/Twitch Bits Integrations/` — Bits tier handlers and automatic bits reward integrations
-- `Actions/Voice Commands/` — Voice-command-driven mode and scene switching actions
-- `Actions/LotAT/` — Reserved / in-progress
+| You're working on | Role | Agent Tree |
+|---|---|---|
+| Any `.cs` script under `Actions/` | `streamerbot-dev` | `.agents/roles/streamerbot-dev/` |
+| LotAT C# engine / story pipeline | `lotat-tech` | `.agents/roles/lotat-tech/` |
+| LotAT adventure content / lore | `lotat-writer` | `.agents/roles/lotat-writer/` |
+| Art generation / diffusion prompts | `art-director` | `.agents/roles/art-director/` |
+| Chat text, titles, canon, content strategy | `brand-steward` | `.agents/roles/brand-steward/` |
+| Stream interaction apps | `app-dev` | `.agents/roles/app-dev/` |
+| Validation, sync, change summary, tooling | `ops` | `.agents/roles/ops/` |
 
-### Routing notes
-- Keep `Actions/` focused on Streamer.bot runtime source only.
-- Mirror Streamer.bot action-group limits in the repo: feature-group folders under `Actions/` may contain scripts directly or one level of action folders, but those action folders should not contain additional subfolders.
-- Use `Tools/` for Mix It Up scripts, overlays, sync helpers, validators, and similar local tooling.
-- Use `Creative/` for art-generation, world-building, and other non-runtime scaffolding.
+## Coordination
 
-### Key References
-- `WORKING.md` — **Check first.** Active agent work, task queue, file conflict registry
-- `Docs/AGENT-WORKFLOW.md` — When to commit direct vs. use a branch; merge review template
-- `Actions/SHARED-CONSTANTS.md` — Canonical global variable / OBS / timer names
-- `Actions/HELPER-SNIPPETS.md` — Reusable C# copy/paste patterns
-- `Creative/Brand/BRAND-IDENTITY.md` — Brand vision, mission, values, and the neurodivergent metaphor
-- `Creative/Brand/BRAND-VOICE.md` — Tone and language conventions per context
-- `Creative/Brand/CHARACTER-CODEX.md` — Unified canonical character reference
-- `Docs/ONBOARDING.md` — Start here if new to the project
+Before starting any task: **check `WORKING.md`** for active agent work and file conflicts.
 
-### Mix It Up API Payload Convention (Run Command)
-When calling `POST /api/v2/commands/{commandId}` from Streamer.bot scripts:
-- Keep standard fields: `Platform`, `Arguments`, `IgnoreRequirements`.
-- Pass extra variables for Mix It Up command usage inside `SpecialIdentifiers` (not as top-level fields).
-- Example payload shape:
-  - `Platform = "Twitch"`
-  - `Arguments = "optional message text"`
-  - `SpecialIdentifiers = new { test = "True" }`
-  - `IgnoreRequirements = false`
+After completing any code task: load `ops/change-summary` to produce the paste targets and validation checklist the operator needs.
 
----
+## Pi Routing
 
-## Skill Routing
+Pi's skill tree is at `.pi/skills/`. Pi uses `.pi/skills/README.md` for its routing table. Pi meta-skills (for navigating and updating `.agents/`) are at `.pi/skills/meta/`.
 
-Load the listed skills based on the task at hand. `streamerbot-scripting` is the base skill for **all** `.cs` work. `change-summary` is a **terminal skill** — always load it after completing code changes.
+## Project Domains
 
-| Task | Skills to load |
+| Domain | Path | Contains |
+|---|---|---|
+| Actions | `Actions/` | Streamer.bot C# runtime scripts |
+| Tools | `Tools/` | Local utilities, validators, API helpers |
+| Creative | `Creative/` | Brand docs, character art, worldbuilding, lore |
+| Docs | `Docs/` | Architecture, workflow, onboarding |
+| Agent Tree | `.agents/` | Shared role/skill knowledge tree |
+
+## Key References
+
+| File | Purpose |
 |---|---|
-| Writing/editing any `.cs` script | `streamerbot-scripting` + relevant `feature-*` |
-| Squad mini-game work (Clone, Duck, Pedro, Toothless, offering) | `streamerbot-scripting` + `feature-squad` |
-| Adding a new Squad mini-game | `streamerbot-scripting` + `feature-squad` + read `Actions/HELPER-SNIPPETS.md` mini-game contract |
-| Commander role/command work (Captain Stretch, The Director, Water Wizard) | `streamerbot-scripting` + `feature-commanders` |
-| Voice command mode/scene work | `streamerbot-scripting` + `feature-voice-commands` |
-| Bits scripts OR `stream-start.cs` OR core Twitch event scripts | `streamerbot-scripting` + `feature-twitch-integration` |
-| Hype Train scripts | `streamerbot-scripting` + `feature-hype-train` |
-| Channel Point redeem scripts | `streamerbot-scripting` + `feature-channel-points` |
-| `Tools/` work (Mix It Up API, Python utilities, StreamerBot validators) | `buildtools` |
-| Art generation / diffusion model prompts / character assets | `creative-art` |
-| Lore, canon, CYOA story generation, franchise development | `creative-worldbuilding` |
-| Full story pipeline (story JSON + C# engine) | `creative-worldbuilding` → `streamerbot-scripting` → `change-summary` |
-| Preparing change summary / paste targets | `change-summary` |
-| Syncing repo to Streamer.bot | `sync-workflow` |
-| Any chat bot output text, follow/sub/bits/raid messages | `brand-steward` |
-| Stream titles, descriptions, community posts, announcements | `brand-steward` |
-| Reviewing new story or lore for canon consistency | `brand-canon-guardian` |
-| Adding new characters, world elements, or mechanics | `brand-canon-guardian` |
-| Planning story content tied to a real build session | `content-strategy` → `creative-worldbuilding` |
-| Writing stream titles/descriptions for a specific build | `content-strategy` → `brand-steward` |
-
-### Chaining Example
-
-> "Fix the Duck mini-game cooldown" →
-> Load `streamerbot-scripting` → `feature-squad` → (make changes) → `change-summary`
-
----
-
-## Default Priority Order
-
-1. Live stream reliability
-2. Safe chat-facing behavior
-3. Backward compatibility for existing features
-4. Maintainable, readable scripts
-5. Minimal operator friction during manual copy/paste sync
-
----
-
-## Scope Boundaries
-
-**In scope:**
-- Implement/maintain C# scripts for Streamer.bot actions under `Actions/`.
-- Implement/maintain local tooling under `Tools/`.
-- Implement/maintain creative scaffolding under `Creative/` when explicitly requested.
-- Focused, minimal-risk fixes.
-- Readability/reliability improvements without changing intended behavior.
-- Thorough, beginner-friendly comments.
-
-**Out of scope (unless explicitly requested):**
-- Broad refactors across unrelated feature groups.
-- Renaming triggers/behavior that chat depends on.
-- Changing core stream-start/housekeeping behavior.
-- Introducing unnecessary external dependencies.
+| `WORKING.md` | Active work, task queue, conflict registry — check first |
+| `Actions/SHARED-CONSTANTS.md` | Canonical global variable, OBS source, timer names |
+| `Actions/HELPER-SNIPPETS.md` | Reusable C# patterns — copy verbatim |
+| `Creative/Brand/BRAND-IDENTITY.md` | Brand vision, mission, values, neurodivergent metaphor |
+| `Creative/Brand/CHARACTER-CODEX.md` | Canonical character identities |
+| `Docs/AGENT-WORKFLOW.md` | When to commit direct vs. use a branch; merge review template |
+| `Docs/ONBOARDING.md` | Start here if new to the project |

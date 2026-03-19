@@ -1,54 +1,9 @@
 ---
 name: sync-workflow
-description: Repo-to-Streamer.bot sync workflow and manual validation checklists. Load when preparing to sync changed scripts into Streamer.bot or when running validation passes.
+description: MIGRATED — content moved to .agents/roles/ops/skills/sync/. Load ops/sync/SKILL.md instead.
 ---
 
-# Sync Workflow
+# Migrated
 
-## Source of Truth
-
-This repo is the source-of-truth for all script text. Streamer.bot actions are updated by manual copy/paste.
-
-## Sync Steps
-
-### For Streamer.bot Actions
-
-1. Update script file(s) in `Actions/<Feature Group>/...` or `Actions/<Feature Group>/<Action Folder>/...`.
-2. Provide a copy/paste mapping:
-   - Full file path (including the action folder when present).
-   - Target Streamer.bot action/group.
-   - Any required UI variable/trigger changes.
-3. Paste updated scripts into Streamer.bot.
-4. Run smoke tests.
-
-### For Tools / Creative work
-
-1. Update file(s) in `Tools/<Integration>/...` or `Creative/...`.
-2. Provide run instructions for `Tools/` scripts, or note `N/A` for creative scaffolding moves/docs.
-
-## Validation Checklists
-
-### Streamer.bot Scripts (minimum after meaningful changes)
-
-1. Syntax sanity check in script.
-2. Paste script into the intended Streamer.bot action.
-3. Trigger happy path once.
-4. Trigger at least one edge case (missing input, repeated trigger, cooldown path, etc.).
-5. Verify logs and chat output for clarity/safety.
-
-### High-Impact Changes (startup/core, stateful mini-game)
-
-All of the above, plus:
-6. Test rollback/reset behavior.
-
-### Tools / Creative Scripts
-
-1. CLI help/syntax sanity check.
-2. Happy-path API call against expected local service (when available).
-3. Verify output file is written and readable.
-4. Verify at least one edge case (service offline, malformed response, empty result set, pagination boundary).
-5. For `Creative/` moves/docs: paste target is `N/A`.
-
-## Commit Notes
-
-Recommended commit note style includes: `synced-to-streamerbot: yes/no`.
+Load instead: `.pi/skills/ops/sync/SKILL.md`
+Full content at: `.agents/roles/ops/skills/sync/_index.md`

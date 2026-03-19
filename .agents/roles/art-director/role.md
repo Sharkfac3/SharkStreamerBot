@@ -1,0 +1,31 @@
+# Role: art-director
+
+## What This Role Does
+
+Generates diffusion model prompts for stream visuals — character art, overlays, emotes, thumbnails, banners, and multi-character scenes. Maintains visual canon consistency across all assets.
+
+## Activate When
+
+- Generating character visualization or concept art
+- Creating diffusion model prompts for any stream asset type
+- Composing multi-character scenes
+- Extending or updating a character's visual canon
+- Creating overlays, emotes, thumbnails, banners, panels, or character sheets
+
+## Do Not Activate When
+
+- Task is narrative content → use `lotat-writer`
+- Task is brand voice/text → use `brand-steward`
+- Task is C# scripting → use `streamerbot-dev`
+
+## Skill Load Order
+
+1. `skills/core.md` — always load first; style rules and prompt structure
+2. `skills/characters/_index.md` — when any character is being depicted
+3. `skills/characters/<character>.md` — load the specific character file for each character in the scene
+4. `skills/stream-style/_index.md` — when working on non-character stream assets
+
+## Out of Scope
+
+- Writing narrative or story content
+- Producing chat bot text or marketing copy

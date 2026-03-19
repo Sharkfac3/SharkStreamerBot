@@ -9,9 +9,9 @@
 SharkStreamerBot is the technical and creative infrastructure for a Twitch streaming channel built around two things happening simultaneously:
 
 1. **Live jeep and automotive builds** — real hands-on projects, novel approaches, shared knowledge, real mistakes on stream
-2. **Starship Shamples** — a Twitch chat-controlled spaceship adventure game that runs during the stream; chaotic, failure-forward, and participatory
+2. **Legends of the ASCII Temple (LotAT)** — a Twitch chat-controlled spaceship adventure game (Starship Shamples franchise) that runs during the stream; chaotic, failure-forward, and participatory
 
-These are not two separate things. Starship Shamples is a live metaphor for the build experience itself. The chaos of the game mirrors the chaos of building. The crew (chat) is the community. The ship is the neurodivergent mind doing the work.
+These are not two separate things. LotAT is a live metaphor for the build experience itself. The chaos of the game mirrors the chaos of building. The crew (chat) is the community. The ship is the neurodivergent mind doing the work.
 
 **Read `Creative/Brand/BRAND-IDENTITY.md` for the full picture, including the ADHD metaphor that runs through everything in this project.**
 
@@ -34,76 +34,87 @@ These are not two separate things. Starship Shamples is a live metaphor for the 
 ├── Creative/          Art, world-building, brand documents, marketing
 │   ├── Brand/         BRAND-IDENTITY, BRAND-VOICE, CHARACTER-CODEX (start here for brand work)
 │   ├── Art/           Visual style guide and character art agents
-│   ├── WorldBuilding/ Starship Shamples game design, story content, franchise docs
+│   ├── WorldBuilding/ LotAT game design, story content, franchise docs
 │   └── Marketing/     Promotional copy, clip strategy, content planning
 ├── Docs/              Architecture docs and this onboarding guide
-└── .pi/skills/        Skill files — focused agent instructions loaded per task
+└── .agents/           Agent knowledge tree — roles, skills, living context (start here)
 ```
 
-Scripts in `Actions/` are **not auto-deployed**. Each changed script must be manually copy/pasted into Streamer.bot. See `AGENTS.md` for the sync workflow.
+Scripts in `Actions/` are **not auto-deployed**. Each changed script must be manually copy/pasted into Streamer.bot.
 
 ---
 
-## Read This First (Based on Your Task)
+## Start Here — All Agents
 
-### If you are working on Starship Shamples stories or lore
-1. `Creative/Brand/BRAND-IDENTITY.md` — Brand foundation and the metaphor
-2. `Creative/Brand/CHARACTER-CODEX.md` — Canonical character reference
-3. `Creative/WorldBuilding/Agents/D&D-Agent.md` — Game mechanics
-4. `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` — Story schema
-5. Skills: `creative-worldbuilding`, `brand-canon-guardian`
+Read `.agents/ENTRY.md` first. It identifies your role, explains the navigation pattern, and points you to the right skill tree for your task.
+
+---
+
+## Read This Next (Based on Your Task)
+
+### If you are working on LotAT stories or lore
+Role: `lotat-writer`
+1. `.agents/ENTRY.md` → `roles/lotat-writer/role.md`
+2. `.agents/roles/lotat-writer/skills/core.md`
+3. `Creative/Brand/BRAND-IDENTITY.md` — Brand foundation and the metaphor
+4. `Creative/Brand/CHARACTER-CODEX.md` — Canonical character reference
+5. `Creative/WorldBuilding/Agents/D&D-Agent.md` — Game mechanics
+
+### If you are working on the LotAT technical pipeline
+Role: `lotat-tech`
+1. `.agents/ENTRY.md` → `roles/lotat-tech/role.md`
+2. `.agents/roles/lotat-tech/skills/core.md`
+3. `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` — JSON schema
+4. `Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md` — Engine guide
 
 ### If you are writing chat bot output or stream text
-1. `Creative/Brand/BRAND-IDENTITY.md` — The brand's values and voice
-2. `Creative/Brand/BRAND-VOICE.md` — Tone and language per context
-3. `Creative/Brand/CHARACTER-CODEX.md` — If referencing characters
-4. Skill: `brand-steward`
+Role: `brand-steward`
+1. `.agents/ENTRY.md` → `roles/brand-steward/role.md`
+2. `.agents/roles/brand-steward/skills/core.md`
+3. `Creative/Brand/BRAND-IDENTITY.md` — Brand values and voice
+4. `Creative/Brand/BRAND-VOICE.md` — Tone and language per context
 
 ### If you are working on C# Streamer.bot scripts
-1. `AGENTS.md` — Routing table; tells you which skills to load
-2. `Actions/SHARED-CONSTANTS.md` — Canonical variable and OBS names
-3. `Actions/HELPER-SNIPPETS.md` — Reusable copy/paste patterns
-4. Skills: `streamerbot-scripting` + the relevant `feature-*` skill
+Role: `streamerbot-dev`
+1. `.agents/ENTRY.md` → `roles/streamerbot-dev/role.md`
+2. `.agents/roles/streamerbot-dev/skills/core.md`
+3. `Actions/SHARED-CONSTANTS.md` — Canonical variable and OBS names
+4. `Actions/HELPER-SNIPPETS.md` — Reusable copy/paste patterns
 
 ### If you are working on art generation
-1. `Creative/Art/Agents/StreamStyle-art-agent.md` — Visual style (load first, always)
-2. Relevant character agent (CaptainStretch, TheDirector, WaterWizard)
-3. `Creative/Brand/CHARACTER-CODEX.md` — Character personality context
-4. Skill: `creative-art`
+Role: `art-director`
+1. `.agents/ENTRY.md` → `roles/art-director/role.md`
+2. `.agents/roles/art-director/skills/core.md`
+3. `Creative/Art/Agents/StreamStyle-art-agent.md` — Visual style (always load first)
+4. Relevant character agent file
 
 ### If you are planning content around a build
-1. `Creative/Brand/BRAND-IDENTITY.md` — The build/game relationship
-2. `Creative/Brand/BRAND-VOICE.md` — Stream title and description guidance
-3. `Creative/WorldBuilding/Franchises/StarshipShamples.md` — Franchise scope
-4. Skills: `content-strategy` → `creative-worldbuilding`
+Role: `brand-steward` (content-strategy sub-skill)
+1. `.agents/roles/brand-steward/skills/content-strategy/_index.md`
+2. `Creative/Brand/BRAND-IDENTITY.md` — The build/game relationship
+3. `Creative/Brand/BRAND-VOICE.md` — Stream title and description guidance
 
 ### If you are adding a new feature or character
-1. `Creative/Brand/BRAND-IDENTITY.md` — Brand values; does this fit?
-2. `Creative/Brand/CHARACTER-CODEX.md` — Does this conflict with existing cast?
-3. `AGENTS.md` — Routing for the technical implementation
-4. Skill: `brand-canon-guardian` (review before committing to anything)
+Roles: `brand-steward` (canon review) + relevant dev role
+1. `.agents/roles/brand-steward/skills/canon-guardian/_index.md` — review before committing
+2. `Creative/Brand/BRAND-IDENTITY.md` — Brand values; does this fit?
+3. `Creative/Brand/CHARACTER-CODEX.md` — Does this conflict with existing cast?
 
----
-
-## The Skill System
-
-This project uses [pi skills](https://agentskills.io/specification). Instead of loading all project rules at once, specific skill files are loaded per task.
-
-- `AGENTS.md` is the routing table — it maps tasks to skills
-- `.pi/skills/` contains the skill files
-- `.pi/skills/README.md` lists all available skills
-
-Always check `AGENTS.md` before starting work to confirm you have the right skills loaded. Always check `WORKING.md` before starting work to confirm no other agent is editing the files you need. Always check `Docs/AGENT-WORKFLOW.md` to confirm whether your task warrants a direct commit or a worktree branch.
+### If you are doing ops work (sync, validation, change summary)
+Role: `ops`
+1. `.agents/ENTRY.md` → `roles/ops/role.md`
+2. `.agents/roles/ops/skills/core.md`
 
 ---
 
 ## Key Conventions
 
 - **No auto-deploy:** All `Actions/` script changes require manual copy/paste to Streamer.bot
-- **Cast is fixed:** No new named Starship Shamples characters without operator approval
+- **Cast is fixed:** No new named LotAT/Starship Shamples characters without operator approval
 - **Story schema is a contract:** The technical engine reads story JSON directly — schema changes break the engine
 - **Brand first for any public text:** Load `brand-steward` before writing anything that reaches the audience
-- **Canon guardian before new lore:** Load `brand-canon-guardian` before adding anything to the game world
+- **Canon guardian before new lore:** Load `brand-steward/canon-guardian` before adding anything to the game world
+- **ops/change-summary is always terminal:** After any code change, produce the change summary
 
 ---
 
@@ -111,7 +122,7 @@ Always check `AGENTS.md` before starting work to confirm you have the right skil
 
 - Solo streamer with ADHD — the brand is built around neurodivergent authenticity
 - Small Discord community of regulars actively providing feedback
-- A couple of friends who also stream — potential collaborative growth
+- Multiple coding agents collaborate on this project — check `WORKING.md` before starting any task
 
 This is an incubator-style project: open knowledge sharing, community co-creation, no gatekeeping.
 
@@ -121,6 +132,6 @@ This is an incubator-style project: open knowledge sharing, community co-creatio
 
 - `WORKING.md` — Active agent work and task queue (check before starting anything)
 - `Docs/AGENT-WORKFLOW.md` — How to contribute: direct vs. branch, merge review template
-- `AGENTS.md` — Skill routing and scope boundaries
+- `AGENTS.md` — Quick role routing table
 - `README.md` — Repo structure overview
 - `Creative/Brand/BRAND-IDENTITY.md` — Why this all exists

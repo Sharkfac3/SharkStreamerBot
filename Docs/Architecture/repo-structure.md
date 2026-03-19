@@ -1,65 +1,82 @@
 # Repository Structure
 
-This repo is being organized into four top-level working domains:
+Five top-level working domains:
 
 - `Actions/` — Streamer.bot runtime action source only
 - `Tools/` — external/local utilities, integrations, validators, sync helpers
 - `Creative/` — art, world-building, marketing, and reusable agent scaffolding
 - `Docs/` — architecture, workflow, convention, and integration docs
+- `.agents/` — agent knowledge tree (roles, skills, living context)
 
-## Routing rules
+## Routing Rules
 
 ### `Actions/`
 Belongs here:
 - Streamer.bot C# action scripts
-- action-group docs tied directly to runtime behavior
-- shared runtime references such as constants and helper snippets
+- Action-group docs tied directly to runtime behavior
+- Shared runtime references (SHARED-CONSTANTS.md, HELPER-SNIPPETS.md)
 
 Does not belong here:
-- local Python utilities
+- Local Python utilities
 - Mix It Up export tools
-- creative prompt scaffolding
-- architecture notes unrelated to runtime actions
+- Creative prompt scaffolding
+- Architecture notes unrelated to runtime actions
 
 ### `Tools/`
 Belongs here:
-- external/local support utilities
+- External/local support utilities
 - Mix It Up API scripts, command helpers, overlay source
 - Streamer.bot sync, validation, export/import helpers
 
 Does not belong here:
 - Streamer.bot runtime action source
-- art or story prompt systems
-- final creative assets
+- Art or story prompt systems
+- Final creative assets
 
 ### `Creative/`
 Belongs here:
-- reusable art-generation agents
-- world-building and story scaffolding
-- marketing scaffolding
-- references, experiments, projects, and approved assets
+- Reusable art-generation agents
+- World-building and story scaffolding (LotAT, Starship Shamples)
+- Marketing scaffolding
+- References, experiments, projects, and approved assets
 
 Does not belong here:
-- runtime action scripts
-- operational tooling scripts
-- repo-wide architecture docs
+- Runtime action scripts
+- Operational tooling scripts
+- Repo-wide architecture docs
 
 ### `Docs/`
 Belongs here:
-- repository structure docs
-- workflow docs
-- conventions and integration docs
+- Repository structure docs
+- Workflow docs
+- Conventions and integration docs
 
 Does not belong here:
-- runtime scripts
-- utility code
-- creative project outputs
+- Runtime scripts
+- Utility code
+- Creative project outputs
+- Agent skill content (that goes in `.agents/`)
 
-## Current ownership notes
+### `.agents/`
+Belongs here:
+- Role definitions (`roles/<role>/role.md`)
+- Skill content for each role (`roles/<role>/skills/`)
+- Living context notes agents add over time (`roles/<role>/context/`)
+- Shared cross-role knowledge (`_shared/`)
+- Role template for adding new roles (`roles/_template/`)
 
-- Mix It Up tooling belongs under `Tools/MixItUp/`
-- Streamer.bot support tooling belongs under `Tools/StreamerBot/`
-- art agent scaffolding belongs under `Creative/Art/`
-- world-building scaffolding belongs under `Creative/WorldBuilding/`
+Does not belong here:
+- Runtime C# code (that goes in `Actions/`)
+- Actual story content or lore (that goes in `Creative/WorldBuilding/`)
+- Duplicate content from SHARED-CONSTANTS.md or HELPER-SNIPPETS.md (reference them)
 
-`Actions/` should remain conceptually stable.
+## Current Ownership Notes
+
+- Mix It Up tooling → `Tools/MixItUp/`
+- Streamer.bot support tooling → `Tools/StreamerBot/`
+- Art agent scaffolding → `Creative/Art/`
+- LotAT/Starship Shamples worldbuilding → `Creative/WorldBuilding/`
+- Agent skill tree → `.agents/roles/`
+- Pi operational skill layer → `.pi/skills/`
+
+`Actions/` should remain conceptually stable — runtime scripts only.
