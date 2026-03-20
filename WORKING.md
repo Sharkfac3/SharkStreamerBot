@@ -30,19 +30,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-03-18 | pi | Fix scene-dance gamer scene casing | uncommitted |
-| 2026-03-18 | pi | Adjust scene-dance OBS mapping | uncommitted |
-| 2026-03-18 | pi | Add scene-dance voice command action | uncommitted |
-| 2026-03-18 | pi | Standardize bits TTS waits and add message-effects pacing wait | uncommitted |
-| 2026-03-18 | pi | Apply shared Mix It Up unlock waits to Duck, Clone, and Toothless Squad unlock flows | uncommitted |
-| 2026-03-18 | pi | Normalize Pedro unlock waits to shared Mix It Up buffer pattern | uncommitted |
-| 2026-03-18 | pi | Add shared Mix It Up unlock wait guidance | uncommitted |
-| 2026-03-18 | pi | Extend Pedro unlock waits to 31 seconds | uncommitted |
-| 2026-03-17 | pi | Add cryptic feedback for invalid !pedro text usage | uncommitted |
-| 2026-03-17 | pi | Prevent overlapping Pedro secret unlock runs | uncommitted |
-| 2026-03-17 | pi | Bring Pedro implementation back in line with planned cooldown/unlock/wait behavior | uncommitted |
-| 2026-03-17 | pi | Allow Pedro secret text to trigger Mix It Up multiple times per stream | uncommitted |
-| 2026-03-17 | pi | Add Pedro resolve wait | uncommitted |
+| 2026-03-20 | pi | Add remaining humans role starters | uncommitted |
+| 2026-03-20 | pi | Add humans role kickoff prompts and README | uncommitted |
+| 2026-03-20 | pi | Add humans prompt starter for streamerbot-dev role | uncommitted |
+| 2026-03-20 | pi | Remove stale completed routing stabilization note | uncommitted |
+| 2026-03-20 | pi | Add routing sweet-spot sanity checks and stale reference scanning | uncommitted |
+| 2026-03-20 | pi | Partially generate AGENTS.md quick routing from routing-manifest.json | uncommitted |
+| 2026-03-20 | pi | Generate routing tables from routing-manifest.json and add sync script | uncommitted |
+| 2026-03-20 | pi | Remove wrapper-manifest duplication and derive routing validation from routing-manifest.json | uncommitted |
+| 2026-03-20 | pi | Add unified routing manifest and validator support | uncommitted |
+| 2026-03-20 | pi | Remove stale Pi migration planning note and add routing stabilization plan | uncommitted |
 
 ---
 

@@ -10,7 +10,7 @@ Check `WORKING.md` at repo root for active agent work and file conflicts.
 
 ## After Any Code Change
 
-Load `ops/change-summary` from `.agents/roles/ops/skills/change-summary/_index.md` to produce paste targets and validation checklist for the operator.
+Load `ops-change-summary` from `.agents/roles/ops/skills/change-summary/_index.md` to produce paste targets and validation checklist for the operator.
 
 ## Key Facts
 

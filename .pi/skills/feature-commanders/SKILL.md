@@ -1,9 +1,9 @@
 ---
 name: feature-commanders
-description: MIGRATED — content moved to .agents/roles/streamerbot-dev/skills/commanders/. Load streamerbot-dev/commanders/SKILL.md instead.
+description: MIGRATED — content moved to .agents/roles/streamerbot-dev/skills/commanders/. Load streamerbot-dev-commanders/SKILL.md instead.
 ---
 
-# Migrated
+# Migrated Compatibility Alias
 
-Load instead: `.pi/skills/streamerbot-dev/commanders/SKILL.md`
+Load instead: `.pi/skills/streamerbot-dev-commanders/SKILL.md`
 Full content at: `.agents/roles/streamerbot-dev/skills/commanders/`

@@ -3,7 +3,7 @@ name: creative-worldbuilding
 description: MIGRATED — split into lotat-writer and lotat-tech roles. Load lotat-writer/SKILL.md or lotat-tech/SKILL.md instead.
 ---
 
-# Migrated
+# Migrated Compatibility Alias
 
 This skill has been split into two roles:
 

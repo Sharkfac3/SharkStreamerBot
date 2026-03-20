@@ -3,7 +3,7 @@ name: streamerbot-scripting
 description: MIGRATED — content moved to .agents/roles/streamerbot-dev/skills/core.md. Load streamerbot-dev/SKILL.md instead.
 ---
 
-# Migrated
+# Migrated Compatibility Alias
 
 This skill has been migrated to the role-based agent tree.
 

@@ -113,8 +113,8 @@ Role: `ops`
 - **Cast is fixed:** No new named LotAT/Starship Shamples characters without operator approval
 - **Story schema is a contract:** The technical engine reads story JSON directly — schema changes break the engine
 - **Brand first for any public text:** Load `brand-steward` before writing anything that reaches the audience
-- **Canon guardian before new lore:** Load `brand-steward/canon-guardian` before adding anything to the game world
-- **ops/change-summary is always terminal:** After any code change, produce the change summary
+- **Canon guardian before new lore:** Load `brand-steward-canon-guardian` before adding anything to the game world
+- **ops-change-summary is always terminal:** After any code change, produce the change summary
 
 ---
 

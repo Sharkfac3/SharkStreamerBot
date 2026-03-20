@@ -42,10 +42,10 @@ This is not required — stories don't have to mirror the build. But the best on
 ## When to Chain
 
 ```
-content-strategy → lotat-writer → (story JSON) → lotat-tech → ops/change-summary
+brand-steward-content-strategy → lotat-writer → (story JSON) → lotat-tech → ops-change-summary
 ```
 
 For content planning without code:
 ```
-content-strategy → brand-steward/voice → (titles, descriptions, community posts)
+brand-steward-content-strategy → brand-steward → (titles, descriptions, community posts)
 ```

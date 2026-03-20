@@ -22,4 +22,4 @@ Full context: `.agents/roles/lotat-tech/role.md`
 
 ## Terminal
 
-After any code change: load `ops/change-summary/SKILL.md`
+After any code change: load `ops-change-summary/SKILL.md`

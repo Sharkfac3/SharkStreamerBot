@@ -15,6 +15,6 @@ Full context: `.agents/roles/ops/role.md`
 
 | Task | Load |
 |---|---|
-| Formatting change summary after code work | `ops/change-summary/SKILL.md` |
-| Syncing to Streamer.bot | `ops/sync/SKILL.md` |
-| Running validation | `ops/validation/SKILL.md` |
+| Formatting change summary after code work | `ops-change-summary/SKILL.md` |
+| Syncing to Streamer.bot | `ops-sync/SKILL.md` |
+| Running validation | `ops-validation/SKILL.md` |

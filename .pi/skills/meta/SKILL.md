@@ -11,5 +11,5 @@ These skills teach Pi how to work with the project's agent infrastructure itself
 
 | Task | Load |
 |---|---|
-| Reading or navigating the .agents/ tree | `meta/agents-navigate/SKILL.md` |
-| Adding or updating content in .agents/ | `meta/agents-update/SKILL.md` |
+| Reading or navigating the .agents/ tree | `meta-agents-navigate/SKILL.md` |
+| Adding or updating content in .agents/ | `meta-agents-update/SKILL.md` |

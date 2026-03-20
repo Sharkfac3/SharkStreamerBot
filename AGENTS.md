@@ -11,6 +11,7 @@ Read `.agents/ENTRY.md` — it is the universal entry point for all agents (Clau
 
 ## Quick Role Routing
 
+<!-- GENERATED:agents-quick-role-routing:start -->
 | You're working on | Role | Agent Tree |
 |---|---|---|
 | Any `.cs` script under `Actions/` | `streamerbot-dev` | `.agents/roles/streamerbot-dev/` |
@@ -20,16 +21,17 @@ Read `.agents/ENTRY.md` — it is the universal entry point for all agents (Clau
 | Chat text, titles, canon, content strategy | `brand-steward` | `.agents/roles/brand-steward/` |
 | Stream interaction apps | `app-dev` | `.agents/roles/app-dev/` |
 | Validation, sync, change summary, tooling | `ops` | `.agents/roles/ops/` |
+<!-- GENERATED:agents-quick-role-routing:end -->
 
 ## Coordination
 
 Before starting any task: **check `WORKING.md`** for active agent work and file conflicts.
 
-After completing any code task: load `ops/change-summary` to produce the paste targets and validation checklist the operator needs.
+After completing any code task: load `ops-change-summary` to produce the paste targets and validation checklist the operator needs.
 
 ## Pi Routing
 
-Pi's skill tree is at `.pi/skills/`. Pi uses `.pi/skills/README.md` for its routing table. Pi meta-skills (for navigating and updating `.agents/`) are at `.pi/skills/meta/`.
+Pi's skill tree is at `.pi/skills/`. Pi uses `.pi/skills/README.md` for its routing table. Pi meta-skills are exposed through the flat wrappers `meta`, `meta-agents-navigate`, and `meta-agents-update`.
 
 ## Project Domains
 

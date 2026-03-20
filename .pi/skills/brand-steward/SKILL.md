@@ -21,5 +21,5 @@ Full context: `.agents/roles/brand-steward/role.md`
 
 ## Sub-Skills
 
-- `brand-steward/canon-guardian/SKILL.md`
-- `brand-steward/content-strategy/SKILL.md`
+- `brand-steward-canon-guardian/SKILL.md`
+- `brand-steward-content-strategy/SKILL.md`

@@ -24,4 +24,6 @@ Full context: `.agents/roles/lotat-writer/role.md`
 
 ## Canon Review
 
-After producing story content: load `brand-steward/canon-guardian/SKILL.md`
+After producing story content: load `lotat-writer-canon-guardian/SKILL.md`
+
+Escalate franchise-wide canon changes to `brand-steward-canon-guardian/SKILL.md`.

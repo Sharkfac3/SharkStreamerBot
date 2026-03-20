@@ -27,7 +27,7 @@ Handles the operational layer: validation, sync workflow, change summaries, loca
 
 ## The Terminal Rule
 
-`ops/change-summary` is the **last step in every code task**. Load it after the work is done to format the output the operator needs to sync and validate.
+`ops-change-summary` is the **last step in every code task**. Load it after the work is done to format the output the operator needs to sync and validate.
 
 ## Out of Scope
 

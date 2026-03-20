@@ -11,7 +11,7 @@ Creates narrative content for Legends of the ASCII Temple (LotAT) — adventure 
 - Expanding lore, building out the universe, or adding world elements
 - Writing character backstory or personality details
 - Developing the Starship Shamples franchise or any future franchise
-- Planning story arcs tied to real-world build sessions (chain to `brand-steward/content-strategy`)
+- Planning story arcs tied to real-world build sessions (chain to `brand-steward-content-strategy`)
 
 ## Do Not Activate When
 
@@ -29,14 +29,15 @@ Creates narrative content for Legends of the ASCII Temple (LotAT) — adventure 
 6. `skills/adventures/mechanics.md` — when designing dice hooks, Chaos Meter, commander moments
 7. `skills/adventures/session-format.md` — when structuring a story for live stream pacing
 8. `skills/franchises/starship-shamples.md` — for Starship Shamples-specific canon
+9. `skills/canon-guardian/_index.md` — when reviewing LotAT story canon or reusable world elements
 
 ## Chains To
 
 | Next Role | When |
 |---|---|
 | `lotat-tech` | After story JSON is complete — hand off for schema validation and engine implementation |
-| `brand-steward` | When story content needs canon review or touches brand identity |
-| `brand-steward/content-strategy` | When planning a story tied to a specific build session |
+| `brand-steward` | When story content needs franchise-wide canon review or touches brand identity |
+| `brand-steward-content-strategy` | When planning a story tied to a specific build session |
 
 ## Out of Scope
 

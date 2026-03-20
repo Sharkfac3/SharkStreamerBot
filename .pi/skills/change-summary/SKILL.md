@@ -1,9 +1,9 @@
 ---
 name: change-summary
-description: MIGRATED — content moved to .agents/roles/ops/skills/change-summary/. Load ops/change-summary/SKILL.md instead.
+description: MIGRATED — content moved to .agents/roles/ops/skills/change-summary/. Load ops-change-summary/SKILL.md instead.
 ---
 
-# Migrated
+# Migrated Compatibility Alias
 
-Load instead: `.pi/skills/ops/change-summary/SKILL.md`
+Load instead: `.pi/skills/ops-change-summary/SKILL.md`
 Full content at: `.agents/roles/ops/skills/change-summary/_index.md`

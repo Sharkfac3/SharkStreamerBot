@@ -23,12 +23,12 @@ Load `.agents/roles/streamerbot-dev/role.md` to confirm scope and skill load ord
 
 ## Sub-Skills
 
-- `streamerbot-dev/squad/SKILL.md`
-- `streamerbot-dev/commanders/SKILL.md`
-- `streamerbot-dev/twitch/SKILL.md`
-- `streamerbot-dev/voice-commands/SKILL.md`
-- `streamerbot-dev/lotat/SKILL.md`
+- `streamerbot-dev-squad/SKILL.md`
+- `streamerbot-dev-commanders/SKILL.md`
+- `streamerbot-dev-twitch/SKILL.md`
+- `streamerbot-dev-voice-commands/SKILL.md`
+- `streamerbot-dev-lotat/SKILL.md`
 
 ## Terminal
 
-After any code change: load `ops/change-summary/SKILL.md`
+After any code change: load `ops-change-summary/SKILL.md`
