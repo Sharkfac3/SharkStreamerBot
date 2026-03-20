@@ -12,6 +12,9 @@ public class CPHInline
     private const string VAR_DUCK_QUACK_COUNT = "duck_quack_count";
     private const string VAR_DUCK_CALLER = "duck_caller";
     private const string VAR_DUCK_UNLOCKED = "duck_unlocked";
+    private const string VAR_DUCK_TARGET_QUACKS = "duck_target_quacks";
+    private const string VAR_DUCK_UNIQUE_QUACKERS = "duck_unique_quackers";
+    private const string VAR_DUCK_UNIQUE_QUACKER_COUNT = "duck_unique_quacker_count";
     private const string OBS_SOURCE_DUCK_DANCING = "Duck - Dancing";
     private const string TIMER_DUCK_CALL_WINDOW = "Duck - Call Window";
 
@@ -138,6 +141,9 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_DUCK_QUACK_COUNT, 0, false);
         CPH.SetGlobalVar(VAR_DUCK_CALLER, "", false);
         CPH.SetGlobalVar(VAR_DUCK_UNLOCKED, false, false);
+        CPH.SetGlobalVar(VAR_DUCK_TARGET_QUACKS, 0, false);
+        CPH.SetGlobalVar(VAR_DUCK_UNIQUE_QUACKERS, "|", false);
+        CPH.SetGlobalVar(VAR_DUCK_UNIQUE_QUACKER_COUNT, 0, false);
 
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
         CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);

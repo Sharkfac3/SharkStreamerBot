@@ -11,6 +11,9 @@ public class CPHInline
     private const string VAR_DUCK_EVENT_ACTIVE = "duck_event_active";
     private const string VAR_DUCK_QUACK_COUNT = "duck_quack_count";
     private const string VAR_DUCK_CALLER = "duck_caller";
+    private const string VAR_DUCK_TARGET_QUACKS = "duck_target_quacks";
+    private const string VAR_DUCK_UNIQUE_QUACKERS = "duck_unique_quackers";
+    private const string VAR_DUCK_UNIQUE_QUACKER_COUNT = "duck_unique_quacker_count";
     private const string TIMER_DUCK_CALL_WINDOW = "Duck - Call Window";
 
     // Shared mini-game lock (cross-feature).
@@ -18,9 +21,13 @@ public class CPHInline
     private const string VAR_MINIGAME_NAME = "minigame_name";
     private const string MINIGAME_NAME_DUCK = "duck";
 
+    // Duck now unlocks immediately when chat reaches the live threshold.
+    // The timer is only the maximum time allowed before the attempt fails.
+    private const int DUCK_MINIMUM_TARGET_QUACKS = 12;
+
     /*
      * Purpose:
-     * - Starts the Duck mini-event (2-minute quack window).
+     * - Starts the Duck mini-event and opens the live quack race.
      *
      * Expected trigger/input:
      * - Action/command to begin Duck event.
@@ -30,11 +37,14 @@ public class CPHInline
      * - duck_event_active
      * - duck_quack_count
      * - duck_caller
+     * - duck_target_quacks
+     * - duck_unique_quackers
+     * - duck_unique_quacker_count
      * - shared lock: minigame_active/minigame_name
      *
      * Key outputs/side effects:
      * - Enables timer: "Duck - Call Window"
-     * - Announces event in chat.
+     * - Announces the event in chat without exposing the exact quack target.
      */
     public bool Execute()
     {
@@ -50,24 +60,28 @@ public class CPHInline
         bool active = (CPH.GetGlobalVar<bool?>(VAR_DUCK_EVENT_ACTIVE, false) ?? false);
         if (active)
         {
-            CPH.SendMessage("🦆 Duck is already on the river... QUACK HARDER!");
+            CPH.SendMessage("🦆 Duck is already on the river. The crew is still quacking.");
             return true;
         }
 
-        // Reset event state for new run.
+        // Reset event state for a fresh run.
         CPH.SetGlobalVar(VAR_DUCK_EVENT_ACTIVE, true, false);
         CPH.SetGlobalVar(VAR_DUCK_QUACK_COUNT, 0, false);
+        CPH.SetGlobalVar(VAR_DUCK_TARGET_QUACKS, DUCK_MINIMUM_TARGET_QUACKS, false);
+        CPH.SetGlobalVar(VAR_DUCK_UNIQUE_QUACKERS, "|", false);
+        CPH.SetGlobalVar(VAR_DUCK_UNIQUE_QUACKER_COUNT, 0, false);
 
         // Optional flavor: who called Duck.
         string user = "";
         CPH.TryGetArg("user", out user);
         CPH.SetGlobalVar(VAR_DUCK_CALLER, user ?? "", false);
 
-        // Start timer that will resolve event outcome.
+        // Start timer that will fail the event if chat does not reach the target in time.
         CPH.EnableTimer(TIMER_DUCK_CALL_WINDOW);
 
-        // Notify chat.
-        CPH.SendMessage("🦆 Duck has been called to the river! You have 2 minutes — spam **quack**!");
+        // Notify chat without revealing the exact threshold.
+        // The quack requirement still scales with how many crew members join in.
+        CPH.SendMessage("🦆 Duck has hit the river! Quack like you mean it before time runs out. The bigger the crew gets, the harder the duck is to corner.");
         return true;
     }
 

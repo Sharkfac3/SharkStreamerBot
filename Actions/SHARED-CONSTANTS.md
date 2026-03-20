@@ -40,6 +40,7 @@ Used in:
 - `Actions/Squad/Clone/clone-main.cs`
 - `Actions/Squad/Clone/clone-volley.cs`
 - `Actions/Squad/Duck/duck-main.cs`
+- `Actions/Squad/Duck/duck-call.cs`
 - `Actions/Squad/Duck/duck-resolve.cs`
 - `Actions/Squad/Pedro/pedro-main.cs`
 - `Actions/Squad/Toothless/toothless-main.cs`
@@ -52,6 +53,9 @@ Used in:
 - `VAR_DUCK_QUACK_COUNT` = `duck_quack_count`
 - `VAR_DUCK_CALLER` = `duck_caller`
 - `VAR_DUCK_UNLOCKED` = `duck_unlocked`
+- `VAR_DUCK_TARGET_QUACKS` = `duck_target_quacks`
+- `VAR_DUCK_UNIQUE_QUACKERS` = `duck_unique_quackers`
+- `VAR_DUCK_UNIQUE_QUACKER_COUNT` = `duck_unique_quacker_count`
 - `OBS_SOURCE_DUCK_DANCING` = `Duck - Dancing`
 - `TIMER_DUCK_CALL_WINDOW` = `Duck - Call Window`
 

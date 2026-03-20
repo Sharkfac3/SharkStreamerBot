@@ -30,6 +30,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-20 | pi | Refactor Duck to immediate threshold unlock | uncommitted |
 | 2026-03-20 | pi | Add remaining humans role starters | uncommitted |
 | 2026-03-20 | pi | Add humans role kickoff prompts and README | uncommitted |
 | 2026-03-20 | pi | Add humans prompt starter for streamerbot-dev role | uncommitted |
@@ -39,7 +40,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-03-20 | pi | Generate routing tables from routing-manifest.json and add sync script | uncommitted |
 | 2026-03-20 | pi | Remove wrapper-manifest duplication and derive routing validation from routing-manifest.json | uncommitted |
 | 2026-03-20 | pi | Add unified routing manifest and validator support | uncommitted |
-| 2026-03-20 | pi | Remove stale Pi migration planning note and add routing stabilization plan | uncommitted |
 
 ---
 
