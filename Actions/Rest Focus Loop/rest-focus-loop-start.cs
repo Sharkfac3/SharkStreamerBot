@@ -15,7 +15,6 @@ public class CPHInline
     private const string VAR_REST_FOCUS_LOOP_ACTIVE = "rest_focus_loop_active";
     private const string VAR_REST_FOCUS_LOOP_PHASE = "rest_focus_loop_phase";
 
-    private const string PHASE_IDLE = "idle";
     private const string PHASE_PRE_REST = "pre_rest";
 
     private const string TIMER_PRE_REST = "Rest Focus - Pre Rest";
@@ -50,15 +49,59 @@ public class CPHInline
      */
     public bool Execute()
     {
-        StopAllLoopTimers();
+        const string logPrefix = "Rest Focus Loop Start";
 
         CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_ACTIVE, true, false);
-        CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_PHASE, PHASE_IDLE, false);
 
-        StartTimer(TIMER_PRE_REST, PRE_REST_SECONDS, "Rest Focus Loop Start");
+        // We enter pre_rest directly so loop state always reflects the timer we are about to arm.
         CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_PHASE, PHASE_PRE_REST, false);
 
+        if (!StartTargetTimer(TIMER_PRE_REST, PRE_REST_SECONDS, logPrefix))
+        {
+            RecoverFromTimerStartFailure(logPrefix, PHASE_PRE_REST, TIMER_PRE_REST);
+        }
+
         return true;
+    }
+
+    private bool StartTargetTimer(string targetTimerName, int seconds, string logPrefix)
+    {
+        if (seconds < 1)
+            seconds = 1;
+
+        try
+        {
+            // Clear every non-target timer first so a stale loop phase cannot keep running in parallel.
+            DisableNonTargetTimers(targetTimerName);
+
+            // Also reset the target timer itself before applying the new interval.
+            CPH.DisableTimer(targetTimerName);
+
+            CPH.LogWarn($"[{logPrefix}] Arming timer '{targetTimerName}' for {seconds} second(s).");
+            CPH.SetTimerInterval(targetTimerName, seconds); // VERIFY: unconfirmed method signature
+            CPH.EnableTimer(targetTimerName);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            CPH.LogError($"[{logPrefix}] Failed to arm timer '{targetTimerName}' for phase '{PHASE_PRE_REST}'. Exception: {ex}");
+            return false;
+        }
+    }
+
+    private void DisableNonTargetTimers(string targetTimerName)
+    {
+        if (!string.Equals(targetTimerName, TIMER_PRE_REST, StringComparison.Ordinal))
+            CPH.DisableTimer(TIMER_PRE_REST);
+
+        if (!string.Equals(targetTimerName, TIMER_REST, StringComparison.Ordinal))
+            CPH.DisableTimer(TIMER_REST);
+
+        if (!string.Equals(targetTimerName, TIMER_PRE_FOCUS, StringComparison.Ordinal))
+            CPH.DisableTimer(TIMER_PRE_FOCUS);
+
+        if (!string.Equals(targetTimerName, TIMER_FOCUS, StringComparison.Ordinal))
+            CPH.DisableTimer(TIMER_FOCUS);
     }
 
     private void StopAllLoopTimers()
@@ -69,14 +112,12 @@ public class CPHInline
         CPH.DisableTimer(TIMER_FOCUS);
     }
 
-    private void StartTimer(string timerName, int seconds, string logPrefix)
+    private void RecoverFromTimerStartFailure(string logPrefix, string targetPhase, string targetTimerName)
     {
-        if (seconds < 1)
-            seconds = 1;
+        // Safe recovery path: stop all loop timers and drop the active flag so the operator can restart cleanly.
+        StopAllLoopTimers();
+        CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_ACTIVE, false, false);
 
-        CPH.LogWarn($"[{logPrefix}] Starting timer '{timerName}' for {seconds} second(s).");
-        CPH.DisableTimer(timerName);
-        CPH.SetTimerInterval(timerName, seconds); // VERIFY: unconfirmed method signature
-        CPH.EnableTimer(timerName);
+        CPH.LogError($"[{logPrefix}] Recovery triggered after failing to arm timer '{targetTimerName}' for phase '{targetPhase}'. The loop has been marked inactive and all loop timers were disabled. Verify the timer exists and that SetTimerInterval is supported in this Streamer.bot build, then restart the loop.");
     }
 }

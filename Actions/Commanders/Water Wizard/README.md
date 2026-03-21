@@ -128,7 +128,7 @@ Handles Water Wizard-only `!castrest X` command usage during the rest/focus loop
 
 ### Expected Trigger / Input
 - Chat command/action trigger for `!castrest`.
-- Expects `X` to be a whole number of minutes (reads `input0` first, then falls back to `rawInput` / `message`).
+- Expects `X` to be a whole number of minutes from `1` to `999` (reads `input0` first, then falls back to `rawInput` / `message`).
 
 ### Required Runtime Variables
 - Reads `current_water_wizard` (active Water Wizard username).
@@ -137,13 +137,15 @@ Handles Water Wizard-only `!castrest X` command usage during the rest/focus loop
 
 ### Key Outputs / Side Effects
 - If caller **is** current Water Wizard and the loop is in `pre_rest`:
-  - Stops timer `Rest Focus - Pre Rest`.
-  - Starts timer `Rest Focus - Rest` using `X` minutes converted to seconds.
+  - Sets `rest_focus_loop_phase = "rest"` before arming the next timer so overlapping triggers see the intended target state.
   - Triggers Mix It Up placeholder command `Wizards Rest` with `Arguments = seconds` and `SpecialIdentifiers.time = seconds`.
-  - Sets `rest_focus_loop_phase = "rest"`.
+  - Defensively disables every non-target rest/focus loop timer, then disables and re-arms timer `Rest Focus - Rest` using `X` minutes converted to seconds.
+  - If timer arming fails, disables all four loop timers and marks `rest_focus_loop_active = false` so the operator can restart cleanly.
 - If caller **is not** current Water Wizard:
   - If a Water Wizard is active, sends Twitch chat instruction to type `!hail`.
   - If no Water Wizard is active, explains that the default rest duration will be used instead.
+- If caller **is** current Water Wizard but the loop is not active:
+  - Sends a short chat message that the crew is not in a rest/focus loop right now.
 - If caller **is** current Water Wizard but the loop is not in `pre_rest`:
   - Sends a short chat message explaining that the rest window already moved on.
 
@@ -160,14 +162,16 @@ Handles Water Wizard-only `!castrest X` command usage during the rest/focus loop
 - None.
 
 ### Chat / Log Output
-- Sends short guidance messages for unauthorized use, invalid usage, and inactive/wrong loop phase.
+- Sends short guidance messages for unauthorized use, invalid usage, inactive loop state, and wrong loop phase.
 - Logs warning/error if Mix It Up call fails.
-- Logs timer start.
+- Logs timer arming attempts, timer-arm failures, and fail-closed loop recovery actions.
 
 ### Operator Notes
 - Replace `REPLACE_WITH_WIZARDS_REST_COMMAND_ID` before production use.
 - Wire this script to the `!castrest` command trigger action.
-- This script uses `CPH.SetTimerInterval(string, int)` for dynamic rest duration. Verify that method in Streamer.bot before production use.
+- This script depends on `CPH.SetTimerInterval(string, int)` to apply the operator-selected rest duration. Verify that method in your Streamer.bot build before production use.
+- Mix It Up failure does **not** stop the loop. Timer-arm failure does.
+- If timer arming fails, the script disables all four rest/focus timers and clears `rest_focus_loop_active`. Recovery is manual: fix the timer/setup problem, then restart the loop from its normal start action.
 
 ---
 

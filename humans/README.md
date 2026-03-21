@@ -25,3 +25,4 @@ This folder is for human-friendly kickoff prompts you can paste into a new chat 
 - They also remind the agent to check `WORKING.md` first.
 - For code-changing tasks, the prompt should push the agent to finish with an ops-style change summary.
 - You can create more role starters here over time using the same pattern.
+- Task-specific prompt packs can live in subfolders under `humans/` when you want to split one initiative into multiple sequential agent chats.

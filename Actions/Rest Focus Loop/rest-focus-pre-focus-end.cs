@@ -12,6 +12,8 @@ public class CPHInline
     private const string PHASE_PRE_FOCUS = "pre_focus";
     private const string PHASE_FOCUS = "focus";
 
+    private const string TIMER_PRE_REST = "Rest Focus - Pre Rest";
+    private const string TIMER_REST = "Rest Focus - Rest";
     private const string TIMER_PRE_FOCUS = "Rest Focus - Pre Focus";
     private const string TIMER_FOCUS = "Rest Focus - Focus";
 
@@ -36,17 +38,19 @@ public class CPHInline
      */
     public bool Execute()
     {
+        const string logPrefix = "Rest Focus Pre Focus End";
+
         if (!IsLoopActive())
             return true;
 
         string currentPhase = GetCurrentPhase();
         if (!string.Equals(currentPhase, PHASE_PRE_FOCUS, StringComparison.OrdinalIgnoreCase))
         {
-            CPH.LogWarn($"[Rest Focus Pre Focus End] Ignoring stale timer fire because phase is '{currentPhase}'.");
+            CPH.LogWarn($"[{logPrefix}] Ignoring stale timer fire because phase is '{currentPhase}'.");
             return true;
         }
 
-        BeginFocus(DEFAULT_FOCUS_SECONDS, "Rest Focus Pre Focus End");
+        BeginFocus(DEFAULT_FOCUS_SECONDS, logPrefix);
         return true;
     }
 
@@ -55,15 +59,19 @@ public class CPHInline
         if (focusSeconds < 1)
             focusSeconds = 1;
 
-        CPH.DisableTimer(TIMER_PRE_FOCUS);
+        // Update the phase before arming the next timer so any overlapping trigger sees the intended target state.
+        CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_PHASE, PHASE_FOCUS, false);
+
         TriggerMixItUpCommand(
             MIXITUP_CAPTAINS_FOCUS_COMMAND_ID,
             logPrefix,
             arguments: focusSeconds.ToString(),
             specialIdentifiers: new { time = focusSeconds.ToString() });
 
-        StartTimer(TIMER_FOCUS, focusSeconds, logPrefix);
-        CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_PHASE, PHASE_FOCUS, false);
+        if (!StartTargetTimer(TIMER_FOCUS, focusSeconds, logPrefix, PHASE_FOCUS))
+        {
+            RecoverFromTimerStartFailure(logPrefix, PHASE_FOCUS, TIMER_FOCUS);
+        }
     }
 
     private bool IsLoopActive()
@@ -76,15 +84,57 @@ public class CPHInline
         return CPH.GetGlobalVar<string>(VAR_REST_FOCUS_LOOP_PHASE, false) ?? string.Empty;
     }
 
-    private void StartTimer(string timerName, int seconds, string logPrefix)
+    private bool StartTargetTimer(string targetTimerName, int seconds, string logPrefix, string targetPhase)
     {
         if (seconds < 1)
             seconds = 1;
 
-        CPH.LogWarn($"[{logPrefix}] Starting timer '{timerName}' for {seconds} second(s).");
-        CPH.DisableTimer(timerName);
-        CPH.SetTimerInterval(timerName, seconds); // VERIFY: unconfirmed method signature
-        CPH.EnableTimer(timerName);
+        try
+        {
+            DisableNonTargetTimers(targetTimerName);
+            CPH.DisableTimer(targetTimerName);
+
+            CPH.LogWarn($"[{logPrefix}] Arming timer '{targetTimerName}' for phase '{targetPhase}' with duration {seconds} second(s).");
+            CPH.SetTimerInterval(targetTimerName, seconds); // VERIFY: unconfirmed method signature
+            CPH.EnableTimer(targetTimerName);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            CPH.LogError($"[{logPrefix}] Failed to arm timer '{targetTimerName}' for phase '{targetPhase}'. Exception: {ex}");
+            return false;
+        }
+    }
+
+    private void DisableNonTargetTimers(string targetTimerName)
+    {
+        if (!string.Equals(targetTimerName, TIMER_PRE_REST, StringComparison.Ordinal))
+            CPH.DisableTimer(TIMER_PRE_REST);
+
+        if (!string.Equals(targetTimerName, TIMER_REST, StringComparison.Ordinal))
+            CPH.DisableTimer(TIMER_REST);
+
+        if (!string.Equals(targetTimerName, TIMER_PRE_FOCUS, StringComparison.Ordinal))
+            CPH.DisableTimer(TIMER_PRE_FOCUS);
+
+        if (!string.Equals(targetTimerName, TIMER_FOCUS, StringComparison.Ordinal))
+            CPH.DisableTimer(TIMER_FOCUS);
+    }
+
+    private void StopAllLoopTimers()
+    {
+        CPH.DisableTimer(TIMER_PRE_REST);
+        CPH.DisableTimer(TIMER_REST);
+        CPH.DisableTimer(TIMER_PRE_FOCUS);
+        CPH.DisableTimer(TIMER_FOCUS);
+    }
+
+    private void RecoverFromTimerStartFailure(string logPrefix, string targetPhase, string targetTimerName)
+    {
+        StopAllLoopTimers();
+        CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_ACTIVE, false, false);
+
+        CPH.LogError($"[{logPrefix}] Recovery triggered after failing to arm timer '{targetTimerName}' for phase '{targetPhase}'. The loop has been marked inactive and all loop timers were disabled. Verify the timer exists and that SetTimerInterval is supported in this Streamer.bot build, then restart the loop.");
     }
 
     private bool TriggerMixItUpCommand(string commandId, string logPrefix, string arguments = "", object specialIdentifiers = null)
