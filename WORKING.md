@@ -30,6 +30,8 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-20 | pi | Add temporary focus timer bridge scripts for voice command and timer end | uncommitted |
+| 2026-03-20 | pi | Implement rest/focus loop with voice command, commander commands, timers, and Mix It Up hooks | uncommitted |
 | 2026-03-20 | pi | Refactor Duck to immediate threshold unlock | uncommitted |
 | 2026-03-20 | pi | Add remaining humans role starters | uncommitted |
 | 2026-03-20 | pi | Add humans role kickoff prompts and README | uncommitted |
@@ -38,8 +40,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-03-20 | pi | Add routing sweet-spot sanity checks and stale reference scanning | uncommitted |
 | 2026-03-20 | pi | Partially generate AGENTS.md quick routing from routing-manifest.json | uncommitted |
 | 2026-03-20 | pi | Generate routing tables from routing-manifest.json and add sync script | uncommitted |
-| 2026-03-20 | pi | Remove wrapper-manifest duplication and derive routing validation from routing-manifest.json | uncommitted |
-| 2026-03-20 | pi | Add unified routing manifest and validator support | uncommitted |
 
 ---
 

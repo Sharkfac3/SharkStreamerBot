@@ -160,6 +160,7 @@ Used in:
 - `Actions/Commanders/Captain Stretch/captain-stretch-thank.cs`
 - `Actions/Commanders/Captain Stretch/captain-stretch-stretch.cs`
 - `Actions/Commanders/Captain Stretch/captain-stretch-shrimp.cs`
+- `Actions/Commanders/Captain Stretch/captain-stretch-generalfocus.cs`
 - `Actions/Commanders/The Director/the-director-redeem.cs`
 - `Actions/Commanders/The Director/the-director-award.cs`
 - `Actions/Commanders/The Director/the-director-checkchat.cs`
@@ -168,6 +169,42 @@ Used in:
 - `Actions/Commanders/Water Wizard/water-wizard-hail.cs`
 - `Actions/Commanders/Water Wizard/wizard-hydrate.cs`
 - `Actions/Commanders/Water Wizard/water-wizard-orb.cs`
+- `Actions/Commanders/Water Wizard/water-wizard-castrest.cs`
+
+---
+
+## Rest / Focus Loop (shared)
+- `VAR_REST_FOCUS_LOOP_ACTIVE` = `rest_focus_loop_active`
+- `VAR_REST_FOCUS_LOOP_PHASE` = `rest_focus_loop_phase`
+- `PHASE_IDLE` = `idle`
+- `PHASE_PRE_REST` = `pre_rest`
+- `PHASE_REST` = `rest`
+- `PHASE_PRE_FOCUS` = `pre_focus`
+- `PHASE_FOCUS` = `focus`
+- `TIMER_REST_FOCUS_PRE_REST` = `Rest Focus - Pre Rest`
+- `TIMER_REST_FOCUS_REST` = `Rest Focus - Rest`
+- `TIMER_REST_FOCUS_PRE_FOCUS` = `Rest Focus - Pre Focus`
+- `TIMER_REST_FOCUS_FOCUS` = `Rest Focus - Focus`
+
+Used in:
+- `Actions/Rest Focus Loop/rest-focus-loop-start.cs`
+- `Actions/Rest Focus Loop/rest-focus-pre-rest-end.cs`
+- `Actions/Rest Focus Loop/rest-focus-rest-end.cs`
+- `Actions/Rest Focus Loop/rest-focus-pre-focus-end.cs`
+- `Actions/Rest Focus Loop/rest-focus-focus-end.cs`
+- `Actions/Commanders/Water Wizard/water-wizard-castrest.cs`
+- `Actions/Commanders/Captain Stretch/captain-stretch-generalfocus.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
+
+---
+
+## Temporary (shared)
+- `TIMER_TEMP_FOCUS` = `Temp Focus Timer`
+
+Used in:
+- `Actions/Temporary/temp-focus-timer-start.cs`
+- `Actions/Temporary/temp-focus-timer-end.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
 
 ---
 

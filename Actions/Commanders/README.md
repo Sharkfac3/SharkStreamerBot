@@ -20,6 +20,12 @@ This folder contains commander slot assignment scripts and commander support com
 - Each support command increments a per-tenure counter.
 - On commander redeem, outgoing tenure counter is compared to persistent high score for that role.
 
+## Commander-Only Command Rules
+- Water Wizard can run `!hydrate`, `!orb`, and `!castrest` when the relevant feature window is active.
+- Captain Stretch can run `!stretch`, `!shrimp`, and `!generalfocus` when the relevant feature window is active.
+- Unauthorized callers should get short guidance that points them back to the active commander support command.
+- New loop-control commands must preserve the existing commander assignment model.
+
 ## Commander Docs
 - `Captain Stretch/README.md`
 - `The Director/README.md`

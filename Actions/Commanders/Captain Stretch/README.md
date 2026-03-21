@@ -120,6 +120,56 @@ Handles Captain Stretch-only `!stretch` command usage.
 
 ---
 
+## Script: `captain-stretch-generalfocus.cs`
+
+### Purpose
+Handles Captain Stretch-only `!generalfocus X` command usage during the rest/focus loop's pre-focus window.
+
+### Expected Trigger / Input
+- Chat command/action trigger for `!generalfocus`.
+- Expects `X` to be a whole number of minutes (reads `input0` first, then falls back to `rawInput` / `message`).
+
+### Required Runtime Variables
+- Reads `current_captain_stretch` (active Captain Stretch username).
+- Reads `rest_focus_loop_active`.
+- Reads/writes `rest_focus_loop_phase`.
+
+### Key Outputs / Side Effects
+- If caller **is** current Captain Stretch and the loop is in `pre_focus`:
+  - Stops timer `Rest Focus - Pre Focus`.
+  - Starts timer `Rest Focus - Focus` using `X` minutes converted to seconds.
+  - Triggers Mix It Up placeholder command `Captain's Focus` with `Arguments = seconds` and `SpecialIdentifiers.time = seconds`.
+  - Sets `rest_focus_loop_phase = "focus"`.
+- If caller **is not** current Captain Stretch:
+  - If a Captain Stretch is active, sends Twitch chat instruction to type `!thank`.
+  - If no Captain Stretch is active, explains that the default focus duration will be used instead.
+- If caller **is** current Captain Stretch but the loop is not in `pre_focus`:
+  - Sends a short chat message explaining that the focus window is not open.
+
+### Mix It Up Actions
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Command ID in script: `REPLACE_WITH_CAPTAINS_FOCUS_COMMAND_ID` *(placeholder; must be replaced)*
+- Payload `Arguments`: focus duration in seconds
+- Payload `SpecialIdentifiers.time`: focus duration in seconds
+
+### OBS Interactions
+- None.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- Sends short guidance messages for unauthorized use, invalid usage, and inactive/wrong loop phase.
+- Logs warning/error if Mix It Up call fails.
+- Logs timer start.
+
+### Operator Notes
+- Replace `REPLACE_WITH_CAPTAINS_FOCUS_COMMAND_ID` before production use.
+- Wire this script to the `!generalfocus` command trigger action.
+- This script uses `CPH.SetTimerInterval(string, int)` for dynamic focus duration. Verify that method in Streamer.bot before production use.
+
+---
+
 ## Script: `captain-stretch-shrimp.cs`
 
 ### Purpose

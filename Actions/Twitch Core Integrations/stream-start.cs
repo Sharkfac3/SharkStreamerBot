@@ -57,6 +57,18 @@ public class CPHInline
     private const string VAR_STREAM_MODE = "stream_mode";
     private const string MODE_WORKSPACE = "workspace";
 
+    // Rest / Focus loop
+    private const string VAR_REST_FOCUS_LOOP_ACTIVE = "rest_focus_loop_active";
+    private const string VAR_REST_FOCUS_LOOP_PHASE = "rest_focus_loop_phase";
+    private const string PHASE_IDLE = "idle";
+    private const string TIMER_REST_FOCUS_PRE_REST = "Rest Focus - Pre Rest";
+    private const string TIMER_REST_FOCUS_REST = "Rest Focus - Rest";
+    private const string TIMER_REST_FOCUS_PRE_FOCUS = "Rest Focus - Pre Focus";
+    private const string TIMER_REST_FOCUS_FOCUS = "Rest Focus - Focus";
+
+    // Temporary timers
+    private const string TIMER_TEMP_FOCUS = "Temp Focus Timer";
+
     /*
      * Purpose:
      * - Runs at stream start to reset shared state for Squad, LotAT, and Twitch integrations.
@@ -74,9 +86,11 @@ public class CPHInline
      * - Resets Toothless rarity unlock flags + last roll tracking.
      * - Resets LotAT mode + offering steal settings.
      * - Resets Duck, Clone, and Pedro runtime state.
+     * - Resets the rest/focus loop active flag, phase, and timers.
+     * - Disables the temporary Temp Focus Timer to prevent stale timer fires.
      * - Sets stream mode to workspace as the default start-of-stream mode.
      * - Hides Duck/Clone/Pedro/Toothless dance sources in OBS.
-     * - Disables Duck, Clone, and Pedro timers to prevent stale timer fires.
+     * - Disables Duck, Clone, Pedro, rest/focus, and temporary timers to prevent stale timer fires.
      *
      * Operator notes:
      * - Keep scene/source names in sync with OBS.
@@ -178,6 +192,21 @@ public class CPHInline
         CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
         CPH.DisableTimer(TIMER_PEDRO_CALL_WINDOW);
+
+        // -------------------------------------------------
+        // Rest / Focus loop reset
+        // -------------------------------------------------
+        CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_PHASE, PHASE_IDLE, false);
+        CPH.DisableTimer(TIMER_REST_FOCUS_PRE_REST);
+        CPH.DisableTimer(TIMER_REST_FOCUS_REST);
+        CPH.DisableTimer(TIMER_REST_FOCUS_PRE_FOCUS);
+        CPH.DisableTimer(TIMER_REST_FOCUS_FOCUS);
+
+        // -------------------------------------------------
+        // Temporary timer reset
+        // -------------------------------------------------
+        CPH.DisableTimer(TIMER_TEMP_FOCUS);
 
         return true;
     }

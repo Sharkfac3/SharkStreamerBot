@@ -121,6 +121,56 @@ Handles Water Wizard-only `!hydrate X` command usage.
 
 ---
 
+## Script: `water-wizard-castrest.cs`
+
+### Purpose
+Handles Water Wizard-only `!castrest X` command usage during the rest/focus loop's pre-rest window.
+
+### Expected Trigger / Input
+- Chat command/action trigger for `!castrest`.
+- Expects `X` to be a whole number of minutes (reads `input0` first, then falls back to `rawInput` / `message`).
+
+### Required Runtime Variables
+- Reads `current_water_wizard` (active Water Wizard username).
+- Reads `rest_focus_loop_active`.
+- Reads/writes `rest_focus_loop_phase`.
+
+### Key Outputs / Side Effects
+- If caller **is** current Water Wizard and the loop is in `pre_rest`:
+  - Stops timer `Rest Focus - Pre Rest`.
+  - Starts timer `Rest Focus - Rest` using `X` minutes converted to seconds.
+  - Triggers Mix It Up placeholder command `Wizards Rest` with `Arguments = seconds` and `SpecialIdentifiers.time = seconds`.
+  - Sets `rest_focus_loop_phase = "rest"`.
+- If caller **is not** current Water Wizard:
+  - If a Water Wizard is active, sends Twitch chat instruction to type `!hail`.
+  - If no Water Wizard is active, explains that the default rest duration will be used instead.
+- If caller **is** current Water Wizard but the loop is not in `pre_rest`:
+  - Sends a short chat message explaining that the rest window already moved on.
+
+### Mix It Up Actions
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Command ID in script: `REPLACE_WITH_WIZARDS_REST_COMMAND_ID` *(placeholder; must be replaced)*
+- Payload `Arguments`: rest duration in seconds
+- Payload `SpecialIdentifiers.time`: rest duration in seconds
+
+### OBS Interactions
+- None.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- Sends short guidance messages for unauthorized use, invalid usage, and inactive/wrong loop phase.
+- Logs warning/error if Mix It Up call fails.
+- Logs timer start.
+
+### Operator Notes
+- Replace `REPLACE_WITH_WIZARDS_REST_COMMAND_ID` before production use.
+- Wire this script to the `!castrest` command trigger action.
+- This script uses `CPH.SetTimerInterval(string, int)` for dynamic rest duration. Verify that method in Streamer.bot before production use.
+
+---
+
 ## Script: `water-wizard-orb.cs`
 
 ### Purpose
