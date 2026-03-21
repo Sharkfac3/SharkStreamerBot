@@ -30,6 +30,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-21 | claude | Add 4 missing subscription trigger scripts + README trigger variable tables | uncommitted |
 | 2026-03-21 | pi | Sync rest/focus loop hardening docs to implementation | uncommitted |
 | 2026-03-21 | pi | Harden commander rest/focus override transitions | uncommitted |
 | 2026-03-21 | pi | Harden core rest/focus loop phase transitions and timer start handling | uncommitted |
