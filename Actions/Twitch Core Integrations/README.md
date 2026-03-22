@@ -72,24 +72,35 @@ They are intentionally minimal so they can be expanded later.
 - No script in this folder interacts with OBS.
 - If a command ID is still a placeholder, the script logs a warning and exits safely.
 
-## Script: `subscription-gift-single.cs`
+## Script: `subscription-dispatcher.cs`
 
 ### Purpose
-Base handler for a single gifted subscription event.
+Shared template for the 5 simple subscription events that each map 1-to-1 with a single Mix It Up command. Each Streamer.bot action pastes this file and replaces 2 constants — no extra sub-actions or Set Argument steps required.
+
+### Covered Events
+
+| Streamer.bot Action | SB Trigger | Replace `SCRIPT_NAME` with | Replace `MIXITUP_COMMAND_ID` with |
+|---|---|---|---|
+| Subscription New | Twitch → Subscriptions → Subscription | `"Core - Subscription New"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_NEW_COMMAND_ID"` |
+| Subscription Renewed | Twitch → Subscriptions → Resubscription | `"Core - Subscription Renewed"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_RENEWED_COMMAND_ID"` |
+| Prime Paid Upgrade | Twitch → Subscriptions → Prime Paid Upgrade | `"Core - Subscription Prime Paid Upgrade"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_PRIME_PAID_UPGRADE_COMMAND_ID"` |
+| Gift Paid Upgrade | Twitch → Subscriptions → Gift Paid Upgrade | `"Core - Subscription Gift Paid Upgrade"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_PAID_UPGRADE_COMMAND_ID"` |
+| Pay It Forward | Twitch → Subscriptions → Pay It Forward | `"Core - Subscription Pay It Forward"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_PAY_IT_FORWARD_COMMAND_ID"` |
 
 ### Expected Trigger / Input
-- Wire to the Twitch subscription gift event that represents exactly 1 gifted sub.
+- Wire each Streamer.bot action to its corresponding trigger (see table above).
+- Paste `subscription-dispatcher.cs` into the action's C# execute sub-action.
+- Replace `SCRIPT_NAME` and `MIXITUP_COMMAND_ID` at the top of the pasted code.
 
 ### Required Runtime Variables
 - None.
 
 ### Key Outputs / Side Effects
-- Ready to call Mix It Up.
+- Calls Mix It Up when a real command ID is configured.
 - Logs a warning until a real command ID is configured.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_SINGLE_COMMAND_ID`
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
@@ -107,27 +118,48 @@ Base handler for a single gifted subscription event.
 - Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
 
 ### Operator Notes
-- Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
+- Replace both placeholder constants when ready.
+- Expand `BuildArguments()` and `BuildSpecialIdentifiers()` when the event field contract is finalized. See the Trigger Variables section below for available args per event.
+- Prime Paid Upgrade, Gift Paid Upgrade, and Pay It Forward require Streamer.bot v0.2.5+.
 
-## Script: `subscription-gift-multiple.cs`
+---
+
+## Script: `subscription-gift.cs`
 
 ### Purpose
-Base handler for a multi-gift subscription event.
+Smart handler for all gift subscription events. Wired to TWO triggers in ONE Streamer.bot action. Routes between solo gifts, gift bomb aggregates, and per-recipient gift fires that occur during a bomb.
+
+### How Twitch Gift Events Work
+- **Solo gift (1 sub):** `Gift Subscription` fires once — `fromGiftBomb = false`
+- **Gift bomb (N subs):** `Gift Bomb` fires once (aggregate) + `Gift Subscription` fires N times (`fromGiftBomb = true` on each)
+
+### Routing Logic
+| Condition | Result |
+|---|---|
+| `gifts` arg present | Gift Bomb event → calls `MIXITUP_COMMAND_ID_GIFT_BOMB` |
+| `fromGiftBomb = false` | Solo Gift Subscription → calls `MIXITUP_COMMAND_ID_GIFT_SINGLE` |
+| `fromGiftBomb = true` | Individual gift within a bomb → suppressed (logged only) |
+
+Suppression is intentional: the Gift Bomb aggregate event handles the announcement. The N individual `Gift Subscription` events fired during a bomb are noise — they would produce duplicate alerts without suppression.
 
 ### Expected Trigger / Input
-- Wire to the Twitch subscription gift event that represents more than 1 gifted sub.
+Wire ONE Streamer.bot action with TWO triggers:
+- Trigger 1: Twitch → Subscriptions → Gift Subscription
+- Trigger 2: Twitch → Subscriptions → Gift Bomb
+
+Paste `subscription-gift.cs` into the action once. No Set Argument steps needed.
 
 ### Required Runtime Variables
 - None.
 
 ### Key Outputs / Side Effects
-- Ready to call Mix It Up.
-- Logs a warning until a real command ID is configured.
+- Calls `MIXITUP_COMMAND_ID_GIFT_SINGLE` for solo gifts.
+- Calls `MIXITUP_COMMAND_ID_GIFT_BOMB` for gift bomb aggregates.
+- Suppresses (logs only) individual `Gift Subscription` events fired within a bomb.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_MULTIPLE_COMMAND_ID`
+- Command IDs: `REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_SINGLE_COMMAND_ID`, `REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_BOMB_COMMAND_ID`
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
@@ -142,87 +174,15 @@ Base handler for a multi-gift subscription event.
 
 ### Chat / Log Output
 - No chat output.
+- Logs info messages identifying which routing branch executed.
 - Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
 
 ### Operator Notes
-- Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
+- Replace both `MIXITUP_COMMAND_ID_GIFT_SINGLE` and `MIXITUP_COMMAND_ID_GIFT_BOMB` before production use.
+- Expand `BuildSingleArguments()` / `BuildBombArguments()` when the event field contracts are finalized. See the Trigger Variables section below for available args.
+- The old "Subscription Gift Multiple" Streamer.bot action can be deleted — its function is now handled by this script's Gift Bomb branch.
 
-## Script: `subscription-new.cs`
-
-### Purpose
-Base handler for a brand-new subscription event.
-
-### Expected Trigger / Input
-- Wire to the Twitch new subscription event.
-
-### Required Runtime Variables
-- None.
-
-### Key Outputs / Side Effects
-- Ready to call Mix It Up.
-- Logs a warning until a real command ID is configured.
-
-### Mix It Up Actions
-- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_CORE_SUBSCRIPTION_NEW_COMMAND_ID`
-- Payload shape:
-  - `Platform = "Twitch"`
-  - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
-  - `IgnoreRequirements = false`
-
-### OBS Interactions
-- None.
-
-### Wait Behavior
-- None.
-
-### Chat / Log Output
-- No chat output.
-- Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
-
-### Operator Notes
-- Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
-
-## Script: `subscription-renewed.cs`
-
-### Purpose
-Base handler for a renewed subscription event.
-
-### Expected Trigger / Input
-- Wire to the Twitch subscription renewal event.
-
-### Required Runtime Variables
-- None.
-
-### Key Outputs / Side Effects
-- Ready to call Mix It Up.
-- Logs a warning until a real command ID is configured.
-
-### Mix It Up Actions
-- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_CORE_SUBSCRIPTION_RENEWED_COMMAND_ID`
-- Payload shape:
-  - `Platform = "Twitch"`
-  - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
-  - `IgnoreRequirements = false`
-
-### OBS Interactions
-- None.
-
-### Wait Behavior
-- None.
-
-### Chat / Log Output
-- No chat output.
-- Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
-
-### Operator Notes
-- Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
+---
 
 ## Script: `follower-new.cs`
 
@@ -261,132 +221,6 @@ Base handler for a new follower event.
 ### Operator Notes
 - Replace the placeholder command ID when ready.
 - Add argument/special identifier mapping later when the event contract is finalized.
-
-## Script: `subscription-prime-paid-upgrade.cs`
-
-### Purpose
-Base handler for a Prime Paid Upgrade event — fires when a user upgrades their Twitch Prime sub to a paid tier.
-
-### Expected Trigger / Input
-- Wire to Streamer.bot: Twitch → Subscriptions → Prime Paid Upgrade.
-- Requires Streamer.bot v0.2.5+.
-
-### Required Runtime Variables
-- None.
-
-### Key Outputs / Side Effects
-- Ready to call Mix It Up.
-- Logs a warning until a real command ID is configured.
-
-### Mix It Up Actions
-- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_CORE_SUBSCRIPTION_PRIME_PAID_UPGRADE_COMMAND_ID`
-- Payload shape:
-  - `Platform = "Twitch"`
-  - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
-  - `IgnoreRequirements = false`
-
-### OBS Interactions
-- None.
-
-### Wait Behavior
-- None.
-
-### Chat / Log Output
-- No chat output.
-- Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
-
-### Operator Notes
-- Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
-- Available trigger args: `systemMessage`, `upgradeTier` (number, e.g. `1000`), `upgradeTierString` (e.g. `"tier 1"`), plus Twitch User group (`user`, `userId`, etc.).
-
----
-
-## Script: `subscription-gift-paid-upgrade.cs`
-
-### Purpose
-Base handler for a Gift Paid Upgrade event — fires when a user upgrades their gifted subscription to a paid tier.
-
-### Expected Trigger / Input
-- Wire to Streamer.bot: Twitch → Subscriptions → Gift Paid Upgrade.
-- Requires Streamer.bot v0.2.5+.
-
-### Required Runtime Variables
-- None.
-
-### Key Outputs / Side Effects
-- Ready to call Mix It Up.
-- Logs a warning until a real command ID is configured.
-
-### Mix It Up Actions
-- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_PAID_UPGRADE_COMMAND_ID`
-- Payload shape:
-  - `Platform = "Twitch"`
-  - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
-  - `IgnoreRequirements = false`
-
-### OBS Interactions
-- None.
-
-### Wait Behavior
-- None.
-
-### Chat / Log Output
-- No chat output.
-- Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
-
-### Operator Notes
-- Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
-- Available trigger args: Twitch User group only (`user`, `userId`, etc.). No additional documented trigger-specific variables.
-
----
-
-## Script: `subscription-pay-it-forward.cs`
-
-### Purpose
-Base handler for a Pay It Forward event — fires when a user who received a gifted sub then gifts to someone else.
-
-### Expected Trigger / Input
-- Wire to Streamer.bot: Twitch → Subscriptions → Pay It Forward.
-- Requires Streamer.bot v0.2.5+.
-
-### Required Runtime Variables
-- None.
-
-### Key Outputs / Side Effects
-- Ready to call Mix It Up.
-- Logs a warning until a real command ID is configured.
-
-### Mix It Up Actions
-- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_CORE_SUBSCRIPTION_PAY_IT_FORWARD_COMMAND_ID`
-- Payload shape:
-  - `Platform = "Twitch"`
-  - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
-  - `IgnoreRequirements = false`
-
-### OBS Interactions
-- None.
-
-### Wait Behavior
-- None.
-
-### Chat / Log Output
-- No chat output.
-- Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
-
-### Operator Notes
-- Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
-- Available trigger args: Twitch User group only (`user`, `userId`, etc.). No additional documented trigger-specific variables.
-
----
 
 ## Script: `subscription-counter-rollover.cs`
 
@@ -579,4 +413,4 @@ Triggered under Twitch → Subscriptions → Sub Counter Rollover.
 
 > This is a counter event — Twitch Chat and Twitch User variable groups are NOT available. Only General and Twitch Broadcaster shared groups apply.
 
-> All subscription scripts are currently stubs — expand `BuildArguments()` and `BuildSpecialIdentifiers()` when event field contracts are finalized.
+> All subscription scripts are currently stubs — expand the `Build*Arguments()` and `Build*SpecialIdentifiers()` methods when event field contracts are finalized. See each script's operator notes for which trigger args are available.

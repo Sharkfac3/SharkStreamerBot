@@ -7,11 +7,26 @@ public class CPHInline
 {
     /*
      * Purpose:
-     * - Base Twitch integration bridge for a Gift Paid Upgrade event.
-     * - Fires when a user upgrades their gifted subscription to a paid tier.
+     * - Shared dispatcher template for simple subscription events that each map
+     *   1-to-1 with a single Mix It Up command.
+     *
+     * Supported events (one paste per Streamer.bot action):
+     * - Subscription New          → Twitch → Subscriptions → Subscription
+     * - Subscription Renewed      → Twitch → Subscriptions → Resubscription
+     * - Prime Paid Upgrade        → Twitch → Subscriptions → Prime Paid Upgrade
+     * - Gift Paid Upgrade         → Twitch → Subscriptions → Gift Paid Upgrade
+     * - Pay It Forward            → Twitch → Subscriptions → Pay It Forward
+     *
+     * Operator paste instructions:
+     * - Paste this file into the target Streamer.bot action.
+     * - Replace SCRIPT_NAME with the human-readable name for that event
+     *   (used in log output so you can tell which event fired).
+     * - Replace MIXITUP_COMMAND_ID with the real Mix It Up command ID for that event.
+     * - Do NOT change any other logic — the structure is identical for all events.
      *
      * Expected trigger/input:
-     * - Wire this script to the Streamer.bot Twitch event: Subscriptions → Gift Paid Upgrade.
+     * - Wire to the appropriate Streamer.bot subscription event trigger.
+     * - No extra sub-actions or Set Argument steps required.
      *
      * Required runtime variables:
      * - None.
@@ -21,21 +36,24 @@ public class CPHInline
      * - Sends empty Arguments and empty SpecialIdentifiers for now.
      * - Does not interact with OBS.
      *
-     * Trigger-specific arguments (available via CPH.TryGetArg):
-     * - user   (string) : Display name of the user upgrading (from Twitch User group)
-     * - userId (string) : Twitch user ID (from Twitch User group)
-     * - (No additional documented trigger-specific variables beyond the shared groups.)
-     *
      * Operator notes:
      * - Replace MIXITUP_COMMAND_ID before production use.
-     * - Expand BuildArguments / BuildSpecialIdentifiers later when the final event fields are known.
-     * - Requires Streamer.bot v0.2.5 or later.
+     * - Expand BuildArguments / BuildSpecialIdentifiers when the final event
+     *   field contract for this specific event is decided.
+     * - Requires Streamer.bot v0.2.5 or later for Prime Paid Upgrade,
+     *   Gift Paid Upgrade, and Pay It Forward triggers.
      */
 
-    private const string SCRIPT_NAME = "Core - Subscription Gift Paid Upgrade";
+    // OPERATOR: Replace with the human-readable name for this event.
+    // Examples: "Core - Subscription New", "Core - Subscription Renewed",
+    //           "Core - Subscription Prime Paid Upgrade", etc.
+    private const string SCRIPT_NAME = "Core - Subscription [REPLACE_WITH_EVENT_NAME]";
+
+    // OPERATOR: Replace with the real Mix It Up command ID for this event.
+    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_COMMAND_ID";
+
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
-    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_PAID_UPGRADE_COMMAND_ID";
 
     private static readonly HttpClient Http = new HttpClient();
 
@@ -63,14 +81,14 @@ public class CPHInline
 
     private string BuildArguments()
     {
-        // Expand this when the final event field contract is decided.
-        // Available args: user, userId (and other Twitch User group fields).
+        // Expand this when the final event field contract for this specific event is decided.
+        // Refer to Actions/Twitch Core Integrations/README.md for available trigger args per event.
         return string.Empty;
     }
 
     private object BuildSpecialIdentifiers()
     {
-        // Expand this when the final event field contract is decided.
+        // Expand this when the final event field contract for this specific event is decided.
         return new { };
     }
 
