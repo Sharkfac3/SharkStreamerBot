@@ -19,7 +19,9 @@ Read `.agents/ENTRY.md` — it is the universal entry point for all agents (Clau
 | LotAT adventure content / lore | `lotat-writer` | `.agents/roles/lotat-writer/` |
 | Art generation / diffusion prompts | `art-director` | `.agents/roles/art-director/` |
 | Chat text, titles, canon, content strategy | `brand-steward` | `.agents/roles/brand-steward/` |
+| Short-form clips, captions, and platform formatting | `content-repurposer` | `.agents/roles/content-repurposer/` |
 | Stream interaction apps | `app-dev` | `.agents/roles/app-dev/` |
+| Product docs, specs, knowledge articles, and customer-facing product content | `product-dev` | `.agents/roles/product-dev/` |
 | Validation, sync, change summary, tooling | `ops` | `.agents/roles/ops/` |
 <!-- GENERATED:agents-quick-role-routing:end -->
 

@@ -1,5 +1,9 @@
 # Core Skills — app-dev
 
+## Business Context
+
+This project supports a live R&D stream that is also a business — developing off-road racing products live while building community. Apps you build serve the content pipeline (overlays, dashboards, engagement tools) and may eventually serve the product side (customer-facing tools, community platforms). Build with extensibility in mind. Read `.agents/_shared/project.md` for the full business context and content pipeline.
+
 ## Status
 
 Placeholder — populated as the first stream interaction apps are defined and built.

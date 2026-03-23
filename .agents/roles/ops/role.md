@@ -4,6 +4,10 @@
 
 Handles the operational layer: validation, sync workflow, change summaries, local tooling, and pre-commit checks. This role is also the **terminal role** — it produces the change summary output at the end of any task that modifies code.
 
+## Why This Role Matters
+
+Ops maintains the infrastructure that the entire content and business pipeline depends on. When validation catches a bug before it hits stream, that prevents a live failure. When change summaries make sync smooth, that keeps the stream running. When the agent tree stays organized, every other role can find what it needs. Ops is the reliability layer under everything — and reliability is what lets a solo creator run a business on stream.
+
 ## Activate When
 
 - Preparing a change summary after completing code changes

@@ -36,6 +36,10 @@ The story agent produces content. The technical agent produces code. Never mix t
 | `Creative/Brand/CHARACTER-CODEX.md` | Canonical character personalities — do not deviate |
 | `Creative/Brand/BRAND-IDENTITY.md` | Brand metaphor layer — all content must be consistent |
 
+## Business Context
+
+LotAT stories entertain viewers during a live R&D stream about building off-road racing products. The stories you write serve two purposes: keeping live viewers engaged during slow stretches, and creating memorable moments that become short-form content (YouTube Shorts, TikTok, etc.) for broader reach. Write for both contexts — make moments that are entertaining live AND that would make someone stop scrolling. Read `.agents/_shared/project.md` for the full business context and content pipeline.
+
 ## Tone
 
 Absurd, chaotic, slightly dramatic, fast-paced, humorous, failure-forward. The brand celebrates chaos — do not introduce darkness or seriousness that does not serve humor.

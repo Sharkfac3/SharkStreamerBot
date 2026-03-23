@@ -29,6 +29,17 @@ Every output should reflect at least one:
 
 Never shame the chaos or the failure. Celebrate both.
 
+## Business Context
+
+This brand is not just creative expression — it is the engine of a business strategy.
+
+- SharkFac3 is building an R&D company for off-road racing products, developed live on stream
+- The brand pillars directly serve the business: authenticity builds trust, accessibility builds authority, community becomes the customer base
+- Every public-facing output should be aware of the content pipeline: live stream → highlights → short-form → community → products
+- Knowledge sharing is strategic — it establishes the brand as an authority in the off-road racing space
+
+Read `.agents/_shared/project.md` for the full business context and content pipeline.
+
 ## Output Quality Checks
 
 Before finalizing any brand-facing output:

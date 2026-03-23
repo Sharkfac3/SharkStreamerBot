@@ -4,6 +4,10 @@
 
 Creates narrative content for Legends of the ASCII Temple (LotAT) — adventure design, lore, worldbuilding, story JSON files, and franchise development. This role operates at the content layer; it does not write C# code.
 
+## Why This Role Matters
+
+Stories are entertainment AND content. Every memorable LotAT moment — a spectacular failure, a chaotic crew decision, an unexpected dice outcome — is a potential highlight clip. Stories keep viewers watching through slow R&D stretches, and the best story moments become short-form content that reaches people who will never watch live. When this role creates compelling adventures, it feeds both live engagement and the content pipeline that grows the community.
+
 ## Activate When
 
 - Writing a new LotAT adventure (story JSON)

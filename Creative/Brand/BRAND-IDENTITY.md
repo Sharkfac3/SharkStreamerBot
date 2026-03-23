@@ -132,6 +132,54 @@ The jeep build IS the Starship Shamples mission. The technical problem being sol
 
 ---
 
+## The Business Model
+
+SharkFac3 is building an R&D company focused on developing new products for off-road racing. The stream is the workspace — products are researched, prototyped, and tested live, in real time, with an audience watching every failure and breakthrough.
+
+The R&D company is the business. The stream is both where the work happens and how people find out about it. These are not two separate activities. The stream does not exist to promote products — the stream is where the products get built.
+
+Knowledge sharing is not just a brand value. It is the business strategy. By giving away technical expertise freely — documenting novel techniques, explaining the reasoning behind design decisions, walking through failures in detail — SharkFac3 establishes genuine authority in the off-road racing space. The person who taught you everything they know for free is the person you trust when they have something to sell.
+
+The community is the future customer base. Not because they are being marketed to, but because they watched the products get developed. They offered feedback. They saw the problems that led to the solutions. They understand why the product exists because they were there when the need was identified. That is a fundamentally different relationship than traditional marketing creates.
+
+This is not an ad-supported model. It is not sponsor-driven. The revenue comes from products the community helped shape and watched get built. That requires a long-term commitment to sustained engagement and genuine entertainment — which is why the entertainment layers (Starship Shamples, the commanders, LotAT) are not decorations on top of the business. They are load-bearing infrastructure that keeps people watching through the slow parts of real R&D work.
+
+> **For agents:** When evaluating whether a feature or piece of content is worth building, ask: does this keep people engaged long enough to build the kind of trust that turns a viewer into a customer? That is the business question underneath every creative decision.
+
+---
+
+## The Content Pipeline
+
+Content flows from the live stream outward in stages, each one reaching a broader audience:
+
+1. **Live stream** — Real R&D work happening on camera. Mini-games, commander interactions, and LotAT stories fill the natural gaps between exciting build moments. This is where the core community forms and where trust gets built.
+
+2. **Highlights** — Clip-worthy moments captured from stream. These include both technical breakthroughs (a novel solution working for the first time) and entertainment peaks (Pedro breaking something spectacular, a LotAT mission going sideways). The best clips contain both.
+
+3. **Short-form content** — Highlights edited for YouTube Shorts, TikTok, and Instagram Reels. This is how people who will never sit through a live stream discover SharkFac3. The format is different but the brand identity is the same: authentic, specific, chaotic, warm.
+
+4. **Community** — Short-form content drives discovery. The live stream converts curious viewers into community members. Discord deepens engagement and gives people a place to participate between streams. Each stage feeds the next.
+
+5. **Products** — The community that watched development happen live becomes the natural customer base. They do not need to be convinced the product works — they watched it get built.
+
+> **For agents:** When designing features, creating stories, or producing art, consider whether the output creates or supports clip-worthy moments. The best features serve both live entertainment AND the content pipeline. A commander interaction that is funny enough to clip is doing double duty — it entertains the live audience and it becomes short-form content that brings new people in.
+
+---
+
+## How This All Connects
+
+The brand pillars are not just creative choices — they ARE the business strategy.
+
+Authenticity builds trust. Trust sells products. If the audience believes the streamer is honest about failures, they will believe the streamer is honest about the products.
+
+Accessibility and knowledge sharing establish authority. Authority sells products. The person who freely teaches what they know is the person the community turns to when they need a solution.
+
+Community as crew means people are invested in the build. Invested people buy from people they trust. They are not customers being marketed to — they are participants who watched the thing get made.
+
+Chaos with purpose is entertainment that keeps people watching through the slow parts of real R&D work. Watch time builds the community. The community becomes the customer base. The entertainment layers are not a distraction from the business — they are what makes the business model work.
+
+---
+
 ## Agent Notes
 
 Agents working in this project should load this document when:

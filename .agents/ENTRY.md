@@ -2,7 +2,9 @@
 
 ## What This Project Is
 
-A Twitch streaming platform built on Streamer.bot with integrations to Mix It Up and OBS. Scope spans C# runtime actions, an interactive D&D-style adventure system (Legends of the ASCII Temple), brand identity, art generation, and future stream interaction apps.
+The technical and creative infrastructure for SharkFac3's live stream — where an R&D company building off-road racing products operates in public. The stream is both the workspace and the marketing engine: products are developed live, knowledge is shared freely to establish authority, and a community is built that will eventually become the customer base.
+
+The project spans Streamer.bot runtime actions, interactive entertainment features (mini-games, commanders, Legends of the ASCII Temple), brand identity, art generation, content repurposing, and future product documentation. Entertainment layers keep viewers engaged during real R&D work, and clip-worthy moments feed a content pipeline that drives discovery and growth.
 
 ## How to Navigate
 
@@ -25,6 +27,8 @@ A Twitch streaming platform built on Streamer.bot with integrations to Mix It Up
 | `brand-steward` | `roles/brand-steward/` | Any public-facing output — chat text, titles, marketing, canon review |
 | `app-dev` | `roles/app-dev/` | Stream interaction apps (expanding) |
 | `ops` | `roles/ops/` | Validation, sync workflow, change summaries, tooling |
+| `content-repurposer` | `roles/content-repurposer/` | Live-to-short-form content pipeline — clip selection, captions, platform formatting |
+| `product-dev` | `roles/product-dev/` | Product documentation, knowledge articles, technical specs (placeholder — expanding) |
 
 ## Shared Context
 

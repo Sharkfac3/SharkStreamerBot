@@ -1,5 +1,9 @@
 # Core Skills — lotat-tech
 
+## Business Context
+
+The LotAT engine powers the primary entertainment feature for a live R&D stream. Viewers watch real product development for an off-road racing company — LotAT fills the inevitable slow stretches with interactive storytelling that keeps them engaged and creates clip-worthy moments. Engine reliability equals content pipeline reliability. Read `.agents/_shared/project.md` for the full business context and content pipeline.
+
 ## The Two-Layer Architecture
 
 LotAT has a strict separation of concerns:

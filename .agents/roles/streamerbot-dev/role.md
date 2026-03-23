@@ -4,6 +4,10 @@
 
 Writes and maintains C# scripts for Streamer.bot actions under `Actions/`. Scripts are not auto-deployed — each changed file is manually copy/pasted into Streamer.bot after editing in the repo.
 
+## Why This Role Matters
+
+Interactive features are the entertainment layer that keeps viewers engaged during live R&D work. Every mini-game trigger, commander command, and channel point redemption is a moment of engagement — and potentially a clip-worthy moment that feeds the content pipeline. When this role builds reliable, entertaining features, it directly drives viewer retention and community growth, which is the engine of the entire business.
+
 ## Activate When
 
 - Writing or editing any `.cs` file under `Actions/`

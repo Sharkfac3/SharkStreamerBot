@@ -6,14 +6,14 @@
 
 ## What Is This Project?
 
-SharkStreamerBot is the technical and creative infrastructure for a Twitch streaming channel built around two things happening simultaneously:
+SharkStreamerBot is the technical and creative infrastructure for a live stream where an R&D company is being built in public. Two things happen simultaneously:
 
-1. **Live jeep and automotive builds** — real hands-on projects, novel approaches, shared knowledge, real mistakes on stream
-2. **Legends of the ASCII Temple (LotAT)** — a Twitch chat-controlled spaceship adventure game (Starship Shamples franchise) that runs during the stream; chaotic, failure-forward, and participatory
+1. **Live R&D for off-road racing products** — real research and development, novel approaches, knowledge shared freely, real mistakes on stream. The stream is both the workspace and the marketing engine for the business.
+2. **Interactive entertainment** — Legends of the ASCII Temple (LotAT), mini-games, commander roles, and other engagement features that keep viewers watching through slow stretches and create clip-worthy moments for the content pipeline.
 
-These are not two separate things. LotAT is a live metaphor for the build experience itself. The chaos of the game mirrors the chaos of building. The crew (chat) is the community. The ship is the neurodivergent mind doing the work.
+These are not two separate things. The entertainment is the engagement layer that keeps the community growing while the real work happens. The content pipeline (live stream → highlights → short-form → community → products) is the business strategy.
 
-**Read `Creative/Brand/BRAND-IDENTITY.md` for the full picture, including the ADHD metaphor that runs through everything in this project.**
+**Read `Creative/Brand/BRAND-IDENTITY.md` for the full picture, including the ADHD metaphor that runs through everything and the business model that ties it all together.**
 
 ---
 
@@ -22,6 +22,28 @@ These are not two separate things. LotAT is a live metaphor for the build experi
 - Not a traditional gaming channel — the stream game is a layer on top of real automotive content
 - Not a polished, production-quality brand — authenticity over polish, always
 - Not passive watch content — the audience participates in outcomes
+- Not a product-first company — the community comes first; products are the long-term play built on trust and authority earned through free knowledge sharing
+
+---
+
+## The Content Pipeline
+
+Every agent should understand how their work feeds into the broader pipeline:
+
+```
+Live Stream → Highlights → Short-Form Content → Discovery → Community → Products
+     ↑                                              ↓
+     └──────── Entertainment keeps them watching ────┘
+```
+
+| Stage | What Happens | Key Roles |
+|---|---|---|
+| Live stream | Real R&D work + entertainment layers | `streamerbot-dev`, `lotat-tech`, `lotat-writer` |
+| Highlights | Clip-worthy moments identified from recordings | `content-repurposer` |
+| Short-form | Clips formatted for YouTube Shorts, TikTok, Instagram | `content-repurposer`, `art-director` |
+| Discovery | New people find the content and visit the live stream | `brand-steward` (community growth) |
+| Community | Viewers become regulars, join Discord, participate | `brand-steward` |
+| Products | Community buys products they watched get developed | `product-dev` |
 
 ---
 
@@ -100,6 +122,19 @@ Roles: `brand-steward` (canon review) + relevant dev role
 2. `Creative/Brand/BRAND-IDENTITY.md` — Brand values; does this fit?
 3. `Creative/Brand/CHARACTER-CODEX.md` — Does this conflict with existing cast?
 
+### If you are repurposing stream content for short-form
+Role: `content-repurposer`
+1. `.agents/ENTRY.md` → `roles/content-repurposer/role.md`
+2. `.agents/roles/content-repurposer/skills/core.md`
+3. `Creative/Brand/BRAND-IDENTITY.md` — Brand voice and business context
+4. `Creative/Brand/BRAND-VOICE.md` — Tone for captions and descriptions
+
+### If you are working on product documentation
+Role: `product-dev`
+1. `.agents/ENTRY.md` → `roles/product-dev/role.md`
+2. `.agents/roles/product-dev/skills/core.md` — Note: this role is a placeholder; check Next Steps in `role.md`
+3. `Creative/Brand/BRAND-IDENTITY.md` — Brand alignment for product content
+
 ### If you are doing ops work (sync, validation, change summary)
 Role: `ops`
 1. `.agents/ENTRY.md` → `roles/ops/role.md`
@@ -121,6 +156,7 @@ Role: `ops`
 ## Key People and Context
 
 - Solo streamer with ADHD — the brand is built around neurodivergent authenticity
+- Building an R&D company for off-road racing products — the stream is the workspace; knowledge sharing builds authority; the community is the future customer base
 - Small Discord community of regulars actively providing feedback
 - Multiple coding agents collaborate on this project — check `WORKING.md` before starting any task
 

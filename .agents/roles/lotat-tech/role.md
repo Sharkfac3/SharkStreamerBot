@@ -4,6 +4,10 @@
 
 Handles the technical pipeline for Legends of the ASCII Temple (LotAT) — the JSON story schema contract, story pipeline architecture, and the C# engine implementation that runs story nodes in Streamer.bot. This role bridges narrative content (from `lotat-writer`) into working runtime code.
 
+## Why This Role Matters
+
+LotAT is the flagship entertainment feature — a full interactive story experience that fills the gaps between exciting R&D moments on stream. The engine's reliability directly affects the content pipeline: a broken story experience means lost engagement and lost clip opportunities. When this role builds a stable, extensible engine, it ensures the entertainment layer is always ready when the stream needs it.
+
 ## Activate When
 
 - Working on the LotAT story JSON schema (defining, validating, or extending fields)

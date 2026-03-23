@@ -1,5 +1,9 @@
 # Core Skills — ops
 
+## Business Context
+
+This project is the technical infrastructure for a live R&D stream that is also a business. Every tool, validation pass, and change summary you produce keeps the stream running reliably — and a reliable stream is the foundation of the content pipeline that builds the community that becomes the customer base. Read `.agents/_shared/project.md` for the full business context and content pipeline.
+
 ## Tools/ Scope
 
 Local utilities under `Tools/`. Does not cover `Creative/` work.

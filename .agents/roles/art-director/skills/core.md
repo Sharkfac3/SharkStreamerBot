@@ -1,5 +1,9 @@
 # Core Skills — art-director
 
+## Business Context
+
+Art assets support a live R&D stream about building off-road racing products. Visuals you create serve both the live stream experience AND short-form content across YouTube, TikTok, and Instagram. Design with both contexts in mind: immersive at stream resolution, recognizable at thumbnail size. The brand's visual identity is a key part of the content pipeline. Read `.agents/_shared/project.md` for the full business context and content pipeline.
+
 ## Agent Loading Order
 
 **Always load agents in this order — no exceptions:**

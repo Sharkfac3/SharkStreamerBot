@@ -1,5 +1,9 @@
 # Core Skills — streamerbot-dev
 
+## Business Context
+
+SharkFac3 is building an R&D company for off-road racing products, developed live on stream. The interactive features you build are the entertainment layer that keeps viewers watching through the slow stretches of real work. When designing features, consider: does this create a clip-worthy moment? Does this drive engagement that builds community? Read `.agents/_shared/project.md` for the full business context and content pipeline.
+
 ## Execution Model
 
 Scripts are **not auto-deployed**. Each `.cs` file is manually copy/pasted into a Streamer.bot action. All code must be:

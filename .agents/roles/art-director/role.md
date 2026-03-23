@@ -4,6 +4,10 @@
 
 Generates diffusion model prompts for stream visuals — character art, overlays, emotes, thumbnails, banners, and multi-character scenes. Maintains visual canon consistency across all assets.
 
+## Why This Role Matters
+
+Visual assets serve the stream AND the content pipeline. Character art, overlays, and thumbnails establish the brand identity on stream, but they also become the visual identity for short-form content — thumbnails, social media posts, and brand recognition across platforms. When this role creates compelling visuals, they work at both scales: immersive on a live stream and eye-catching as a YouTube Shorts thumbnail.
+
 ## Activate When
 
 - Generating character visualization or concept art

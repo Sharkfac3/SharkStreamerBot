@@ -34,7 +34,9 @@ This table is sourced from the routing contract in `.agents/routing-manifest.jso
 | `lotat-writer` | `roles/lotat-writer/` | LotAT narrative — adventure design, lore, worldbuilding, story content |
 | `art-director` | `roles/art-director/` | Diffusion model prompts, character art, stream visuals |
 | `brand-steward` | `roles/brand-steward/` | Any public-facing output — chat text, titles, marketing, canon review |
+| `content-repurposer` | `roles/content-repurposer/` | Short-form content repurposing — clip selection, captions, content calendars, platform formatting |
 | `app-dev` | `roles/app-dev/` | Stream interaction apps (expanding) |
+| `product-dev` | `roles/product-dev/` | Product documentation, technical knowledge articles, specifications, and future customer-facing content for stream-developed R&D products |
 | `ops` | `roles/ops/` | Validation, sync workflow, change summaries, tooling |
 
 ## Meta Wrappers
@@ -64,7 +66,9 @@ Meta wrappers are Pi-only navigation helpers for the `.agents/` tree itself. The
 | Chat bot text, stream titles, announcements | `brand-steward/SKILL.md` |
 | Canon audit (new characters, franchise lore) | `brand-steward/SKILL.md` → `brand-steward-canon-guardian/SKILL.md` |
 | Story tied to a specific build session | `brand-steward/SKILL.md` → `brand-steward-content-strategy/SKILL.md` |
+| Short-form clips, captions, and content calendars | `content-repurposer/SKILL.md` |
 | Standalone stream interaction app work | `app-dev/SKILL.md` |
+| Product docs, specs, knowledge articles, and customer-facing product content | `product-dev/SKILL.md` |
 | Sync to Streamer.bot | `ops/SKILL.md` → `ops-sync/SKILL.md` |
 | After any code change | `ops-change-summary/SKILL.md` ← always terminal |
 | Run validation | `ops/SKILL.md` → `ops-validation/SKILL.md` |

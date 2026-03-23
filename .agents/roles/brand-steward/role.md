@@ -4,6 +4,10 @@
 
 Maintains brand consistency across all public-facing output. Covers voice/tone for chat bot messages, stream titles, community posts, and marketing copy. Also houses the canon guardian function (auditing new content against established lore) and content strategy (connecting story content to real-world build sessions).
 
+## Why This Role Matters
+
+The brand is the business strategy. Every public-facing message, every stream title, every Discord announcement shapes how the community perceives SharkFac3 — not just as a streamer, but as a trusted builder and knowledge sharer. Brand consistency builds the trust that eventually sells products. When this role maintains voice, canon, and community engagement, it is directly building the asset that makes the business work: a community that trusts the person behind the brand.
+
 ## Activate When
 
 - Writing chat bot output text (follow messages, sub messages, bits responses, hype train, raid responses)
@@ -13,6 +17,9 @@ Maintains brand consistency across all public-facing output. Covers voice/tone f
 - Reviewing new story or lore content for canon consistency
 - Adding new characters, world elements, or permanent mechanics
 - Planning story content tied to a real-world build session
+- Planning community growth strategy (Discord, Twitch, social media)
+- Designing community-to-customer engagement patterns
+- Writing content that serves the community → authority → products pipeline
 
 ## Do Not Activate When
 
@@ -26,6 +33,7 @@ Maintains brand consistency across all public-facing output. Covers voice/tone f
 2. `skills/voice/_index.md` — when producing any public-facing text
 3. `skills/canon-guardian/_index.md` — when reviewing or adding story/lore/characters
 4. `skills/content-strategy/_index.md` — when connecting story to a real-world build
+5. `skills/community-growth/_index.md` — when planning community engagement, audience development, or growth strategy
 
 ## Chains To
 
@@ -34,6 +42,7 @@ Maintains brand consistency across all public-facing output. Covers voice/tone f
 | `lotat-writer` | When content strategy planning leads to story generation |
 | `lotat-tech` | After canon-approved story goes to pipeline |
 | `ops` | After producing changes that involve code (via `streamerbot-dev` chain) |
+| `content-repurposer` | When community strategy identifies content repurposing needs |
 
 ## Out of Scope
 

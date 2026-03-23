@@ -30,17 +30,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-03-21 | claude | Add 4 missing subscription trigger scripts + README trigger variable tables | uncommitted |
-| 2026-03-21 | pi | Sync rest/focus loop hardening docs to implementation | uncommitted |
-| 2026-03-21 | pi | Harden commander rest/focus override transitions | uncommitted |
-| 2026-03-21 | pi | Harden core rest/focus loop phase transitions and timer start handling | uncommitted |
-| 2026-03-20 | pi | Add temporary focus timer bridge scripts for voice command and timer end | uncommitted |
-| 2026-03-20 | pi | Implement rest/focus loop with voice command, commander commands, timers, and Mix It Up hooks | uncommitted |
-| 2026-03-20 | pi | Refactor Duck to immediate threshold unlock | uncommitted |
-| 2026-03-20 | pi | Add remaining humans role starters | uncommitted |
-| 2026-03-20 | pi | Add humans role kickoff prompts and README | uncommitted |
-| 2026-03-20 | pi | Add humans prompt starter for streamerbot-dev role | uncommitted |
-| 2026-03-20 | pi | Remove stale completed routing stabilization note | uncommitted |
+| — | — | — | — |
 
 ---
 

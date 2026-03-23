@@ -4,6 +4,10 @@
 
 Builds and maintains standalone applications that support stream interactions — dashboards, overlays, chat integrations, and any other tooling that runs as an independent app rather than as a Streamer.bot script.
 
+## Why This Role Matters
+
+Apps extend the stream's capabilities beyond what Streamer.bot scripts can do alone. Overlays capture moments, dashboards track engagement, and future apps may serve the product side of the business — customer-facing tools, product configurators, or community platforms. This role builds the infrastructure that scales the content creator's capabilities into a full business operation.
+
 ## Activate When
 
 - Building a new stream interaction application
