@@ -19,6 +19,8 @@
 2. `skills/<subfolder>/_index.md` — load when task involves that feature area
 3. `skills/<subfolder>/<specific>.md` — load only when task is specifically about that topic
 
+Use `skills/example-skill/_index.md` as the pattern when creating the first real sub-skill folder for a new role.
+
 ## Chains To
 
 | Next Role | When |
