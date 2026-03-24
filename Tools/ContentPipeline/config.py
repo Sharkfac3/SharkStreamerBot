@@ -29,6 +29,10 @@ class Settings:
     clips_dir: Path
     review_queue_dir: Path
     published_dir: Path
+    feedback_dir: Path
+    feedback_db_path: Path
+    feedback_prompt_path: Path
+    feedback_summary_path: Path
     recordings_dir: Path
     whisper_model: str
     whisper_device: str
@@ -71,6 +75,7 @@ class Settings:
             self.clips_dir,
             self.review_queue_dir,
             self.published_dir,
+            self.feedback_dir,
         ):
             path.mkdir(parents=True, exist_ok=True)
 
@@ -82,6 +87,7 @@ def load_settings() -> Settings:
     data_dir = _resolve_path(_get_value("CONTENT_PIPELINE_DATA_DIR", file_values), TOOL_ROOT / "data")
     transcripts_dir = _resolve_path(_get_value("CONTENT_PIPELINE_TRANSCRIPTS_DIR", file_values), data_dir / "transcripts")
     highlights_dir = _resolve_path(_get_value("CONTENT_PIPELINE_HIGHLIGHTS_DIR", file_values), data_dir / "highlights")
+    feedback_dir = _resolve_path(_get_value("CONTENT_PIPELINE_FEEDBACK_DIR", file_values), data_dir / "feedback")
 
     return Settings(
         repo_root=REPO_ROOT,
@@ -92,6 +98,10 @@ def load_settings() -> Settings:
         clips_dir=_resolve_path(_get_value("CONTENT_PIPELINE_CLIPS_DIR", file_values), data_dir / "clips"),
         review_queue_dir=_resolve_path(_get_value("CONTENT_PIPELINE_REVIEW_QUEUE_DIR", file_values), data_dir / "review_queue"),
         published_dir=_resolve_path(_get_value("CONTENT_PIPELINE_PUBLISHED_DIR", file_values), data_dir / "published"),
+        feedback_dir=feedback_dir,
+        feedback_db_path=_resolve_path(_get_value("CONTENT_PIPELINE_FEEDBACK_DB_PATH", file_values), feedback_dir / "feedback.db"),
+        feedback_prompt_path=_resolve_path(_get_value("CONTENT_PIPELINE_FEEDBACK_PROMPT_PATH", file_values), feedback_dir / "prompt_context.txt"),
+        feedback_summary_path=_resolve_path(_get_value("CONTENT_PIPELINE_FEEDBACK_SUMMARY_PATH", file_values), feedback_dir / "summary.json"),
         recordings_dir=_resolve_path(
             _get_value("CONTENT_PIPELINE_RECORDINGS_DIR", file_values),
             _path_from_string(DEFAULT_RECORDINGS_DIR),

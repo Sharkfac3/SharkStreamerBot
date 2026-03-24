@@ -49,9 +49,11 @@
     {
       "name": "content-repurposer",
       "folder": "roles/content-repurposer/",
-      "when": "Short-form content repurposing \u2014 clip selection, captions, content calendars, platform formatting",
+      "when": "Short-form content repurposing \u2014 clip selection, captions, content calendars, platform formatting, and content-pipeline tooling",
       "pi_wrapper": "content-repurposer",
-      "canonical_children": []
+      "canonical_children": [
+        "content-repurposer-pipeline"
+      ]
     },
     {
       "name": "app-dev",
@@ -94,6 +96,14 @@
       "required_surfaces": [
         ".pi/skills/README.md",
         ".pi/skills/brand-steward/SKILL.md"
+      ]
+    },
+    {
+      "name": "content-repurposer-pipeline",
+      "owner_role": "content-repurposer",
+      "required_surfaces": [
+        ".pi/skills/README.md",
+        ".pi/skills/content-repurposer/SKILL.md"
       ]
     },
     {
@@ -229,7 +239,7 @@
       "agent_tree": ".agents/roles/brand-steward/"
     },
     {
-      "work": "Short-form clips, captions, and platform formatting",
+      "work": "Short-form clips, captions, platform formatting, or content-pipeline tooling",
       "role": "content-repurposer",
       "agent_tree": ".agents/roles/content-repurposer/"
     },

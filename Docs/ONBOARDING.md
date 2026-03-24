@@ -129,6 +129,13 @@ Role: `content-repurposer`
 3. `Creative/Brand/BRAND-IDENTITY.md` — Brand voice and business context
 4. `Creative/Brand/BRAND-VOICE.md` — Tone for captions and descriptions
 
+### If you are working on content-pipeline tooling
+Role: `content-repurposer` (`content-repurposer-pipeline` sub-skill)
+1. `.agents/ENTRY.md` → `roles/content-repurposer/role.md`
+2. `.agents/roles/content-repurposer/skills/core.md`
+3. `.agents/roles/content-repurposer/skills/pipeline/_index.md`
+4. `Tools/ContentPipeline/` — actual pipeline scripts and config
+
 ### If you are working on product documentation
 Role: `product-dev`
 1. `.agents/ENTRY.md` → `roles/product-dev/role.md`

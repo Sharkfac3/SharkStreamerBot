@@ -30,13 +30,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-24 | pi | Create human startup prompt pack for all scaffolded agent roles | uncommitted |
+| 2026-03-24 | pi | Final cleanup pass for content-pipeline prompt residue | uncommitted |
+| 2026-03-24 | pi | Remove obsolete content-pipeline planning/prompt artifacts | uncommitted |
+| 2026-03-24 | pi | Remove historical framing from content pipeline docs | uncommitted |
+| 2026-03-24 | pi | Route content-pipeline tooling as a first-class content-repurposer skill | uncommitted |
+| 2026-03-24 | pi | Create human-run prompt pack for content pipeline drift cleanup | uncommitted |
+| 2026-03-24 | pi | Build ContentPipeline Phase 6 feedback loop tooling | uncommitted |
 | 2026-03-24 | pi | Build ContentPipeline Phase 5 review queue web UI | uncommitted |
 | 2026-03-24 | pi | Build ContentPipeline Phase 4 Instagram formatting tooling | uncommitted |
 | 2026-03-24 | pi | Build ContentPipeline Phase 3 clip extraction tooling | uncommitted |
-| 2026-03-24 | pi | Build ContentPipeline Phase 2 highlight detection tooling | uncommitted | 
-| 2026-03-24 | pi | Build ContentPipeline Phase 1 transcription tooling | 197e231 |
-| 2026-03-24 | pi | Add example sub-skill folder to role template | 9696d18 |
-| 2026-03-24 | pi | Add missing context folders for content-repurposer and product-dev | 7d9e09e |
 
 ---
 

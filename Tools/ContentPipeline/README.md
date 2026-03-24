@@ -1,34 +1,57 @@
 # Content Pipeline
 
-Local Python tooling for turning stream recordings into short-form content.
+Local Python tooling for turning SharkStreamerBot stream recordings into review-ready short-form clips.
 
-## Phase Status
+## What the Pipeline Does
 
-- [x] Phase 1 — `transcribe.py`
-- [x] Phase 2 — `detect_highlights.py`
-- [x] Phase 3 — `extract_clips.py`
-- [x] Phase 4 — `format_instagram.py`
-- [x] Phase 5 — `review_server.py`
-- [ ] Phase 6 — `feedback.py`
+The pipeline is split into six independently runnable phases:
 
-## What Exists Right Now
+```text
+recording.mp4
+  ↓
+transcribe.py
+  ↓  data/transcripts/<recording>.srt + .json
 
-This pass ships **Phase 1 transcription**, **Phase 2 highlight detection**, **Phase 3 clip extraction**, **Phase 4 Instagram formatting**, and **Phase 5 review queue tooling**:
+detect_highlights.py
+  ↓  data/highlights/<recording>.json
 
-- `config.py` — central config loader with `.env` support
-- `transcribe.py` — faster-whisper transcription CLI
-- `detect_highlights.py` — Ollama-powered highlight detection CLI
-- `extract_clips.py` — FFmpeg-powered clip extraction CLI
-- `format_instagram.py` — subtitle burning + Instagram review formatting CLI
-- `review_server.py` — FastAPI review queue with keyboard-first one-clip workflow
-- `requirements.txt` — Python dependency list
-- `lib/transcript_io.py` — transcript readers/writers and time-range helpers
-- `lib/highlight_io.py` — highlight manifest helpers
-- `lib/clip_manifest.py` — clip/review manifest readers/writers
-- `lib/ffmpeg_utils.py` — ffmpeg/ffprobe helpers
-- `data/` — working output folders (gitignored)
+extract_clips.py
+  ↓  data/clips/<recording>_<index>_<category>.mp4 + data/clips/<recording>.json
 
-## Install
+format_instagram.py
+  ↓  data/review_queue/<clip>.mp4 + <clip>_meta.json
+
+review_server.py
+  ↓  approved items moved to data/published/
+
+feedback.py
+  ↓  data/feedback/feedback.db + summary.json + prompt_context.txt
+```
+
+Each phase can be run on its own. The normal operator flow is:
+
+1. transcribe recordings
+2. detect highlights from transcript JSON
+3. extract clips from highlight manifests
+4. format clips for Instagram review
+5. review and approve clips in the web UI
+6. sync published metadata and import platform metrics
+
+## Repository Layout
+
+- `config.py` — shared settings loader with `.env` support
+- `transcribe.py` — recording → transcript
+- `detect_highlights.py` — transcript → highlight manifest
+- `extract_clips.py` — highlight manifest → clip files + clip manifest
+- `format_instagram.py` — clip manifest → review queue video + metadata
+- `review_server.py` — review queue web app
+- `feedback.py` — published clip analytics and prompt feedback
+- `lib/` — shared manifest, transcript, ffmpeg, and analytics helpers
+- `data/` — local working outputs; gitignored
+
+## Setup
+
+### 1. Create a virtual environment
 
 ```bash
 python3 -m venv .venv
@@ -36,137 +59,202 @@ source .venv/bin/activate
 pip install -r Tools/ContentPipeline/requirements.txt
 ```
 
-Install local non-pip dependencies separately:
+### 2. Install non-pip dependencies
 
-- FFmpeg on PATH for clip extraction and formatting
-- Ollama: https://ollama.com/download
-- Pull a model: `ollama pull llama3.1:8b`
+Required outside Python:
 
-## Configure
+- **FFmpeg** and **ffprobe** on PATH for clip extraction and formatting
+- **Ollama** for highlight detection
+- an Ollama model, default: `llama3.1:8b`
 
-Create `Tools/ContentPipeline/.env` from `.env.example` if you want to override defaults.
+Example:
 
-Important defaults:
+```bash
+ollama pull llama3.1:8b
+```
 
-- recordings directory: `C:\Users\sharkfac3\Workspace\streamStuff\recordings`
-- transcript output: `Tools/ContentPipeline/data/transcripts/`
-- highlight output: `Tools/ContentPipeline/data/highlights/`
-- clip output: `Tools/ContentPipeline/data/clips/`
-- review queue output: `Tools/ContentPipeline/data/review_queue/`
+### 3. Optional config overrides
+
+Copy `Tools/ContentPipeline/.env.example` to `Tools/ContentPipeline/.env` if you need to override defaults.
+
+Important defaults from `config.py`:
+
+- recordings dir: `C:\Users\sharkfac3\Workspace\streamStuff\recordings`
+- data dir: `Tools/ContentPipeline/data/`
+- transcripts dir: `data/transcripts/`
+- highlights dir: `data/highlights/`
+- clips dir: `data/clips/`
+- review queue dir: `data/review_queue/`
+- published dir: `data/published/`
+- feedback dir: `data/feedback/`
 - Whisper model: `large-v3`
-- Whisper VAD filter: enabled
+- Whisper device: `auto`
+- Whisper compute type: `auto`
+- Whisper VAD: enabled
+- word timestamps: enabled
 - Ollama URL: `http://localhost:11434/api/generate`
 - Ollama model: `llama3.1:8b`
 - highlight windows: 5 minutes with 1 minute overlap
-- ffmpeg/ffprobe: auto-detected from PATH when possible
+- max highlights requested per window: 3
 - clip padding: 2 seconds before, 1 second after
-- clip output: 1080x1920, 30fps, H.264 NVENC, AAC, 8 Mbps
-- review output: 1080x1920, 30fps, H.264/AAC, ≤90s, ≤250 MB
+- clip output: 1080x1920, 30 fps, `h264_nvenc`, AAC, 8 Mbps
+- review limits: 90 seconds max, 250 MB max
 - subtitle defaults: Arial, white text, black outline, lower-third placement
 
-The config loader also understands Windows-style paths when the tool is run from WSL.
+`config.py` also converts Windows recording paths correctly when the scripts run from WSL.
 
-## Usage
+## Running the Pipeline
 
-### Phase 1 — dry run transcription
+### Phase 1 — Transcription
+
+Dry run:
 
 ```bash
 python3 Tools/ContentPipeline/transcribe.py --dry-run --limit 3
 ```
 
-### Phase 1 — transcribe one recording
+Single recording:
 
 ```bash
 python3 Tools/ContentPipeline/transcribe.py "2026-02-23 21-11-57.mp4"
 ```
 
-You can pass either:
-- a full path
-- a filename relative to the recordings folder
-- a filename stem without `.mp4`
-
-### Phase 1 — batch transcribe recordings
+Batch mode:
 
 ```bash
 python3 Tools/ContentPipeline/transcribe.py --limit 5
 ```
 
-By default, batch mode scans the recordings directory and processes **non-vertical** `.mp4` files. This avoids duplicating work on `-vertical.mp4` recordings that contain the same audio.
+Input resolution rules:
+- full file path works
+- a filename relative to the recordings directory works
+- a stem without `.mp4` works
 
-### Phase 2 — dry run highlight detection
+Batch mode scans the recordings directory for `.mp4` files and skips `-vertical.mp4` files to avoid transcribing duplicate audio.
+
+Outputs per recording:
+- `data/transcripts/<recording>.srt`
+- `data/transcripts/<recording>.json`
+
+The JSON transcript stores source recording info, transcription metadata, segment timestamps, and word timestamps when available.
+
+### Phase 2 — Highlight Detection
+
+Dry run:
 
 ```bash
 python3 Tools/ContentPipeline/detect_highlights.py --dry-run --limit 3
 ```
 
-### Phase 2 — detect highlights for one transcript
+Single transcript:
 
 ```bash
 python3 Tools/ContentPipeline/detect_highlights.py "2026-02-23 21-11-57"
 ```
 
-You can pass either:
-- a full transcript JSON path
-- a filename relative to the transcripts folder
-- a transcript stem without `.json`
-
-### Phase 2 — batch detect highlights
+Batch mode:
 
 ```bash
 python3 Tools/ContentPipeline/detect_highlights.py --limit 5
 ```
 
-### Phase 3 — dry run clip extraction
+Input resolution rules:
+- full transcript JSON path works
+- a filename relative to `data/transcripts/` works
+- a stem without `.json` works
+
+The detector:
+- reads transcript JSON
+- splits it into 5-minute windows with 1-minute overlap by default
+- calls Ollama over HTTP using the Python standard library
+- asks for up to 3 highlights per window by default
+- deduplicates overlapping suggestions across windows
+- writes one highlight manifest per transcript
+
+If `data/feedback/prompt_context.txt` exists, Phase 2 appends it to the prompt as performance feedback.
+
+Outputs per transcript:
+- `data/highlights/<recording>.json`
+
+Each manifest includes source transcript/recording references, detection metadata, and deduplicated highlights with timestamps, category, caption suggestion, confidence, and rank.
+
+### Phase 3 — Clip Extraction
+
+Dry run:
 
 ```bash
 python3 Tools/ContentPipeline/extract_clips.py --dry-run --limit 3
 ```
 
-### Phase 3 — extract clips for one highlight manifest
+Single manifest:
 
 ```bash
 python3 Tools/ContentPipeline/extract_clips.py "2026-02-23 21-11-57"
 ```
 
-You can pass either:
-- a full highlight manifest JSON path
-- a filename relative to the highlights folder
-- a highlight manifest stem without `.json`
-
-### Phase 3 — batch extract clips
+Batch mode:
 
 ```bash
 python3 Tools/ContentPipeline/extract_clips.py --limit 5
 ```
 
-Clip extraction prefers `-vertical.mp4` recordings when available. If a vertical counterpart does not exist, it falls back to the horizontal recording and center-crops it to 9:16.
+Input resolution rules:
+- full highlight manifest path works
+- a filename relative to `data/highlights/` works
+- a stem without `.json` works
 
-### Phase 4 — dry run Instagram formatting
+Extraction behavior:
+- uses `ffprobe` to inspect the chosen source recording
+- uses `ffmpeg` to re-encode each clip for precise cuts
+- adds 2 seconds of pre-pad and 1 second of post-pad by default
+- outputs 1080x1920, 30 fps, H.264 + AAC clips
+- center-crops horizontal sources to 9:16
+- pads portrait sources to the configured 1080x1920 frame
+
+Source recording selection is driven by the highlight manifest's stored source recording reference. If that exact source file is not available, extraction also checks same-stem alternatives in the recordings directory, including a `-vertical.mp4` variant.
+
+Outputs per manifest:
+- `data/clips/<recording>_<index>_<category>.mp4`
+- `data/clips/<recording>.json`
+
+The clip manifest records clip ranges, output files, source recording metadata, source variant, and ffmpeg/ffprobe context.
+
+### Phase 4 — Instagram Formatting
+
+Dry run:
 
 ```bash
 python3 Tools/ContentPipeline/format_instagram.py --dry-run --limit 3
 ```
 
-### Phase 4 — format one clip manifest for review
+Single manifest:
 
 ```bash
 python3 Tools/ContentPipeline/format_instagram.py "2026_03_04_21_01_35"
 ```
 
-You can pass either:
-- a full clip manifest JSON path
-- a filename relative to the clips folder
-- a clip manifest stem without `.json`
-
-### Phase 4 — batch format Instagram review clips
+Batch mode:
 
 ```bash
 python3 Tools/ContentPipeline/format_instagram.py --limit 5
 ```
 
-Formatting reads the matching transcript from `data/transcripts/`, burns ASS subtitles into each extracted clip, and writes review-ready outputs plus metadata into `data/review_queue/`.
+Formatting behavior:
+- resolves the matching transcript from `data/transcripts/`
+- collects transcript segments that overlap each extracted clip range
+- builds ASS subtitles with lower-third placement and wrapped mobile-readable lines
+- burns subtitles into the clip with FFmpeg
+- validates the result against the configured Instagram-ready constraints
 
-### Phase 5 — launch the review queue web UI
+Outputs per clip:
+- `data/review_queue/<clip>.mp4`
+- `data/review_queue/<clip>_meta.json`
+
+Review metadata stores caption text, hashtags, subtitle settings, transcript references, compliance targets, and review workflow state.
+
+### Phase 5 — Review Queue
+
+Start the server:
 
 ```bash
 python3 Tools/ContentPipeline/review_server.py
@@ -179,80 +267,120 @@ python3 Tools/ContentPipeline/review_server.py --host 0.0.0.0 --port 8765
 python3 Tools/ContentPipeline/review_server.py --reload
 ```
 
-The review server:
-- shows one pending clip at a time
-- auto-plays the current clip
-- supports inline caption + hashtag editing
-- supports keyboard shortcuts: `A` approve, `S` skip, `T` trash, `E` focus caption, `Ctrl+Enter` save edits
-- moves approved clips from `data/review_queue/` to `data/published/`
+Current review workflow:
+- the UI shows one pending item at a time
+- clips auto-play in the browser
+- caption and hashtags are editable inline
+- `A` approves the item
+- `S` marks it skipped
+- `T` marks it rejected/trash
+- `E` focuses the caption field
+- `Ctrl+Enter` saves edits without changing queue state
 
-## Outputs
+Queue behavior:
+- pending and skipped items appear in the active queue
+- rejected items stay on disk with updated metadata but no longer appear in the queue
+- approved items move from `data/review_queue/` to `data/published/`
+- approval writes final caption/hashtag values into published metadata
 
-### Phase 1
+### Phase 6 — Feedback Loop
 
-For each recording, the tool writes:
+Index published metadata:
 
-- `data/transcripts/<recording-name>.srt`
-- `data/transcripts/<recording-name>.json`
+```bash
+python3 Tools/ContentPipeline/feedback.py sync
+```
 
-The JSON output includes:
-- transcript metadata
-- segment-level timestamps
-- word-level timestamps when available
-- confidence-related fields returned by faster-whisper
+Export a metrics template CSV:
 
-### Phase 2
+```bash
+python3 Tools/ContentPipeline/feedback.py template
+```
 
-For each transcript, the tool writes:
+Import platform metrics:
 
-- `data/highlights/<recording-name>.json`
+```bash
+python3 Tools/ContentPipeline/feedback.py import-csv Tools/ContentPipeline/data/feedback/metrics_template.csv
+```
 
-The highlight manifest includes:
-- source transcript and recording metadata
-- Ollama model + endpoint metadata
-- deduplicated highlight suggestions across sliding windows
-- per-highlight category, description, suggested caption, confidence, and absolute timestamps
+Print the current summary:
 
-### Phase 3
+```bash
+python3 Tools/ContentPipeline/feedback.py report
+python3 Tools/ContentPipeline/feedback.py report --json
+```
 
-For each highlight manifest, the tool writes:
+Matching order during CSV import:
+1. `clip_id`
+2. `video_file_name` / `file_name`
+3. exact caption text
 
-- `data/clips/<recording>_<index>_<category>.mp4`
-- `data/clips/<recording>.json`
+Feedback outputs:
+- `data/feedback/feedback.db` — SQLite database
+- `data/feedback/summary.json` — aggregate summary
+- `data/feedback/prompt_context.txt` — short text block for Phase 2 prompt context
 
-The clip manifest includes:
-- selected source recording and whether vertical or horizontal fallback was used
-- ffmpeg/ffprobe metadata for the source video
-- padded extraction ranges per clip
-- output clip paths and upstream highlight metadata
+## Working Data and Outputs
 
-### Phase 4
+`Tools/ContentPipeline/data/` is local working state and should not be committed.
 
-For each clip entry in a clip manifest, the tool writes:
+Current output folders:
 
-- `data/review_queue/<clip-name>.mp4`
-- `data/review_queue/<clip-name>_meta.json`
+- `data/transcripts/`
+- `data/highlights/`
+- `data/clips/`
+- `data/review_queue/`
+- `data/published/`
+- `data/feedback/`
 
-The review metadata includes:
-- source clip manifest and transcript references
-- generated caption + hashtag bundle
-- subtitle styling info and transcript segment counts
-- final ffprobe validation details for the review-ready output
+## Troubleshooting
 
-### Phase 5
+### Missing Python dependencies
 
-When a clip is reviewed:
+Common runtime messages:
+- `faster-whisper is not installed` → run `pip install -r Tools/ContentPipeline/requirements.txt`
+- `FastAPI is not installed` or `uvicorn is not installed` → run `pip install -r Tools/ContentPipeline/requirements.txt`
 
-- skipped/rejected clips stay in `data/review_queue/` with updated `review_state`
-- approved clips move to `data/published/`
-- approved metadata stores the final caption/hashtags used at approval time
+`transcribe.py` delays the `faster-whisper` import until actual transcription work starts, so `--help` and `--dry-run` still work before that package is installed.
 
-## Notes
+### FFmpeg or ffprobe not found
 
-- `faster-whisper` is imported only when transcription actually runs, so `--help` and `--dry-run` work even before dependencies are installed.
-- Phase 2 uses the Python standard library to call Ollama over HTTP — no extra pip package required.
-- Phase 3 uses `ffprobe` to inspect input media and `ffmpeg` for full re-encode extraction.
-- Phase 4 uses ASS subtitles through FFmpeg and validates final H.264/AAC output against Instagram-oriented constraints.
-- If CUDA is unavailable for transcription, set `CONTENT_PIPELINE_WHISPER_DEVICE=cpu` in `.env`.
-- If FFmpeg is not detected automatically, set `CONTENT_PIPELINE_FFMPEG_PATH` and `CONTENT_PIPELINE_FFPROBE_PATH` in `.env`.
-- `data/` and `.env` are local-only and should not be committed.
+If extraction or formatting reports missing FFmpeg tools:
+- install FFmpeg so `ffmpeg` and `ffprobe` are on PATH, or
+- set `CONTENT_PIPELINE_FFMPEG_PATH` and `CONTENT_PIPELINE_FFPROBE_PATH` in `Tools/ContentPipeline/.env`
+
+### Ollama not reachable or model errors
+
+If highlight detection fails:
+- confirm Ollama is running
+- confirm the configured model is pulled locally
+- confirm `CONTENT_PIPELINE_OLLAMA_URL` matches the running endpoint
+
+### Missing source files
+
+The scripts fail early when required source directories or files are missing. Typical causes:
+- recordings directory does not exist
+- transcript JSON has not been generated yet
+- highlight manifest has not been generated yet
+- transcript file expected by `format_instagram.py` is missing
+
+Run the phases in order unless you are intentionally targeting a specific existing intermediate file.
+
+### Clip formatting validation failures
+
+`format_instagram.py` rejects outputs that exceed configured limits, including:
+- duration over 90 seconds
+- output file larger than 250 MB
+- output video codec not H.264
+- output audio codec not AAC
+- output resolution not 1080x1920
+
+If this happens, inspect the source clip duration and your config overrides.
+
+## Maintenance Expectations
+
+- Keep each phase independently runnable from the CLI.
+- Keep manifest schemas stable or document changes in the agent-facing pipeline skill docs.
+- Keep operator docs in this README aligned with `config.py` defaults and actual script behavior.
+- Keep `data/` local-only.
+- The review UI is plain FastAPI + inline HTML/CSS/JS; there is no frontend build step.

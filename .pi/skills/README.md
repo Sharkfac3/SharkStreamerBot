@@ -34,7 +34,7 @@ This table is sourced from the routing contract in `.agents/routing-manifest.jso
 | `lotat-writer` | `roles/lotat-writer/` | LotAT narrative — adventure design, lore, worldbuilding, story content |
 | `art-director` | `roles/art-director/` | Diffusion model prompts, character art, stream visuals |
 | `brand-steward` | `roles/brand-steward/` | Any public-facing output — chat text, titles, marketing, canon review |
-| `content-repurposer` | `roles/content-repurposer/` | Short-form content repurposing — clip selection, captions, content calendars, platform formatting |
+| `content-repurposer` | `roles/content-repurposer/` | Short-form content repurposing — clip selection, captions, content calendars, platform formatting, and content-pipeline tooling |
 | `app-dev` | `roles/app-dev/` | Stream interaction apps (expanding) |
 | `product-dev` | `roles/product-dev/` | Product documentation, technical knowledge articles, specifications, and future customer-facing content for stream-developed R&D products |
 | `ops` | `roles/ops/` | Validation, sync workflow, change summaries, tooling |
@@ -67,6 +67,7 @@ Meta wrappers are Pi-only navigation helpers for the `.agents/` tree itself. The
 | Canon audit (new characters, franchise lore) | `brand-steward/SKILL.md` → `brand-steward-canon-guardian/SKILL.md` |
 | Story tied to a specific build session | `brand-steward/SKILL.md` → `brand-steward-content-strategy/SKILL.md` |
 | Short-form clips, captions, and content calendars | `content-repurposer/SKILL.md` |
+| Content-pipeline tooling in `Tools/ContentPipeline/` | `content-repurposer/SKILL.md` → `content-repurposer-pipeline/SKILL.md` |
 | Standalone stream interaction app work | `app-dev/SKILL.md` |
 | Product docs, specs, knowledge articles, and customer-facing product content | `product-dev/SKILL.md` |
 | Sync to Streamer.bot | `ops/SKILL.md` → `ops-sync/SKILL.md` |

@@ -2,7 +2,7 @@
 
 ## What This Role Does
 
-Owns the pipeline from live stream recordings to short-form content. Identifies highlight-worthy moments, writes captions and descriptions in brand voice, plans content calendars, and formats output for platform-specific requirements (YouTube Shorts, TikTok, Instagram Reels). Works proactively (suggesting stream features that create clip-worthy moments) and reactively (reviewing recordings and selecting clips).
+Owns the pipeline from live stream recordings to short-form content. Identifies highlight-worthy moments, writes captions and descriptions in brand voice, plans content calendars, formats output for platform-specific requirements (YouTube Shorts, TikTok, Instagram Reels), and maintains the local tooling that moves recordings through the content pipeline. Works proactively (suggesting stream features that create clip-worthy moments) and reactively (reviewing recordings, selecting clips, and improving pipeline automation).
 
 ## Why This Role Matters
 
@@ -14,6 +14,7 @@ Short-form content is the discovery engine for the entire business. People who w
 - Writing captions, descriptions, or titles for short-form content
 - Planning a content calendar for repurposed stream content
 - Formatting content for platform-specific requirements (YouTube Shorts, TikTok, Instagram)
+- Building, modifying, or debugging `Tools/ContentPipeline/` tooling
 - Suggesting features or moments that would create good clips (proactive content strategy)
 - Writing YouTube video descriptions, tags, or metadata
 
@@ -28,7 +29,8 @@ Short-form content is the discovery engine for the entire business. People who w
 
 1. `skills/core.md` — always load first; content pipeline fundamentals and brand voice integration
 2. `skills/clip-strategy/_index.md` — when identifying or planning clip-worthy moments
-3. `skills/platforms/_index.md` — when formatting for specific platforms
+3. `skills/pipeline/_index.md` — when building, modifying, or debugging `Tools/ContentPipeline/` tooling
+4. `skills/platforms/_index.md` — when formatting for specific platforms
 
 ## Chains To
 
