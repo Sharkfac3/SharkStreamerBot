@@ -234,8 +234,8 @@ Squad members are recurring NPCs — not controlled by chat. They are story agen
 
 - `Creative/Brand/BRAND-IDENTITY.md` — The metaphor layer explained in full; why these characters exist
 - `Creative/Brand/BRAND-VOICE.md` — How to write for these characters in narration and bot output
-- `Creative/Art/Agents/StreamStyle-art-agent.md` — Visual rendering standards (load before any character art agent)
-- `Creative/Art/Agents/CaptainStretch-art-Agent.md` — Captain Stretch visual generation
-- `Creative/Art/Agents/TheDirector-art-Agent.md` — The Director visual generation
-- `Creative/Art/Agents/WaterWizard-art-agent.md` — Water Wizard visual generation
+- `Creative/Art/Agents/stream-style-art-agent.md` — Visual rendering standards (load before any character art agent)
+- `Creative/Art/Agents/captain-stretch-art-agent.md` — Captain Stretch visual generation
+- `Creative/Art/Agents/the-director-art-agent.md` — The Director visual generation
+- `Creative/Art/Agents/water-wizard-art-agent.md` — Water Wizard visual generation
 - `Creative/WorldBuilding/Agents/D&D-Agent.md` — Story structure and game mechanics

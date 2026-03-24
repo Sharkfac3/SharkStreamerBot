@@ -195,4 +195,4 @@ See also:
 - `Creative/Brand/BRAND-VOICE.md` — Specific tone and language guidance per context
 - `Creative/Brand/CHARACTER-CODEX.md` — Canonical character reference (appearance, personality, metaphor role)
 - `Creative/WorldBuilding/Agents/D&D-Agent.md` — Game mechanics and story structure
-- `Creative/Art/Agents/StreamStyle-art-agent.md` — Visual style canon
+- `Creative/Art/Agents/stream-style-art-agent.md` — Visual style canon

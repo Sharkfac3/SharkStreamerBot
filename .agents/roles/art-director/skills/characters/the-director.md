@@ -6,7 +6,7 @@ Commander slot. Committee consensus, executive process, four-eyed calm.
 
 ## Agent File
 
-`Creative/Art/Agents/TheDirector-art-Agent.md` — load before generating any Director art.
+`Creative/Art/Agents/the-director-art-agent.md` — load before generating any Director art.
 
 ## Quick Reference
 
@@ -21,4 +21,4 @@ Commander slot. Committee consensus, executive process, four-eyed calm.
 
 ## Notes
 
-Always load `Creative/Art/Agents/StreamStyle-art-agent.md` first, then `TheDirector-art-Agent.md`.
+Always load `Creative/Art/Agents/stream-style-art-agent.md` first, then `the-director-art-agent.md`.

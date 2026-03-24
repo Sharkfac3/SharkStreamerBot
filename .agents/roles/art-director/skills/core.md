@@ -8,7 +8,7 @@ Art assets support a live R&D stream about building off-road racing products. Vi
 
 **Always load agents in this order — no exceptions:**
 
-1. `Creative/Art/Agents/StreamStyle-art-agent.md` — shared style foundation (rendering, line art, shading, readability rules)
+1. `Creative/Art/Agents/stream-style-art-agent.md` — shared style foundation (rendering, line art, shading, readability rules)
 2. The relevant character agent(s) for the task
 
 The style agent defines *how everything looks*. Character agents define *who the character is*. Character agents do not override the style agent — they layer on top of it.
@@ -19,7 +19,7 @@ Every generated prompt output must include these labeled sections:
 
 ```
 **Character:** <name or "N/A">
-**Style Agent:** Creative/Art/Agents/StreamStyle-art-agent.md
+**Style Agent:** Creative/Art/Agents/stream-style-art-agent.md
 **Character Agent:** <agent file path or "N/A">
 **Model:** <model used or "unspecified">
 **Asset Type:** <overlay | emote | thumbnail | banner | character sheet | other>

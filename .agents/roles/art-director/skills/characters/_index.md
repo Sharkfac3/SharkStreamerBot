@@ -8,9 +8,9 @@ Before generating any character art, read the character's agent file. Do not inv
 
 | Character | Agent File |
 |---|---|
-| Captain Stretch | `Creative/Art/Agents/CaptainStretch-art-Agent.md` |
-| The Director | `Creative/Art/Agents/TheDirector-art-Agent.md` |
-| Water Wizard | `Creative/Art/Agents/WaterWizard-art-agent.md` |
+| Captain Stretch | `Creative/Art/Agents/captain-stretch-art-agent.md` |
+| The Director | `Creative/Art/Agents/the-director-art-agent.md` |
+| Water Wizard | `Creative/Art/Agents/water-wizard-art-agent.md` |
 
 ## Squad Characters
 

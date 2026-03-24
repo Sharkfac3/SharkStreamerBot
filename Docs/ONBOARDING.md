@@ -107,7 +107,7 @@ Role: `streamerbot-dev`
 Role: `art-director`
 1. `.agents/ENTRY.md` → `roles/art-director/role.md`
 2. `.agents/roles/art-director/skills/core.md`
-3. `Creative/Art/Agents/StreamStyle-art-agent.md` — Visual style (always load first)
+3. `Creative/Art/Agents/stream-style-art-agent.md` — Visual style (always load first)
 4. Relevant character agent file
 
 ### If you are planning content around a build

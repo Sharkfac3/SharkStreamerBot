@@ -2,7 +2,7 @@
 
 Generate visual assets of **The Director**.
 
-> **Style Reference:** Apply the shared stream art style from `StreamStyle-art-agent.md`.
+> **Style Reference:** Apply the shared stream art style from `stream-style-art-agent.md`.
 > All rendering, shading, line art, and color philosophy rules defined there take priority.
 
 ## Character Canon
@@ -99,4 +99,4 @@ Create clear, recognizable, repeatable visual depictions of The Director that pr
 
 Specify the intended asset type when prompting: emote, overlay/panel, thumbnail/banner, or character sheet.
 
-Each type has different background and detail requirements — refer to the Backgrounds table in `StreamStyle-art-agent.md`.
+Each type has different background and detail requirements — refer to the Backgrounds table in `stream-style-art-agent.md`.

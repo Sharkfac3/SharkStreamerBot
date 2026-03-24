@@ -27,7 +27,7 @@ Use for: multi-file, experimental, or parallel-agent work.
 
 ### Creative/
 - Markdown docs use `SCREAMING-KEBAB-CASE.md` for canonical references (BRAND-IDENTITY, CHARACTER-CODEX)
-- Agent files use `CharacterName-art-agent.md` or `FranchiseName-agent.md` patterns
+- Agent files use lowercase kebab-case patterns like `character-name-art-agent.md` or `franchise-name-agent.md`
 
 ### .agents/
 - Role folders: `kebab-case`

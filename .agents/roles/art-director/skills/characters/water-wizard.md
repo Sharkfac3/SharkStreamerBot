@@ -6,7 +6,7 @@ Commander slot. Calm wisdom, hydration solutions, festival brain.
 
 ## Agent File
 
-`Creative/Art/Agents/WaterWizard-art-agent.md` — load before generating any Water Wizard art.
+`Creative/Art/Agents/water-wizard-art-agent.md` — load before generating any Water Wizard art.
 
 ## Quick Reference
 
@@ -21,4 +21,4 @@ Commander slot. Calm wisdom, hydration solutions, festival brain.
 
 ## Notes
 
-Always load `Creative/Art/Agents/StreamStyle-art-agent.md` first, then `WaterWizard-art-agent.md`.
+Always load `Creative/Art/Agents/stream-style-art-agent.md` first, then `water-wizard-art-agent.md`.

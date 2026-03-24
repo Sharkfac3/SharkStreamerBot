@@ -2,7 +2,7 @@
 
 ## The Style Agent
 
-`Creative/Art/Agents/StreamStyle-art-agent.md` is the foundational style document for all stream visuals. It defines:
+`Creative/Art/Agents/stream-style-art-agent.md` is the foundational style document for all stream visuals. It defines:
 - Rendering style (anime, cel shading, clean linework)
 - Line art and shading conventions
 - Readability rules for stream assets (contrast, silhouette, legibility at small sizes)

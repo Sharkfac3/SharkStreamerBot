@@ -6,7 +6,7 @@ Commander slot. Executive function, authority, shrimp denial.
 
 ## Agent File
 
-`Creative/Art/Agents/CaptainStretch-art-Agent.md` — load before generating any Captain Stretch art.
+`Creative/Art/Agents/captain-stretch-art-agent.md` — load before generating any Captain Stretch art.
 
 ## Quick Reference
 
@@ -21,4 +21,4 @@ Commander slot. Executive function, authority, shrimp denial.
 
 ## Notes
 
-Always load `Creative/Art/Agents/StreamStyle-art-agent.md` first, then `CaptainStretch-art-Agent.md`. Do not override StreamStyle with character-specific prompts.
+Always load `Creative/Art/Agents/stream-style-art-agent.md` first, then `captain-stretch-art-agent.md`. Do not override StreamStyle with character-specific prompts.
