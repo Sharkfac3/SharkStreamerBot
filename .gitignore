@@ -1,2 +1,10 @@
 # Claude Code agent files
 .claude/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Content pipeline local state
+Tools/ContentPipeline/.env
+Tools/ContentPipeline/data/

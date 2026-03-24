@@ -30,6 +30,11 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-24 | pi | Build ContentPipeline Phase 5 review queue web UI | uncommitted |
+| 2026-03-24 | pi | Build ContentPipeline Phase 4 Instagram formatting tooling | uncommitted |
+| 2026-03-24 | pi | Build ContentPipeline Phase 3 clip extraction tooling | uncommitted |
+| 2026-03-24 | pi | Build ContentPipeline Phase 2 highlight detection tooling | uncommitted | 
+| 2026-03-24 | pi | Build ContentPipeline Phase 1 transcription tooling | 197e231 |
 | 2026-03-24 | pi | Add example sub-skill folder to role template | 9696d18 |
 | 2026-03-24 | pi | Add missing context folders for content-repurposer and product-dev | 7d9e09e |
 
