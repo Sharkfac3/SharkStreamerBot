@@ -25,10 +25,10 @@ The project spans Streamer.bot runtime actions, interactive entertainment featur
 | `lotat-writer` | `roles/lotat-writer/` | LotAT narrative — adventure design, lore, worldbuilding, story content |
 | `art-director` | `roles/art-director/` | Diffusion model prompts, character art, stream visuals |
 | `brand-steward` | `roles/brand-steward/` | Any public-facing output — chat text, titles, marketing, canon review |
+| `content-repurposer` | `roles/content-repurposer/` | Short-form content repurposing — clip selection, captions, content calendars, platform formatting |
 | `app-dev` | `roles/app-dev/` | Stream interaction apps (expanding) |
+| `product-dev` | `roles/product-dev/` | Product documentation, technical knowledge articles, specifications, and future customer-facing content for stream-developed R&D products |
 | `ops` | `roles/ops/` | Validation, sync workflow, change summaries, tooling |
-| `content-repurposer` | `roles/content-repurposer/` | Live-to-short-form content pipeline — clip selection, captions, platform formatting |
-| `product-dev` | `roles/product-dev/` | Product documentation, knowledge articles, technical specs (placeholder — expanding) |
 
 ## Shared Context
 

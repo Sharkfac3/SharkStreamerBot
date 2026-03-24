@@ -27,6 +27,7 @@ All LotAT engine state in `Actions/SHARED-CONSTANTS.md`:
 - `lotat_active` — session running flag
 - `lotat_announcement_sent` — session start dedup
 - `lotat_offering_steal_chance` — offering integration
+- `lotat_steal_multiplier` — offering steal scaling
 - `boost_*` — boost state
 
 ## Sub-Skills

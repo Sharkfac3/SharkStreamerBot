@@ -10,10 +10,9 @@ Stream lifecycle events and core Twitch behavior: startup resets, bits integrati
 |---|---|---|
 | Stream Start | `Actions/Twitch Core Integrations/stream-start.cs` | Stream → Go Live |
 | Follower New | `Actions/Twitch Core Integrations/follower-new.cs` | Follow event |
-| Subscription New | `Actions/Twitch Core Integrations/subscription-new.cs` | Sub event |
-| Subscription Renewed | `Actions/Twitch Core Integrations/subscription-renewed.cs` | Re-sub event |
-| Subscription Gift Single | `Actions/Twitch Core Integrations/subscription-gift-single.cs` | Gift sub event |
-| Subscription Gift Multiple | `Actions/Twitch Core Integrations/subscription-gift-multiple.cs` | Mass gift sub event |
+| Subscription Dispatcher | `Actions/Twitch Core Integrations/subscription-dispatcher.cs` | Subscription event routing |
+| Subscription Gift | `Actions/Twitch Core Integrations/subscription-gift.cs` | Gift sub event |
+| Subscription Counter Rollover | `Actions/Twitch Core Integrations/subscription-counter-rollover.cs` | Subscription counter maintenance |
 | Bits Tier 1–4 | `Actions/Twitch Bits Integrations/bits-tier-*.cs` | Cheer event (by tier) |
 
 ## Detailed Docs
@@ -23,7 +22,7 @@ Stream lifecycle events and core Twitch behavior: startup resets, bits integrati
 
 ## Stream-Start Reset
 
-`stream-start.cs` is the **central reset point** for all session state. Resets:
+`Actions/Twitch Core Integrations/stream-start.cs` is the **central reset point** for all session state. Resets:
 - Squad (Duck, Clone, Pedro, Toothless, offering/LotAT)
 - OBS sources (hide dancing sources, cycle rarity sources)
 - Timers (disable Duck Call Window, Clone Volley Timer)
@@ -46,7 +45,7 @@ Sub/re-sub/gift-sub scripts and hype train scripts are currently stubs. Expand `
 - Favor reliability and idempotency
 - Fail safely (log useful info, avoid cascading failures)
 - For TTS/readout integrations: include queue-safe timing/wait behavior so rapid triggers do not overlap
-- Keep `stream-start.cs` early in stream startup order so downstream scripts see clean state
+- Keep `Actions/Twitch Core Integrations/stream-start.cs` early in stream startup order so downstream scripts see clean state
 
 ## Sub-Skills
 

@@ -15,11 +15,9 @@ SharkFac3 is building an R&D company for off-road racing products, developed liv
 3. **Authority through transparency** — detailed, honest documentation (including what went wrong) builds more trust than polished marketing
 4. **Accessible by default** — documentation should be understandable by enthusiasts, not just professionals; this matches the brand's accessibility pillar
 
-## Future Skill Areas (To Be Created)
+## Future Skill Areas
 
-- `skills/product-docs/` — Product specifications, data sheets, technical documentation
-- `skills/knowledge-articles/` — Articles derived from build sessions, techniques, and approaches
-- `skills/customer-content/` — Product descriptions, marketing copy, customer-facing materials
+No sub-skill directories exist yet. Add them only when this placeholder role becomes active.
 
 ## Integration Points
 

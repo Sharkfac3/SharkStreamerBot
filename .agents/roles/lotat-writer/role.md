@@ -15,7 +15,7 @@ Stories are entertainment AND content. Every memorable LotAT moment — a specta
 - Expanding lore, building out the universe, or adding world elements
 - Writing character backstory or personality details
 - Developing the Starship Shamples franchise or any future franchise
-- Planning story arcs tied to real-world build sessions (chain to `brand-steward-content-strategy`)
+- Planning story arcs tied to real-world build sessions (chain to `brand-steward` and load the `content-strategy` sub-skill)
 
 ## Do Not Activate When
 
@@ -41,7 +41,7 @@ Stories are entertainment AND content. Every memorable LotAT moment — a specta
 |---|---|
 | `lotat-tech` | After story JSON is complete — hand off for schema validation and engine implementation |
 | `brand-steward` | When story content needs franchise-wide canon review or touches brand identity |
-| `brand-steward-content-strategy` | When planning a story tied to a specific build session |
+| `brand-steward` | When planning a story tied to a specific build session — load the `content-strategy` sub-skill |
 
 ## Out of Scope
 

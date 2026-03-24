@@ -26,7 +26,7 @@ The offering system in `Actions/Squad/offering.cs` already interacts with LotAT 
 - `lotat_offering_steal_chance`
 - `boost_*`
 
-Any new LotAT global variable must be reset in `stream-start.cs` and added to `Actions/SHARED-CONSTANTS.md`.
+Any new LotAT global variable must be reset in `Actions/Twitch Core Integrations/stream-start.cs` and added to `Actions/SHARED-CONSTANTS.md`.
 
 ## When This Expands
 

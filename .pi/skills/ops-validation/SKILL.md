@@ -1,6 +1,6 @@
 ---
 name: ops-validation
-description: SHARED-CONSTANTS drift checks, pre-commit validation, schema compliance. Load when running validation passes.
+description: SHARED-CONSTANTS drift checks, local validation checks, schema compliance. Load when running validation passes.
 ---
 
 # Validation — ops

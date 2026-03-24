@@ -40,7 +40,7 @@ The entire business model leads here. Products developed live on stream need pro
 |---|---|
 | `brand-steward` | When product content needs brand voice review |
 | `content-repurposer` | When product milestones create content-worthy moments |
-| `ops` | After any documentation changes — load `ops/skills/change-summary/_index.md` |
+| `ops` | After any documentation changes — load `.agents/roles/ops/skills/change-summary/_index.md` |
 
 ## Out of Scope
 

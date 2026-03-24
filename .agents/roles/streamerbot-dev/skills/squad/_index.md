@@ -12,7 +12,7 @@ Chat-triggered mini-games and interaction behavior. Each action folder is a self
 | Duck | `Actions/Squad/Duck/` | `duck-main.cs`, `duck-call.cs`, `duck-resolve.cs` |
 | Pedro | `Actions/Squad/Pedro/` | `pedro-main.cs` |
 | Toothless | `Actions/Squad/Toothless/` | `toothless-main.cs` |
-| Offering | `Actions/Squad/` | `offering.cs` — also implements the LotAT steal mechanic; reads LotAT state vars reset by `stream-start.cs` |
+| Offering | `Actions/Squad/` | `offering.cs` — also implements the LotAT steal mechanic; reads LotAT state vars reset by `Actions/Twitch Core Integrations/stream-start.cs` |
 
 ## Detailed Docs
 
@@ -43,7 +43,7 @@ All Squad scripts share global variable names from `Actions/SHARED-CONSTANTS.md`
 
 ## Stream-Start Reset
 
-`stream-start.cs` resets all Squad state at stream start. Any new Squad global variable must be added there and to `Actions/SHARED-CONSTANTS.md`.
+`Actions/Twitch Core Integrations/stream-start.cs` resets all Squad state at stream start. Any new Squad global variable must be added there and to `Actions/SHARED-CONSTANTS.md`.
 
 ## Player Key
 

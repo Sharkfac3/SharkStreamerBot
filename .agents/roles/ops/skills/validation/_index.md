@@ -1,29 +1,10 @@
 # Validation
 
-## Pre-Commit Hooks
-
-Install with: `python3 Tools/StreamerBot/Validation/install-hooks.py`
-
-The pre-commit hook runs `validate.py` which checks for:
-- SHARED-CONSTANTS drift (global variable names used in scripts that are not in SHARED-CONSTANTS.md)
-- Story JSON schema compliance
-- Pi skill wrapper integrity and `.agents/` ↔ `.pi/skills/` role parity
-- `.agents/routing-manifest.json` as the primary routing contract
-- `.agents/ENTRY.md` ↔ `.pi/skills/README.md` Roles table parity
-- routing-manifest-backed alias inventory and canonical wrapper route-surface coverage
-- manifest collisions, duplicate routing entries, and stale Pi wrapper references across repo markdown
-
-## Manual Validation Script
-
-`Tools/StreamerBot/Validation/validate.py`
-
-Run directly for on-demand validation passes. See `Tools/StreamerBot/Validation/README.md` for options.
-
 ## Routing Doc Sync Script
 
 `Tools/StreamerBot/Validation/sync-routing-docs.py`
 
-Run this after editing `.agents/routing-manifest.json` to rewrite generated routing tables before validating.
+Run this after editing `.agents/routing-manifest.json` to rewrite generated routing tables in `AGENTS.md`, `.agents/ENTRY.md`, and `.pi/skills/README.md`.
 
 ## What to Validate Before Committing
 
@@ -38,21 +19,3 @@ Run this after editing `.agents/routing-manifest.json` to rewrite generated rout
 - [ ] Any new Pi-exposed sub-skill wrapper uses the flat `<role>-<subskill>` naming pattern
 - [ ] `.pi/skills/README.md` generated tables and route surfacing still align with `.agents/routing-manifest.json`
 - [ ] Pi wrapper references point only to existing flat wrappers
-
-## SHARED-CONSTANTS Drift
-
-If validation flags a SHARED-CONSTANTS drift:
-1. Stop — do not commit
-2. Add the new constant to `Actions/SHARED-CONSTANTS.md`
-3. Add the reset to `Actions/Twitch Core Integrations/stream-start.cs`
-4. Re-run validation
-5. Then commit
-
-## Pi Wrapper Drift
-
-If validation flags Pi wrapper drift:
-1. Stop — do not commit
-2. Read `.pi/skills/README.md` for the canonical wrapper contract
-3. Fix the wrapper name, target, or missing role wrapper
-4. Re-run validation
-5. Then commit

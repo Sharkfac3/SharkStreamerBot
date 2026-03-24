@@ -20,7 +20,7 @@ When the first app is planned, document here:
 
 Apps in this project will likely need to integrate with:
 - **Streamer.bot** — via its HTTP/WebSocket API for reading/triggering actions
-- **Mix It Up** — via REST API (see `_shared/mixitup-api.md`)
+- **Mix It Up** — via REST API (see `.agents/_shared/mixitup-api.md`)
 - **Twitch** — via EventSub or PubSub for stream events
 - **OBS** — via obs-websocket if the app needs scene/source control
 

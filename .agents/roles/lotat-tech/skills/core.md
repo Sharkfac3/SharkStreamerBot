@@ -36,9 +36,10 @@ LotAT engine state lives in Streamer.bot global variables. Key variables from `A
 - `lotat_active` — whether a session is currently running
 - `lotat_announcement_sent` — deduplication flag for session start announcement
 - `lotat_offering_steal_chance` — offering mechanic interaction
+- `lotat_steal_multiplier` — offering steal scaling
 - `boost_*` — boost state variables
 
-Any new LotAT state variable must be added to `stream-start.cs` reset and `Actions/SHARED-CONSTANTS.md`.
+Any new LotAT state variable must be added to `Actions/Twitch Core Integrations/stream-start.cs` reset and `Actions/SHARED-CONSTANTS.md`.
 
 ## Key References
 

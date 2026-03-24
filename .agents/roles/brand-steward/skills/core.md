@@ -22,10 +22,10 @@ Every output should reflect at least one:
 
 ## The Metaphor (Always in Mind)
 
-- The ship = the ADHD mind
-- The crew = the community
-- The chaos = the experience of being neurodivergent
-- The build still happening = the point
+- The Starship Shamples = the streamer's ADHD/"space cadet" mind
+- The chaotic crew = competing impulses, half-finished ideas, and tangents
+- Chat/community = the crew riding the chaos together
+- The ship still flying / the build still happening = the point
 
 Never shame the chaos or the failure. Celebrate both.
 
@@ -54,5 +54,5 @@ Before finalizing any brand-facing output:
 
 - Maximum 1–2 sentences per automated message
 - Reference the game world where it fits naturally — not forced
-- Each event type has a character association — see `BRAND-VOICE.md` for examples
+- Each event type has a character association — see `Creative/Brand/BRAND-VOICE.md` for examples
 - Prefer warm and specific over polished and generic
