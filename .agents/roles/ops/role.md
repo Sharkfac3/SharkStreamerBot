@@ -15,6 +15,7 @@ Ops maintains the infrastructure that the entire content and business pipeline d
 - Running validation passes against SHARED-CONSTANTS
 - Working on `Tools/` utilities (Mix It Up API helpers, Python scripts, validators)
 - Maintaining `.pi/skills/` or `.agents/` structure (meta-operations on the agent tree)
+- Running a LotAT night readiness check against a handed-off story (`Creative/WorldBuilding/Storylines/ready/`) — verify art, engine, and marketing outputs exist, then write `<story_id>-READINESS.md` alongside the story with a checklist of missing items
 
 ## Do Not Activate When
 
@@ -32,6 +33,32 @@ Ops maintains the infrastructure that the entire content and business pipeline d
 ## The Terminal Rule
 
 `ops-change-summary` is the **last step in every code task**. Load it after the work is done to format the output the operator needs to sync and validate.
+
+## Readiness Check Output Format
+
+When running a LotAT night readiness check, write `Creative/WorldBuilding/Storylines/ready/<story_id>-READINESS.md` with this structure:
+
+```markdown
+# LotAT Night Readiness — <story title>
+
+## Story
+- [x] Story JSON present in ready/
+
+## Art (art-director)
+- [ ] Background art for: <list ship_sections_used>
+- [ ] Character art for: <list unique crew_focus values across all nodes>
+
+## Engine (lotat-tech)
+- [ ] C# engine updated for this story
+- [ ] SHARED-CONSTANTS.md updated for any new commands
+
+## Marketing (brand-steward)
+- [ ] Stream title copy prepared
+- [ ] Social teaser copy prepared
+
+## Risks
+- Any unchecked items above must be resolved before the LotAT night
+```
 
 ## Out of Scope
 

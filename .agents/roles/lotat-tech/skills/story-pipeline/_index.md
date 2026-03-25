@@ -19,7 +19,8 @@ streamerbot-dev deploys engine scripts to Actions/LotAT/
 | Story agent prompt | `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` |
 | Coding agent prompt | `Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md` |
 | Franchise overview | `Creative/WorldBuilding/Franchises/StarshipShamples.md` |
-| Completed story files | `Creative/WorldBuilding/Storylines/` |
+| Draft stories (pre-review) | `Creative/WorldBuilding/Storylines/drafts/` |
+| Handed-off stories (ready for engine) | `Creative/WorldBuilding/Storylines/ready/` |
 | In-progress / experiments | `Creative/WorldBuilding/Experiments/` |
 
 ## Validation Before Engine Consumption
@@ -31,6 +32,8 @@ Before implementing engine changes for a new story, verify the story JSON:
 - [ ] All `next_node_id` values reference valid node IDs in the file
 - [ ] Only supported commands used (see `engine/commands.md`)
 - [ ] No invented schema fields
+
+> **Note:** Only consume stories from `ready/`. Do not process a story that has not been handed off by the operator via the story viewer.
 
 ## Sub-Skills
 

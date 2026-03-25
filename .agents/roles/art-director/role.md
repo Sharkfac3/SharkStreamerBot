@@ -15,6 +15,7 @@ Visual assets serve the stream AND the content pipeline. Character art, overlays
 - Composing multi-character scenes
 - Extending or updating a character's visual canon
 - Creating overlays, emotes, thumbnails, banners, panels, or character sheets
+- Extracting LotAT art asset requirements from a handed-off story (`Creative/WorldBuilding/Storylines/ready/`) — read `ship_sections_used` for background art needs, `crew_focus` entries across nodes for character art needs, and node `tags` for scene/environment hints
 
 ## Do Not Activate When
 

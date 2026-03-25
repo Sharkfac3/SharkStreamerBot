@@ -20,6 +20,7 @@ The brand is the business strategy. Every public-facing message, every stream ti
 - Planning community growth strategy (Discord, Twitch, social media)
 - Designing community-to-customer engagement patterns
 - Writing content that serves the community → authority → products pipeline
+- Preparing LotAT night marketing copy from a handed-off story (`Creative/WorldBuilding/Storylines/ready/`) — read `title`, `summary`, `cast`, and `tone` to produce stream schedule copy and social teaser copy
 
 ## Do Not Activate When
 

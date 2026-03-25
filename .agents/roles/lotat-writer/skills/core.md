@@ -36,6 +36,14 @@ The story agent produces content. The technical agent produces code. Never mix t
 | `Creative/Brand/CHARACTER-CODEX.md` | Canonical character personalities — do not deviate |
 | `Creative/Brand/BRAND-IDENTITY.md` | Brand metaphor layer — all content must be consistent |
 
+## Story File Workflow
+
+- Write draft stories to `Creative/WorldBuilding/Storylines/drafts/<story_id>.json`
+- Do not place stories directly in `Creative/WorldBuilding/Storylines/ready/`
+- To review: launch the story viewer with `uvicorn Tools/LotAT/story_viewer:app --reload`, then open `http://localhost:8000`
+- Stories move to `ready/` when the operator clicks Handoff in the viewer
+- `ready/` is the source for all downstream agents — do not modify a story after handoff
+
 ## Business Context
 
 LotAT stories entertain viewers during a live R&D stream about building off-road racing products. The stories you write serve two purposes: keeping live viewers engaged during slow stretches, and creating memorable moments that become short-form content (YouTube Shorts, TikTok, etc.) for broader reach. Write for both contexts — make moments that are entertaining live AND that would make someone stop scrolling. Read `.agents/_shared/project.md` for the full business context and content pipeline.

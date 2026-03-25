@@ -30,6 +30,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-25 | pi | Update LotAT story pipeline agent docs | uncommitted |
 | 2026-03-24 | pi | Create human startup prompt pack for all scaffolded agent roles | uncommitted |
 | 2026-03-24 | pi | Final cleanup pass for content-pipeline prompt residue | uncommitted |
 | 2026-03-24 | pi | Remove obsolete content-pipeline planning/prompt artifacts | uncommitted |
@@ -39,7 +40,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-03-24 | pi | Build ContentPipeline Phase 6 feedback loop tooling | uncommitted |
 | 2026-03-24 | pi | Build ContentPipeline Phase 5 review queue web UI | uncommitted |
 | 2026-03-24 | pi | Build ContentPipeline Phase 4 Instagram formatting tooling | uncommitted |
-| 2026-03-24 | pi | Build ContentPipeline Phase 3 clip extraction tooling | uncommitted |
 
 ---
 
