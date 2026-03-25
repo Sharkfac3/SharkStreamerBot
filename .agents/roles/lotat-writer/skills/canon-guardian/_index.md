@@ -15,6 +15,7 @@ This sub-skill focuses on:
 - story pacing and live-session fit
 - correct use of the existing cast
 - consistency with established world rules and Chaos Meter behavior
+- keeping authored story files inside the current JSON contract
 - avoiding accidental lore drift in reusable story content
 
 For broader brand/cast/metaphor changes, escalate to `brand-steward` canon review.
@@ -25,7 +26,7 @@ Before approving canon-affecting LotAT content:
 
 | Document | Why |
 |---|---|
-| `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` | Authoritative story schema, story structure, and adventure generation rules |
+| `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` | Authoritative story contract, story structure, and adventure generation rules |
 | `Creative/WorldBuilding/Franchises/StarshipShamples.md` | Franchise-level canon baseline for setting, tone, and recurring elements |
 | `Creative/WorldBuilding/Agents/D&D-Agent.md` | Mechanics, Chaos Meter framing, dice-hook expectations, adventure tone |
 | `Creative/Brand/CHARACTER-CODEX.md` | Canonical personalities, identities, and behavioral constraints for recurring characters |
@@ -38,7 +39,7 @@ Answer these before approving new story content:
 **1. Does the story respect LotAT format rules?**
 - Is the adventure paced for live stream play?
 - Do stage beats stay readable at stream speed?
-- Does the structure match the established LotAT story format and command constraints?
+- Does the structure match the established LotAT story format and current contract fields?
 
 **2. Does it preserve world logic?**
 - Do locations, hazards, and choices fit the existing Starship Shamples universe?
@@ -53,6 +54,7 @@ Answer these before approving new story content:
 **4. Does the Chaos Meter stay honest?**
 - Does chaos escalate rather than reset mid-story?
 - Do endings reflect the final chaos state?
+- Does the story use the real `chaos` object rather than stale aliases?
 - Are dice hooks and commander moments used sparingly rather than constantly?
 
 **5. Does this create broader canon drift?**
@@ -62,8 +64,9 @@ Answer these before approving new story content:
 
 ## Review Checklist
 
-- [ ] Story structure matches LotAT pacing and schema expectations
+- [ ] Story structure matches LotAT pacing and the authoritative contract
 - [ ] No unsupported commands or schema inventions are implied
+- [ ] Top-level cast usage matches the contract (`commanders_used`, `squad_members_used`)
 - [ ] Existing characters remain in-character
 - [ ] Chaos Meter progression remains consistent
 - [ ] New lore is either temporary/local or explicitly approved for canon expansion

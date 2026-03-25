@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Legends of the ASCII Temple (LotAT) is the interactive D&D-style adventure system that runs on stream. From the `streamerbot-dev` perspective, this folder covers the **C# runtime engine** — the Streamer.bot actions that execute story nodes, handle chat commands, manage state, and drive the adventure forward.
+Legends of the ASCII Temple (LotAT) is the interactive D&D-style adventure system that runs on stream. From the `streamerbot-dev` perspective, this folder covers the **C# runtime engine** — the Streamer.bot actions that open the session join phase, register `!join` participants, execute story nodes, handle chat commands, manage state, and drive the adventure forward.
 
 ## Current Status
 
@@ -25,6 +25,16 @@ The offering system in `Actions/Squad/offering.cs` already interacts with LotAT 
 - `lotat_announcement_sent`
 - `lotat_offering_steal_chance`
 - `boost_*`
+
+Runtime behavior expected by the current LotAT contract:
+- session start opens a join phase before the first story node decision
+- `!join` registers a viewer into the session participant roster
+- later decision windows may auto-close once every joined participant has submitted one of the allowed node commands
+
+Before implementing LotAT runtime behavior in `Actions/`, read these lotat-tech engine docs:
+- `.agents/roles/lotat-tech/skills/engine/session-lifecycle.md`
+- `.agents/roles/lotat-tech/skills/engine/state-and-voting.md`
+- `.agents/roles/lotat-tech/skills/engine/commands.md`
 
 Any new LotAT global variable must be reset in `Actions/Twitch Core Integrations/stream-start.cs` and added to `Actions/SHARED-CONSTANTS.md`.
 

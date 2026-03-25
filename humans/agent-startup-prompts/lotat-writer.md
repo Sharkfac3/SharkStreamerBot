@@ -59,3 +59,7 @@ When responding:
 - Preserve canon.
 - Write for pace, clarity, and audience participation.
 - Make moments memorable enough that they could become clips later.
+
+Your task:
+
+explain to me how we would go about writing a story

@@ -30,16 +30,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-03-25 | pi | Update LotAT story pipeline agent docs | uncommitted |
-| 2026-03-24 | pi | Create human startup prompt pack for all scaffolded agent roles | uncommitted |
-| 2026-03-24 | pi | Final cleanup pass for content-pipeline prompt residue | uncommitted |
-| 2026-03-24 | pi | Remove obsolete content-pipeline planning/prompt artifacts | uncommitted |
-| 2026-03-24 | pi | Remove historical framing from content pipeline docs | uncommitted |
-| 2026-03-24 | pi | Route content-pipeline tooling as a first-class content-repurposer skill | uncommitted |
-| 2026-03-24 | pi | Create human-run prompt pack for content pipeline drift cleanup | uncommitted |
-| 2026-03-24 | pi | Build ContentPipeline Phase 6 feedback loop tooling | uncommitted |
-| 2026-03-24 | pi | Build ContentPipeline Phase 5 review queue web UI | uncommitted |
-| 2026-03-24 | pi | Build ContentPipeline Phase 4 Instagram formatting tooling | uncommitted |
+| 2026-03-25 | pi | Add LotAT runtime session spec prompt pack and scaffolding docs | uncommitted |
+| 2026-03-25 | pi | Update LotAT agent docs for join roster and vote auto-close rules | uncommitted |
+| 2026-03-25 | pi | Add loaded-story handoff to LotAT viewer | uncommitted |
+| 2026-03-25 | pi | Add reverse stage flow to LotAT story viewer | uncommitted |
+| 2026-03-25 | pi | Add ready/finished stages to LotAT story viewer | uncommitted |
+| 2026-03-25 | pi | Fix nested LotAT tree toggle clicks | uncommitted |
+| 2026-03-25 | pi | Fix collapsible LotAT tree toggle selector | uncommitted |
+| 2026-03-25 | pi | Add collapsible LotAT story tree nodes | uncommitted |
+| 2026-03-25 | pi | Add root launcher for LotAT story viewer | uncommitted |
+| 2026-03-25 | pi | Harden LotAT story viewer import path startup | uncommitted |
 
 ---
 

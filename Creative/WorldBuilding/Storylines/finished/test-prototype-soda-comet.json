@@ -1,0 +1,387 @@
+{
+  "story_id": "test_prototype_soda_comet",
+  "title": "Prototype: The Soda Comet Incident",
+  "tone": "absurd-chaotic-humorous",
+  "version": "1.0",
+  "summary": "A fizzy comet made of weaponized soda ice drifts toward the Starship Shamples. Chat must decide whether to study it, fight it, or let Pedro the Raccoon solve carbonation with electricity, which is the wrong kind of confidence but still technically confidence.",
+  "starting_ship_section": "Command Deck",
+  "starting_node_id": "node_001",
+  "supported_mechanics": {
+    "chat_voting": true,
+    "chaos_meter": true,
+    "commander_moments": true,
+    "dice_hooks": true,
+    "landing_party": false
+  },
+  "cast": {
+    "commanders_used": ["Captain Stretch"],
+    "squad_members_used": ["Pedro the Raccoon", "Toothless the Dragon"]
+  },
+  "ship_sections_used": ["Command Deck", "Engineering", "Security Deck"],
+  "commands_used": ["!scan", "!target", "!analyze", "!reroute", "!deploy", "!contain"],
+  "nodes": [
+    {
+      "node_id": "node_001",
+      "node_type": "stage",
+      "ship_section": "Command Deck",
+      "title": "A Carbonated Approach",
+      "read_aloud": "A bright green comet streaks toward the ship, shedding sparkling soda hail across the windshield. The bridge smells faintly like lime syrup, which is not a reassuring development.",
+      "sfx_hint": "soft_alarm_with_fizzy_pop",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": null
+      },
+      "chaos": {
+        "on_enter": 0,
+        "on_success": 0,
+        "on_failure": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_001_a",
+          "label": "Scan the soda comet",
+          "command": "!scan",
+          "result_flavor": "The sensors begin slurping up extremely sticky data.",
+          "next_node_id": "node_002"
+        },
+        {
+          "choice_id": "node_001_b",
+          "label": "Target it dramatically",
+          "command": "!target",
+          "result_flavor": "Captain Stretch points at the comet with crisp shrimp-denial authority.",
+          "next_node_id": "node_003"
+        }
+      ],
+      "tags": ["opening", "anomaly", "prototype"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_002",
+      "node_type": "stage",
+      "ship_section": "Engineering",
+      "title": "Pedro Finds the Bubbles",
+      "read_aloud": "Engineering reports the comet is packed with pressurized syrup crystals. Pedro has already connected one of the readings to the coolant loop because he said it looked lonely.",
+      "sfx_hint": "hiss_then_tool_drop",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Pedro the Raccoon"
+      },
+      "chaos": {
+        "on_enter": 1,
+        "on_success": 0,
+        "on_failure": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_002_a",
+          "label": "Analyze the syrup math",
+          "command": "!analyze",
+          "result_flavor": "The crew discovers the comet has a hollow center and several terrible possibilities.",
+          "next_node_id": "node_004"
+        },
+        {
+          "choice_id": "node_002_b",
+          "label": "Reroute the pressure",
+          "command": "!reroute",
+          "result_flavor": "Pedro reroutes something with the confidence of a raccoon opening a circuit breaker with a spoon.",
+          "next_node_id": "node_005"
+        }
+      ],
+      "tags": ["engineering", "pedro", "escalation"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_003",
+      "node_type": "stage",
+      "ship_section": "Security Deck",
+      "title": "Toothless Prepares for War",
+      "read_aloud": "Toothless arrives in full security mode and declares the comet a hostile beverage. The security crew has somehow produced anti-soda shields and a net labeled 'FOR EMERGENCIES OR PARADE CANDY.'",
+      "sfx_hint": "metal_clang_and_dragon_snort",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Toothless the Dragon"
+      },
+      "chaos": {
+        "on_enter": 1,
+        "on_success": 0,
+        "on_failure": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_003_a",
+          "label": "Deploy the anti-soda net",
+          "command": "!deploy",
+          "result_flavor": "The net catches part of the comet and flings a chunk of fizz into Engineering.",
+          "next_node_id": "node_005"
+        },
+        {
+          "choice_id": "node_003_b",
+          "label": "Contain it in foam",
+          "command": "!contain",
+          "result_flavor": "Security launches a perfect foam sphere around the comet and, regrettably, also around the ship.",
+          "next_node_id": "ending_001"
+        }
+      ],
+      "tags": ["security", "toothless", "branch"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_004",
+      "node_type": "stage",
+      "ship_section": "Command Deck",
+      "title": "Captain Stretch Makes It Official",
+      "read_aloud": "The analysis reveals the comet can be safely vented if the crew hits the hollow core at exactly the right angle. Captain Stretch straightens his uniform, insists this is a completely normal captain problem, and demands immediate action.",
+      "sfx_hint": "dramatic_beep",
+      "crew_focus": {
+        "commander": "Captain Stretch",
+        "squad_member": null
+      },
+      "chaos": {
+        "on_enter": 1,
+        "on_success": 0,
+        "on_failure": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": true,
+        "commander": "Captain Stretch",
+        "prompt": "Captain Stretch demands a precise bridge decision and absolutely refuses to answer any shrimp-related follow-up questions."
+      },
+      "choices": [
+        {
+          "choice_id": "node_004_a",
+          "label": "Scan for a clean vent",
+          "command": "!scan",
+          "result_flavor": "The bridge finds a narrow safe channel and prays the syrup obeys geometry.",
+          "next_node_id": "ending_002"
+        },
+        {
+          "choice_id": "node_004_b",
+          "label": "Target the hollow core",
+          "command": "!target",
+          "result_flavor": "Weapons lock onto the exact center of the problem, which is always encouraging right before disaster.",
+          "next_node_id": "ending_003"
+        }
+      ],
+      "tags": ["commander", "precision", "late-branch"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_005",
+      "node_type": "stage",
+      "ship_section": "Engineering",
+      "title": "Cola Lightning in the Reactor",
+      "read_aloud": "Engineering fills with crackling brown lightning as the comet syrup hits the hot lines. Pedro is wearing safety goggles over only one eye, which somehow feels worse than wearing none.",
+      "sfx_hint": "electrical_pop_fizz",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Pedro the Raccoon"
+      },
+      "chaos": {
+        "on_enter": 2,
+        "on_success": 0,
+        "on_failure": 1
+      },
+      "dice_hook": {
+        "enabled": true,
+        "purpose": "Determine whether the overloaded cola surge can be read before it cooks the reactor.",
+        "success_threshold": 55,
+        "failure_text": "The readings arrive one second too late and the fizz chooses violence.",
+        "success_text": "The crew catches the surge pattern just before the reactor commits to a beverage-themed meltdown."
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_005_a",
+          "label": "Analyze the surge pattern",
+          "command": "!analyze",
+          "result_flavor": "The diagnostics attempt to explain cola lightning in a tone normally reserved for tax forms.",
+          "next_node_id": "ending_002"
+        },
+        {
+          "choice_id": "node_005_b",
+          "label": "Reroute it anyway",
+          "command": "!reroute",
+          "result_flavor": "Pedro shouts 'loop it back!' which has never once improved a sentence.",
+          "next_node_id": "ending_004"
+        }
+      ],
+      "tags": ["engineering", "dice-hook", "high-chaos"],
+      "end_state": null
+    },
+    {
+      "node_id": "ending_001",
+      "node_type": "ending",
+      "ship_section": "Security Deck",
+      "title": "Foam Prison Drift",
+      "read_aloud": "Security successfully contains the comet and accidentally cocoons the entire Starship Shamples in expanding foam. The ship drifts safely through space like a giant packing peanut while the crew debates whether this still counts as a tactical victory.",
+      "sfx_hint": "muffled_alarm",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Toothless the Dragon"
+      },
+      "chaos": {
+        "on_enter": 2,
+        "on_success": 0,
+        "on_failure": 0
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null
+      },
+      "choices": [],
+      "tags": ["ending", "failure", "security"],
+      "end_state": "failure"
+    },
+    {
+      "node_id": "ending_002",
+      "node_type": "ending",
+      "ship_section": "Command Deck",
+      "title": "Sticky but Operational",
+      "read_aloud": "The crew vents the comet in a glittering arc of harmless soda mist and the ship survives. Every console is now tacky forever, but Captain Stretch declares the mission a polished example of command excellence and nobody is brave enough to challenge that.",
+      "sfx_hint": "relieved_chime_with_fizzy_hiss",
+      "crew_focus": {
+        "commander": "Captain Stretch",
+        "squad_member": null
+      },
+      "chaos": {
+        "on_enter": 3,
+        "on_success": 0,
+        "on_failure": 0
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null
+      },
+      "choices": [],
+      "tags": ["ending", "partial-success", "sticky"],
+      "end_state": "success"
+    },
+    {
+      "node_id": "ending_003",
+      "node_type": "ending",
+      "ship_section": "Command Deck",
+      "title": "The Celebratory Geyser",
+      "read_aloud": "The targeted shot pops the comet perfectly and launches a galaxy-sized soda fountain across the bow. The crew survives the blast, but the ship is now internationally recognized as the inventor of an accidental parade.",
+      "sfx_hint": "huge_pop_then_cheer",
+      "crew_focus": {
+        "commander": "Captain Stretch",
+        "squad_member": null
+      },
+      "chaos": {
+        "on_enter": 4,
+        "on_success": 0,
+        "on_failure": 0
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null
+      },
+      "choices": [],
+      "tags": ["ending", "bizarre", "public-disaster"],
+      "end_state": "partial"
+    },
+    {
+      "node_id": "ending_004",
+      "node_type": "ending",
+      "ship_section": "Engineering",
+      "title": "Full Soda Meltdown",
+      "read_aloud": "Pedro's final reroute converts the reactor into a carbonated thunder cannon and the ship lurches out of control. The Starship Shamples survives technically, but only because the explosion blasts it into a new postal code before the paperwork can catch up.",
+      "sfx_hint": "massive_fizz_explosion",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Pedro the Raccoon"
+      },
+      "chaos": {
+        "on_enter": 5,
+        "on_success": 0,
+        "on_failure": 0
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null
+      },
+      "choices": [],
+      "tags": ["ending", "failure", "pedro"],
+      "end_state": "failure"
+    }
+  ]
+}

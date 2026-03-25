@@ -6,7 +6,7 @@ Starship Shamples is the setting for all LotAT adventures. The ship sections are
 
 ## Ship Sections
 
-Ship sections are referenced in story node `ship_section` fields. Use established sections — do not invent new ones without operator approval.
+Ship sections are referenced in each story node's `ship_section` field, and the story also tracks them at the top level in `ship_sections_used`. Use established sections — do not invent new ones without operator approval.
 
 For the current list of ship sections, see: `Creative/WorldBuilding/Agents/D&D-Agent.md`
 
@@ -23,14 +23,16 @@ New single-gimmick space regions are approvable without operator escalation. New
 
 - Starts low at the beginning of every story
 - Escalates over the arc — never resets mid-story
-- Terminal nodes must reflect the final chaos level in tone
-- Chaos changes are tracked per node via `chaos_change` field
+- Ending nodes must reflect the final chaos level in tone
+- Per-node chaos is tracked with the contract's `chaos` object (`on_enter`, `on_success`, `on_failure`) — not a flat `chaos_change` field
+- If you are unsure how to represent a chaos adjustment, check `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`
 
 ## The Dice System
 
 - Dice hooks add tension to specific moments — use sparingly
 - Defined in `Creative/WorldBuilding/Agents/D&D-Agent.md`
 - A dice hook can change the outcome of a node but should not be a default mechanic for every stage
+- Use only the supported `dice_hook` structure from the authoritative story contract; do not improvise alternate roll fields
 
 ## Tone Constraints
 

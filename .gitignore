@@ -8,3 +8,6 @@ __pycache__/
 # Content pipeline local state
 Tools/ContentPipeline/.env
 Tools/ContentPipeline/data/
+
+# python virtual environment
+.venv/

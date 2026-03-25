@@ -4,9 +4,11 @@
 
 The C# engine running in Streamer.bot actions under `Actions/LotAT/`:
 - Loads and parses story JSON
+- Opens a session-start join phase and registers `!join` participants
 - Tracks current node state
 - Handles chat command routing to story mechanics
 - Advances the story based on chat votes/commands
+- Closes a decision window early when all joined participants have voted
 - Manages the Chaos Meter
 - Triggers Mix It Up overlays for narration/effects
 
@@ -30,6 +32,14 @@ All LotAT engine state in `Actions/SHARED-CONSTANTS.md`:
 - `lotat_steal_multiplier` — offering steal scaling
 - `boost_*` — boost state
 
+Expected runtime state to add when the engine is implemented/refined:
+- join-phase status for the active session
+- joined-participant roster for the active session
+- per-node vote submissions keyed to joined participants
+- decision-window completion state so the engine can auto-close once all joined participants have voted
+
 ## Sub-Skills
 
 - `commands.md` — supported chat commands and engine constraints
+- `session-lifecycle.md` — runtime session stages, join-window flow, node-entry flow, and end-of-session contract
+- `state-and-voting.md` — participant roster, vote storage, early-close rules, tie-break behavior, and edge cases

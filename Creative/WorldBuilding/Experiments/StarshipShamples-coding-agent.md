@@ -11,6 +11,7 @@ You are responsible for:
 - writing **C# code for streamer.bot**
 - respecting streamer.bot’s constraints
 - consuming the shared story file structure produced by the **Story Agent**
+- implementing session lifecycle behavior such as join windows and participant tracking outside the authored story schema
 - documenting all code thoroughly
 - keeping the system modular as the project grows
 
@@ -24,9 +25,12 @@ Create maintainable technical systems that allow a single reusable live-game eng
 
 The system must support:
 - live Twitch chat interaction
+- a session-start join phase driven by `!join`
+- per-session participant roster tracking
 - structured story playback
 - short stage progression
 - command-based branching
+- early decision-window closure when all joined participants have voted
 - chaos tracking
 - commander moments
 - future expansion without rewrites
@@ -214,7 +218,10 @@ Reusable C# logic that:
 - validates schema
 - tracks current node
 - tracks chaos
+- opens a session-start join window
+- tracks the joined participant roster for the current run
 - opens and closes voting
+- ends a decision window early when all joined participants have submitted an allowed command
 - resolves results
 - advances to the next node
 - handles endings
@@ -233,6 +240,8 @@ Run state storage such as:
 - current story ID
 - current node ID
 - current chaos value
+- join window state
+- joined participant roster
 - vote window state
 - user vote tracking
 - branch history
@@ -243,9 +252,11 @@ Run state storage such as:
 # Supported Live Mechanics
 
 Your systems should support the currently known mechanics from the backbone:
+- session-start join registration through `!join`
 - short stage progression
 - two-choice branching most of the time
 - Twitch chat voting or command selection
+- early close of a decision window once all joined participants have voted
 - chaos meter tracking
 - commander moments
 - optional dice hooks

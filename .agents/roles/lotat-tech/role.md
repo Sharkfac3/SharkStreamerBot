@@ -28,6 +28,8 @@ LotAT is the flagship entertainment feature — a full interactive story experie
 3. `skills/story-pipeline/json-schema.md` — when working directly with story JSON fields
 4. `skills/engine/_index.md` — when building or modifying the C# engine
 5. `skills/engine/commands.md` — when adding or reviewing supported chat commands
+6. `skills/engine/session-lifecycle.md` — when defining or reviewing the runtime session contract
+7. `skills/engine/state-and-voting.md` — when defining or reviewing participant roster, vote handling, and early-close behavior
 
 ## Chains To
 

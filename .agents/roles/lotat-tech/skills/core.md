@@ -21,12 +21,18 @@ LotAT has a strict separation of concerns:
 - Engine reads node data, executes commands, tracks state, advances the story
 - Story content (narration, choices, character moments) lives entirely in JSON
 - Engine commands are the bridge between JSON story events and Streamer.bot actions
+- Session lifecycle behavior such as join windows, participant roster tracking, and vote auto-close rules lives in the engine/runtime layer, not in authored story JSON
 
 ## Schema is a Contract
 
 The JSON story schema is shared between `lotat-writer` (produces it) and `lotat-tech` (consumes it). **Schema drift breaks the engine.**
 
-- Do not add top-level fields without updating both the schema doc and the engine
+- The authoritative authored-story contract lives in `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`
+- `.agents/roles/lotat-tech/skills/story-pipeline/json-schema.md` is a synced implementation summary, not a competing authority
+- `lotat-tech` owns schema and command-contract changes
+- `lotat-writer` owns story content within the schema
+- Canon, cast, or metaphor changes escalate to `brand-steward`
+- Do not add top-level fields without updating the authoritative contract, synced summaries, and engine plan together
 - Do not rename existing fields without a migration plan
 - Version bumps require operator approval
 
@@ -38,6 +44,13 @@ LotAT engine state lives in Streamer.bot global variables. Key variables from `A
 - `lotat_offering_steal_chance` — offering mechanic interaction
 - `lotat_steal_multiplier` — offering steal scaling
 - `boost_*` — boost state variables
+
+Runtime design assumptions to preserve:
+- each LotAT session begins with a join phase before the first story decision
+- viewers opt into that session with `!join`
+- the engine tracks a per-session joined-user roster
+- during a decision window, the engine may close voting early once every joined user has submitted one of the currently allowed decision commands
+- join roster data is runtime state, not authored story schema
 
 Any new LotAT state variable must be added to `Actions/Twitch Core Integrations/stream-start.cs` reset and `Actions/SHARED-CONSTANTS.md`.
 

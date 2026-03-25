@@ -31,6 +31,9 @@ This content plays live on stream. Pacing must respect the stream environment:
 
 ## Chat Command Timing
 
+- Live sessions now begin with an engine-run join phase where viewers opt in via `!join`
+- `!join` is a runtime participation command, not a story-authored choice command
 - Commands should feel organic to the narration — not bolted on
 - A `!scan` command fits an investigation moment; `!deploy` fits a crew action
 - Don't front-load the story with commands — distribute them across the arc
+- Assume the engine may close a decision window early once every joined participant has submitted one of the currently allowed commands

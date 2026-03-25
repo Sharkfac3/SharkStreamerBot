@@ -33,8 +33,14 @@ What requires operator approval:
 - New named cast members
 - Changes to character personalities
 - New permanent ship sections or locations
-- Mechanics that change how chat interacts
+- New story-authored mechanics that change how chat interacts
 - Anything that would require updating `Creative/Brand/CHARACTER-CODEX.md`
+
+Current runtime interaction assumptions the writer should respect:
+- each live LotAT run begins with a `!join` participation phase
+- joined users form the participant roster for that session
+- later decision windows may resolve early once every joined participant has submitted one of the allowed commands
+- these behaviors belong to the engine/runtime layer, not story JSON
 
 ## Tone Reference
 

@@ -4,6 +4,8 @@
 
 Starship Shamples is the flagship franchise of this brand — a live, Twitch chat-controlled spaceship adventure game that plays out during real-world build streams. It is simultaneously an interactive game, an entertainment layer, and a metaphor for the neurodivergent creative experience.
 
+> **Authority note:** This file is a franchise summary and canon reference. It is **not** the authoritative story JSON schema. For valid authored story-file structure, use `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`.
+
 See `Creative/Brand/BRAND-IDENTITY.md` for the full brand context, including the metaphor explained in detail.
 
 ## Franchise Scope
@@ -46,11 +48,17 @@ Core systems:
 
 ## Story Content
 
-Managed by: `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`
-Implemented by: `Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md`
-Story files live in: `Creative/WorldBuilding/Storylines/`
+**Authoritative story contract:** `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`
+**Implementation reference:** `.agents/roles/lotat-tech/skills/story-pipeline/json-schema.md`
+**Implemented by:** `Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md`
+**Story files live in:** `Creative/WorldBuilding/Storylines/`
 
-Stories are modular data — the game engine is separate from story content. A new story does not require new code unless it introduces a new mechanic. New mechanics require engine changes before story content can use them.
+Ownership:
+- `lotat-writer` owns story content and authored story files
+- `lotat-tech` owns story schema and command-contract changes
+- `brand-steward` reviews canon, cast, and metaphor changes
+
+Stories are modular data — the game engine is separate from story content. A new story does not require new code unless it introduces a new mechanic. New mechanics require engine changes before story content can use them. If the schema changes, the authoritative story contract must be updated first and all summary/reference docs must be synced in the same pass.
 
 ## Skill Routing
 
