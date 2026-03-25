@@ -107,8 +107,9 @@ Live runs now begin with a **join phase** before the first story decision.
 Rules:
 - the engine invites chat to join the current LotAT session with `!join`
 - joined users form the participant roster for that run
+- when the join phase closes, that roster is treated as frozen for the rest of the run
 - story authors do **not** define join behavior in story JSON; this is runtime behavior owned by `lotat-tech` / `streamerbot-dev`
-- story authors should assume only joined users are counted when the engine resolves "everyone has voted"
+- story authors should assume only joined users from that frozen roster are counted when the engine resolves "everyone has voted"
 - if every joined participant submits one of the allowed commands for the current decision window, the engine may close that window early and advance immediately
 - this early-close rule is runtime behavior, not a per-story field
 

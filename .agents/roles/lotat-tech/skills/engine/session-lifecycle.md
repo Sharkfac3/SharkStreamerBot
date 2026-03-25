@@ -1,196 +1,359 @@
-# LotAT Engine — Session Lifecycle Spec
+# LotAT Engine — Session Lifecycle Runtime Contract
 
 ## Purpose
 
-This document defines the **runtime session contract** for LotAT live play.
+This document defines the **runtime session contract** for Legends of the ASCII Temple (LotAT) live play.
 
-It describes how a LotAT run should behave on stream **without changing the authored story JSON schema**. Use this when planning or reviewing the engine lifecycle in Streamer.bot.
+It explains how a LotAT run progresses at runtime in Streamer.bot-adjacent engine logic **without changing the authored story JSON schema**. Future agents should use this doc as scaffolding when implementing, reviewing, or debugging session flow.
 
 ## Scope Boundary
 
-This is an **engine/runtime spec**, not a story-authoring spec.
+This is an **engine/runtime contract**, not authored story content.
 
 Belongs here:
-- join phase behavior
-- participant roster rules
-- runtime stages
-- timer behavior
-- node-entry and decision-window flow
-- early-close voting rules
-- session-end behavior
+- runtime stage names and allowed transitions
+- session-start join behavior
+- `!join` handling
+- participant roster creation and freeze rules
+- zero-join behavior
+- node-entry flow
+- decision-window open/close flow
+- end-of-session teardown
+- operator recovery controls
 
 Does **not** belong here:
 - new story JSON fields
-- authored narrative content
+- authored narrative text
+- per-story overrides for join/vote lifecycle
 - changes to `choices[].command` semantics beyond runtime handling
 
-## Core Principle
+## Core Runtime Principle
 
 Every LotAT session begins with a **join phase** before the first story decision.
 
-Viewers opt into that run with `!join`. The engine tracks that roster and later uses it to decide whether a node's decision window can end early once **all joined participants have voted**.
+Viewers opt into that session with `!join`. The engine records a per-session participant roster and uses that roster for later runtime rules, especially the "all joined participants have voted" early-close condition.
 
-## Runtime Stage Model
+> Runtime contract: join roster state is runtime-owned session state. It is **not** authored into story JSON.
 
-The recommended runtime stage model is:
+## Canonical Runtime Stages
 
-1. `idle`
-   - no active LotAT run
+Recommended stage set for the session state machine:
 
-2. `join_open`
-   - session exists
-   - chat may use `!join`
-   - no story decision is active yet
+| Stage | Meaning | Accepts Chat Input? | Exit Conditions |
+|---|---|---|---|
+| `idle` | No active LotAT session exists. | No LotAT session input should be processed. | Operator starts a session. |
+| `join_open` | Session exists and is collecting participants. | `!join` only. Decision commands do not count yet. | Join timer ends, operator force-closes join, or operator cancels session. |
+| `node_intro` | Engine has entered a node and is presenting runtime/story output. | No vote-counting yet. | Intro/setup work completes, then either open decision window or end session if node is an ending. |
+| `decision_open` | Current node choices are live and votes may be collected. | Valid current-node decision commands from joined participants. | Timer expires, all joined participants vote, operator force-closes, or operator cancels session. |
+| `decision_resolving` | Voting is closed and the engine is determining the winning path. | No new votes should count. | Resolution completes and engine enters next node or ends session. |
+| `ended` | Run has finished or been cancelled and is awaiting final cleanup / safe return. | No further session participation should be accepted. | Cleanup completes and engine returns to `idle`. |
 
-3. `node_intro`
-   - engine has entered the current node
-   - narration, overlays, and mechanic setup happen here
+## Stage Transition Contract
 
-4. `decision_open`
-   - current node choices are active
-   - joined participants may submit one of the current node's allowed commands
+Normal happy-path flow:
 
-5. `decision_resolving`
-   - voting is closed
-   - winner is computed
-   - chaos/result logic is applied
-   - next node is selected
+`idle` → `join_open` → `node_intro` → `decision_open` → `decision_resolving` → `node_intro` ... → `ended` → `idle`
 
-6. `ended`
-   - session reached an ending node or was cancelled/reset
+Exceptional but expected paths:
+- `join_open` → `ended` when zero users joined
+- `join_open` → `ended` when operator cancels before story start
+- `decision_open` → `ended` when operator cancels mid-session
+- `node_intro` → `ended` when the entered node is an ending node
 
-## Start-of-Session Flow
+Recommended rule:
+- never skip directly from `decision_open` to a new node without entering `decision_resolving`
+- never accept decision votes outside `decision_open`
+- never accept `!join` outside `join_open`
+
+## Start-of-Session Contract
 
 When a LotAT session starts, the engine should:
 
-1. confirm no conflicting active LotAT run is already in progress
-2. load the canonical runtime story file
-3. initialize session state
-4. set runtime stage to `join_open`
-5. clear any stale join roster or vote state from the last run
-6. announce the join window to chat
-7. start the join timer
+1. confirm no conflicting active LotAT session is already running
+2. load the selected / canonical story definition
+3. validate that required runtime inputs exist (`story_id`, `starting_node_id`, nodes, choices where applicable)
+4. initialize fresh session state
+5. clear any stale roster, vote, timer, or branch state from a prior run
+6. set runtime stage to `join_open`
+7. announce the join phase to chat
+8. start the join timer
 
-Recommended chat expectation:
-- tell viewers clearly that they must type `!join` during the join window to participate in that mission
+Recommended chat/operator expectation:
+- chat is told clearly to type `!join` during the join window to participate in **this** LotAT mission
+- the announcement should make clear that joining is per-session, not permanent
 
-## Join Phase Contract
+## Join-Phase Contract
 
 During `join_open`:
-- `!join` is accepted
-- each unique viewer may join once
-- duplicate joins are ignored
-- the engine records a participant roster for the current run
+- `!join` is the only LotAT session command that should be accepted from chat
+- each unique viewer may join at most once for that session
+- duplicate `!join` attempts do not create duplicate roster entries
+- decision commands received during this phase do not count as votes
+- the engine should be able to inspect the current roster while the join window is still open
 
-Recommended identity rule:
-- use `userId` when available
-- otherwise fall back to lowercased `user`
+Recommended participant identity rule:
+- primary key: `userId`
+- fallback key: lowercased `user`
 
-## Roster Freeze Rule
+Recommended UX behavior:
+- duplicates may be ignored silently or acknowledged lightly, but must not mutate the roster
+- the operator should be able to see the roster count and identities if recovery is needed
 
-Recommended v1 contract:
+## `!join` as a Runtime Session Command
 
-> The participant roster is finalized when the join phase closes and remains fixed for the rest of the LotAT run.
+`!join` is an **engine-owned runtime session command**.
 
-Why this is preferred:
-- prevents the target participant count from changing mid-vote
-- keeps early-close logic deterministic
-- reduces live confusion and recovery complexity
+Contract implications:
+- it belongs to runtime lifecycle handling, not authored story choices
+- it should **not** appear in `choices[].command`
+- it should **not** appear in `commands_used`
+- it exists to build the participant roster for the current run
 
-Implication:
-- `!join` is a session-start participation command, not a mid-story opt-in command
+`!join` should be processed only when:
+- runtime stage is `join_open`
+- the session has not already been cancelled or ended
 
-## Zero-Join Rule
+`!join` should be ignored when:
+- stage is `idle`
+- stage is `node_intro`
+- stage is `decision_open`
+- stage is `decision_resolving`
+- stage is `ended`
 
-Recommended v1 contract:
+## Participant Roster Creation Contract
 
-> If the join window closes with zero participants, the LotAT session ends cleanly instead of continuing with an empty roster.
+The participant roster is created during `join_open`.
 
-Recommended operator/chat framing:
-- announce that no crew joined the mission
-- clear session state cleanly
+Minimum contract:
+- roster starts empty at session initialization
+- valid `!join` messages append unique participants to the active-session roster
+- roster is session-scoped, not global across runs
+- roster is the authoritative source for participant eligibility during all later decision windows
+
+The runtime should be able to answer:
+- who joined this session
+- how many participants are in the session
+- whether a given viewer is a joined participant
+
+## Roster Freeze Contract
+
+Recommended v1 rule:
+
+> When the join phase closes, the roster is frozen and remains fixed for the rest of the session.
+
+This is a runtime-only rule. It must not be reintroduced later as a per-story JSON field or per-node authored override unless the schema is intentionally changed.
+
+Why this is the preferred runtime contract:
+- early-close logic stays deterministic
+- participant targets do not change mid-vote
+- live recovery is simpler
+- future agents have a clear boundary between session setup and story play
+
+Implications:
+- late joiners are not added after the join phase ends
+- no mid-story participant churn is assumed in v1
+- decision windows should count only the frozen joined roster
+
+## Zero-Join Contract
+
+Recommended v1 rule:
+
+> If the join window closes with zero participants, the session ends cleanly and does not continue into the story.
+
+Required behavior:
+- do **not** enter the starting node
+- do **not** open a decision window with an empty roster
+- announce that no crew joined / no participants entered the mission
+- transition to `ended`
+- perform normal end-of-session cleanup
 - return to `idle`
 
-This keeps participation explicit and avoids creating a second fallback voting model.
+Reasoning:
+- avoids inventing a second fallback voting model
+- keeps participation explicit
+- reduces runtime ambiguity for future implementation work
 
-## Node Entry Flow
+## Join Close → Story Start Contract
 
-After a non-empty roster is locked and the join phase closes, the engine should enter the story's `starting_node_id`.
+When the join phase closes with one or more participants:
 
-For each node entry, the engine should:
-- load the node from the current story definition
-- set the current node state
-- apply `chaos.on_enter`
-- present `read_aloud`
-- surface `sfx_hint` as a production hook if needed
-- surface optional `crew_focus`
-- surface optional `commander_moment`
-- surface optional `dice_hook`
-- if the node is an ending, transition to session-end handling
-- if the node is a stage, open a decision window
+1. stop the join timer
+2. freeze the roster
+3. resolve the story's `starting_node_id`
+4. set current node state
+5. transition to `node_intro`
 
-## Decision Window Flow
+This is the only normal path from session-start setup into active story progression.
 
-When a stage node opens:
-- clear prior node vote state
-- derive the allowed commands from the current node's two choices
+## Node-Entry Contract
+
+Each time the engine enters a node, it should:
+
+1. resolve the node definition by `node_id`
+2. set the active node state
+3. set runtime stage to `node_intro`
+4. clear any stale per-node transient state that should not leak from the prior node
+5. apply `chaos.on_enter`
+6. surface `read_aloud`
+7. surface `sfx_hint` as a production hook if present
+8. surface `crew_focus` if present
+9. surface `commander_moment` if enabled
+10. surface `dice_hook` if enabled
+11. inspect `node_type`
+
+Then:
+- if `node_type = "ending"`, transition directly into end-of-session handling
+- if `node_type = "stage"`, open a decision window
+
+## Decision-Window Open Contract
+
+When a stage node opens for voting, the engine should:
+- derive the allowed commands from the current node's `choices`
+- clear prior-node vote state
+- initialize a fresh vote map for the active node
 - set runtime stage to `decision_open`
-- announce the current choices
+- announce the available choices clearly to chat
 - start the decision timer
 
-Only the current node's allowed commands should count.
+Only the active node's allowed commands should count as valid votes.
 
-## Decision Closure Paths
+Recommended rule:
+- the active node vote map is per-node state and must not carry forward implicitly from earlier nodes
 
-A decision window may close in exactly two normal ways:
+## Decision Eligibility Contract
+
+A vote counts only when all of the following are true:
+- runtime stage is `decision_open`
+- the viewer is in the frozen roster for this session
+- the submitted command matches one of the current node's allowed commands
+- the vote arrives before the decision window closes
+
+A vote does **not** count when:
+- the viewer never joined
+- the command is not valid for the active node
+- the window is already closed
+- the session is not in `decision_open`
+
+## Decision-Window Close Contract
+
+A decision window may close through exactly these normal paths:
 
 ### 1. Timer expiry
-The decision timer reaches the end of its configured duration.
+The configured decision timer ends before all joined participants vote.
 
 ### 2. Early close
-Every joined participant has submitted a valid vote for the current node.
+All joined participants have submitted a valid vote for the current node.
 
-Both paths should converge into the same resolution step so the result logic stays consistent.
+### 3. Operator force-close
+The operator manually closes the decision window for recovery or pacing reasons.
 
-## End-of-Session Flow
+All three paths should converge into the same resolution flow.
+
+## Early-Close Contract
+
+Recommended v1 rule:
+
+> If every joined participant currently in the frozen roster has submitted a valid vote for the active node, the engine may close the decision window immediately.
+
+This is the same runtime early-close condition referenced in `commands.md` and `state-and-voting.md`: the denominator is the frozen joined roster for the current session, not all chatters and not a story-authored value.
+
+Required consequences:
+- stop the decision timer
+- prevent new votes from being counted
+- transition to `decision_resolving`
+- use the normal vote-resolution path
+
+This rule depends on the frozen roster and should not be implemented against all chatters generally.
+
+## Decision-Resolving Contract
+
+When the window closes, the engine should:
+
+1. set runtime stage to `decision_resolving`
+2. lock out new votes for the active node
+3. tally only the current node's recorded valid votes
+4. resolve ties according to the voting contract (`state-and-voting.md` currently recommends earliest matching choice in `choices` order)
+5. select the winning authored choice
+6. emit that choice's `result_flavor`
+7. apply any runtime result logic tied to success/failure/chaos progression
+8. transition to the winning `next_node_id`
+9. enter the next node through the normal node-entry contract
+
+Recommended safety rule:
+- there should be exactly one resolution pass per node
+
+## End-of-Session Contract
 
 A session ends when:
 - an ending node is reached
-- the session is cancelled manually
 - the join phase closes with zero participants
-- a reset action explicitly tears the run down
+- the operator cancels the session
+- a reset action explicitly tears the session down
+- unrecoverable runtime validation failure requires safe abort
 
 On session end, the engine should:
-- stop active LotAT timers
-- announce the ending or cancellation state
-- clear or reset session-specific globals
-- return to a safe inactive stage
+1. set runtime stage to `ended`
+2. stop any active LotAT timers
+3. announce the ending, cancellation, or zero-join outcome as appropriate
+4. persist any final inspection snapshot needed for debugging/operator visibility
+5. clear or reset session-specific state
+6. return to a safe inactive condition
+7. transition back to `idle`
 
-## Operator-Friendly Controls to Preserve
+Minimum state to clear/reset before returning to `idle`:
+- active-session flag
+- join-phase state
+- participant roster / count
+- current node vote map
+- current allowed commands
+- active node identifier if session-scoped
+- any timer state specific to the run
 
-For live reliability, the runtime design should keep room for manual controls such as:
-- force close join window
-- force close decision window
-- advance to next node
-- cancel session
-- inspect current roster
-- inspect current votes
-- reset LotAT state
+## Operator Recovery Controls
 
-These are not story mechanics. They are operator recovery tools.
+These controls are runtime/operator tools, not story mechanics. The contract should leave room for them even before implementation details are finalized.
+
+Recommended recovery controls:
+- **force close join window** — stop join collection and move to zero-join handling or story start based on roster count
+- **force close decision window** — stop voting and enter normal resolution immediately
+- **advance to next node** — move forward manually when recovery requires bypassing normal pacing
+- **cancel session** — abort the run safely and move to teardown
+- **inspect current roster** — show who joined and how many participants are locked for the session
+- **inspect current votes** — show current valid vote map for the active node
+- **reset LotAT state** — clear LotAT runtime state after interruption or partial failure
+
+Recommended operator assumptions:
+- these controls must be safe to use live on stream
+- they should not require story-schema changes
+- they should operate against runtime state only
+
+## Runtime Assumptions Locked by This Contract
+
+This document assumes:
+- every LotAT session begins in `idle` and must pass through `join_open`
+- `!join` is the session-start participation command
+- roster creation happens only during `join_open`
+- roster freezes when join closes
+- zero joins ends the session instead of starting story playback
+- every non-ending node is introduced through `node_intro`
+- every decision window opens through `decision_open`
+- every decision window closes into `decision_resolving`
+- only joined participants count toward early-close
+- session lifecycle rules are runtime-owned, not story-authored
 
 ## Non-Goals
 
-This spec does **not** require:
+This contract does **not** require:
 - new story JSON fields
-- changes to authored story structure
+- story-level configuration of join behavior in v1
 - late-join support in v1
 - a leave-session command in v1
 - C# implementation details in this doc
 
 ## Related Docs
 
-- `commands.md` — command categories and runtime `!join` rule
+- `commands.md` — command categories and the `!join` runtime boundary
 - `state-and-voting.md` — roster, vote, tie-break, and edge-case rules
+- `docs-map.md` — navigation guide for engine docs
 - `../story-pipeline/json-schema.md` — authored story schema boundary
 - `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` — authoritative authored story contract

@@ -17,6 +17,7 @@ When the story schema or command contract changes:
 4. escalate to `brand-steward` if canon, cast, or metaphor meaning changed
 
 Do not let this summary become a competing schema authority.
+Do not treat runtime-session documentation in `../engine/` as permission to invent authored JSON fields for join flow, participant rosters, or vote auto-close behavior.
 
 ## Top-Level Fields
 

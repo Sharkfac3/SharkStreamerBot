@@ -27,10 +27,11 @@ The system must support:
 - live Twitch chat interaction
 - a session-start join phase driven by `!join`
 - per-session participant roster tracking
+- roster freeze when the join phase closes
 - structured story playback
 - short stage progression
 - command-based branching
-- early decision-window closure when all joined participants have voted
+- early decision-window closure when all joined participants in that frozen roster have voted
 - chaos tracking
 - commander moments
 - future expansion without rewrites

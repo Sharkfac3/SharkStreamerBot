@@ -23,13 +23,14 @@ LotAT is the flagship entertainment feature — a full interactive story experie
 
 ## Skill Load Order
 
-1. `skills/core.md` — always load first; covers engine architecture and schema contract
+1. `skills/core.md` — always load first; covers engine architecture, schema contract, and runtime/story boundaries
 2. `skills/story-pipeline/_index.md` — when working on the pipeline flow or schema
 3. `skills/story-pipeline/json-schema.md` — when working directly with story JSON fields
-4. `skills/engine/_index.md` — when building or modifying the C# engine
-5. `skills/engine/commands.md` — when adding or reviewing supported chat commands
-6. `skills/engine/session-lifecycle.md` — when defining or reviewing the runtime session contract
-7. `skills/engine/state-and-voting.md` — when defining or reviewing participant roster, vote handling, and early-close behavior
+4. `skills/engine/docs-map.md` — start here for engine work when you need the navigation map to the runtime contract docs
+5. `skills/engine/_index.md` — engine overview and sub-skill index
+6. `skills/engine/commands.md` — when adding or reviewing supported chat commands
+7. `skills/engine/session-lifecycle.md` — canonical runtime session flow spec: stages, join flow, teardown, and recovery
+8. `skills/engine/state-and-voting.md` — canonical runtime participation/voting spec: roster, vote handling, and early-close behavior
 
 ## Chains To
 

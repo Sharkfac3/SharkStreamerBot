@@ -22,6 +22,7 @@ LotAT has a strict separation of concerns:
 - Story content (narration, choices, character moments) lives entirely in JSON
 - Engine commands are the bridge between JSON story events and Streamer.bot actions
 - Session lifecycle behavior such as join windows, participant roster tracking, and vote auto-close rules lives in the engine/runtime layer, not in authored story JSON
+- The runtime session contract is documented in `skills/engine/session-lifecycle.md` and `skills/engine/state-and-voting.md`; treat those as the navigation target for runtime-spec questions before discussing C# implementation details
 
 ## Schema is a Contract
 
@@ -60,5 +61,8 @@ Any new LotAT state variable must be added to `Actions/Twitch Core Integrations/
 |---|---|
 | `Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md` | Technical agent prompt — engine implementation guidelines |
 | `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` | Story agent prompt — defines the JSON schema the engine must consume |
+| `skills/engine/docs-map.md` | First-stop navigation map to the runtime session contract docs |
+| `skills/engine/session-lifecycle.md` | Canonical runtime session flow spec |
+| `skills/engine/state-and-voting.md` | Canonical runtime participation/voting spec |
 | `Actions/SHARED-CONSTANTS.md` | LotAT global variable names |
 | `Actions/HELPER-SNIPPETS.md` | Reusable C# patterns |

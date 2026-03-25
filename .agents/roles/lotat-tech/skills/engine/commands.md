@@ -2,9 +2,11 @@
 
 ## Command Categories
 
-LotAT now distinguishes between:
+LotAT distinguishes between:
 - **authored decision commands** — used in story JSON `choices[].command` and `commands_used`
 - **runtime session commands** — used by the engine to manage the live session, but not authored into story JSON
+
+This distinction is a runtime/story boundary, not a schema expansion. Runtime session commands may be documented in story-agent or tech docs so future agents understand the live-play contract, but they do **not** become valid authored `choices[].command` values unless the schema is intentionally changed.
 
 ## Currently Supported Authored Decision Commands
 
@@ -23,8 +25,9 @@ These are engine-owned commands that support the live session lifecycle.
 For each LotAT session:
 - the engine opens a join phase before the first story decision
 - viewers who type `!join` are added to the participant roster for that run
-- during each later decision window, only joined participants count toward the "everyone has voted" rule
-- if every joined participant submits one of the currently allowed decision commands for that node, the engine should close the decision window early and advance immediately
+- when the join phase closes, that roster is frozen for the rest of the session
+- during each later decision window, only joined participants from that frozen roster count toward the "everyone has voted" rule
+- if every joined participant submits one of the currently allowed decision commands for that node, the engine may auto-close the decision window early and advance immediately through the normal resolution path
 
 ## Adding a New Command
 

@@ -18,10 +18,21 @@ The C# engine running in Streamer.bot actions under `Actions/LotAT/`:
 - Engine is story-agnostic — any valid JSON story file should run without engine modifications
 - Chat commands are the primary interaction surface — see `commands.md` for supported set
 - Chaos Meter state is tracked in global variables and must survive action re-entry
+- Runtime contract docs in this folder describe behavior boundaries; implementation work in `Actions/LotAT/` should follow them rather than move those rules into ad hoc script-specific docs
 
 ## Current Status
 
 `Actions/LotAT/` is reserved and in active development. As engine scripts are created, document each one here.
+
+## Runtime Session Spec — Start Here
+
+If your question is about how a live LotAT run behaves before or between any future C# implementation details, read these docs in order:
+1. `docs-map.md` — navigation entry point
+2. `session-lifecycle.md` — canonical runtime session flow spec
+3. `state-and-voting.md` — canonical runtime roster/voting spec
+4. `commands.md` — runtime vs authored command boundary
+
+These docs define the **runtime contract**. Future Streamer.bot scripts should implement them, not silently redefine them.
 
 ## State Variables
 
@@ -40,6 +51,7 @@ Expected runtime state to add when the engine is implemented/refined:
 
 ## Sub-Skills
 
+- `docs-map.md` — high-level navigation map for the LotAT engine docs in this folder
 - `commands.md` — supported chat commands and engine constraints
-- `session-lifecycle.md` — runtime session stages, join-window flow, node-entry flow, and end-of-session contract
+- `session-lifecycle.md` — canonical runtime session contract: stages, join flow, roster freeze, zero-join handling, node-entry flow, decision flow, teardown, and operator recovery controls
 - `state-and-voting.md` — participant roster, vote storage, early-close rules, tie-break behavior, and edge cases

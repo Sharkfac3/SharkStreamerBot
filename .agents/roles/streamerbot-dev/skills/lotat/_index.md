@@ -13,10 +13,11 @@ Reserved / in-progress. The `Actions/LotAT/` folder is the target location for a
 | Concern | Role |
 |---|---|
 | C# engine that runs story nodes | `streamerbot-dev` (here) |
+| Runtime contract docs for session flow, roster rules, and vote handling | `lotat-tech` |
 | Story JSON schema, pipeline architecture | `lotat-tech` |
 | Narrative content, adventure design, lore | `lotat-writer` |
 
-Do not mix concerns. If a task is "write a new adventure," use `lotat-writer`. If it is "implement the engine command that executes node transitions," use `streamerbot-dev` here + `lotat-tech` for schema context.
+Do not mix concerns. If a task is "write a new adventure," use `lotat-writer`. If it is "implement the engine command that executes node transitions," use `streamerbot-dev` here + `lotat-tech` for schema/runtime-contract context.
 
 ## LotAT State Variables
 
@@ -31,10 +32,13 @@ Runtime behavior expected by the current LotAT contract:
 - `!join` registers a viewer into the session participant roster
 - later decision windows may auto-close once every joined participant has submitted one of the allowed node commands
 
-Before implementing LotAT runtime behavior in `Actions/`, read these lotat-tech engine docs:
+Before implementing LotAT runtime behavior in `Actions/`, read these lotat-tech engine docs in order:
+- `.agents/roles/lotat-tech/skills/engine/docs-map.md`
 - `.agents/roles/lotat-tech/skills/engine/session-lifecycle.md`
 - `.agents/roles/lotat-tech/skills/engine/state-and-voting.md`
 - `.agents/roles/lotat-tech/skills/engine/commands.md`
+
+Treat those lotat-tech docs as the runtime contract source. This `streamerbot-dev` index points implementers back to the contract; it does not redefine session rules locally.
 
 Any new LotAT global variable must be reset in `Actions/Twitch Core Integrations/stream-start.cs` and added to `Actions/SHARED-CONSTANTS.md`.
 
