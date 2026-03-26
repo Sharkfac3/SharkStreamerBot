@@ -30,16 +30,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-03-25 | pi | Create LotAT ambiguity-resolution prompt pack for humans/ | uncommitted |
-| 2026-03-25 | pi | Review LotAT runtime session scaffolding docs for consistency | uncommitted |
-| 2026-03-25 | pi | Add LotAT runtime spec navigation scaffolding | uncommitted |
-| 2026-03-25 | pi | Document LotAT runtime state model and voting contract | uncommitted |
-| 2026-03-25 | pi | Refine LotAT runtime session lifecycle contract docs | uncommitted |
-| 2026-03-25 | pi | Add high-level LotAT engine docs map | uncommitted |
-| 2026-03-25 | pi | Add LotAT runtime session spec prompt pack and scaffolding docs | uncommitted |
-| 2026-03-25 | pi | Update LotAT agent docs for join roster and vote auto-close rules | uncommitted |
-| 2026-03-25 | pi | Add loaded-story handoff to LotAT viewer | uncommitted |
-| 2026-03-25 | pi | Add reverse stage flow to LotAT story viewer | uncommitted |
+| 2026-03-26 | pi | Repo-wide Ollama doc consistency pass | uncommitted |
+| 2026-03-26 | pi | Align Content Pipeline docs to Windows-native Ollama workflow | uncommitted |
+| 2026-03-26 | pi | Add Windows 11 Ollama setup doc in humans/ | uncommitted |
+| 2026-03-26 | pi | Add Ollama unload visibility to pipeline orchestrator logs | uncommitted |
+| 2026-03-26 | pi | Add explicit Ollama unload handling to ContentPipeline | uncommitted |
+| 2026-03-26 | pi | Audit ContentPipeline Ollama model lifecycle behavior | uncommitted |
+| 2026-03-26 | pi | Remove human launcher references from ContentPipeline README | uncommitted |
+| 2026-03-26 | pi | Move ContentPipeline operator docs out of Tools/ folder | uncommitted |
+| 2026-03-26 | pi | Add human-facing ContentPipeline launchers and docs | uncommitted |
+| 2026-03-26 | pi | Add First Run section to ContentPipeline README | uncommitted |
 
 ---
 

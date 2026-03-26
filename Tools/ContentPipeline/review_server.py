@@ -966,6 +966,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     print(f"[review] Review queue: {review_queue_dir}")
     print(f"[review] Published dir: {published_dir}")
     print(f"[review] Serving http://{args.host}:{args.port}")
+    print("Review server started → http://localhost:8000")
+    print("Press Ctrl+C to stop.")
 
     uvicorn.run(app, host=args.host, port=args.port, reload=args.reload)
     return 0

@@ -121,6 +121,8 @@ def build_runtime_options(args: argparse.Namespace, settings: Settings) -> dict[
     return {
         "ollama_url": (args.ollama_url or settings.ollama_url).strip(),
         "model": (args.model or settings.ollama_model).strip(),
+        "keep_alive": settings.ollama_keep_alive,
+        "unload_model_after_run": settings.ollama_unload_after_run,
         "window_minutes": window_minutes,
         "overlap_minutes": overlap_minutes,
         "max_highlights_per_window": max_per_window,
@@ -281,6 +283,7 @@ def detect_for_transcript(transcript_path: Path, output_file: Path, options: dic
             ollama_url=str(options["ollama_url"]),
             model=str(options["model"]),
             prompt=prompt,
+            keep_alive=str(options["keep_alive"]),
         )
         suggestions = normalize_highlights(
             payload=payload,
@@ -316,18 +319,20 @@ def infer_duration_seconds(transcript_payload: dict[str, Any], segments: list[di
     return 0.0
 
 
-def request_ollama(*, ollama_url: str, model: str, prompt: str) -> dict[str, Any]:
+def request_ollama(*, ollama_url: str, model: str, prompt: str, keep_alive: str | None = None) -> dict[str, Any]:
     """Send a single non-streaming prompt to Ollama and parse the response JSON."""
-    request_body = json.dumps(
-        {
-            "model": model,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": 0.2,
-            },
-        }
-    ).encode("utf-8")
+    request_payload: dict[str, Any] = {
+        "model": model,
+        "prompt": prompt,
+        "stream": False,
+        "options": {
+            "temperature": 0.2,
+        },
+    }
+    if keep_alive is not None and keep_alive.strip():
+        request_payload["keep_alive"] = keep_alive.strip()
+
+    request_body = json.dumps(request_payload).encode("utf-8")
 
     request = urllib.request.Request(
         ollama_url,
@@ -363,6 +368,36 @@ def request_ollama(*, ollama_url: str, model: str, prompt: str) -> dict[str, Any
         raise RuntimeError("Ollama model output must decode to a JSON object")
 
     return model_payload
+
+
+def unload_ollama_model(*, ollama_url: str, model: str) -> None:
+    """Ask Ollama to unload the model so it does not keep occupying VRAM after Phase 2."""
+    request_body = json.dumps(
+        {
+            "model": model,
+            "prompt": "",
+            "stream": False,
+            "keep_alive": 0,
+        }
+    ).encode("utf-8")
+
+    request = urllib.request.Request(
+        ollama_url,
+        data=request_body,
+        headers={"Content-Type": "application/json", "Accept": "application/json"},
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            status = getattr(response, "status", 200)
+            response.read()
+    except urllib.error.URLError as error:
+        raise RuntimeError(f"Ollama unload request failed: {error}") from error
+
+    if status < 200 or status >= 300:
+        raise RuntimeError(f"Ollama unload returned HTTP {status}")
+
 
 
 def parse_model_json(text: str) -> Any:
@@ -522,39 +557,53 @@ def main(argv: Sequence[str] | None = None) -> int:
     print(f"[highlights] Highlight output: {settings.highlights_dir}")
     print(
         f"[highlights] Ollama: model={options['model']} url={options['ollama_url']} "
+        f"keep_alive={options['keep_alive']} unload_after_run={options['unload_model_after_run']} "
         f"window={options['window_minutes']}m overlap={options['overlap_minutes']}m "
         f"max_per_window={options['max_highlights_per_window']}"
     )
 
     processed = 0
     skipped = 0
+    should_unload_model = False
 
-    for transcript_path in transcripts:
-        result_path = output_path(transcript_path, settings.highlights_dir)
-        exists_already = result_path.exists()
+    try:
+        for transcript_path in transcripts:
+            result_path = output_path(transcript_path, settings.highlights_dir)
+            exists_already = result_path.exists()
 
-        if args.dry_run:
-            action = "skip(existing)" if exists_already and not args.overwrite else "detect"
-            print(f"[highlights] {action}: {transcript_path.name} -> {result_path.name}")
-            continue
+            if args.dry_run:
+                action = "skip(existing)" if exists_already and not args.overwrite else "detect"
+                print(f"[highlights] {action}: {transcript_path.name} -> {result_path.name}")
+                continue
 
-        if exists_already and not args.overwrite:
-            print(f"[highlights] Skipping existing output for {transcript_path.name}")
-            skipped += 1
-            continue
+            if exists_already and not args.overwrite:
+                print(f"[highlights] Skipping existing output for {transcript_path.name}")
+                skipped += 1
+                continue
 
-        print(f"[highlights] Detecting highlights for {transcript_path.name}...")
-        try:
-            window_count, raw_suggestions = detect_for_transcript(transcript_path, result_path, options)
-        except Exception as error:
-            print(f"[highlights] Failed for {transcript_path.name}: {error}", file=sys.stderr)
-            return 1
+            should_unload_model = True
+            print(f"[highlights] Detecting highlights for {transcript_path.name}...")
+            try:
+                window_count, raw_suggestions = detect_for_transcript(transcript_path, result_path, options)
+            except Exception as error:
+                print(f"[highlights] Failed for {transcript_path.name}: {error}", file=sys.stderr)
+                return 1
 
-        processed += 1
-        print(
-            f"[highlights] Wrote {result_path.name} "
-            f"(windows={window_count} raw_suggestions={raw_suggestions})"
-        )
+            processed += 1
+            print(
+                f"[highlights] Wrote {result_path.name} "
+                f"(windows={window_count} raw_suggestions={raw_suggestions})"
+            )
+    finally:
+        if should_unload_model and bool(options["unload_model_after_run"]):
+            try:
+                unload_ollama_model(
+                    ollama_url=str(options["ollama_url"]),
+                    model=str(options["model"]),
+                )
+                print(f"[highlights] Unloaded Ollama model {options['model']}")
+            except Exception as error:
+                print(f"[highlights] Warning: could not unload Ollama model {options['model']}: {error}", file=sys.stderr)
 
     print(f"[highlights] Done. processed={processed} skipped={skipped} total={len(transcripts)}")
     return 0

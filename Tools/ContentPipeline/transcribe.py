@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 from typing import Sequence
 
-from config import Settings, find_recordings, load_settings
+from config import Settings, ensure_recordings_dir_exists, find_recordings, load_settings
 from lib.transcript_io import build_transcript_payload, segment_to_dict, write_srt, write_transcript_json
 
 
@@ -54,8 +54,8 @@ def resolve_inputs(args: argparse.Namespace) -> tuple[Settings, list[Path]]:
     settings = load_settings()
     recordings_dir = (args.recordings_dir or settings.recordings_dir).resolve()
 
-    if not recordings_dir.exists() and not args.inputs:
-        raise FileNotFoundError(f"Recordings directory does not exist: {recordings_dir}")
+    if not args.inputs or any(not Path(value).expanduser().is_absolute() for value in args.inputs):
+        recordings_dir = ensure_recordings_dir_exists(recordings_dir)
 
     settings = replace(settings, recordings_dir=recordings_dir)
 

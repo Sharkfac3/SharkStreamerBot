@@ -43,6 +43,8 @@ class Settings:
     word_timestamps: bool
     ollama_url: str
     ollama_model: str
+    ollama_keep_alive: str
+    ollama_unload_after_run: bool
     highlight_window_minutes: int
     highlight_window_overlap_minutes: int
     highlight_max_per_window: int
@@ -88,6 +90,10 @@ def load_settings() -> Settings:
     transcripts_dir = _resolve_path(_get_value("CONTENT_PIPELINE_TRANSCRIPTS_DIR", file_values), data_dir / "transcripts")
     highlights_dir = _resolve_path(_get_value("CONTENT_PIPELINE_HIGHLIGHTS_DIR", file_values), data_dir / "highlights")
     feedback_dir = _resolve_path(_get_value("CONTENT_PIPELINE_FEEDBACK_DIR", file_values), data_dir / "feedback")
+    recordings_dir = _resolve_path(
+        _get_value("CONTENT_PIPELINE_RECORDINGS_DIR", file_values),
+        _path_from_string(DEFAULT_RECORDINGS_DIR),
+    )
 
     return Settings(
         repo_root=REPO_ROOT,
@@ -102,10 +108,7 @@ def load_settings() -> Settings:
         feedback_db_path=_resolve_path(_get_value("CONTENT_PIPELINE_FEEDBACK_DB_PATH", file_values), feedback_dir / "feedback.db"),
         feedback_prompt_path=_resolve_path(_get_value("CONTENT_PIPELINE_FEEDBACK_PROMPT_PATH", file_values), feedback_dir / "prompt_context.txt"),
         feedback_summary_path=_resolve_path(_get_value("CONTENT_PIPELINE_FEEDBACK_SUMMARY_PATH", file_values), feedback_dir / "summary.json"),
-        recordings_dir=_resolve_path(
-            _get_value("CONTENT_PIPELINE_RECORDINGS_DIR", file_values),
-            _path_from_string(DEFAULT_RECORDINGS_DIR),
-        ),
+        recordings_dir=recordings_dir,
         whisper_model=_get_value("CONTENT_PIPELINE_WHISPER_MODEL", file_values) or "large-v3",
         whisper_device=(_get_value("CONTENT_PIPELINE_WHISPER_DEVICE", file_values) or "auto").strip(),
         whisper_compute_type=(_get_value("CONTENT_PIPELINE_WHISPER_COMPUTE_TYPE", file_values) or "auto").strip(),
@@ -115,6 +118,8 @@ def load_settings() -> Settings:
         word_timestamps=_parse_bool(_get_value("CONTENT_PIPELINE_WORD_TIMESTAMPS", file_values), True),
         ollama_url=(_get_value("CONTENT_PIPELINE_OLLAMA_URL", file_values) or "http://localhost:11434/api/generate").strip(),
         ollama_model=(_get_value("CONTENT_PIPELINE_OLLAMA_MODEL", file_values) or "llama3.1:8b").strip(),
+        ollama_keep_alive=(_get_value("CONTENT_PIPELINE_OLLAMA_KEEP_ALIVE", file_values) or "10m").strip(),
+        ollama_unload_after_run=_parse_bool(_get_value("CONTENT_PIPELINE_OLLAMA_UNLOAD_AFTER_RUN", file_values), True),
         highlight_window_minutes=_parse_int(_get_value("CONTENT_PIPELINE_HIGHLIGHT_WINDOW_MINUTES", file_values), 5),
         highlight_window_overlap_minutes=_parse_int(
             _get_value("CONTENT_PIPELINE_HIGHLIGHT_WINDOW_OVERLAP_MINUTES", file_values),
@@ -236,6 +241,21 @@ def _resolve_optional_binary_path(value: str | None, executable_name: str) -> Pa
             return Path(found).resolve()
 
     return None
+
+
+def ensure_recordings_dir_exists(recordings_dir: Path) -> Path:
+    """Exit with an actionable message if the resolved recordings directory is missing."""
+    resolved_recordings_dir = recordings_dir.resolve()
+    if resolved_recordings_dir.exists():
+        return resolved_recordings_dir
+
+    print(f"ERROR: Recordings directory not found: {resolved_recordings_dir}", file=sys.stderr)
+    print(
+        "Set CONTENT_PIPELINE_RECORDINGS_DIR in Tools/ContentPipeline/.env to your recordings path.",
+        file=sys.stderr,
+    )
+    print("See Tools/ContentPipeline/.env.example for all options.", file=sys.stderr)
+    sys.exit(1)
 
 
 def _path_from_string(value: str) -> Path:

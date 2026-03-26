@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 from typing import Any, Sequence
 
-from config import Settings, load_settings
+from config import Settings, ensure_recordings_dir_exists, load_settings
 from lib.clip_manifest import (
     build_clip_manifest,
     clip_manifest_name,
@@ -63,7 +63,7 @@ def parse_args_from(argv: Sequence[str]) -> argparse.Namespace:
 def resolve_inputs(args: argparse.Namespace) -> tuple[Settings, list[Path]]:
     """Resolve input highlight manifests using CLI args and config."""
     settings = load_settings()
-    recordings_dir = (args.recordings_dir or settings.recordings_dir).resolve()
+    recordings_dir = ensure_recordings_dir_exists((args.recordings_dir or settings.recordings_dir).resolve())
     highlights_dir = (args.highlights_dir or settings.highlights_dir).resolve()
     clips_dir = (args.clips_dir or settings.clips_dir).resolve()
 

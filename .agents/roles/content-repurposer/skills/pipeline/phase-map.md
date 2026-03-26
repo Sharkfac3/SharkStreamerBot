@@ -21,6 +21,7 @@ Current-state reference for agents working on `Tools/ContentPipeline/`.
 - **Key code contracts:**
   - transcript segments are grouped into overlapping sliding windows
   - Ollama is called over raw HTTP via `urllib.request`
+  - the preferred operator setup is Windows-hosted Ollama with WSL-based repo tooling reaching `http://localhost:11434`
   - valid categories are `technical`, `entertainment`, and `hybrid`
   - overlapping suggestions are deduplicated and ranked
   - optional prompt feedback is loaded from `data/feedback/prompt_context.txt`
