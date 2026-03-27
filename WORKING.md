@@ -12,7 +12,7 @@
 
 | Agent | Task | Domain | Files Being Edited | Started |
 |-------|------|--------|--------------------|---------|
-| — | — | — | — | — |
+| pi | Clean up references to humans/ folder | .agents/, Creative/, WORKING.md | WORKING.md, .agents/roles/lotat-tech/skills/engine/docs-map.md, .agents/roles/lotat-tech/skills/story-pipeline/_index.md, Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md, Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md, TBD | 2026-03-26 |
 
 *Empty table = no active agent work. If you see entries here, check the files listed before editing anything in that domain.*
 
@@ -30,16 +30,13 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-27 | pi | Separate human ArtPipeline docs from agent-focused pipeline docs | uncommitted |
+| 2026-03-27 | pi | Document ArtPipeline and update art-director role | uncommitted |
+| 2026-03-26 | pi | Lock in LotAT dice hook runtime contract | uncommitted |
+| 2026-03-26 | pi | Simplify LotAT chaos contract and ending outcome docs | uncommitted |
 | 2026-03-26 | pi | Repo-wide Ollama doc consistency pass | uncommitted |
 | 2026-03-26 | pi | Align Content Pipeline docs to Windows-native Ollama workflow | uncommitted |
 | 2026-03-26 | pi | Add Windows 11 Ollama setup doc in humans/ | uncommitted |
-| 2026-03-26 | pi | Add Ollama unload visibility to pipeline orchestrator logs | uncommitted |
-| 2026-03-26 | pi | Add explicit Ollama unload handling to ContentPipeline | uncommitted |
-| 2026-03-26 | pi | Audit ContentPipeline Ollama model lifecycle behavior | uncommitted |
-| 2026-03-26 | pi | Remove human launcher references from ContentPipeline README | uncommitted |
-| 2026-03-26 | pi | Move ContentPipeline operator docs out of Tools/ folder | uncommitted |
-| 2026-03-26 | pi | Add human-facing ContentPipeline launchers and docs | uncommitted |
-| 2026-03-26 | pi | Add First Run section to ContentPipeline README | uncommitted |
 
 ---
 

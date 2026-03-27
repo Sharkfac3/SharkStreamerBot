@@ -1,0 +1,18 @@
+{
+  "redemption-overlay": {
+    "description": "Character graphic shown when a viewer redeems to become a commander",
+    "default_requirements": {
+      "width": 512,
+      "height": 768,
+      "format": "png",
+      "transparent_background": true,
+      "framing": "upper-body"
+    },
+    "sd_defaults": {
+      "steps": 30,
+      "cfg_scale": 7.0,
+      "sampler": "euler_a",
+      "denoising_strength": 1.0
+    }
+  }
+}

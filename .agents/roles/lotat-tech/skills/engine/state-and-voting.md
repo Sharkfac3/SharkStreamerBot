@@ -16,6 +16,7 @@ Do not convert these rules into new story JSON fields unless an intentional sche
 
 In particular:
 - `!join` is a runtime session command
+- `!roll` is a runtime dice-window command
 - joined-participant tracking is runtime state
 - vote eligibility is runtime logic
 - latest-vote-wins behavior is runtime logic
@@ -35,6 +36,11 @@ That means:
 - the roster is the denominator for the "everyone has voted" early-close rule
 
 This keeps live behavior deterministic and recoverable.
+
+Important exception:
+- nodes with enabled dice hooks open a pre-vote `!roll` window that is **not** roster-gated
+- any viewer in chat may roll during that window
+- dice-window participation remains separate from the joined-participant voting model
 
 ## Participant Identity Rules
 
@@ -97,6 +103,7 @@ A vote is not valid when any of the following are true:
 
 Important boundary:
 - `!join` is never a story-choice vote
+- `!roll` is never a story-choice vote
 - authored `choices[].command` values are the only commands that may count as decision votes
 
 ## Valid-Vote Storage Rules
@@ -157,6 +164,26 @@ Important denominator rule:
 - the check is against the **joined roster**, not against all chat viewers who happen to speak
 - non-joined chatter never delays or accelerates early-close
 
+## Dice-Window Participation Rules
+
+When a node opens a dice window:
+- runtime stage must be `dice_open` for `!roll` to be accepted
+- `!roll` is open to **all chat viewers**, not just joined participants
+- no participant roster check is applied to dice rolls in v1
+- users may roll repeatedly while the window remains open
+- each roll generates a public 1–100 result in chat
+- success is `roll >= success_threshold`
+- the first successful roll ends the dice window immediately
+- if the timer expires before any successful roll occurs, the result is failure
+- dice success/failure is narrative-only in v1 and does **not** alter chaos, branching, vote eligibility, or vote tallying
+
+Recommended runtime state for dice windows:
+- whether the active node currently has a dice window open
+- the current node's `success_threshold`
+- the current node's `roll_window_seconds`
+- whether the dice result already resolved as success/failure
+- optional debug snapshot such as total roll attempts during the node
+
 ## Tie-Break Behavior
 
 Recommended deterministic tie-break rule:
@@ -197,6 +224,8 @@ Tracks what matters for the currently active node.
 
 Examples:
 - active node type
+- whether a dice window is currently open for the node
+- current dice threshold / dice timer state when applicable
 - allowed commands for the current node
 - vote map for the current node
 - count of joined participants who currently have a valid vote
@@ -234,6 +263,7 @@ Exact final names belong to implementation work, but the contract likely needs r
 - roster frozen/open state
 - active node identifier
 - current node allowed commands
+- current node dice-window state when applicable
 - current node vote map
 - current node valid-voter count
 - current chaos total
@@ -285,6 +315,16 @@ Recommended invariant:
 ### Not everyone votes
 - let the timer expire normally
 - resolve using whatever valid votes exist at close time
+
+### Dice window with lots of chat activity
+- allow repeated `!roll` attempts while runtime stage is `dice_open`
+- close immediately on the first roll meeting the threshold
+- ignore later `!roll` messages after the dice window resolves
+
+### Nobody rolls
+- let the dice timer expire normally
+- treat the node's dice outcome as failure
+- continue into the normal decision window afterward
 
 ### Vote arrives exactly as the timer closes
 - once runtime stage leaves `decision_open`, treat subsequent arrivals as late votes and ignore them

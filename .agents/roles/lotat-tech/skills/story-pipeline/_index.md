@@ -54,7 +54,9 @@ Before implementing engine changes for a new story, verify the story JSON:
 - [ ] Each choice has `choice_id`, `label`, `command`, `result_flavor`, and `next_node_id`
 - [ ] All `next_node_id` values reference valid node IDs in the file
 - [ ] Only supported authored decision commands are used in `choices[].command` / `commands_used` (see `engine/commands.md`)
-- [ ] Runtime commands such as `!join` do not appear in story JSON fields
+- [ ] Runtime commands such as `!join` and `!roll` do not appear in story JSON fields
+- [ ] Ending nodes keep `dice_hook.enabled: false`
+- [ ] Enabled stage-node dice hooks include `roll_window_seconds` and a `success_threshold` from 1–90
 - [ ] No invented schema fields outside the authoritative contract
 
 > **Note:** Future engine/runtime code should consume the canonical loaded runtime copy at `Creative/WorldBuilding/Storylines/loaded/current-story.json`, not scan `ready/` directly. Only load a story into that runtime slot after the operator has handed it off into `ready/` and explicitly loaded it via the story viewer.

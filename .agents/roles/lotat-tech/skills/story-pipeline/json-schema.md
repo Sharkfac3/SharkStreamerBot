@@ -71,7 +71,7 @@ Use this exact top-level shape:
 | `chat_voting` | boolean | yes | Whether chat voting is used |
 | `chaos_meter` | boolean | yes | Whether chaos tracking is used |
 | `commander_moments` | boolean | yes | Whether commander moments are used |
-| `dice_hooks` | boolean | yes | Whether dice hooks are used |
+| `dice_hooks` | boolean | yes | For valid v1 stories this should remain `true`; node-level `dice_hook.enabled` determines whether a given stage opens a pre-vote roll window |
 | `landing_party` | boolean | yes | Must remain `false` unless that mechanic is officially added |
 
 ## `cast`
@@ -100,13 +100,12 @@ Each node must use this shape:
     "squad_member": "Pedro the Raccoon"
   },
   "chaos": {
-    "on_enter": 0,
-    "on_success": 0,
-    "on_failure": 1
+    "delta": 0
   },
   "dice_hook": {
     "enabled": false,
     "purpose": null,
+    "roll_window_seconds": null,
     "success_threshold": null,
     "failure_text": null,
     "success_text": null
@@ -166,11 +165,9 @@ Each node must use this shape:
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `on_enter` | number | yes | Chaos change when entering the node |
-| `on_success` | number | yes | Chaos change associated with the success path |
-| `on_failure` | number | yes | Chaos change associated with the failure path |
+| `delta` | number | yes | Non-negative chaos increase applied when entering the node |
 
-The contract uses a `chaos` object. Do **not** replace it with a flat `chaos_change` field.
+The contract uses a `chaos` object with a single `delta` field in v1. Do **not** replace it with a flat `chaos_change` field.
 
 ## `dice_hook`
 
@@ -178,9 +175,10 @@ The contract uses a `chaos` object. Do **not** replace it with a flat `chaos_cha
 |---|---|---|---|
 | `enabled` | boolean | yes | Whether a dice hook is active |
 | `purpose` | string or null | yes | What the roll is for |
-| `success_threshold` | number or null | yes | Threshold when enabled |
-| `failure_text` | string or null | yes | Failure outcome text |
-| `success_text` | string or null | yes | Success outcome text |
+| `roll_window_seconds` | number or null | yes | Whole-second pre-vote `!roll` window length when enabled |
+| `success_threshold` | number or null | yes | Success target when enabled; valid authored range is 1–90 and success is `roll >= success_threshold` |
+| `failure_text` | string or null | yes | Failure outcome text read aloud by the operator |
+| `success_text` | string or null | yes | Success outcome text read aloud by the operator |
 
 ## `commander_moment`
 
@@ -229,13 +227,12 @@ Ending nodes must use this shape:
     "squad_member": "Duck the Duck"
   },
   "chaos": {
-    "on_enter": 1,
-    "on_success": 0,
-    "on_failure": 0
+    "delta": 1
   },
   "dice_hook": {
     "enabled": false,
     "purpose": null,
+    "roll_window_seconds": null,
     "success_threshold": null,
     "failure_text": null,
     "success_text": null
@@ -257,7 +254,8 @@ Stage vs ending expectations:
 - stage nodes use `end_state: null`
 - ending nodes use `node_type: "ending"`
 - ending nodes must use `choices: []`
-- ending nodes must use a non-null `end_state`
+- ending nodes must use an `end_state` of `"success"`, `"partial"`, or `"failure"`
+- ending outcome classification is authored for the final node only and should remain hidden from viewers until that ending is reached in play
 
 ## Command Restrictions
 
@@ -276,11 +274,12 @@ Currently supported authored decision commands:
 
 Runtime-only session commands:
 - `!join` — used by the engine during the session join phase; not valid in `choices[].command` and not listed in `commands_used`
+- `!roll` — used by the engine only during an active node dice-roll window; not valid in `choices[].command` and not listed in `commands_used`
 
 Rules:
 - do not invent new commands in `choices[].command`
 - every command listed in `commands_used` must come from the authored decision-command list above
-- runtime commands such as `!join` are engine behavior, not story schema content
+- runtime commands such as `!join` and `!roll` are engine behavior, not story schema content
 - if a new authored decision command is added to the engine, update the engine command doc, the authoritative story contract, and this summary together
 - if a new runtime/session command is added, update the engine command doc and authoritative contract guidance without pretending it is a story-choice command
 
@@ -294,11 +293,16 @@ Rules:
 - `title` is required both at the top level and at the node level
 - `sfx_hint` belongs at node level, not top level
 - `tags` is a required node-level array
-- `end_state` is required on every node: `null` for stages, non-null for endings
+- `end_state` is required on every node: `null` for stages, `"success"`, `"partial"`, or `"failure"` for endings
+- outcome classification belongs to ending nodes only; the engine should not infer per-stage success/failure from prose, tags, or downstream guesses
 - all `next_node_id` values must reference valid `node_id` values in the same story file
 - `read_aloud` should stay within 1–4 sentences for live-stream pacing
 - choices should usually present exactly 2 options for normal stage nodes
 - join-roster tracking and vote auto-close behavior are runtime rules and must not be encoded as new story JSON fields
+- dice hooks are stage-only in v1; ending nodes must keep `dice_hook.enabled = false`
+- if `dice_hook.enabled = true`, the node must provide non-null `purpose`, `roll_window_seconds`, `success_threshold`, `success_text`, and `failure_text`
+- if `dice_hook.enabled = true`, `roll_window_seconds` must be a positive whole number and `success_threshold` must be an integer from 1 to 90
+- dice-hook success/failure is narrative-only in v1 and must not be treated as a branch redirect, chaos modifier, or vote override
 - chaos should escalate across the story arc rather than reset arbitrarily
 
 ## Ready-for-Engine Checklist
@@ -306,9 +310,10 @@ Rules:
 Before treating a story as implementation-ready, verify:
 - [ ] all required top-level fields are present exactly as defined above
 - [ ] `cast` uses the fixed object shape
-- [ ] each node includes the full node contract, including `title`, `sfx_hint`, `crew_focus`, `chaos`, `tags`, and `end_state`
+- [ ] each node includes the full node contract, including `title`, `sfx_hint`, `crew_focus`, `chaos`, `dice_hook`, `tags`, and `end_state`
 - [ ] each choice includes `command`
 - [ ] all commands are from the supported engine command list
-- [ ] endings use `choices: []` and a non-null `end_state`
+- [ ] endings use `choices: []`, a valid `end_state`, and `dice_hook.enabled: false`
+- [ ] enabled stage-node dice hooks include `purpose`, `roll_window_seconds`, `success_threshold`, `success_text`, and `failure_text`
 - [ ] stages use `end_state: null`
 - [ ] no stale schema aliases or invented fields were introduced

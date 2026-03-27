@@ -28,4 +28,4 @@ This folder contains copy/paste startup prompts for each scaffolded project role
 - These prompts are grounded in `.agents/ENTRY.md`, `.agents/_shared/*`, and each role's `role.md` + `skills/core.md`.
 - They are written for humans to paste into general-purpose AI chats.
 - They tell the agent what to read, what to avoid, and what success looks like inside this repo.
-- For multi-chat migration or hardening work, see sibling prompt packs under `humans/` such as `humans/lotat-engine-session-spec/`.
+- For multi-chat migration or hardening work, see sibling prompt packs in this repo.

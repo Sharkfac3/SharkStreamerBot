@@ -24,7 +24,7 @@ New single-gimmick space regions are approvable without operator escalation. New
 - Starts low at the beginning of every story
 - Escalates over the arc — never resets mid-story
 - Ending nodes must reflect the final chaos level in tone
-- Per-node chaos is tracked with the contract's `chaos` object (`on_enter`, `on_success`, `on_failure`) — not a flat `chaos_change` field
+- Per-node chaos is tracked with the contract's `chaos` object using a single non-negative `delta` field — not a flat `chaos_change` field
 - If you are unsure how to represent a chaos adjustment, check `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`
 
 ## The Dice System

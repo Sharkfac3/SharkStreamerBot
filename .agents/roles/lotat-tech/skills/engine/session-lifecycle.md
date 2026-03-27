@@ -14,6 +14,7 @@ Belongs here:
 - runtime stage names and allowed transitions
 - session-start join behavior
 - `!join` handling
+- `!roll` handling for pre-vote dice windows
 - participant roster creation and freeze rules
 - zero-join behavior
 - node-entry flow
@@ -43,7 +44,8 @@ Recommended stage set for the session state machine:
 |---|---|---|---|
 | `idle` | No active LotAT session exists. | No LotAT session input should be processed. | Operator starts a session. |
 | `join_open` | Session exists and is collecting participants. | `!join` only. Decision commands do not count yet. | Join timer ends, operator force-closes join, or operator cancels session. |
-| `node_intro` | Engine has entered a node and is presenting runtime/story output. | No vote-counting yet. | Intro/setup work completes, then either open decision window or end session if node is an ending. |
+| `node_intro` | Engine has entered a node and is presenting runtime/story output. | No vote-counting yet. | Intro/setup work completes, then either open dice window, open decision window, or end session if node is an ending. |
+| `dice_open` | Current node has an enabled dice hook and the pre-vote `!roll` window is live. | `!roll` only; available to all chat, not just joined participants. | First successful roll, timer expiry, operator force-close, or operator cancel. |
 | `decision_open` | Current node choices are live and votes may be collected. | Valid current-node decision commands from joined participants. | Timer expires, all joined participants vote, operator force-closes, or operator cancels session. |
 | `decision_resolving` | Voting is closed and the engine is determining the winning path. | No new votes should count. | Resolution completes and engine enters next node or ends session. |
 | `ended` | Run has finished or been cancelled and is awaiting final cleanup / safe return. | No further session participation should be accepted. | Cleanup completes and engine returns to `idle`. |
@@ -52,11 +54,12 @@ Recommended stage set for the session state machine:
 
 Normal happy-path flow:
 
-`idle` → `join_open` → `node_intro` → `decision_open` → `decision_resolving` → `node_intro` ... → `ended` → `idle`
+`idle` → `join_open` → `node_intro` → `dice_open` (optional) → `decision_open` → `decision_resolving` → `node_intro` ... → `ended` → `idle`
 
 Exceptional but expected paths:
 - `join_open` → `ended` when zero users joined
 - `join_open` → `ended` when operator cancels before story start
+- `dice_open` → `ended` when operator cancels mid-session
 - `decision_open` → `ended` when operator cancels mid-session
 - `node_intro` → `ended` when the entered node is an ending node
 
@@ -64,6 +67,7 @@ Recommended rule:
 - never skip directly from `decision_open` to a new node without entering `decision_resolving`
 - never accept decision votes outside `decision_open`
 - never accept `!join` outside `join_open`
+- never accept `!roll` outside `dice_open`
 
 ## Start-of-Session Contract
 
@@ -193,17 +197,59 @@ Each time the engine enters a node, it should:
 2. set the active node state
 3. set runtime stage to `node_intro`
 4. clear any stale per-node transient state that should not leak from the prior node
-5. apply `chaos.on_enter`
+5. apply `chaos.delta`
 6. surface `read_aloud`
 7. surface `sfx_hint` as a production hook if present
 8. surface `crew_focus` if present
 9. surface `commander_moment` if enabled
-10. surface `dice_hook` if enabled
+10. inspect `dice_hook` if present
 11. inspect `node_type`
 
 Then:
 - if `node_type = "ending"`, transition directly into end-of-session handling
-- if `node_type = "stage"`, open a decision window
+- if `node_type = "stage"` and `dice_hook.enabled = true`, open the dice window before normal voting
+- if `node_type = "stage"` and `dice_hook.enabled = false`, open a decision window
+
+## Dice-Window Open Contract
+
+When a stage node has `dice_hook.enabled = true`, the engine should:
+- validate that `purpose`, `roll_window_seconds`, `success_threshold`, `success_text`, and `failure_text` are present
+- set runtime stage to `dice_open`
+- announce the roll purpose, success target, and window length to chat
+- announce that chat may use `!roll`
+- start the dice timer in whole seconds from `roll_window_seconds`
+- accept `!roll` from **any viewer in chat**, not just joined participants
+
+Runtime boundaries:
+- `!roll` is a runtime-only command and never a story choice
+- dice participation does **not** consult the frozen joined roster
+- dice success/failure is narrative-only in v1 and does **not** change chaos, branch routing, or later vote eligibility
+
+## Dice-Window Resolution Contract
+
+During `dice_open`:
+- each `!roll` generates a random value from 1 to 100
+- every roll result should be surfaced to chat in v1
+- users may roll repeatedly while the window remains open
+- a roll succeeds when `roll >= success_threshold`
+- the **first** successful roll closes the dice window immediately as a success
+- if the timer expires before any successful roll occurs, the dice window resolves as a failure
+- if nobody rolls at all, that still resolves as a failure
+
+On dice success:
+1. stop the dice timer
+2. lock out further `!roll` handling for that node
+3. surface the authored `success_text` for operator read-aloud
+4. proceed into the normal decision-window open contract for that same node
+
+On dice failure:
+1. stop the dice timer if still active
+2. lock out further `!roll` handling for that node
+3. surface the authored `failure_text` for operator read-aloud
+4. proceed into the normal decision-window open contract for that same node
+
+Operator note:
+- the current v1 contract treats dice success as anonymous crowd success; the engine does not need to preserve a named "winner" for branching purposes
 
 ## Decision-Window Open Contract
 
@@ -275,9 +321,10 @@ When the window closes, the engine should:
 4. resolve ties according to the voting contract (`state-and-voting.md` currently recommends earliest matching choice in `choices` order)
 5. select the winning authored choice
 6. emit that choice's `result_flavor`
-7. apply any runtime result logic tied to success/failure/chaos progression
-8. transition to the winning `next_node_id`
-9. enter the next node through the normal node-entry contract
+7. transition to the winning `next_node_id`
+8. enter the next node through the normal node-entry contract
+
+In v1, do **not** classify stage resolution as success/failure for chaos purposes. The engine should use the authored ending node's `end_state` (`"success"`, `"partial"`, or `"failure"`) only when that ending is actually reached.
 
 Recommended safety rule:
 - there should be exactly one resolution pass per node
@@ -315,6 +362,7 @@ These controls are runtime/operator tools, not story mechanics. The contract sho
 
 Recommended recovery controls:
 - **force close join window** — stop join collection and move to zero-join handling or story start based on roster count
+- **force close dice window** — resolve the active node's dice window as failure and continue into the normal decision window
 - **force close decision window** — stop voting and enter normal resolution immediately
 - **advance to next node** — move forward manually when recovery requires bypassing normal pacing
 - **cancel session** — abort the run safely and move to teardown
@@ -336,9 +384,12 @@ This document assumes:
 - roster freezes when join closes
 - zero joins ends the session instead of starting story playback
 - every non-ending node is introduced through `node_intro`
+- nodes with enabled dice hooks open `dice_open` before voting
+- `!roll` is accepted only during `dice_open`
 - every decision window opens through `decision_open`
 - every decision window closes into `decision_resolving`
 - only joined participants count toward early-close
+- dice-hook resolution is narrative-only in v1
 - session lifecycle rules are runtime-owned, not story-authored
 
 ## Non-Goals

@@ -136,9 +136,3 @@ The current documented LotAT runtime contract assumes:
 - runtime stages progress through `idle` / `join_open` / `node_intro` / `decision_open` / `decision_resolving` / `ended`
 - these are runtime rules, not authored story fields
 
-## Related Human Prompt Pack
-
-For manual copy/paste work in fresh AI chats, use:
-- `humans/lotat-engine-session-spec/README.md`
-
-That prompt pack is the human-facing companion to the engine docs in this folder.

@@ -4,7 +4,8 @@
 
 - Represents escalating ship crisis level
 - Starts low, ends high — this is non-negotiable
-- Use the node-level `chaos` object from the contract: `on_enter`, `on_success`, `on_failure`
+- Use the node-level `chaos` object from the contract with a single `delta` value
+- `chaos.delta` is a non-negative per-node increase applied when that node is reached
 - Do not replace that object with a flat `chaos_change` field or any other alias
 - Do not reset mid-story
 - Ending nodes must match the final chaos level in tone — high chaos = dramatic/spectacular outcome, low chaos = calmer resolution

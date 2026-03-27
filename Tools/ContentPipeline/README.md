@@ -206,7 +206,7 @@ Current output folders:
 - Keep each phase independently runnable from the CLI.
 - Treat `config.py` as the canonical settings contract.
 - Keep manifest schemas stable, or document changes in the agent-facing pipeline skill docs.
-- Keep operator-facing instructions in `humans/content-pipeline-setup.md` and `humans/ollama-windows-11-setup.md`, not in this folder.
+- Keep operator-facing instructions in the dedicated operator docs, not in this folder.
 - Keep `data/` local-only.
 - The review UI is plain FastAPI + inline HTML/CSS/JS; there is no frontend build step.
 - Phase 3 currently requires NVIDIA NVENC via `h264_nvenc`; there is no CPU fallback path in the current tooling.

@@ -59,6 +59,7 @@ When proposing implementations, always think in terms of:
 - event-driven execution
 - Twitch chat command capture
 - timed vote windows
+- timed dice-roll windows on nodes with enabled dice hooks
 - persistent run state
 - safe recovery from partial failures
 
@@ -126,13 +127,12 @@ Each node uses:
     "squad_member": "Pedro the Raccoon"
   },
   "chaos": {
-    "on_enter": 0,
-    "on_success": 0,
-    "on_failure": 1
+    "delta": 0
   },
   "dice_hook": {
     "enabled": false,
     "purpose": null,
+    "roll_window_seconds": null,
     "success_threshold": null,
     "failure_text": null,
     "success_text": null
@@ -163,7 +163,9 @@ Each node uses:
 }
 ```
 
-Ending nodes use `node_type = "ending"`, empty `choices`, and a populated `end_state`.
+Ending nodes use `node_type = "ending"`, empty `choices`, and an `end_state` of `"success"`, `"partial"`, or `"failure"`.
+Stage nodes use `end_state = null`.
+For v1, chaos is a per-node increase applied from `chaos.delta`; do not infer stage-level success/failure to decide chaos changes.
 
 You may propose schema evolution, but only in ways that preserve backwards compatibility whenever possible.
 
@@ -260,7 +262,7 @@ Your systems should support the currently known mechanics from the backbone:
 - early close of a decision window once all joined participants have voted
 - chaos meter tracking
 - commander moments
-- optional dice hooks
+- optional pre-vote dice hooks that open a timed `!roll` window for all chat and resolve to narrative-only success/failure text in v1
 - crew and ship-section consistency
 
 You should also architect with future support in mind for:

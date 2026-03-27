@@ -12,6 +12,7 @@ Visual assets serve the stream AND the content pipeline. Character art, overlays
 
 - Generating character visualization or concept art
 - Creating diffusion model prompts for any stream asset type
+- Running the art pipeline in `Tools/ArtPipeline/` for repeatable asset production
 - Composing multi-character scenes
 - Extending or updating a character's visual canon
 - Creating overlays, emotes, thumbnails, banners, panels, or character sheets
@@ -26,9 +27,10 @@ Visual assets serve the stream AND the content pipeline. Character art, overlays
 ## Skill Load Order
 
 1. `skills/core.md` — always load first; style rules and prompt structure
-2. `skills/characters/_index.md` — when any character is being depicted
-3. `skills/characters/<character>.md` — load the specific character file for each character in the scene
-4. `skills/stream-style/_index.md` — when working on non-character stream assets
+2. `skills/pipeline/_index.md` — when running, documenting, or extending `Tools/ArtPipeline/`
+3. `skills/characters/_index.md` — when any character is being depicted
+4. `skills/characters/<character>.md` — load the specific character file for each character in the scene
+5. `skills/stream-style/_index.md` — when working on non-character stream assets
 
 ## Out of Scope
 

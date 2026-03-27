@@ -6,7 +6,7 @@ You are the **Story Agent** for **Starship Shamples**, a live **Twitch chat–co
 
 **This file is the authoritative story contract for authored Starship Shamples story JSON.**
 
-If any other doc summarizes, references, or paraphrases the story JSON structure, this file wins. Supporting docs in `.agents/`, `Creative/`, or `humans/` may explain the contract, but they may not silently redefine it.
+If any other doc summarizes, references, or paraphrases the story JSON structure, this file wins. Supporting docs in `.agents/` or `Creative/` may explain the contract, but they may not silently redefine it.
 
 ### Contract hierarchy
 - **Authoritative contract:** this file (`Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`)
@@ -177,6 +177,7 @@ These are **engine/runtime commands**, not authored story-choice commands.
 They control participation in a live LotAT run and should **not** appear in `choices[].command` or `commands_used`.
 
 - `!join` — used during the session start join window to register a viewer as a participant for the current LotAT run
+- `!roll` — used only during an active node dice-roll window; not a story-choice command
 
 ### Command Deck
 - `!scan`
@@ -290,13 +291,12 @@ Each node must use this shape:
     "squad_member": "Pedro the Raccoon"
   },
   "chaos": {
-    "on_enter": 0,
-    "on_success": 0,
-    "on_failure": 1
+    "delta": 0
   },
   "dice_hook": {
     "enabled": false,
     "purpose": null,
+    "roll_window_seconds": null,
     "success_threshold": null,
     "failure_text": null,
     "success_text": null
@@ -342,13 +342,12 @@ Ending nodes must use:
     "squad_member": "Duck the Duck"
   },
   "chaos": {
-    "on_enter": 1,
-    "on_success": 0,
-    "on_failure": 0
+    "delta": 1
   },
   "dice_hook": {
     "enabled": false,
     "purpose": null,
+    "roll_window_seconds": null,
     "success_threshold": null,
     "failure_text": null,
     "success_text": null
@@ -363,6 +362,10 @@ Ending nodes must use:
   "end_state": "failure"
 }
 ```
+
+Ending-node `end_state` values are limited to `"success"`, `"partial"`, or `"failure"`.
+Stage nodes must use `end_state: null`.
+Outcome classification is authored for the final ending only and should remain hidden from viewers until that ending is reached in normal play.
 
 ---
 
@@ -407,15 +410,35 @@ When enabled:
 ## 6. Dice hooks
 Only include a dice hook when it adds live tension.
 Do not attach dice to every stage.
+In v1, dice hooks are a **pre-vote runtime window** on stage nodes only.
+When enabled:
+- the engine opens a timed `!roll` window **before** normal voting for that node
+- **any viewer in chat** may type `!roll` during that window, even if they did not `!join`
+- each `!roll` generates a random value from 1 to 100
+- success is `roll >= success_threshold`
+- `success_threshold` must be an authored integer from 1 to 90
+- `roll_window_seconds` must be authored in whole seconds for Streamer.bot timer use
+- the window closes immediately on the first success; otherwise it fails when the timer expires
+- success/failure is **narrative only** in v1 — it does **not** change branching, chaos, vote eligibility, or vote resolution
+- the authored `success_text` / `failure_text` is operator-read outcome text, not a hidden branch redirect
+
 A dice hook should clearly state:
 - what the roll is for
+- how long the roll window stays open
 - what counts as success
 - what happens on success
 - what happens on failure
 
+Authoring rules:
+- keep dice hooks optional per stage node
+- ending nodes must keep `dice_hook.enabled = false` in v1
+- all valid v1 stories should keep `supported_mechanics.dice_hooks = true`
+
 ## 7. Chaos
 Chaos changes should be simple.
 Do not create giant arithmetic chains.
+Use the node-level `chaos` object with a single `delta` value.
+Chaos only goes up in v1 — do not use negative values.
 Use chaos to justify escalation, weirdness, and mission instability.
 
 ## 8. Read-aloud quality
@@ -473,6 +496,7 @@ Do not include code.
 
 Never:
 - invent a new schema
+- use `!roll` as a story-choice command or list it in `commands_used`
 - invent unsupported commands without being told to
 - write long screenplay scenes
 - rely on hidden information the audience cannot see

@@ -19,14 +19,21 @@ These are the authored commands story JSON may use.
 These are engine-owned commands that support the live session lifecycle.
 
 `!join` — register the viewer in the current session's participant roster during the join phase
+`!roll` — submit a public 1–100 dice roll during an active node dice-roll window; available to all chat, not just joined participants
 
-## Runtime Voting Rule
+## Runtime Dice and Voting Rule
 
 For each LotAT session:
 - the engine opens a join phase before the first story decision
 - viewers who type `!join` are added to the participant roster for that run
 - when the join phase closes, that roster is frozen for the rest of the session
-- during each later decision window, only joined participants from that frozen roster count toward the "everyone has voted" rule
+- when the engine enters a stage node with `dice_hook.enabled = true`, it opens a timed pre-vote `!roll` window
+- during that dice window, **any viewer in chat** may type `!roll`; joined-session status does not matter for rolling
+- the first roll meeting `roll >= success_threshold` closes the dice window immediately as a success
+- if the timer expires with no successful roll, the dice window resolves as a failure
+- dice-hook success/failure is narrative-only in v1 and does **not** change chaos, branching, vote eligibility, or vote resolution
+- after the dice window resolves, the engine opens the normal decision window for that node if it is a stage node
+- during each decision window, only joined participants from that frozen roster count toward the "everyone has voted" rule
 - if every joined participant submits one of the currently allowed decision commands for that node, the engine may auto-close the decision window early and advance immediately through the normal resolution path
 
 ## Adding a New Command
@@ -49,3 +56,4 @@ For each LotAT session:
 - Each command must have a defined interaction path in the engine
 - Authored decision commands should map to thematic ship actions (scanning, targeting, deploying crew, etc.)
 - Runtime session commands manage session flow and participation; they are not story-content fields
+- `!roll` is never an authored story-choice command and must not appear in `commands_used`
