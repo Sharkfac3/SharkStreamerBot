@@ -16,7 +16,9 @@ Do not convert these rules into new story JSON fields unless an intentional sche
 
 In particular:
 - `!join` is a runtime session command
+- commander-input commands are runtime commander-window commands
 - `!roll` is a runtime dice-window command
+- join and decision timer defaults are runtime-owned
 - joined-participant tracking is runtime state
 - vote eligibility is runtime logic
 - latest-vote-wins behavior is runtime logic
@@ -37,7 +39,17 @@ That means:
 
 This keeps live behavior deterministic and recoverable.
 
-Important exception:
+Timer ownership in v1:
+- join window length is a fixed runtime default of **120 seconds**
+- decision window length is a fixed runtime default of **120 seconds**
+- commander-window length comes from authored `commander_moment.window_seconds`
+- dice-window length comes from authored `dice_hook.roll_window_seconds`
+- join/decision timing is not story-authored and does not support per-story, per-node, or live-operator overrides in v1
+
+Important exceptions:
+- nodes with enabled commander moments open a pre-vote commander-input window that is **not** roster-gated
+- only the snapshotted assigned commander user for that node may satisfy that commander window
+- commander-window participation remains separate from the joined-participant voting model
 - nodes with enabled dice hooks open a pre-vote `!roll` window that is **not** roster-gated
 - any viewer in chat may roll during that window
 - dice-window participation remains separate from the joined-participant voting model
@@ -103,6 +115,7 @@ A vote is not valid when any of the following are true:
 
 Important boundary:
 - `!join` is never a story-choice vote
+- commander-input commands are never story-choice votes
 - `!roll` is never a story-choice vote
 - authored `choices[].command` values are the only commands that may count as decision votes
 
@@ -164,6 +177,27 @@ Important denominator rule:
 - the check is against the **joined roster**, not against all chat viewers who happen to speak
 - non-joined chatter never delays or accelerates early-close
 
+## Commander-Window Participation Rules
+
+When a node opens a commander window:
+- runtime stage must be `commander_open` for commander-input commands to be accepted
+- the engine snapshots the assigned commander user at window open
+- only that snapshotted assigned commander user may satisfy the commander moment
+- no joined-roster check is applied to commander input in v1
+- valid commands are determined only by the authored `commander_moment.commander` value and the engine's commander-command mapping
+- the first valid mapped commander-input command ends the commander window immediately
+- if the timer expires before any valid assigned-commander input occurs, the result is a silent skip/failure
+- commander success/failure is narrative-only in v1 and does **not** alter chaos, branching, vote eligibility, or vote tallying
+- non-assigned users typing mapped commander commands during the window are ignored silently
+
+Recommended runtime state for commander windows:
+- whether the active node currently has a commander window open
+- which commander the active node expects
+- which assigned commander identity was snapshotted at window open
+- the current node's authored `window_seconds`
+- whether the commander result already resolved as success/skip
+- optional debug snapshot such as last valid commander-input command seen for the node
+
 ## Dice-Window Participation Rules
 
 When a node opens a dice window:
@@ -180,7 +214,7 @@ When a node opens a dice window:
 Recommended runtime state for dice windows:
 - whether the active node currently has a dice window open
 - the current node's `success_threshold`
-- the current node's `roll_window_seconds`
+- the current node's authored `roll_window_seconds`
 - whether the dice result already resolved as success/failure
 - optional debug snapshot such as total roll attempts during the node
 
@@ -217,6 +251,8 @@ Examples:
 - joined-participant roster
 - joined-participant count
 - whether the roster is frozen
+- which named timer/window type is currently expected, if any
+- whether the current active window has already resolved
 
 ### 2. Node-level state
 
@@ -224,6 +260,8 @@ Tracks what matters for the currently active node.
 
 Examples:
 - active node type
+- whether a commander window is currently open for the node
+- snapshotted commander target / allowed commander-input commands when applicable
 - whether a dice window is currently open for the node
 - current dice threshold / dice timer state when applicable
 - allowed commands for the current node
@@ -263,10 +301,13 @@ Exact final names belong to implementation work, but the contract likely needs r
 - roster frozen/open state
 - active node identifier
 - current node allowed commands
+- current node commander-window state when applicable
 - current node dice-window state when applicable
 - current node vote map
 - current node valid-voter count
 - current chaos total
+- active named timer / expected window type
+- current window resolved/not-resolved guard
 - branch history
 - last resolution snapshot
 
@@ -315,6 +356,27 @@ Recommended invariant:
 ### Not everyone votes
 - let the timer expire normally
 - resolve using whatever valid votes exist at close time
+
+### Commander window with no assigned commander
+- skip the commander moment silently to chat
+- log the skip for operator/debug visibility
+- continue into the normal decision window afterward
+
+### Wrong user types a valid commander command
+- ignore it silently
+- do not treat it as a vote
+- do not mutate commander-window state
+
+### Assigned commander responds correctly
+- accept the first valid mapped command while `commander_open`
+- close the commander window immediately
+- emit the authored `success_text`
+- continue into the normal decision window afterward
+
+### Commander window times out
+- let the commander timer expire normally
+- emit no failure text in v1
+- continue into the normal decision window afterward
 
 ### Dice window with lots of chat activity
 - allow repeated `!roll` attempts while runtime stage is `dice_open`
@@ -371,12 +433,11 @@ Recommended recovery posture:
 ## Non-Goals
 
 This spec does **not** require:
-- modifying the authored story JSON shape
-- adding new top-level or node-level schema fields
 - supporting mid-story roster changes in v1
 - exposing all runtime state publicly in chat
 - random tie-break behavior
 - treating `!join` as an authored story-choice command
+- treating commander-input commands as authored story-choice commands
 
 ## Related Docs
 

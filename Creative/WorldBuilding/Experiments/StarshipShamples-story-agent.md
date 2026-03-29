@@ -178,6 +178,9 @@ They control participation in a live LotAT run and should **not** appear in `cho
 
 - `!join` — used during the session start join window to register a viewer as a participant for the current LotAT run
 - `!roll` — used only during an active node dice-roll window; not a story-choice command
+- `!stretch` / `!shrimp` — existing Captain Stretch commands used by the engine only during an active Captain Stretch commander moment
+- `!hydrate` / `!orb` — existing Water Wizard commands used by the engine only during an active Water Wizard commander moment
+- `!checkchat` / `!toad` — existing The Director commands used by the engine only during an active The Director commander moment
 
 ### Command Deck
 - `!scan`
@@ -304,7 +307,9 @@ Each node must use this shape:
   "commander_moment": {
     "enabled": false,
     "commander": null,
-    "prompt": null
+    "prompt": null,
+    "window_seconds": null,
+    "success_text": null
   },
   "choices": [
     {
@@ -355,7 +360,9 @@ Ending nodes must use:
   "commander_moment": {
     "enabled": false,
     "commander": null,
-    "prompt": null
+    "prompt": null,
+    "window_seconds": null,
+    "success_text": null
   },
   "choices": [],
   "tags": ["ending", "failure"],
@@ -402,10 +409,31 @@ Branches should:
 ## 5. Commander moments
 Commander moments should be occasional and meaningful.
 Do not overuse them.
+In v1, a commander moment is a **blocking pre-vote runtime window** on a stage node.
 When enabled:
 - tie the moment to that commander’s personality
 - make it feel like a special interruption or authority moment
 - keep the prompt short and actionable
+- the engine opens a timed commander-input window before normal voting for that node
+- only the **currently assigned user** for that commander slot may satisfy the moment
+- commander participation is independent of `!join`; the assigned commander user does **not** need to be in the joined roster
+- any valid existing command for that commander counts; the exact command used does **not** change branching in v1
+- the first valid commander command closes the window immediately as a success
+- success is **narrative only** in v1 — it does **not** change branching, chaos, vote eligibility, or vote resolution
+- timeout, missing assignment, offline commander, or invalid chatter input should continue silently into normal voting
+- the authored `success_text` is operator-read flavor text, not a hidden branch redirect
+
+Current commander command mapping for v1:
+- Captain Stretch: `!stretch` or `!shrimp`
+- The Water Wizard: `!hydrate` or `!orb`
+- The Director: `!checkchat` or `!toad`
+
+Authoring rules:
+- keep commander moments optional per stage node
+- ending nodes must keep `commander_moment.enabled = false` in v1
+- do **not** place a commander moment on the same node as an enabled dice hook in v1
+- if `commander_moment.enabled = true`, provide non-null `commander`, `prompt`, `window_seconds`, and `success_text`
+- `window_seconds` must be authored in whole seconds for Streamer.bot timer use
 
 ## 6. Dice hooks
 Only include a dice hook when it adds live tension.

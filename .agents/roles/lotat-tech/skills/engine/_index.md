@@ -19,6 +19,8 @@ The C# engine running in Streamer.bot actions under `Actions/LotAT/`:
 - Chat commands are the primary interaction surface — see `commands.md` for supported set
 - Chaos Meter state is tracked in global variables and must survive action re-entry
 - Runtime contract docs in this folder describe behavior boundaries; implementation work in `Actions/LotAT/` should follow them rather than move those rules into ad hoc script-specific docs
+- V1 timing is split cleanly by ownership: join and decision windows are fixed runtime defaults, while commander and dice windows are authored per node in story JSON
+- Recommended implementation model is a hybrid: Streamer.bot named timers trigger window-close actions, and runtime stage/window state guards make stale timer fires harmless
 
 ## Current Status
 
@@ -48,6 +50,8 @@ Expected runtime state to add when the engine is implemented/refined:
 - joined-participant roster for the active session
 - per-node vote submissions keyed to joined participants
 - decision-window completion state so the engine can auto-close once all joined participants have voted
+- active window type / resolution guards so timer callbacks can verify the session is still on the expected step before acting
+- timer names for the four v1 window types: join, decision, commander, and dice
 
 ## Sub-Skills
 

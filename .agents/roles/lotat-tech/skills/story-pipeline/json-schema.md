@@ -113,7 +113,9 @@ Each node must use this shape:
   "commander_moment": {
     "enabled": false,
     "commander": null,
-    "prompt": null
+    "prompt": null,
+    "window_seconds": null,
+    "success_text": null
   },
   "choices": [
     {
@@ -186,7 +188,9 @@ The contract uses a `chaos` object with a single `delta` field in v1. Do **not**
 |---|---|---|---|
 | `enabled` | boolean | yes | Whether a commander moment is active |
 | `commander` | string or null | yes | Which commander owns the moment |
-| `prompt` | string or null | yes | Short actionable prompt |
+| `prompt` | string or null | yes | Chat/operator-facing call-to-action text for the commander window |
+| `window_seconds` | number or null | yes | Whole-second commander-input window length when enabled |
+| `success_text` | string or null | yes | Operator-read flavor text emitted on successful commander input |
 
 ## Choice Shape
 
@@ -240,7 +244,9 @@ Ending nodes must use this shape:
   "commander_moment": {
     "enabled": false,
     "commander": null,
-    "prompt": null
+    "prompt": null,
+    "window_seconds": null,
+    "success_text": null
   },
   "choices": [],
   "tags": ["ending", "failure"],
@@ -275,11 +281,14 @@ Currently supported authored decision commands:
 Runtime-only session commands:
 - `!join` — used by the engine during the session join phase; not valid in `choices[].command` and not listed in `commands_used`
 - `!roll` — used by the engine only during an active node dice-roll window; not valid in `choices[].command` and not listed in `commands_used`
+- `!stretch` / `!shrimp` — existing Captain Stretch commands used by the engine only during an active Captain Stretch commander moment; not valid in `choices[].command` and not listed in `commands_used`
+- `!hydrate` / `!orb` — existing Water Wizard commands used by the engine only during an active Water Wizard commander moment; not valid in `choices[].command` and not listed in `commands_used`
+- `!checkchat` / `!toad` — existing The Director commands used by the engine only during an active The Director commander moment; not valid in `choices[].command` and not listed in `commands_used`
 
 Rules:
 - do not invent new commands in `choices[].command`
 - every command listed in `commands_used` must come from the authored decision-command list above
-- runtime commands such as `!join` and `!roll` are engine behavior, not story schema content
+- runtime commands such as `!join`, `!roll`, and commander-input commands (`!stretch`, `!shrimp`, `!hydrate`, `!orb`, `!checkchat`, `!toad`) are engine behavior, not story schema content
 - if a new authored decision command is added to the engine, update the engine command doc, the authoritative story contract, and this summary together
 - if a new runtime/session command is added, update the engine command doc and authoritative contract guidance without pretending it is a story-choice command
 
@@ -300,9 +309,14 @@ Rules:
 - choices should usually present exactly 2 options for normal stage nodes
 - join-roster tracking and vote auto-close behavior are runtime rules and must not be encoded as new story JSON fields
 - dice hooks are stage-only in v1; ending nodes must keep `dice_hook.enabled = false`
+- commander moments are stage-only in v1; ending nodes must keep `commander_moment.enabled = false`
+- `dice_hook.enabled = true` and `commander_moment.enabled = true` may not coexist on the same node in v1
 - if `dice_hook.enabled = true`, the node must provide non-null `purpose`, `roll_window_seconds`, `success_threshold`, `success_text`, and `failure_text`
 - if `dice_hook.enabled = true`, `roll_window_seconds` must be a positive whole number and `success_threshold` must be an integer from 1 to 90
 - dice-hook success/failure is narrative-only in v1 and must not be treated as a branch redirect, chaos modifier, or vote override
+- if `commander_moment.enabled = true`, the node must provide non-null `commander`, `prompt`, `window_seconds`, and `success_text`
+- if `commander_moment.enabled = true`, `commander` must name a known commander, `window_seconds` must be a positive whole number, and the moment remains narrative-only in v1
+- commander moments are resolved before the node's normal decision vote and do not change branching, chaos, vote eligibility, or vote resolution
 - chaos should escalate across the story arc rather than reset arbitrarily
 
 ## Ready-for-Engine Checklist
@@ -313,7 +327,9 @@ Before treating a story as implementation-ready, verify:
 - [ ] each node includes the full node contract, including `title`, `sfx_hint`, `crew_focus`, `chaos`, `dice_hook`, `tags`, and `end_state`
 - [ ] each choice includes `command`
 - [ ] all commands are from the supported engine command list
-- [ ] endings use `choices: []`, a valid `end_state`, and `dice_hook.enabled: false`
+- [ ] endings use `choices: []`, a valid `end_state`, `dice_hook.enabled: false`, and `commander_moment.enabled: false`
 - [ ] enabled stage-node dice hooks include `purpose`, `roll_window_seconds`, `success_threshold`, `success_text`, and `failure_text`
+- [ ] enabled stage-node commander moments include `commander`, `prompt`, `window_seconds`, and `success_text`
+- [ ] no node enables both a dice hook and a commander moment in v1
 - [ ] stages use `end_state: null`
 - [ ] no stale schema aliases or invented fields were introduced

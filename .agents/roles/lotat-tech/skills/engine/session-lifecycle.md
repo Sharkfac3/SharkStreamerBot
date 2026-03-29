@@ -14,8 +14,10 @@ Belongs here:
 - runtime stage names and allowed transitions
 - session-start join behavior
 - `!join` handling
+- commander-input handling for pre-vote commander windows
 - `!roll` handling for pre-vote dice windows
 - participant roster creation and freeze rules
+- timer ownership, defaults, and reset expectations
 - zero-join behavior
 - node-entry flow
 - decision-window open/close flow
@@ -36,6 +38,21 @@ Viewers opt into that session with `!join`. The engine records a per-session par
 
 > Runtime contract: join roster state is runtime-owned session state. It is **not** authored into story JSON.
 
+## V1 Timer Contract
+
+LotAT v1 has exactly four timer concepts:
+- **join window** — runtime-owned, fixed global default of **120 seconds**
+- **decision window** — runtime-owned, fixed global default of **120 seconds**
+- **commander window** — node-authored via `commander_moment.window_seconds`
+- **dice window** — node-authored via `dice_hook.roll_window_seconds`
+
+Rules:
+- join and decision timing are **not** authored per story or per node in v1
+- operator live override of join/decision duration is **not** part of v1
+- timer durations do **not** belong in `Actions/SHARED-CONSTANTS.md`; only timer names should be shared there when implementation begins
+- recommended implementation model is a **hybrid**: Streamer.bot named timers drive timer-end actions, while runtime stage/window state prevents stale timer events from mutating the session after state has already advanced
+- stream-start / reset behavior should always disable all LotAT timers and clear LotAT runtime window state back to `idle`
+
 ## Canonical Runtime Stages
 
 Recommended stage set for the session state machine:
@@ -44,7 +61,8 @@ Recommended stage set for the session state machine:
 |---|---|---|---|
 | `idle` | No active LotAT session exists. | No LotAT session input should be processed. | Operator starts a session. |
 | `join_open` | Session exists and is collecting participants. | `!join` only. Decision commands do not count yet. | Join timer ends, operator force-closes join, or operator cancels session. |
-| `node_intro` | Engine has entered a node and is presenting runtime/story output. | No vote-counting yet. | Intro/setup work completes, then either open dice window, open decision window, or end session if node is an ending. |
+| `node_intro` | Engine has entered a node and is presenting runtime/story output. | No vote-counting yet. | Intro/setup work completes, then either open commander window, open dice window, open decision window, or end session if node is an ending. |
+| `commander_open` | Current node has an enabled commander moment and the pre-vote commander-input window is live. | Only the mapped commander-input commands from the snapshotted assigned commander user should count. | First valid commander input, timer expiry, silent skip, operator force-close, or operator cancel. |
 | `dice_open` | Current node has an enabled dice hook and the pre-vote `!roll` window is live. | `!roll` only; available to all chat, not just joined participants. | First successful roll, timer expiry, operator force-close, or operator cancel. |
 | `decision_open` | Current node choices are live and votes may be collected. | Valid current-node decision commands from joined participants. | Timer expires, all joined participants vote, operator force-closes, or operator cancels session. |
 | `decision_resolving` | Voting is closed and the engine is determining the winning path. | No new votes should count. | Resolution completes and engine enters next node or ends session. |
@@ -54,11 +72,12 @@ Recommended stage set for the session state machine:
 
 Normal happy-path flow:
 
-`idle` → `join_open` → `node_intro` → `dice_open` (optional) → `decision_open` → `decision_resolving` → `node_intro` ... → `ended` → `idle`
+`idle` → `join_open` → `node_intro` → `commander_open` (optional) / `dice_open` (optional) → `decision_open` → `decision_resolving` → `node_intro` ... → `ended` → `idle`
 
 Exceptional but expected paths:
 - `join_open` → `ended` when zero users joined
 - `join_open` → `ended` when operator cancels before story start
+- `commander_open` → `ended` when operator cancels mid-session
 - `dice_open` → `ended` when operator cancels mid-session
 - `decision_open` → `ended` when operator cancels mid-session
 - `node_intro` → `ended` when the entered node is an ending node
@@ -67,6 +86,7 @@ Recommended rule:
 - never skip directly from `decision_open` to a new node without entering `decision_resolving`
 - never accept decision votes outside `decision_open`
 - never accept `!join` outside `join_open`
+- never accept commander-input commands outside `commander_open`
 - never accept `!roll` outside `dice_open`
 
 ## Start-of-Session Contract
@@ -80,7 +100,7 @@ When a LotAT session starts, the engine should:
 5. clear any stale roster, vote, timer, or branch state from a prior run
 6. set runtime stage to `join_open`
 7. announce the join phase to chat
-8. start the join timer
+8. start the join timer using the fixed v1 runtime default of **120 seconds**
 
 Recommended chat/operator expectation:
 - chat is told clearly to type `!join` during the join window to participate in **this** LotAT mission
@@ -94,6 +114,7 @@ During `join_open`:
 - duplicate `!join` attempts do not create duplicate roster entries
 - decision commands received during this phase do not count as votes
 - the engine should be able to inspect the current roster while the join window is still open
+- the window length is a fixed **120 seconds** in v1 and is not story-authored
 
 Recommended participant identity rule:
 - primary key: `userId`
@@ -201,14 +222,59 @@ Each time the engine enters a node, it should:
 6. surface `read_aloud`
 7. surface `sfx_hint` as a production hook if present
 8. surface `crew_focus` if present
-9. surface `commander_moment` if enabled
+9. inspect `commander_moment` if present
 10. inspect `dice_hook` if present
 11. inspect `node_type`
 
 Then:
 - if `node_type = "ending"`, transition directly into end-of-session handling
+- if `node_type = "stage"` and `commander_moment.enabled = true`, open the commander window before normal voting
 - if `node_type = "stage"` and `dice_hook.enabled = true`, open the dice window before normal voting
-- if `node_type = "stage"` and `dice_hook.enabled = false`, open a decision window
+- if `node_type = "stage"` and neither pre-vote mechanic is enabled, open a decision window
+
+V1 guardrail:
+- a node may not enable both `commander_moment` and `dice_hook`
+
+## Commander-Window Open Contract
+
+When a stage node has `commander_moment.enabled = true`, the engine should:
+- validate that `commander`, `prompt`, `window_seconds`, and `success_text` are present
+- validate that the commander name maps to a known commander-input command set
+- validate that `dice_hook.enabled` is not also true on the same node in v1
+- resolve the currently assigned user for that commander slot from runtime/shared commander state
+- if no assigned commander user exists, log the skip for operator/debug visibility and continue silently into the normal decision window
+- snapshot the assigned commander identity at window open so the target user cannot change mid-window
+- set runtime stage to `commander_open`
+- surface the authored `prompt` as the commander call-to-action
+- announce the commander window length to chat/operator
+- start the commander timer in whole seconds from authored `window_seconds`
+- accept only the mapped commander-input commands from the snapshotted assigned commander user
+
+Runtime boundaries:
+- commander-input commands are existing commander feature commands reused by LotAT; they are runtime-only and never story choices
+- commander participation does **not** consult the frozen joined roster
+- commander-moment success/failure is narrative-only in v1 and does **not** change chaos, branch routing, vote eligibility, or later vote resolution
+- non-assigned users typing commander commands during the window are ignored silently
+
+## Commander-Window Resolution Contract
+
+During `commander_open`:
+- the first valid mapped commander-input command from the snapshotted assigned commander user closes the commander window immediately as a success
+- the exact valid command used does **not** change branching in v1
+- if the timer expires before any valid assigned-commander input occurs, the commander window resolves silently as a skip/failure
+- if the assigned commander is offline, absent, or never responds, the commander window still resolves silently as a skip/failure
+
+On commander success:
+1. stop the commander timer
+2. lock out further commander-input handling for that node
+3. surface the authored `success_text` for operator read-aloud
+4. proceed into the normal decision-window open contract for that same node
+
+On commander skip/failure:
+1. stop the commander timer if still active
+2. lock out further commander-input handling for that node
+3. emit no chat-facing failure text in v1
+4. proceed into the normal decision-window open contract for that same node
 
 ## Dice-Window Open Contract
 
@@ -217,7 +283,7 @@ When a stage node has `dice_hook.enabled = true`, the engine should:
 - set runtime stage to `dice_open`
 - announce the roll purpose, success target, and window length to chat
 - announce that chat may use `!roll`
-- start the dice timer in whole seconds from `roll_window_seconds`
+- start the dice timer in whole seconds from authored `roll_window_seconds`
 - accept `!roll` from **any viewer in chat**, not just joined participants
 
 Runtime boundaries:
@@ -259,7 +325,7 @@ When a stage node opens for voting, the engine should:
 - initialize a fresh vote map for the active node
 - set runtime stage to `decision_open`
 - announce the available choices clearly to chat
-- start the decision timer
+- start the decision timer using the fixed v1 runtime default of **120 seconds**
 
 Only the active node's allowed commands should count as valid votes.
 
@@ -362,11 +428,13 @@ These controls are runtime/operator tools, not story mechanics. The contract sho
 
 Recommended recovery controls:
 - **force close join window** — stop join collection and move to zero-join handling or story start based on roster count
+- **force close commander window** — stop commander-input collection and continue silently into the normal decision window
 - **force close dice window** — resolve the active node's dice window as failure and continue into the normal decision window
 - **force close decision window** — stop voting and enter normal resolution immediately
 - **advance to next node** — move forward manually when recovery requires bypassing normal pacing
 - **cancel session** — abort the run safely and move to teardown
 - **inspect current roster** — show who joined and how many participants are locked for the session
+- **inspect current commander target** — show which assigned commander user, if any, is eligible for the active commander window
 - **inspect current votes** — show current valid vote map for the active node
 - **reset LotAT state** — clear LotAT runtime state after interruption or partial failure
 
@@ -374,23 +442,33 @@ Recommended operator assumptions:
 - these controls must be safe to use live on stream
 - they should not require story-schema changes
 - they should operate against runtime state only
+- in v1 they are recovery tools, not normal timing overrides; the canonical join/decision durations remain the fixed 120-second runtime defaults
 
 ## Runtime Assumptions Locked by This Contract
 
 This document assumes:
 - every LotAT session begins in `idle` and must pass through `join_open`
 - `!join` is the session-start participation command
+- the join window duration is a fixed runtime-owned 120 seconds in v1
 - roster creation happens only during `join_open`
 - roster freezes when join closes
 - zero joins ends the session instead of starting story playback
 - every non-ending node is introduced through `node_intro`
+- nodes with enabled commander moments open `commander_open` before voting
+- commander-input commands are accepted only during `commander_open`
+- commander-window duration comes from authored `commander_moment.window_seconds`
 - nodes with enabled dice hooks open `dice_open` before voting
 - `!roll` is accepted only during `dice_open`
+- dice-window duration comes from authored `dice_hook.roll_window_seconds`
+- commander moments and dice hooks do not coexist on the same node in v1
 - every decision window opens through `decision_open`
+- the decision window duration is a fixed runtime-owned 120 seconds in v1
 - every decision window closes into `decision_resolving`
 - only joined participants count toward early-close
+- commander-moment resolution is narrative-only in v1
 - dice-hook resolution is narrative-only in v1
 - session lifecycle rules are runtime-owned, not story-authored
+- stream-start / reset should disable all LotAT timers and clear runtime window state before returning to `idle`
 
 ## Non-Goals
 

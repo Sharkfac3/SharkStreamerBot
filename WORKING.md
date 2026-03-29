@@ -12,7 +12,6 @@
 
 | Agent | Task | Domain | Files Being Edited | Started |
 |-------|------|--------|--------------------|---------|
-| pi | Clean up references to humans/ folder | .agents/, Creative/, WORKING.md | WORKING.md, .agents/roles/lotat-tech/skills/engine/docs-map.md, .agents/roles/lotat-tech/skills/story-pipeline/_index.md, Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md, Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md, TBD | 2026-03-26 |
 
 *Empty table = no active agent work. If you see entries here, check the files listed before editing anything in that domain.*
 
@@ -30,6 +29,8 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-29 | pi | Lock LotAT v1 timer contract docs and fix prototype JSON commander fields | uncommitted |
+| 2026-03-29 | pi | Lock in LotAT commander moment runtime/schema contract | uncommitted |
 | 2026-03-27 | pi | Separate human ArtPipeline docs from agent-focused pipeline docs | uncommitted |
 | 2026-03-27 | pi | Document ArtPipeline and update art-director role | uncommitted |
 | 2026-03-26 | pi | Lock in LotAT dice hook runtime contract | uncommitted |

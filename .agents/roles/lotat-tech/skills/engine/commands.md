@@ -21,20 +21,45 @@ These are engine-owned commands that support the live session lifecycle.
 `!join` — register the viewer in the current session's participant roster during the join phase
 `!roll` — submit a public 1–100 dice roll during an active node dice-roll window; available to all chat, not just joined participants
 
-## Runtime Dice and Voting Rule
+## Existing Commander Commands Used by LotAT Runtime
+
+These are pre-existing commander feature commands that LotAT may temporarily listen for during an active commander moment. They remain runtime-only and do **not** become authored story-choice commands.
+
+`!stretch` / `!shrimp` — valid only for an active Captain Stretch commander moment
+`!hydrate` / `!orb` — valid only for an active Water Wizard commander moment
+`!checkchat` / `!toad` — valid only for an active The Director commander moment
+
+## Runtime Commander / Dice / Voting Rule
 
 For each LotAT session:
 - the engine opens a join phase before the first story decision
+- the join window uses a fixed runtime default of **120 seconds** in v1
 - viewers who type `!join` are added to the participant roster for that run
 - when the join phase closes, that roster is frozen for the rest of the session
+- when the engine enters a stage node with `commander_moment.enabled = true`, it opens a timed commander-input window before normal voting
+- the commander window duration comes from the node's authored `commander_moment.window_seconds`
+- the engine snapshots the currently assigned commander user at commander-window open
+- only that assigned commander user may satisfy the moment; joined-session status does not matter for commander input
+- any mapped valid command for that commander counts, and the first valid command closes the commander window immediately as a success
+- commander-moment success is narrative-only in v1 and does **not** change chaos, branching, vote eligibility, or vote resolution
+- if the commander window times out, no assigned commander exists, or the assigned commander never responds, the engine continues silently into normal voting
 - when the engine enters a stage node with `dice_hook.enabled = true`, it opens a timed pre-vote `!roll` window
+- the dice window duration comes from the node's authored `dice_hook.roll_window_seconds`
 - during that dice window, **any viewer in chat** may type `!roll`; joined-session status does not matter for rolling
 - the first roll meeting `roll >= success_threshold` closes the dice window immediately as a success
 - if the timer expires with no successful roll, the dice window resolves as a failure
 - dice-hook success/failure is narrative-only in v1 and does **not** change chaos, branching, vote eligibility, or vote resolution
-- after the dice window resolves, the engine opens the normal decision window for that node if it is a stage node
+- after the commander window or dice window resolves, the engine opens the normal decision window for that node if it is a stage node
+- the decision window uses a fixed runtime default of **120 seconds** in v1
 - during each decision window, only joined participants from that frozen roster count toward the "everyone has voted" rule
 - if every joined participant submits one of the currently allowed decision commands for that node, the engine may auto-close the decision window early and advance immediately through the normal resolution path
+
+Implementation note for future Streamer.bot work:
+- v1 should use one named timer per window type (`LotAT - Join Window`, `LotAT - Decision Window`, `LotAT - Commander Window`, `LotAT - Dice Window`) plus runtime stage/window guards so stale timer events cannot advance the session incorrectly
+
+V1 guardrails:
+- commander moments and dice hooks do **not** coexist on the same node
+- commander-input commands are never authored story-choice commands and never appear in `commands_used`
 
 ## Adding a New Command
 
@@ -57,3 +82,4 @@ For each LotAT session:
 - Authored decision commands should map to thematic ship actions (scanning, targeting, deploying crew, etc.)
 - Runtime session commands manage session flow and participation; they are not story-content fields
 - `!roll` is never an authored story-choice command and must not appear in `commands_used`
+- commander-input commands (`!stretch`, `!shrimp`, `!hydrate`, `!orb`, `!checkchat`, `!toad`) are never authored story-choice commands and must not appear in `commands_used`

@@ -126,11 +126,21 @@ Used in:
 - `VAR_LOTAT_ANNOUNCEMENT_SENT` = `lotat_announcement_sent`
 - `VAR_LOTAT_OFFERING_STEAL_CHANCE` = `lotat_offering_steal_chance`
 - `VAR_LOTAT_STEAL_MULTIPLIER` = `lotat_steal_multiplier`
+- `TIMER_LOTAT_JOIN_WINDOW` = `LotAT - Join Window`
+- `TIMER_LOTAT_DECISION_WINDOW` = `LotAT - Decision Window`
+- `TIMER_LOTAT_COMMANDER_WINDOW` = `LotAT - Commander Window`
+- `TIMER_LOTAT_DICE_WINDOW` = `LotAT - Dice Window`
 - `PREFIX_BOOST` = `boost_`
 
 Used in:
 - `Actions/Squad/offering.cs`
 - `Actions/Twitch Core Integrations/stream-start.cs`
+- `Actions/LotAT/` *(planned engine implementation)*
+
+Operator note:
+- These are timer **names only**. V1 timer durations stay in the runtime contract / implementation layer.
+- Runtime defaults to preserve when implementation begins: join = `120s`, decision = `120s`.
+- Stream start should disable all four LotAT timers to clear stale state before returning LotAT to `idle`.
 
 ---
 

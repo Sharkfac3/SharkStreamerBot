@@ -61,7 +61,9 @@
       "commander_moment": {
         "enabled": false,
         "commander": null,
-        "prompt": null
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
       },
       "choices": [
         {
@@ -111,7 +113,9 @@
       "commander_moment": {
         "enabled": false,
         "commander": null,
-        "prompt": null
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
       },
       "choices": [
         {
@@ -161,7 +165,9 @@
       "commander_moment": {
         "enabled": false,
         "commander": null,
-        "prompt": null
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
       },
       "choices": [
         {
@@ -211,7 +217,9 @@
       "commander_moment": {
         "enabled": true,
         "commander": "Captain Stretch",
-        "prompt": "Captain Stretch demands a precise bridge decision and absolutely refuses to answer any shrimp-related follow-up questions."
+        "prompt": "Captain Stretch demands a precise bridge decision and absolutely refuses to answer any shrimp-related follow-up questions.",
+        "window_seconds": 15,
+        "success_text": "Captain Stretch slams the bridge command through with crisp shrimp-denial confidence, and the crew surges into the vote window."
       },
       "choices": [
         {
@@ -261,7 +269,9 @@
       "commander_moment": {
         "enabled": false,
         "commander": null,
-        "prompt": null
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
       },
       "choices": [
         {
@@ -311,7 +321,9 @@
       "commander_moment": {
         "enabled": false,
         "commander": null,
-        "prompt": null
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
       },
       "choices": [],
       "tags": [
@@ -346,7 +358,9 @@
       "commander_moment": {
         "enabled": false,
         "commander": null,
-        "prompt": null
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
       },
       "choices": [],
       "tags": [
@@ -381,7 +395,9 @@
       "commander_moment": {
         "enabled": false,
         "commander": null,
-        "prompt": null
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
       },
       "choices": [],
       "tags": [
@@ -416,7 +432,9 @@
       "commander_moment": {
         "enabled": false,
         "commander": null,
-        "prompt": null
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
       },
       "choices": [],
       "tags": [
