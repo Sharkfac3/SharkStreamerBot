@@ -6,7 +6,7 @@ This document defines the recommended **runtime state model** and **voting contr
 
 Use it when planning engine behavior, reviewing schema/runtime boundaries, or aligning future Streamer.bot implementation work with the live-session contract.
 
-This is agent scaffolding for the engine layer. It is intentionally implementation-aware, but not tied to specific C# classes, global-variable names, or one exact storage shape.
+This is agent scaffolding for the engine layer. It is intentionally implementation-aware and should align to the canonical v1 runtime variable names and JSON storage shapes documented in this file and the surrounding engine docs.
 
 ## Runtime Boundary
 
@@ -56,14 +56,13 @@ Important exceptions:
 
 ## Participant Identity Rules
 
-Recommended participant identity key:
-- primary: `userId`
-- fallback: lowercased `user`
+Canonical participant identity key for v1:
+- `lowercased username/login string`
 
-Recommended normalized runtime identity rule:
-1. if a stable `userId` exists, use it
-2. otherwise use the lowercased username/login value
-3. use the same resolved identity key everywhere runtime participation is checked
+Canonical normalized runtime identity rule:
+1. read the chat user/login value
+2. normalize it to lowercase
+3. use that lowercase username/login string everywhere runtime participation is checked or compared
 
 This same identity rule should be used consistently for:
 - join deduplication
@@ -71,12 +70,13 @@ This same identity rule should be used consistently for:
 - per-node vote storage
 - vote replacement
 - early-close calculations
+- commander-target comparison
 - operator inspection / recovery output
 
 Reasoning:
-- `userId` is the most stable viewer identity
-- lowercased `user` provides a practical fallback when ID data is unavailable
-- using one normalized identity rule avoids join/vote mismatches
+- this keeps LotAT identity storage aligned with the existing commander-user comparison model
+- one canonical lowercase username format is easier for coding agents to implement consistently than mixed `userId` / username fallback logic
+- using one normalized identity rule avoids join/vote/commander mismatches
 
 ## Joined-Participant Roster Rules
 
@@ -235,85 +235,102 @@ Recommended interpretation:
 - find the highest vote count
 - if more than one choice shares that count, choose the earliest of those tied commands in authored `choices` order
 
-## Suggested Runtime State Categories
+## Canonical v1 Runtime State Categories
+
+To reduce implementation ambiguity, v1 should use the following runtime categories and canonical variable names.
 
 ### 1. Session-level state
 
-Tracks whether a run exists and what run-level context is active.
+These values are required for every active run:
+- `lotat_active`
+- `lotat_session_id`
+- `lotat_session_stage`
+- `lotat_session_story_id`
+- `lotat_session_current_node_id`
+- `lotat_session_chaos_total`
+- `lotat_session_roster_frozen`
+- `lotat_session_joined_roster_json`
+- `lotat_session_joined_count`
 
-Examples:
-- whether a LotAT run is active
-- current runtime stage
-- current story ID
-- current node ID
-- current chaos total
-- join-phase open/closed status
-- joined-participant roster
-- joined-participant count
-- whether the roster is frozen
-- which named timer/window type is currently expected, if any
-- whether the current active window has already resolved
+Contract notes:
+- these values must survive normal action-to-action execution during a live run
+- `lotat_session_id` exists both for logging clarity and as a stale-event guard anchor
+- `lotat_session_joined_roster_json` should use a minimal identity-only JSON array of lowercase username/login strings in v1
+- `lotat_session_joined_count` is intentionally stored separately for simple checks and logging
 
 ### 2. Node-level state
 
-Tracks what matters for the currently active node.
+These values are required while a node is active:
+- `lotat_node_active_window`
+- `lotat_node_window_resolved`
+- `lotat_node_allowed_commands_json`
 
-Examples:
-- active node type
-- whether a commander window is currently open for the node
-- snapshotted commander target / allowed commander-input commands when applicable
-- whether a dice window is currently open for the node
-- current dice threshold / dice timer state when applicable
-- allowed commands for the current node
-- vote map for the current node
-- count of joined participants who currently have a valid vote
-- whether the node has already entered resolution
-- last winning command / last winning choice snapshot
+Conditional node/window values:
+- commander window: `lotat_node_commander_name`, `lotat_node_commander_target_user`, `lotat_node_commander_allowed_commands_json`
+- dice window: `lotat_node_dice_success_threshold`
 
-### 3. History / trace state
+Contract notes:
+- `lotat_node_active_window` should be a simple literal such as `none`, `join`, `commander`, `dice`, or `decision`
+- `lotat_node_window_resolved` exists so timer callbacks and chat handlers can no-op safely once the node has already advanced
+- `lotat_node_allowed_commands_json` should hold only the active node's authored decision commands
+- the contract intentionally avoids requiring richer per-window history in v1
 
-Tracks what already happened so the run can be inspected or resumed safely.
+### 3. Vote-level state
 
-Examples:
-- branch history
-- previously resolved node IDs
-- last resolved choice
-- last emitted result flavor snapshot
-- last ending reached
+These values are required during decision handling:
+- `lotat_vote_map_json`
+- `lotat_vote_valid_count`
 
-### 4. Recovery / operator-support state
+Contract notes:
+- `lotat_vote_map_json` should be a minimal lowercase-username → command map for the active node only
+- the engine should not preserve full vote history in v1
+- `lotat_vote_valid_count` should reflect how many joined participants currently have a valid active vote on the node
 
-Tracks enough information to inspect or recover from interruptions.
+### 4. Minimal history state
 
-Examples:
-- current roster snapshot
-- current vote snapshot
-- last stage transition
-- last successful resolution snapshot
-- cancellation / abort reason if the run was interrupted
+Keep history intentionally small in v1:
+- `lotat_session_last_choice_id`
+- `lotat_session_last_end_state` *(recommended but optional for first runnable implementation)*
 
-## Suggested Runtime Data Shape Expectations
+Do not introduce richer branch-history storage in v1 unless the runtime contract is intentionally expanded later.
 
-Exact final names belong to implementation work, but the contract likely needs runtime values representing:
-- active session stage
-- joined-participant roster
-- joined-participant count
-- roster frozen/open state
-- active node identifier
-- current node allowed commands
-- current node commander-window state when applicable
-- current node dice-window state when applicable
-- current node vote map
-- current node valid-voter count
-- current chaos total
-- active named timer / expected window type
-- current window resolved/not-resolved guard
-- branch history
-- last resolution snapshot
+### 5. Recovery / operator-support state
+
+Deep recovery state is intentionally deferred until after v1.
+Recovery snapshots are **not part of the v1 required contract**.
+For now, logs plus the active runtime globals above are the preferred debugging surface.
+
+## Canonical v1 Data Shape Expectations
+
+Use **explicit scalar globals** for simple values and **JSON-packed globals** only when a structured collection is required.
+
+### Minimal joined-roster shape
+```json
+["sharkfac3","viewername"]
+```
+
+### Minimal allowed-command-list shape
+```json
+["!scan","!target"]
+```
+
+### Minimal vote-map shape
+```json
+{
+  "sharkfac3": "!scan",
+  "viewername": "!target"
+}
+```
+
+Rationale:
+- easier for coding agents to implement than one large runtime blob
+- easier to reason about than many over-detailed per-user structures
+- enough to support dedupe, membership checks, tallying, early-close behavior, and commander-target comparison
+- keeps the canonical JSON shapes fully locked before engine implementation begins
 
 Reminder:
 - any new LotAT runtime variable introduced during implementation must also be reflected in `Actions/SHARED-CONSTANTS.md`
-- any persisted reset-sensitive runtime variable must be included in the relevant stream-start / reset flow when code work begins
+- any reset-sensitive runtime variable must be included in `Actions/Twitch Core Integrations/stream-start.cs` when implementation begins
 
 ## Decision Resolution Contract
 

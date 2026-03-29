@@ -45,13 +45,62 @@ All LotAT engine state in `Actions/SHARED-CONSTANTS.md`:
 - `lotat_steal_multiplier` — offering steal scaling
 - `boost_*` — boost state
 
-Expected runtime state to add when the engine is implemented/refined:
-- join-phase status for the active session
-- joined-participant roster for the active session
-- per-node vote submissions keyed to joined participants
-- decision-window completion state so the engine can auto-close once all joined participants have voted
-- active window type / resolution guards so timer callbacks can verify the session is still on the expected step before acting
-- timer names for the four v1 window types: join, decision, commander, and dice
+### Canonical v1 runtime variable contract
+
+The current runtime docs now assume a **minimal implementation-first state contract**.
+
+Use **individual globals** for scalar values and **JSON-packed globals** only for structured collections.
+This keeps the engine easier for coding agents to implement while still giving timers and chat handlers enough shared state to operate safely between actions.
+
+The JSON shapes documented for roster, allowed commands, and vote storage are **canonical v1 contract**, not loose implementation examples.
+LotAT runtime identity should use a **lowercase username/login string** everywhere runtime user comparison occurs, including joined-roster storage, vote-map keys, and commander-target comparison.
+
+#### Session-level required
+- `lotat_active`
+- `lotat_session_id`
+- `lotat_session_stage`
+- `lotat_session_story_id`
+- `lotat_session_current_node_id`
+- `lotat_session_chaos_total`
+- `lotat_session_roster_frozen`
+- `lotat_session_joined_roster_json`
+- `lotat_session_joined_count`
+
+#### Node/window-level required
+- `lotat_node_active_window`
+- `lotat_node_window_resolved`
+- `lotat_node_allowed_commands_json`
+
+#### Vote-level required
+- `lotat_vote_map_json`
+- `lotat_vote_valid_count`
+
+#### Required only when a commander window is active
+- `lotat_node_commander_name`
+- `lotat_node_commander_target_user`
+- `lotat_node_commander_allowed_commands_json`
+
+#### Required only when a dice window is active
+- `lotat_node_dice_success_threshold`
+
+#### Minimal history state recommended for v1
+- `lotat_session_last_choice_id`
+- `lotat_session_last_end_state` *(recommended, not strictly required for first runnable implementation)*
+
+### Deliberately deferred beyond v1
+- full branch-history globals beyond the minimal `lotat_session_last_choice_id`
+- rich recovery snapshots
+- per-roll history
+- per-vote history beyond the active tally
+- operator-inspection blobs beyond what logs already provide
+
+### Coordination rule
+
+When implementation begins:
+1. add the canonical variable names to `Actions/SHARED-CONSTANTS.md`
+2. reset them in `Actions/Twitch Core Integrations/stream-start.cs`
+3. disable all four LotAT timers at stream start before returning runtime state to `idle`
+4. reset JSON globals to safe empty JSON values and scalar globals to safe empty defaults
 
 ## Sub-Skills
 

@@ -53,6 +53,49 @@ Rules:
 - recommended implementation model is a **hybrid**: Streamer.bot named timers drive timer-end actions, while runtime stage/window state prevents stale timer events from mutating the session after state has already advanced
 - stream-start / reset behavior should always disable all LotAT timers and clear LotAT runtime window state back to `idle`
 
+## Canonical v1 Runtime State Buckets
+
+To remove ambiguity before C# implementation starts, v1 runtime state should be divided into four buckets:
+
+### 1. Session-level state
+Must exist for every active run:
+- `lotat_active`
+- `lotat_session_id`
+- `lotat_session_stage`
+- `lotat_session_story_id`
+- `lotat_session_current_node_id`
+- `lotat_session_chaos_total`
+- `lotat_session_roster_frozen`
+- `lotat_session_joined_roster_json`
+- `lotat_session_joined_count`
+
+### 2. Node/window-level state
+Must exist while a node is active:
+- `lotat_node_active_window`
+- `lotat_node_window_resolved`
+- `lotat_node_allowed_commands_json`
+
+Conditional window state:
+- commander window: `lotat_node_commander_name`, `lotat_node_commander_target_user`, `lotat_node_commander_allowed_commands_json`
+- dice window: `lotat_node_dice_success_threshold`
+
+### 3. History-level state
+Keep this minimal in v1:
+- `lotat_session_last_choice_id`
+- optionally `lotat_session_last_end_state`
+
+### 4. Recovery-level state
+Deep recovery state is intentionally deferred until after the first working implementation.
+For v1, logs plus the active runtime globals above are considered sufficient.
+
+Implementation posture for v1:
+- prefer explicit scalar globals over one large runtime blob
+- use JSON-packed globals only for structured collections such as roster, allowed commands, and vote maps
+- treat the roster / allowed-command / vote-map JSON shapes documented in the engine runtime docs as canonical v1 contract
+- use a **lowercase username/login string** as the canonical runtime identity wherever LotAT stores or compares a user
+- optimize for normal action-to-action continuity, not crash recovery
+- do not require recovery snapshots beyond logs in v1
+
 ## Canonical Runtime Stages
 
 Recommended stage set for the session state machine:
@@ -116,9 +159,10 @@ During `join_open`:
 - the engine should be able to inspect the current roster while the join window is still open
 - the window length is a fixed **120 seconds** in v1 and is not story-authored
 
-Recommended participant identity rule:
-- primary key: `userId`
-- fallback key: lowercased `user`
+Canonical participant identity rule for v1:
+- store participant identity as the **lowercased username/login string**
+- use that same lowercased username/login form everywhere LotAT compares users at runtime, including roster membership, vote-map keys, and commander-target comparison
+- do not use `userId` as the canonical stored participant key in v1
 
 Recommended UX behavior:
 - duplicates may be ignored silently or acknowledged lightly, but must not mutate the roster
@@ -414,13 +458,22 @@ On session end, the engine should:
 7. transition back to `idle`
 
 Minimum state to clear/reset before returning to `idle`:
-- active-session flag
-- join-phase state
-- participant roster / count
-- current node vote map
-- current allowed commands
-- active node identifier if session-scoped
-- any timer state specific to the run
+- `lotat_active`
+- `lotat_session_id`
+- `lotat_session_stage`
+- `lotat_session_story_id`
+- `lotat_session_current_node_id`
+- `lotat_session_chaos_total`
+- `lotat_session_roster_frozen`
+- `lotat_session_joined_roster_json`
+- `lotat_session_joined_count`
+- `lotat_node_active_window`
+- `lotat_node_window_resolved`
+- `lotat_node_allowed_commands_json`
+- `lotat_vote_map_json`
+- `lotat_vote_valid_count`
+- any conditional commander/dice globals for the active node
+- minimal history globals if implementation created them
 
 ## Operator Recovery Controls
 

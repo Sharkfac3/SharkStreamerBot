@@ -29,6 +29,8 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-03-29 | pi | Lock LotAT v1 runtime storage contract docs | uncommitted |
+| 2026-03-29 | pi | Lock LotAT runtime state variable contract docs | uncommitted |
 | 2026-03-29 | pi | Lock LotAT v1 timer contract docs and fix prototype JSON commander fields | uncommitted |
 | 2026-03-29 | pi | Lock in LotAT commander moment runtime/schema contract | uncommitted |
 | 2026-03-27 | pi | Separate human ArtPipeline docs from agent-focused pipeline docs | uncommitted |
@@ -37,7 +39,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-03-26 | pi | Simplify LotAT chaos contract and ending outcome docs | uncommitted |
 | 2026-03-26 | pi | Repo-wide Ollama doc consistency pass | uncommitted |
 | 2026-03-26 | pi | Align Content Pipeline docs to Windows-native Ollama workflow | uncommitted |
-| 2026-03-26 | pi | Add Windows 11 Ollama setup doc in humans/ | uncommitted |
 
 ---
 

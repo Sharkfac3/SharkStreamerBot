@@ -53,7 +53,27 @@ Runtime design assumptions to preserve:
 - during a decision window, the engine may close voting early once every joined user has submitted one of the currently allowed decision commands
 - join roster data is runtime state, not authored story schema
 
-Any new LotAT state variable must be added to `Actions/Twitch Core Integrations/stream-start.cs` reset and `Actions/SHARED-CONSTANTS.md`.
+### V1 runtime state contract direction
+
+For v1, use a runtime state model that is **easy for coding agents to implement and reason about**:
+- use **explicit individual globals** for scalar values such as flags, IDs, counts, stage, and active window type
+- use **JSON-packed globals only for structured collections** such as the joined roster, allowed command lists, and vote map
+- treat the JSON storage shapes in the engine runtime docs as **canonical**, not implementation-detail suggestions
+- optimize for **normal action-to-action continuity** during live operation, not crash recovery
+- keep the required state set **minimal** so the engine can work first and become more recovery-friendly later
+- defer recovery snapshots, rich branch history, and vote-history retention beyond v1
+
+Canonical v1 identity/storage rule:
+- LotAT runtime user identity should be stored as a **lowercase username/login string**
+- use that same lowercase username form consistently for joined-roster membership, active vote-map keys, and commander-target comparison
+- do **not** introduce richer per-user JSON objects in v1 unless the runtime contract is intentionally expanded later
+
+Recommended naming style for new runtime variables:
+- preserve existing `lotat_active` for backward compatibility
+- use clear category prefixes for new variables: `lotat_session_*`, `lotat_node_*`, and `lotat_vote_*`
+- prefer literal names over abstract names so future coding agents are less likely to hallucinate meanings
+
+Any new LotAT state variable must be added to `Actions/Twitch Core Integrations/stream-start.cs` reset and `Actions/SHARED-CONSTANTS.md` when implementation begins.
 
 ## Key References
 
