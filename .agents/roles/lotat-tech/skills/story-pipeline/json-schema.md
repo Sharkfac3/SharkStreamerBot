@@ -32,13 +32,6 @@ Use this exact top-level shape:
   "summary": "short one paragraph pitch",
   "starting_ship_section": "Command Deck",
   "starting_node_id": "node_001",
-  "supported_mechanics": {
-    "chat_voting": true,
-    "chaos_meter": true,
-    "commander_moments": true,
-    "dice_hooks": true,
-    "landing_party": false
-  },
   "cast": {
     "commanders_used": ["The Water Wizard"],
     "squad_members_used": ["Pedro the Raccoon", "Duck the Duck"]
@@ -58,21 +51,10 @@ Use this exact top-level shape:
 | `summary` | string | yes | Short one-paragraph pitch |
 | `starting_ship_section` | string | yes | Initial ship location for the story |
 | `starting_node_id` | string | yes | Must reference a valid `node_id` in `nodes[]` |
-| `supported_mechanics` | object | yes | Boolean capability map; see below |
 | `cast` | object | yes | Must be an object with `commanders_used` and `squad_members_used` arrays |
 | `ship_sections_used` | array | yes | Ship sections that appear in the story |
 | `commands_used` | array | yes | Commands used anywhere in the story; must all be engine-supported |
 | `nodes` | array | yes | All stage and ending nodes |
-
-## `supported_mechanics`
-
-| Field | Type | Required | Notes |
-|---|---|---|---|
-| `chat_voting` | boolean | yes | Whether chat voting is used |
-| `chaos_meter` | boolean | yes | Whether chaos tracking is used |
-| `commander_moments` | boolean | yes | Whether commander moments are used |
-| `dice_hooks` | boolean | yes | For valid v1 stories this should remain `true`; node-level `dice_hook.enabled` determines whether a given stage opens a pre-vote roll window |
-| `landing_party` | boolean | yes | Must remain `false` unless that mechanic is officially added |
 
 ## `cast`
 
@@ -94,7 +76,7 @@ Each node must use this shape:
   "ship_section": "Command Deck",
   "title": "Short internal stage title",
   "read_aloud": "One short stream-friendly narration block.",
-  "sfx_hint": "optional short production hint",
+  "sfx_hint": null,
   "crew_focus": {
     "commander": null,
     "squad_member": "Pedro the Raccoon"
@@ -144,13 +126,13 @@ Each node must use this shape:
 | `node_type` | string | yes | `"stage"` or `"ending"` |
 | `ship_section` | string | yes | Ship location for the node |
 | `title` | string | yes | Required short internal stage/ending title |
-| `read_aloud` | string | yes | Required narration block; target 1–4 sentences |
-| `sfx_hint` | string | yes in shape | Short production hint string; contract examples always include it |
-| `crew_focus` | object | yes | Fixed object with `commander` and `squad_member` keys |
+| `read_aloud` | string | yes | Required narration block |
+| `sfx_hint` | string or null | yes | Required on every node in v1; use `null` when no production hint is needed |
+| `crew_focus` | object | yes | Fixed object with `commander` and `squad_member` keys; both keys must always exist |
 | `chaos` | object | yes | Per-node chaos object; see below |
-| `dice_hook` | object | yes | Structured dice hook object |
-| `commander_moment` | object | yes | Structured commander interruption object |
-| `choices` | array | yes | Stage nodes usually present exactly 2 choices; ending nodes use `[]` |
+| `dice_hook` | object | yes | Structured dice hook object; all documented subkeys must always exist |
+| `commander_moment` | object | yes | Structured commander interruption object; all documented subkeys must always exist |
+| `choices` | array | yes | Stage nodes must have 1 or 2 choices in v1; ending nodes use `[]` |
 | `tags` | array of strings | yes | Lightweight categorization tags |
 | `end_state` | string or null | yes | `null` for stage nodes; ending classification for ending nodes |
 
@@ -256,7 +238,8 @@ Ending nodes must use this shape:
 
 Stage vs ending expectations:
 - stage nodes use `node_type: "stage"`
-- stage nodes normally present exactly 2 choices
+- stage nodes must present 1 or 2 choices in v1
+- stage nodes with 3 or more choices are invalid in v1
 - stage nodes use `end_state: null`
 - ending nodes use `node_type: "ending"`
 - ending nodes must use `choices: []`
@@ -301,12 +284,16 @@ Rules:
 - `summary` is a required top-level field
 - `title` is required both at the top level and at the node level
 - `sfx_hint` belongs at node level, not top level
+- `sfx_hint` is required on every node and may be `null`
 - `tags` is a required node-level array
 - `end_state` is required on every node: `null` for stages, `"success"`, `"partial"`, or `"failure"` for endings
 - outcome classification belongs to ending nodes only; the engine should not infer per-stage success/failure from prose, tags, or downstream guesses
 - all `next_node_id` values must reference valid `node_id` values in the same story file
-- `read_aloud` should stay within 1–4 sentences for live-stream pacing
-- choices should usually present exactly 2 options for normal stage nodes
+- `crew_focus` must always include both `commander` and `squad_member`
+- `dice_hook` must always include all documented subkeys, using `null` for inactive values when `enabled = false`
+- `commander_moment` must always include all documented subkeys, using `null` for inactive values when `enabled = false`
+- stage nodes must present 1 or 2 choices in v1
+- stage nodes with 3 or more choices are invalid in v1
 - join-roster tracking and vote auto-close behavior are runtime rules and must not be encoded as new story JSON fields
 - dice hooks are stage-only in v1; ending nodes must keep `dice_hook.enabled = false`
 - commander moments are stage-only in v1; ending nodes must keep `commander_moment.enabled = false`
@@ -319,12 +306,23 @@ Rules:
 - commander moments are resolved before the node's normal decision vote and do not change branching, chaos, vote eligibility, or vote resolution
 - chaos should escalate across the story arc rather than reset arbitrarily
 
+## Editorial Guidance (Not Validation Rules)
+
+The following guidance is useful for writer review but should not be treated as hard schema validation in v1:
+- keeping `read_aloud` concise for live narration
+- preferring 2 choices when a stage benefits from contrast
+- using commander moments sparingly
+- pacing chaos escalation for comedic payoff
+
 ## Ready-for-Engine Checklist
 
 Before treating a story as implementation-ready, verify:
 - [ ] all required top-level fields are present exactly as defined above
 - [ ] `cast` uses the fixed object shape
-- [ ] each node includes the full node contract, including `title`, `sfx_hint`, `crew_focus`, `chaos`, `dice_hook`, `tags`, and `end_state`
+- [ ] each node includes the full node contract, including `title`, `sfx_hint`, `crew_focus`, `chaos`, `dice_hook`, `commander_moment`, `tags`, and `end_state`
+- [ ] `sfx_hint` exists on every node, using a string or `null`
+- [ ] `crew_focus`, `dice_hook`, and `commander_moment` include all documented subkeys even when inactive
+- [ ] each stage node has 1 or 2 choices; no stage node has 3 or more choices in v1
 - [ ] each choice includes `command`
 - [ ] all commands are from the supported engine command list
 - [ ] endings use `choices: []`, a valid `end_state`, `dice_hook.enabled: false`, and `commander_moment.enabled: false`

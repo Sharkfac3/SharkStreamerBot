@@ -6,13 +6,6 @@
   "summary": "A fizzy comet made of weaponized soda ice drifts toward the Starship Shamples. Chat must decide whether to study it, fight it, or let Pedro the Raccoon solve carbonation with electricity, which is the wrong kind of confidence but still technically confidence.",
   "starting_ship_section": "Command Deck",
   "starting_node_id": "node_001",
-  "supported_mechanics": {
-    "chat_voting": true,
-    "chaos_meter": true,
-    "commander_moments": true,
-    "dice_hooks": true,
-    "landing_party": false
-  },
   "cast": {
     "commanders_used": [
       "Captain Stretch"

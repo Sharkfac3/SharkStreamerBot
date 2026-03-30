@@ -19,15 +19,17 @@ Belongs here:
 - participant roster creation and freeze rules
 - timer ownership, defaults, and reset expectations
 - zero-join behavior
+- unresolved timeout behavior
 - node-entry flow
 - decision-window open/close flow
+- fault-abort behavior
 - end-of-session teardown
-- operator recovery controls
 
 Does **not** belong here:
 - new story JSON fields
 - authored narrative text
 - per-story overrides for join/vote lifecycle
+- operator babysitting workflows for normal play
 - changes to `choices[].command` semantics beyond runtime handling
 
 ## Core Runtime Principle
@@ -37,6 +39,8 @@ Every LotAT session begins with a **join phase** before the first story decision
 Viewers opt into that session with `!join`. The engine records a per-session participant roster and uses that roster for later runtime rules, especially the "all joined participants have voted" early-close condition.
 
 > Runtime contract: join roster state is runtime-owned session state. It is **not** authored into story JSON.
+
+> Runtime loading contract: in v1, the engine reads exactly one runtime story file — `Creative/WorldBuilding/Storylines/loaded/current-story.json`. It does **not** scan `ready/` or choose among multiple candidate stories at session start.
 
 ## V1 Timer Contract
 
@@ -102,14 +106,14 @@ Recommended stage set for the session state machine:
 
 | Stage | Meaning | Accepts Chat Input? | Exit Conditions |
 |---|---|---|---|
-| `idle` | No active LotAT session exists. | No LotAT session input should be processed. | Operator starts a session. |
-| `join_open` | Session exists and is collecting participants. | `!join` only. Decision commands do not count yet. | Join timer ends, operator force-closes join, or operator cancels session. |
-| `node_intro` | Engine has entered a node and is presenting runtime/story output. | No vote-counting yet. | Intro/setup work completes, then either open commander window, open dice window, open decision window, or end session if node is an ending. |
-| `commander_open` | Current node has an enabled commander moment and the pre-vote commander-input window is live. | Only the mapped commander-input commands from the snapshotted assigned commander user should count. | First valid commander input, timer expiry, silent skip, operator force-close, or operator cancel. |
-| `dice_open` | Current node has an enabled dice hook and the pre-vote `!roll` window is live. | `!roll` only; available to all chat, not just joined participants. | First successful roll, timer expiry, operator force-close, or operator cancel. |
-| `decision_open` | Current node choices are live and votes may be collected. | Valid current-node decision commands from joined participants. | Timer expires, all joined participants vote, operator force-closes, or operator cancels session. |
-| `decision_resolving` | Voting is closed and the engine is determining the winning path. | No new votes should count. | Resolution completes and engine enters next node or ends session. |
-| `ended` | Run has finished or been cancelled and is awaiting final cleanup / safe return. | No further session participation should be accepted. | Cleanup completes and engine returns to `idle`. |
+| `idle` | No active LotAT session exists. | No LotAT session input should be processed. | Start trigger begins a session. |
+| `join_open` | Session exists and is collecting participants. | `!join` only. Decision commands do not count yet. | Join timer ends and either starts story play or ends the run with zero joins; unrecoverable fault aborts the run. |
+| `node_intro` | Engine has entered a node and is presenting runtime/story output. | No vote-counting yet. | Intro/setup work completes, then either open commander window, open dice window, open decision window, end session if node is an ending, or abort on unrecoverable fault. |
+| `commander_open` | Current node has an enabled commander moment and the pre-vote commander-input window is live. | Only the mapped commander-input commands from the snapshotted assigned commander user should count. | First valid commander input, timer expiry, silent skip, or unrecoverable fault abort. |
+| `dice_open` | Current node has an enabled dice hook and the pre-vote `!roll` window is live. | `!roll` only; available to all chat, not just joined participants. | First successful roll, timer expiry, or unrecoverable fault abort. |
+| `decision_open` | Current node choices are live and votes may be collected. | Valid current-node decision commands from joined participants. | Timer expires, all joined participants vote, unresolved end on zero valid votes, or unrecoverable fault abort. |
+| `decision_resolving` | Voting is closed and the engine is determining the winning path. | No new votes should count. | Resolution completes and engine enters next node, ends unresolved, or aborts on unrecoverable fault. |
+| `ended` | Run has finished, fault-aborted, or ended unresolved and is awaiting final cleanup / safe return. | No further session participation should be accepted. | Cleanup completes and engine returns to `idle`. |
 
 ## Stage Transition Contract
 
@@ -119,10 +123,8 @@ Normal happy-path flow:
 
 Exceptional but expected paths:
 - `join_open` → `ended` when zero users joined
-- `join_open` → `ended` when operator cancels before story start
-- `commander_open` → `ended` when operator cancels mid-session
-- `dice_open` → `ended` when operator cancels mid-session
-- `decision_open` → `ended` when operator cancels mid-session
+- `decision_open` → `ended` when the decision timer closes with zero valid votes and the run ends unresolved
+- any active stage → `ended` when an unrecoverable runtime/code fault requires safe abort
 - `node_intro` → `ended` when the entered node is an ending node
 
 Recommended rule:
@@ -137,17 +139,21 @@ Recommended rule:
 When a LotAT session starts, the engine should:
 
 1. confirm no conflicting active LotAT session is already running
-2. load the selected / canonical story definition
-3. validate that required runtime inputs exist (`story_id`, `starting_node_id`, nodes, choices where applicable)
-4. initialize fresh session state
-5. clear any stale roster, vote, timer, or branch state from a prior run
-6. set runtime stage to `join_open`
-7. announce the join phase to chat
-8. start the join timer using the fixed v1 runtime default of **120 seconds**
+2. load **only** the canonical runtime story file at `Creative/WorldBuilding/Storylines/loaded/current-story.json`
+3. perform only the bare-minimum runtime load checks needed to start safely in v1 (`file exists`, `JSON parses`, core runtime fields such as `story_id`, `starting_node_id`, and `nodes` are present enough to begin)
+4. if any of those minimal load checks fail, abort the start attempt immediately
+5. on abort, log the failure verbosely, send the fixed generic chat-safe fault message, trigger the generic Mix It Up failure alert, and leave the runtime in `idle`
+6. initialize fresh session state
+7. clear any stale roster, vote, timer, or branch state from a prior run
+8. set runtime stage to `join_open`
+9. announce the join phase to chat
+10. start the join timer using the fixed v1 runtime default of **120 seconds**
 
-Recommended chat/operator expectation:
+Recommended v1 expectation:
 - chat is told clearly to type `!join` during the join window to participate in **this** LotAT mission
 - the announcement should make clear that joining is per-session, not permanent
+- the engine is expected to run unattended after the start trigger in normal use
+- the join phase must never open if the runtime story file is missing, malformed, or minimally unusable
 
 ## Join-Phase Contract
 
@@ -156,7 +162,7 @@ During `join_open`:
 - each unique viewer may join at most once for that session
 - duplicate `!join` attempts do not create duplicate roster entries
 - decision commands received during this phase do not count as votes
-- the engine should be able to inspect the current roster while the join window is still open
+- the engine should keep the current roster available in runtime state while the join window is still open
 - the window length is a fixed **120 seconds** in v1 and is not story-authored
 
 Canonical participant identity rule for v1:
@@ -166,7 +172,7 @@ Canonical participant identity rule for v1:
 
 Recommended UX behavior:
 - duplicates may be ignored silently or acknowledged lightly, but must not mutate the roster
-- the operator should be able to see the roster count and identities if recovery is needed
+- no operator inspection workflow is required in v1 normal use
 
 ## `!join` as a Runtime Session Command
 
@@ -180,7 +186,7 @@ Contract implications:
 
 `!join` should be processed only when:
 - runtime stage is `join_open`
-- the session has not already been cancelled or ended
+- the session has not already ended
 
 `!join` should be ignored when:
 - stage is `idle`
@@ -254,6 +260,14 @@ When the join phase closes with one or more participants:
 
 This is the only normal path from session-start setup into active story progression.
 
+When the join phase closes with zero participants:
+1. stop the join timer
+2. transition to `ended`
+3. announce the non-error zero-join outcome
+4. clear session state and return to `idle`
+
+This zero-join path is a normal session end, not a runtime fault.
+
 ## Node-Entry Contract
 
 Each time the engine enters a node, it should:
@@ -286,11 +300,11 @@ When a stage node has `commander_moment.enabled = true`, the engine should:
 - validate that the commander name maps to a known commander-input command set
 - validate that `dice_hook.enabled` is not also true on the same node in v1
 - resolve the currently assigned user for that commander slot from runtime/shared commander state
-- if no assigned commander user exists, log the skip for operator/debug visibility and continue silently into the normal decision window
+- if no assigned commander user exists, log the skip for debugging visibility and continue silently into the normal decision window
 - snapshot the assigned commander identity at window open so the target user cannot change mid-window
 - set runtime stage to `commander_open`
 - surface the authored `prompt` as the commander call-to-action
-- announce the commander window length to chat/operator
+- announce the commander window length to chat
 - start the commander timer in whole seconds from authored `window_seconds`
 - accept only the mapped commander-input commands from the snapshotted assigned commander user
 
@@ -311,7 +325,7 @@ During `commander_open`:
 On commander success:
 1. stop the commander timer
 2. lock out further commander-input handling for that node
-3. surface the authored `success_text` for operator read-aloud
+3. surface the authored `success_text` for normal runtime output
 4. proceed into the normal decision-window open contract for that same node
 
 On commander skip/failure:
@@ -349,16 +363,16 @@ During `dice_open`:
 On dice success:
 1. stop the dice timer
 2. lock out further `!roll` handling for that node
-3. surface the authored `success_text` for operator read-aloud
+3. surface the authored `success_text` for normal runtime output
 4. proceed into the normal decision-window open contract for that same node
 
 On dice failure:
 1. stop the dice timer if still active
 2. lock out further `!roll` handling for that node
-3. surface the authored `failure_text` for operator read-aloud
+3. surface the authored `failure_text` for normal runtime output
 4. proceed into the normal decision-window open contract for that same node
 
-Operator note:
+Implementation note:
 - the current v1 contract treats dice success as anonymous crowd success; the engine does not need to preserve a named "winner" for branching purposes
 
 ## Decision-Window Open Contract
@@ -400,10 +414,9 @@ The configured decision timer ends before all joined participants vote.
 ### 2. Early close
 All joined participants have submitted a valid vote for the current node.
 
-### 3. Operator force-close
-The operator manually closes the decision window for recovery or pacing reasons.
-
-All three paths should converge into the same resolution flow.
+These normal close paths then split into one of two outcomes:
+- if at least one valid vote exists, continue into the normal resolution flow
+- if zero valid votes exist when the timer closes, end the run as unresolved in v1
 
 ## Early-Close Contract
 
@@ -423,7 +436,7 @@ This rule depends on the frozen roster and should not be implemented against all
 
 ## Decision-Resolving Contract
 
-When the window closes, the engine should:
+When the window closes with one or more valid votes, the engine should:
 
 1. set runtime stage to `decision_resolving`
 2. lock out new votes for the active node
@@ -434,28 +447,36 @@ When the window closes, the engine should:
 7. transition to the winning `next_node_id`
 8. enter the next node through the normal node-entry contract
 
+If the decision timer closes with zero valid votes in v1:
+1. stop the decision timer if still active
+2. transition to `ended`
+3. announce the unresolved session outcome
+4. clear session state and return to `idle`
+
 In v1, do **not** classify stage resolution as success/failure for chaos purposes. The engine should use the authored ending node's `end_state` (`"success"`, `"partial"`, or `"failure"`) only when that ending is actually reached.
 
 Recommended safety rule:
 - there should be exactly one resolution pass per node
+- unresolved zero-vote shutdown should not attempt to invent a fallback winner
 
 ## End-of-Session Contract
 
 A session ends when:
 - an ending node is reached
 - the join phase closes with zero participants
-- the operator cancels the session
-- a reset action explicitly tears the session down
-- unrecoverable runtime validation failure requires safe abort
+- the decision timer closes with zero valid votes and the run ends unresolved
+- unrecoverable minimal runtime story-load failure requires safe abort before play begins
+- any later unrecoverable runtime/code fault requires a safe abort during play
 
 On session end, the engine should:
 1. set runtime stage to `ended`
 2. stop any active LotAT timers
-3. announce the ending, cancellation, or zero-join outcome as appropriate
-4. persist any final inspection snapshot needed for debugging/operator visibility
-5. clear or reset session-specific state
-6. return to a safe inactive condition
-7. transition back to `idle`
+3. announce the normal ending, zero-join outcome, unresolved outcome, or fault-abort outcome as appropriate
+4. log any fault details needed for debugging
+5. trigger the generic Mix It Up failure alert only for fault-abort outcomes
+6. clear or reset session-specific state
+7. return to a safe inactive condition
+8. transition back to `idle`
 
 Minimum state to clear/reset before returning to `idle`:
 - `lotat_active`
@@ -475,51 +496,62 @@ Minimum state to clear/reset before returning to `idle`:
 - any conditional commander/dice globals for the active node
 - minimal history globals if implementation created them
 
-## Operator Recovery Controls
+## V1 Unattended Fail-Closed Contract
 
-These controls are runtime/operator tools, not story mechanics. The contract should leave room for them even before implementation details are finalized.
+LotAT v1 is designed to run unattended after a single start trigger.
 
-Recommended recovery controls:
-- **force close join window** — stop join collection and move to zero-join handling or story start based on roster count
-- **force close commander window** — stop commander-input collection and continue silently into the normal decision window
-- **force close dice window** — resolve the active node's dice window as failure and continue into the normal decision window
-- **force close decision window** — stop voting and enter normal resolution immediately
-- **advance to next node** — move forward manually when recovery requires bypassing normal pacing
-- **cancel session** — abort the run safely and move to teardown
-- **inspect current roster** — show who joined and how many participants are locked for the session
-- **inspect current commander target** — show which assigned commander user, if any, is eligible for the active commander window
-- **inspect current votes** — show current valid vote map for the active node
-- **reset LotAT state** — clear LotAT runtime state after interruption or partial failure
+That means:
+- normal timer behavior is part of the primary runtime contract, not an operator-recovery workflow
+- there are no planned operator force-close, inspect, manual-advance, or emergency-exit controls in v1
+- commander timeout, missing commander assignment, dice timeout, and decision timeout with partial votes are all normal runtime outcomes
+- decision timeout with zero valid votes ends the run as unresolved
+- true runtime/code faults end the run immediately through a safe fault-abort path
 
-Recommended operator assumptions:
-- these controls must be safe to use live on stream
-- they should not require story-schema changes
-- they should operate against runtime state only
-- in v1 they are recovery tools, not normal timing overrides; the canonical join/decision durations remain the fixed 120-second runtime defaults
+Fault-abort expectations in v1:
+- send one fixed generic chat-safe fault message
+- trigger one generic Mix It Up failure alert
+- write detailed cause information to logs only
+- disable all LotAT timers
+- clear LotAT runtime state
+- return to `idle`
+
+Implementation posture:
+- prefer deterministic continuation when the contract already defines a normal timeout outcome
+- prefer safe session termination over speculative recovery when runtime state is invalid or code execution fails
+- do not add new story-schema fields to support unattended failure handling
 
 ## Runtime Assumptions Locked by This Contract
 
 This document assumes:
 - every LotAT session begins in `idle` and must pass through `join_open`
+- the engine reads exactly one runtime story file in v1: `Creative/WorldBuilding/Storylines/loaded/current-story.json`
+- the engine does not scan `ready/` directly
+- a single start trigger is the only planned operator control for v1
 - `!join` is the session-start participation command
 - the join window duration is a fixed runtime-owned 120 seconds in v1
 - roster creation happens only during `join_open`
-- roster freezes when join closes
-- zero joins ends the session instead of starting story playback
+- roster freezes when join closes if one or more participants joined
+- zero joins ends the session as a normal non-error outcome instead of starting story playback
+- the join phase does not begin unless the runtime story file loads and passes bare-minimum runtime start checks
+- full schema/contract validation belongs primarily to story generation and operator review tooling, not a second full engine pass at session start
 - every non-ending node is introduced through `node_intro`
 - nodes with enabled commander moments open `commander_open` before voting
 - commander-input commands are accepted only during `commander_open`
 - commander-window duration comes from authored `commander_moment.window_seconds`
+- missing commander assignment or commander timeout continues through the normal runtime path in v1
 - nodes with enabled dice hooks open `dice_open` before voting
 - `!roll` is accepted only during `dice_open`
 - dice-window duration comes from authored `dice_hook.roll_window_seconds`
+- dice timeout continues through the normal runtime path in v1
 - commander moments and dice hooks do not coexist on the same node in v1
 - every decision window opens through `decision_open`
 - the decision window duration is a fixed runtime-owned 120 seconds in v1
-- every decision window closes into `decision_resolving`
+- a decision timer with one or more valid votes closes into `decision_resolving`
+- a decision timer with zero valid votes ends the run unresolved in v1
 - only joined participants count toward early-close
 - commander-moment resolution is narrative-only in v1
 - dice-hook resolution is narrative-only in v1
+- true runtime/code faults fail closed: generic chat message, generic Mix It Up failure alert, logs-only details, teardown, return to `idle`
 - session lifecycle rules are runtime-owned, not story-authored
 - stream-start / reset should disable all LotAT timers and clear runtime window state before returning to `idle`
 
@@ -530,6 +562,7 @@ This contract does **not** require:
 - story-level configuration of join behavior in v1
 - late-join support in v1
 - a leave-session command in v1
+- operator force-close / inspect / advance controls in v1
 - C# implementation details in this doc
 
 ## Related Docs

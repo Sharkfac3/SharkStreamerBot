@@ -239,7 +239,7 @@ That means:
 - do not assume custom dice systems not already defined
 - do not create technical dependencies that the Technical Agent has not approved
 
-You may leave safe extension hooks through optional metadata fields, but the story must still work with the current supported system.
+Do not introduce extra metadata fields or extension hooks in v1. Use only the defined contract fields so the runtime can validate stories strictly and consume a fully predictable JSON shape.
 
 ---
 
@@ -262,13 +262,6 @@ Use this exact top-level shape:
   "summary": "short one paragraph pitch",
   "starting_ship_section": "Command Deck",
   "starting_node_id": "node_001",
-  "supported_mechanics": {
-    "chat_voting": true,
-    "chaos_meter": true,
-    "commander_moments": true,
-    "dice_hooks": true,
-    "landing_party": false
-  },
   "cast": {
     "commanders_used": ["The Water Wizard"],
     "squad_members_used": ["Pedro the Raccoon", "Duck the Duck"]
@@ -288,7 +281,7 @@ Each node must use this shape:
   "ship_section": "Command Deck",
   "title": "Short internal stage title",
   "read_aloud": "One short stream-friendly narration block.",
-  "sfx_hint": "optional short production hint",
+  "sfx_hint": null,
   "crew_focus": {
     "commander": null,
     "squad_member": "Pedro the Raccoon"
@@ -372,6 +365,13 @@ Ending nodes must use:
 
 Ending-node `end_state` values are limited to `"success"`, `"partial"`, or `"failure"`.
 Stage nodes must use `end_state: null`.
+All node keys shown in the contract shape above are required in v1, even when a value is inactive or unused. Inactive optional-content fields should use `null` rather than being omitted.
+In particular:
+- `sfx_hint` is required on every node and may be `null`
+- `crew_focus` must always exist with both `commander` and `squad_member`
+- `dice_hook` must always exist with all documented subkeys present
+- `commander_moment` must always exist with all documented subkeys present
+- stage nodes may use 1 or 2 choices in v1; 3 or more choices are not valid in v1
 Outcome classification is authored for the final ending only and should remain hidden from viewers until that ending is reached in normal play.
 
 ---
@@ -379,11 +379,11 @@ Outcome classification is authored for the final ending only and should remain h
 # Story Construction Rules
 
 ## 1. Stage length
-Each stage must be short.
-Target:
+Each stage must be short and easy to read aloud live.
+Editorial target:
 - 1 to 4 sentences in `read_aloud`
 - 1 clear situation
-- 2 clear options most of the time
+- fast comprehension for chat
 
 ## 2. Story length
 Prefer long chains of short stages rather than a few large scenes.
@@ -393,11 +393,15 @@ Aim for:
 - often 16 to 30 total nodes including endings
 
 ## 3. Choice structure
-Choices should usually:
-- present exactly 2 options
-- use existing supported commands
-- be easy to understand at a glance
-- feel meaningfully different
+V1 contract rules:
+- stage nodes must present either 1 or 2 choices
+- stage nodes with 3 or more choices are not valid in v1
+- ending nodes must present `choices: []`
+- choices must use existing supported commands
+
+Editorial target:
+- when a stage has 2 choices, they should be easy to understand at a glance
+- when a stage has 2 choices, they should feel meaningfully different
 
 ## 4. Branching
 Branches should:
@@ -460,7 +464,6 @@ A dice hook should clearly state:
 Authoring rules:
 - keep dice hooks optional per stage node
 - ending nodes must keep `dice_hook.enabled = false` in v1
-- all valid v1 stories should keep `supported_mechanics.dice_hooks = true`
 
 ## 7. Chaos
 Chaos changes should be simple.
@@ -512,7 +515,7 @@ When asked to generate a story, output in this order:
    - very short notes for the Technical Agent
    - call out any commander moments
    - call out any dice hooks
-   - call out any optional future extension hooks
+   - do not introduce new schema fields here
 
 Do not output extra essays.
 Do not explain the joke unless asked.

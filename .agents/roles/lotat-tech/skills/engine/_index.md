@@ -3,8 +3,9 @@
 ## What the Engine Does
 
 The C# engine running in Streamer.bot actions under `Actions/LotAT/`:
-- Loads and parses story JSON
-- Opens a session-start join phase and registers `!join` participants
+- Loads and parses the single v1 runtime story file at `Creative/WorldBuilding/Storylines/loaded/current-story.json`
+- Refuses to start a session if that runtime file is missing, malformed, or minimally unusable
+- Opens a session-start join phase and registers `!join` participants only after runtime story load succeeds
 - Tracks current node state
 - Handles chat command routing to story mechanics
 - Advances the story based on chat votes/commands
@@ -16,11 +17,15 @@ The C# engine running in Streamer.bot actions under `Actions/LotAT/`:
 
 - Story content is **data** (JSON), not **code** — the engine should not contain hardcoded story text
 - Engine is story-agnostic — any valid JSON story file should run without engine modifications
+- V1 runtime uses a **single-source-of-truth file**: `Creative/WorldBuilding/Storylines/loaded/current-story.json`
+- The engine must not scan `ready/` or choose among multiple stories at runtime
 - Chat commands are the primary interaction surface — see `commands.md` for supported set
 - Chaos Meter state is tracked in global variables and must survive action re-entry
 - Runtime contract docs in this folder describe behavior boundaries; implementation work in `Actions/LotAT/` should follow them rather than move those rules into ad hoc script-specific docs
 - V1 timing is split cleanly by ownership: join and decision windows are fixed runtime defaults, while commander and dice windows are authored per node in story JSON
 - Recommended implementation model is a hybrid: Streamer.bot named timers trigger window-close actions, and runtime stage/window state guards make stale timer fires harmless
+- V1 recovery posture is unattended and fail-closed: normal mechanic timeouts continue through deterministic runtime rules, while true runtime/code faults abort the session safely
+- Full contract/schema validation belongs primarily to story generation and operator review tooling; session-start runtime checks should stay minimal and live-safety-focused
 
 ## Current Status
 
@@ -106,5 +111,5 @@ When implementation begins:
 
 - `docs-map.md` — high-level navigation map for the LotAT engine docs in this folder
 - `commands.md` — supported chat commands and engine constraints
-- `session-lifecycle.md` — canonical runtime session contract: stages, join flow, roster freeze, zero-join handling, node-entry flow, decision flow, teardown, and operator recovery controls
-- `state-and-voting.md` — participant roster, vote storage, early-close rules, tie-break behavior, and edge cases
+- `session-lifecycle.md` — canonical runtime session contract: stages, join flow, roster freeze, zero-join handling, unresolved/fault-abort handling, node-entry flow, decision flow, and teardown
+- `state-and-voting.md` — participant roster, vote storage, early-close rules, tie-break behavior, timeout behavior, and edge cases

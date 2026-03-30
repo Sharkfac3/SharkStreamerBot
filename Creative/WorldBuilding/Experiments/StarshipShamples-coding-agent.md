@@ -75,6 +75,8 @@ That means:
 - your code is the engine layer
 - the schema must be shared and stable
 - you should request schema changes only when they improve scalability or implementation safety
+- in v1, the engine should load exactly one runtime story file: `Creative/WorldBuilding/Storylines/loaded/current-story.json`
+- `Creative/WorldBuilding/Storylines/ready/` is staging/operator-tooling territory, not an engine-scanned runtime source
 
 Do not hardcode story logic into the engine unless it is a reusable mechanic.
 Do not assume custom manual edits per story are acceptable.
@@ -95,13 +97,6 @@ Assume stories use this top-level shape:
   "summary": "short one paragraph pitch",
   "starting_ship_section": "Command Deck",
   "starting_node_id": "node_001",
-  "supported_mechanics": {
-    "chat_voting": true,
-    "chaos_meter": true,
-    "commander_moments": true,
-    "dice_hooks": true,
-    "landing_party": false
-  },
   "cast": {
     "commanders_used": ["The Water Wizard"],
     "squad_members_used": ["Pedro the Raccoon", "Duck the Duck"]
@@ -121,7 +116,7 @@ Each node uses:
   "ship_section": "Command Deck",
   "title": "Short internal stage title",
   "read_aloud": "One short stream-friendly narration block.",
-  "sfx_hint": "optional short production hint",
+  "sfx_hint": null,
   "crew_focus": {
     "commander": null,
     "squad_member": "Pedro the Raccoon"
@@ -140,7 +135,9 @@ Each node uses:
   "commander_moment": {
     "enabled": false,
     "commander": null,
-    "prompt": null
+    "prompt": null,
+    "window_seconds": null,
+    "success_text": null
   },
   "choices": [
     {
@@ -165,6 +162,8 @@ Each node uses:
 
 Ending nodes use `node_type = "ending"`, empty `choices`, and an `end_state` of `"success"`, `"partial"`, or `"failure"`.
 Stage nodes use `end_state = null`.
+For v1, every key shown in the shared story shape is required even when a value is inactive. Use `null` rather than omitting keys for inactive fields such as `sfx_hint`, `crew_focus` entries, `dice_hook` detail fields, and `commander_moment` detail fields.
+For v1, stage nodes may use 1 or 2 choices. Stage nodes with 3 or more choices are invalid for the current engine contract.
 For v1, chaos is a per-node increase applied from `chaos.delta`; do not infer stage-level success/failure to decide chaos changes.
 
 You may propose schema evolution, but only in ways that preserve backwards compatibility whenever possible.
@@ -217,11 +216,12 @@ The story JSON or equivalent structured file produced by the Story Agent.
 
 ## Engine layer
 Reusable C# logic that:
-- loads the story
-- validates schema
+- loads the story from the single v1 runtime file (`Creative/WorldBuilding/Storylines/loaded/current-story.json`)
+- performs only the minimal live-safety runtime checks needed to start safely
+- refuses to open a session if the runtime file is missing, malformed, or minimally unusable
 - tracks current node
 - tracks chaos
-- opens a session-start join window
+- opens a session-start join window only after runtime story load succeeds
 - tracks the joined participant roster for the current run
 - opens and closes voting
 - ends a decision window early when all joined participants have submitted an allowed command
@@ -291,7 +291,7 @@ You should explicitly think about:
 - how actions are triggered
 - what global or argument state is required
 - how recovery works after an interruption
-- how invalid story data is detected and reported
+- how minimal runtime story-load failures are detected, logged verbosely, and reported to chat safely
 - how a story can be started, paused, advanced, or reset cleanly
 
 ---

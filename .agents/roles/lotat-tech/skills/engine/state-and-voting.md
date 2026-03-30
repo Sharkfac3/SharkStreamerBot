@@ -37,7 +37,7 @@ That means:
 - later votes are evaluated against that roster
 - the roster is the denominator for the "everyone has voted" early-close rule
 
-This keeps live behavior deterministic and recoverable.
+This keeps live behavior deterministic and safe for unattended runtime use.
 
 Timer ownership in v1:
 - join window length is a fixed runtime default of **120 seconds**
@@ -45,6 +45,7 @@ Timer ownership in v1:
 - commander-window length comes from authored `commander_moment.window_seconds`
 - dice-window length comes from authored `dice_hook.roll_window_seconds`
 - join/decision timing is not story-authored and does not support per-story, per-node, or live-operator overrides in v1
+- after the single start trigger, v1 is intended to run unattended
 
 Important exceptions:
 - nodes with enabled commander moments open a pre-vote commander-input window that is **not** roster-gated
@@ -71,7 +72,7 @@ This same identity rule should be used consistently for:
 - vote replacement
 - early-close calculations
 - commander-target comparison
-- operator inspection / recovery output
+- any logs/debug output that reports runtime user identity
 
 Reasoning:
 - this keeps LotAT identity storage aligned with the existing commander-user comparison model
@@ -147,7 +148,7 @@ Recommended viewer-facing behavior:
 Reasons this is preferred:
 - more forgiving for live chat mistakes
 - easier for viewers to understand
-- reduces operator friction when chat reacts quickly or misfires
+- reduces friction when chat reacts quickly or misfires
 - still works cleanly with early-close rules
 
 Recommended guardrail:
@@ -294,11 +295,11 @@ Keep history intentionally small in v1:
 
 Do not introduce richer branch-history storage in v1 unless the runtime contract is intentionally expanded later.
 
-### 5. Recovery / operator-support state
+### 5. Fault / debugging state
 
 Deep recovery state is intentionally deferred until after v1.
-Recovery snapshots are **not part of the v1 required contract**.
-For now, logs plus the active runtime globals above are the preferred debugging surface.
+Recovery snapshots and operator-inspection tooling are **not part of the v1 required contract**.
+For now, logs plus the active runtime globals above are the preferred debugging surface for fault investigation.
 
 ## Canonical v1 Data Shape Expectations
 
@@ -334,7 +335,7 @@ Reminder:
 
 ## Decision Resolution Contract
 
-When a decision window closes, the engine should:
+When a decision window closes with one or more valid votes, the engine should:
 1. lock out new votes for that node
 2. tally votes using only the current node's stored valid-vote map
 3. apply the tie-break rule if needed
@@ -343,8 +344,14 @@ When a decision window closes, the engine should:
 6. apply the node's intended runtime result effects
 7. transition to the winning choice's `next_node_id`
 
+If the decision timer closes with zero valid votes in v1:
+1. lock out new votes for that node
+2. end the session as unresolved
+3. do not invent a fallback winning choice
+
 Recommended invariant:
 - there should be only one resolution pass per node
+- unresolved zero-vote timeout is a terminal path, not a hidden fallback-resolution path
 
 ## Edge Cases to Preserve in the Contract
 
@@ -376,7 +383,7 @@ Recommended invariant:
 
 ### Commander window with no assigned commander
 - skip the commander moment silently to chat
-- log the skip for operator/debug visibility
+- log the skip for debugging visibility
 - continue into the normal decision window afterward
 
 ### Wrong user types a valid commander command
@@ -424,34 +431,37 @@ Recommended v1 behavior:
 - end the session cleanly when the join phase closes empty
 
 ### Zero valid votes on a node
-Recommended behavior:
-- still resolve through the normal close path
-- because there is no winning vote total, fall back to the earliest authored choice in `choices` order unless a later implementation contract explicitly defines another deterministic fallback
+Recommended v1 behavior:
+- if the decision timer closes with zero valid votes, end the run as unresolved
+- do not fall back to the earliest authored choice
+- do not invent a synthetic winner
 
-This preserves progress without inventing a new schema field.
+This preserves fail-closed unattended behavior when the frozen roster never produces a valid vote.
 
-## Recovery Expectations
+## Fault-Handling Expectations
 
-For live reliability, runtime state should be sufficient for an operator or later action to determine:
-- whether a run is active
-- which runtime stage it is in
-- which node is active
-- whether the roster is still open or already frozen
+For live reliability, runtime state should be sufficient for the engine or later debugging to determine:
+- whether a run was active
+- which runtime stage it was in
+- which node was active
+- whether the roster was still open or already frozen
 - who joined this session
-- which valid votes are currently recorded for the node
-- whether the current node is still open, already resolving, or already resolved
+- which valid votes were currently recorded for the node
+- whether the current node was still open, already resolving, or already resolved
 - what the last successful resolution decision was
 
-Recommended recovery posture:
-- runtime state should support safe inspection without requiring story edits
-- runtime state should make it possible to force-close, cancel, or resume with minimal ambiguity
-- recovery should prefer deterministic continuation over clever reconstruction
+Recommended v1 posture:
+- runtime state should support safe unattended execution without requiring story edits
+- runtime state should support clean logging and safe teardown on unrecoverable code/runtime faults
+- when a normal timeout rule exists in the contract, follow it deterministically
+- when runtime state is invalid or code execution fails, prefer fail-closed session termination over speculative recovery
 
 ## Non-Goals
 
 This spec does **not** require:
 - supporting mid-story roster changes in v1
 - exposing all runtime state publicly in chat
+- operator inspection or manual force-close tooling in v1
 - random tie-break behavior
 - treating `!join` as an authored story-choice command
 - treating commander-input commands as authored story-choice commands

@@ -57,6 +57,12 @@ For each LotAT session:
 Implementation note for future Streamer.bot work:
 - v1 should use one named timer per window type (`LotAT - Join Window`, `LotAT - Decision Window`, `LotAT - Commander Window`, `LotAT - Dice Window`) plus runtime stage/window guards so stale timer events cannot advance the session incorrectly
 
+V1 operational posture:
+- LotAT is unattended after a single start trigger in normal use
+- timeout behavior for join/commander/dice/decision windows is part of the normal runtime contract, not an operator-recovery path
+- manual operator force-close / inspection controls are out of scope for v1
+- true code/runtime faults should abort the session safely, emit a simple chat-safe message, trigger one generic Mix It Up failure alert, log details, and return to `idle`
+
 V1 guardrails:
 - commander moments and dice hooks do **not** coexist on the same node
 - commander-input commands are never authored story-choice commands and never appear in `commands_used`
