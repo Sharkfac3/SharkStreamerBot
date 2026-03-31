@@ -21,6 +21,16 @@ These are engine-owned commands that support the live session lifecycle.
 `!join` — register the viewer in the current session's participant roster during the join phase
 `!roll` — submit a public 1–100 dice roll during an active node dice-roll window; available to all chat, not just joined participants
 
+## Explicitly Out of Scope for LotAT v1
+
+`!offering` is **not** part of the active LotAT v1 command contract.
+
+Current v1 rule:
+- do not treat `!offering` as an authored decision command
+- do not treat `!offering` as a LotAT runtime-session command
+- do not make LotAT branching, dice, commander moments, chaos, or vote resolution depend on `!offering`
+- treat the existing `Actions/Squad/offering.cs` behavior as separate experimental system work until a future LotAT/offering contract is intentionally approved
+
 ## Existing Commander Commands Used by LotAT Runtime
 
 These are pre-existing commander feature commands that LotAT may temporarily listen for during an active commander moment. They remain runtime-only and do **not** become authored story-choice commands.

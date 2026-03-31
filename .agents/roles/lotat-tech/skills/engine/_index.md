@@ -25,7 +25,9 @@ The C# engine running in Streamer.bot actions under `Actions/LotAT/`:
 - V1 timing is split cleanly by ownership: join and decision windows are fixed runtime defaults, while commander and dice windows are authored per node in story JSON
 - Recommended implementation model is a hybrid: Streamer.bot named timers trigger window-close actions, and runtime stage/window state guards make stale timer fires harmless
 - V1 recovery posture is unattended and fail-closed: normal mechanic timeouts continue through deterministic runtime rules, while true runtime/code faults abort the session safely
-- Full contract/schema validation belongs primarily to story generation and operator review tooling; session-start runtime checks should stay minimal and live-safety-focused
+- Full contract/schema validation belongs primarily to the story-writing / review tooling; session-start runtime checks should stay minimal-safe and live-safety-focused
+- Engine-breaking malformed nodes, graph defects, invalid commands, duplicate IDs, and mechanic-payload errors should be rejected upstream before runtime handoff instead of relying on engine-side validation in v1
+- If a malformed story condition still slips through and causes a live runtime fault, the engine should fail closed: generic chat-safe message, generic Mix It Up failure alert, detailed logs, teardown, return to `idle`
 
 ## Current Status
 
@@ -44,11 +46,21 @@ These docs define the **runtime contract**. Future Streamer.bot scripts should i
 ## State Variables
 
 All LotAT engine state in `Actions/SHARED-CONSTANTS.md`:
-- `lotat_active` — session running flag
-- `lotat_announcement_sent` — session start dedup
-- `lotat_offering_steal_chance` — offering integration
-- `lotat_steal_multiplier` — offering steal scaling
-- `boost_*` — boost state
+- `lotat_active` — session running flag for LotAT itself; do not define this as an offering toggle
+- `lotat_announcement_sent` — existing experimental offering-system latch, not part of the active LotAT v1 runtime contract
+- `lotat_offering_steal_chance` — legacy / provisional offering variable, not part of the active LotAT v1 runtime contract
+- `lotat_steal_multiplier` — legacy / provisional offering variable, not part of the active LotAT v1 runtime contract
+- `boost_*` — external boost-system state, not LotAT v1 engine state
+
+## Offering Boundary for v1
+
+The existing `!offering` command and `Actions/Squad/offering.cs` are currently **out of scope** for LotAT v1.
+
+Until a future contract decision says otherwise:
+- LotAT runtime docs should not assume offering effects
+- LotAT engine implementation should not depend on offering globals or boost state
+- authored story JSON should not contain offering hooks, flags, or node logic
+- future agents should treat the current offering script as separate experimentation rather than an approved LotAT mechanic
 
 ### Canonical v1 runtime variable contract
 

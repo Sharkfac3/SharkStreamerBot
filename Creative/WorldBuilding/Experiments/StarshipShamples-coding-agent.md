@@ -77,6 +77,7 @@ That means:
 - you should request schema changes only when they improve scalability or implementation safety
 - in v1, the engine should load exactly one runtime story file: `Creative/WorldBuilding/Storylines/loaded/current-story.json`
 - `Creative/WorldBuilding/Storylines/ready/` is staging/operator-tooling territory, not an engine-scanned runtime source
+- the existing `!offering` command / `Actions/Squad/offering.cs` are out of scope for LotAT v1 and must not be treated as part of the active engine contract unless a future explicit runtime-contract decision says otherwise
 
 Do not hardcode story logic into the engine unless it is a reusable mechanic.
 Do not assume custom manual edits per story are acceptable.

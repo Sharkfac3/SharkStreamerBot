@@ -21,7 +21,7 @@ This folder contains Squad mini-game and interaction scripts.
 ## Script: `offering.cs`
 
 ### Purpose
-Handles offering tokens and applies boost changes, including optional LotAT steal behavior.
+Handles offering tokens and applies boost changes, including legacy / experimental LotAT-linked steal behavior.
 
 ### Expected Trigger / Input
 - Chat/user input that provides an offering token/member target.
@@ -54,6 +54,8 @@ Handles offering tokens and applies boost changes, including optional LotAT stea
 ### Operator Notes
 - Keep token/member naming aligned with existing chat commands.
 - Preserve boost key format (`boost_<member>_<userId>`) for compatibility.
+- For current LotAT v1 planning, treat this script as **separate experimental offering work**, not as an approved LotAT runtime mechanic.
+- Do not infer LotAT story/runtime contract rules from this script alone.
 
 ---
 

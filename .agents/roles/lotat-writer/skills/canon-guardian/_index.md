@@ -71,6 +71,7 @@ Answer these before approving new story content:
 - [ ] Chaos Meter progression remains consistent
 - [ ] New lore is either temporary/local or explicitly approved for canon expansion
 - [ ] Story tone stays absurd, chaotic, humorous, and stream-playable
+- [ ] Writer-side engine-safety validation has already passed; canon review does not replace structural/runtime-safety validation
 - [ ] Anything with wider franchise impact is flagged for `brand-steward-canon-guardian`
 
 ## Escalate to brand-steward canon review when

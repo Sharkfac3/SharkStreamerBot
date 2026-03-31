@@ -31,7 +31,7 @@ New single-gimmick space regions are approvable without operator escalation. New
 
 - Dice hooks add tension to specific moments — use sparingly
 - Defined in `Creative/WorldBuilding/Agents/D&D-Agent.md`
-- A dice hook can change the outcome of a node but should not be a default mechanic for every stage
+- In v1, a dice hook is a pre-vote **narrative-only** mechanic; it does not change branching, chaos, vote eligibility, or vote resolution
 - Use only the supported `dice_hook` structure from the authoritative story contract; do not improvise alternate roll fields
 
 ## Tone Constraints

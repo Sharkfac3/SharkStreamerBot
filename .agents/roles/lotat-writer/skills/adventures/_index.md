@@ -17,8 +17,9 @@ When field-level structure matters, the authoritative contract is `Creative/Worl
 
 ## Minimum Adventure Structure
 
-- ≥ 12 stage nodes
-- Exactly 2 choices per stage node
+Treat the following as editorial targets unless the authoritative contract says otherwise:
+- ~12+ stage nodes for a full mission
+- 1 or 2 choices per stage node in v1; usually prefer 2 for contrast and replayability
 - Multiple distinct ending nodes (not all paths end the same way)
 - Chaos Meter escalation across the arc
 - Top-level cast usage recorded through the contract's `cast.commanders_used` and `cast.squad_members_used`
@@ -31,6 +32,7 @@ When field-level structure matters, the authoritative contract is `Creative/Worl
 - Do not invent alternate field names, aliases, or one-off metadata blobs
 - Do not invent commands; if the story seems to need one, escalate to `lotat-tech`
 - Stage nodes normally carry the two chat choices; ending nodes use `choices: []`
+- Before handoff, validate the story as engine-safe; engine-breaking defects are hard-fatal, not reviewer-time surprises
 - Keep guidance concise here and verify specifics against the contract before finalizing a story file
 
 ## Multi-Session Arc Planning

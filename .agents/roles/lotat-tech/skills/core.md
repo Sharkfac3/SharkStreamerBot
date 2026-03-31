@@ -40,11 +40,22 @@ The JSON story schema is shared between `lotat-writer` (produces it) and `lotat-
 ## State Management
 
 LotAT engine state lives in Streamer.bot global variables. Key variables from `Actions/SHARED-CONSTANTS.md`:
-- `lotat_active` — whether a session is currently running
-- `lotat_announcement_sent` — deduplication flag for session start announcement
-- `lotat_offering_steal_chance` — offering mechanic interaction
-- `lotat_steal_multiplier` — offering steal scaling
-- `boost_*` — boost state variables
+- `lotat_active` — whether a LotAT session is currently running; define this purely as LotAT runtime session state, not as an offering switch
+- `lotat_announcement_sent` — existing cross-script latch used by the experimental offering system; not part of the LotAT-authored story contract
+- `lotat_offering_steal_chance` — legacy / provisional offering-system variable; not part of the active LotAT v1 runtime contract
+- `lotat_steal_multiplier` — legacy / provisional offering-system variable; not part of the active LotAT v1 runtime contract
+- `boost_*` — boost-system state variables owned outside the LotAT v1 engine contract
+
+### Offering boundary for v1
+
+For LotAT v1, treat `!offering` and the existing `Actions/Squad/offering.cs` behavior as **out of scope** for the LotAT engine/runtime contract.
+
+Current decision:
+- LotAT must **not** depend on `!offering`
+- story JSON must **not** encode offering behavior
+- runtime/engine logic must **not** assume offering effects
+- existing offering-related globals should be treated as **legacy / provisional experimentation**, not as active LotAT v1 mechanics
+- any future LotAT/offering integration must be introduced as a **new explicit runtime-contract decision**, not inferred from old variables or the current offering script
 
 Runtime design assumptions to preserve:
 - each LotAT session begins with a join phase before the first story decision

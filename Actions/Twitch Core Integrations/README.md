@@ -59,6 +59,8 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 ### Operator Notes
 - Keep this action early in stream startup order so downstream scripts see clean state.
 - Keep shared key/timer/OBS names aligned with `Actions/SHARED-CONSTANTS.md`.
+- The offering-related resets here exist because older experimental offering work shares some globals with LotAT naming.
+- For current LotAT v1 planning, do **not** treat these offering resets as proof that offering is part of the active LotAT runtime contract.
 
 ## Core Event Scripts
 These scripts are base Twitch event bridges for follows and subscriptions.

@@ -37,3 +37,4 @@ This content plays live on stream. Pacing must respect the stream environment:
 - A `!scan` command fits an investigation moment; `!deploy` fits a crew action
 - Don't front-load the story with commands — distribute them across the arc
 - Assume the engine may close a decision window early once every joined participant has submitted one of the currently allowed commands
+- Invalid commands or runtime-only commands placed into authored choices are hard-fatal before handoff because they can break live engine behavior

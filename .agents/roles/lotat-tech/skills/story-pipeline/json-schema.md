@@ -10,10 +10,10 @@
 
 ## Sync Rule
 
-When the story schema or command contract changes:
+When the story schema, command contract, or validation taxonomy changes:
 1. update `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` first
 2. update this file in the same pass
-3. check writer-facing guidance for stale field assumptions
+3. check writer-facing guidance for stale field assumptions and validation-ownership assumptions
 4. escalate to `brand-steward` if canon, cast, or metaphor meaning changed
 
 Do not let this summary become a competing schema authority.
@@ -268,12 +268,63 @@ Runtime-only session commands:
 - `!hydrate` / `!orb` — existing Water Wizard commands used by the engine only during an active Water Wizard commander moment; not valid in `choices[].command` and not listed in `commands_used`
 - `!checkchat` / `!toad` — existing The Director commands used by the engine only during an active The Director commander moment; not valid in `choices[].command` and not listed in `commands_used`
 
+Explicitly out of scope for LotAT v1:
+- `!offering` is not part of the active authored-story contract or active LotAT runtime command contract
+- do not place `!offering` in `choices[].command` or `commands_used`
+- do not author story logic that assumes offering effects on dice, branching, chaos, commander moments, or vote resolution
+- treat the existing offering script as separate experimentation until a future explicit LotAT/offering contract is approved
+
 Rules:
 - do not invent new commands in `choices[].command`
 - every command listed in `commands_used` must come from the authored decision-command list above
 - runtime commands such as `!join`, `!roll`, and commander-input commands (`!stretch`, `!shrimp`, `!hydrate`, `!orb`, `!checkchat`, `!toad`) are engine behavior, not story schema content
+- `!offering` is currently out of scope for LotAT v1 and must not be treated as either an authored decision command or an active LotAT runtime mechanic
 - if a new authored decision command is added to the engine, update the engine command doc, the authoritative story contract, and this summary together
 - if a new runtime/session command is added, update the engine command doc and authoritative contract guidance without pretending it is a story-choice command
+
+## Validation Ownership and Taxonomy
+
+V1 validation ownership is intentionally split:
+- **story-writing / review pipeline** owns the comprehensive validation pass
+- **runtime engine** owns only minimal-safe start checks and generic fail-closed behavior if something still slips through
+
+This means the writer/review pipeline should reject engine-breaking stories **before** they ever reach the reviewer/runtime handoff path.
+The engine should not be hardened by relying on a second full schema/graph validator at session start in v1.
+
+### Hard-fatal before runtime handoff
+
+Treat the following as hard-fatal because they can break runtime execution or make engine behavior unsafe/ambiguous:
+- malformed JSON / parse failure
+- missing required top-level fields
+- missing required node fields
+- missing, empty, or unresolved `starting_node_id`
+- duplicate `node_id`
+- duplicate `choice_id`
+- invalid `node_type`
+- invalid `end_state`
+- invalid authored decision commands
+- runtime-only commands appearing in authored story-choice fields
+- `next_node_id` values that reference missing nodes
+- stage nodes with zero choices in v1
+- stage nodes with more than 2 choices in v1
+- malformed ending nodes
+- malformed commander-moment payloads
+- malformed dice-hook payloads
+- related graph-integrity defects that can strand progression or break node resolution
+
+### Warning-only in v1
+
+Use warnings only for issues that do **not** threaten engine safety or session continuity.
+If an issue could break live execution, treat it as hard-fatal instead.
+
+Recommended validator categories for the story pipeline:
+- `StoryFileValidator` — parse + top-level contract
+- `NodeShapeValidator` — per-node required fields and value shape
+- `GraphIntegrityValidator` — node reachability/reference integrity and progression safety
+- `CommandContractValidator` — authored command validity and runtime-command exclusion
+- `MechanicPayloadValidator` — dice-hook and commander-moment payload validity
+- `EndingValidator` — ending-node structure and `end_state` rules
+- `RuntimeLoadabilityValidator` — final “safe for engine handoff” pass
 
 ## Schema Rules
 

@@ -21,11 +21,16 @@ Do not mix concerns. If a task is "write a new adventure," use `lotat-writer`. I
 
 ## LotAT State Variables
 
-The offering system in `Actions/Squad/offering.cs` already interacts with LotAT state. Key variables (from `Actions/SHARED-CONSTANTS.md`):
-- `lotat_active`
-- `lotat_announcement_sent`
-- `lotat_offering_steal_chance`
-- `boost_*`
+Key variables referenced around LotAT work (from `Actions/SHARED-CONSTANTS.md`):
+- `lotat_active` — active LotAT session flag; treat this as LotAT runtime state, not an offering toggle
+- `lotat_announcement_sent` — legacy / provisional offering-system latch, not active LotAT v1 engine contract
+- `lotat_offering_steal_chance` — legacy / provisional offering variable, not active LotAT v1 engine contract
+- `boost_*` — external boost-system state, not LotAT v1 engine state
+
+Important v1 boundary:
+- the existing `!offering` command and `Actions/Squad/offering.cs` are **out of scope** for LotAT v1
+- do not make `Actions/LotAT/` depend on offering globals, boost state, or inferred offering behavior
+- if future work intentionally integrates offering into LotAT, that must be documented as a new explicit runtime contract first
 
 Runtime behavior expected by the current LotAT contract:
 - session start opens a join phase before the first story node decision

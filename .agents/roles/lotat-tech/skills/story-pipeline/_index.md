@@ -10,10 +10,11 @@
 
 ## Governance
 
-- `lotat-writer` owns story content, branching, pacing, and authored story files
-- `lotat-tech` owns story schema changes, command-contract changes, and engine-facing structure
+- `lotat-writer` owns story content, branching, pacing, authored story files, and pre-review validation that stories are safe to hand to the engine path
+- `lotat-tech` owns story schema changes, command-contract changes, validation taxonomy, and engine-facing structure
 - `brand-steward` must review canon, cast, and metaphor-level changes
-- When schema changes, update the authoritative contract first, then sync every derived summary/reference doc in the same pass
+- When schema or validation-taxonomy rules change, update the authoritative contract first, then sync every derived summary/reference doc in the same pass
+- For v1, `!offering` remains out of scope for LotAT story/runtime design; do not infer story-contract support from the existing experimental offering script
 
 ## Flow
 
@@ -46,7 +47,41 @@ streamerbot-dev deploys engine scripts to Actions/LotAT/
 
 ## Validation Before Engine Consumption
 
-Primary validation belongs to story generation and operator review tooling, not the live engine.
+Primary validation belongs to the story-writing / review pipeline, not the live engine.
+
+V1 contract direction:
+- engine-breaking story defects should be caught **before** a story is handed to the reviewer/runtime load path
+- the live engine should assume it was given a vetted story and should **not** perform a second full schema/graph review at session start
+- runtime preflight stays **minimal-safe**, not strict-comprehensive
+- warnings are only worth carrying when the story can still run without risking engine stability; low-ROI editorial warnings can stay out of v1
+
+### Hard-fatal before runtime handoff
+
+Treat these as **hard-fatal** in story-generation / writer-side validation because they can make the engine unsafe, ambiguous, or unable to execute deterministically:
+- malformed JSON / parse failure
+- missing required top-level fields
+- missing required node fields
+- missing, empty, or unresolved `starting_node_id`
+- duplicate `node_id`
+- duplicate `choice_id`
+- invalid `node_type`
+- invalid authored decision commands in `choices[].command` or `commands_used`
+- runtime-only commands such as `!join`, `!roll`, or commander commands appearing in authored story-choice fields
+- `next_node_id` values that reference missing nodes
+- graph defects that can strand progression or break node resolution
+- stage nodes with zero choices in v1
+- stage nodes with more than 2 choices in v1
+- malformed ending nodes
+- malformed commander-moment payloads
+- malformed dice-hook payloads
+- any related structure/graph issue that could break live execution
+
+### Warning-only in v1
+
+Warnings are optional and low priority unless they are useful to the writer and still allow a story to run safely.
+
+Use warnings only for issues that do **not** threaten engine safety or session continuity.
+If an issue could realistically break runtime execution, upgrade it to hard-fatal instead of downgrading it to a warning.
 
 Before treating a story as ready for runtime use, verify the story JSON during story creation / review:
 - [ ] All required top-level fields from the authoritative contract are present (`story_id`, `title`, `tone`, `version`, `summary`, `starting_ship_section`, `starting_node_id`, `cast`, `ship_sections_used`, `commands_used`, `nodes[]`)
@@ -64,12 +99,12 @@ Before treating a story as ready for runtime use, verify the story JSON during s
 - [ ] Enabled stage-node dice hooks include `roll_window_seconds` and a `success_threshold` from 1–90
 - [ ] No invented schema fields outside the authoritative contract
 
-V1 engine-side preflight should stay minimal:
+V1 engine-side preflight should stay minimal-safe:
 - load exactly `Creative/WorldBuilding/Storylines/loaded/current-story.json`
 - do not scan `ready/` directly
 - do not perform a second full schema-review pass at session start
-- do perform the bare-minimum runtime load checks needed to avoid a broken live session (file exists, JSON parses, core runtime fields needed to begin exist)
-- if those minimal runtime checks fail, abort before `join_open`, log verbosely, send a chat-safe fallback message, and leave the session inactive
+- do perform only the bare-minimum runtime load checks needed to avoid a broken live session (file exists, JSON parses, core runtime fields needed to begin exist)
+- if those minimal runtime checks fail, abort before `join_open`, log verbosely, send a chat-safe fallback message, optionally trigger the generic Mix It Up failure alert, and leave the session inactive
 
 > **V1 runtime source-of-truth note:** `Creative/WorldBuilding/Storylines/loaded/current-story.json` is the only runtime story file the engine should read. `ready/` remains operator/tooling staging, not an engine-scanned input directory.
 

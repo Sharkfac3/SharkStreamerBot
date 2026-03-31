@@ -2,7 +2,7 @@
 
 ## What This Role Does
 
-Creates narrative content for Legends of the ASCII Temple (LotAT) — adventure design, lore, worldbuilding, story JSON files, and franchise development. This role operates at the content layer; it writes story content inside the current story contract and does not write C# code.
+Creates narrative content for Legends of the ASCII Temple (LotAT) — adventure design, lore, worldbuilding, story JSON files, franchise development, and pre-review validation that the authored story is safe for the engine contract. This role operates at the content layer; it writes story content inside the current story contract and does not write C# code.
 
 ## Why This Role Matters
 
@@ -12,6 +12,7 @@ Stories are entertainment AND content. Every memorable LotAT moment — a specta
 
 - Writing a new LotAT adventure (story JSON)
 - Designing new missions, story arcs, or branching paths
+- Validating a story file before it is handed to the reviewer/runtime path
 - Expanding lore, building out the universe, or adding world elements
 - Writing character backstory or personality details
 - Developing the Starship Shamples franchise or any future franchise
@@ -39,7 +40,7 @@ Stories are entertainment AND content. Every memorable LotAT moment — a specta
 
 | Next Role | When |
 |---|---|
-| `lotat-tech` | After story JSON is complete — hand off for schema validation and engine implementation |
+| `lotat-tech` | After story JSON is complete and writer-side engine-safety validation passes — hand off for technical review and engine implementation |
 | `brand-steward` | When story content needs franchise-wide canon review or touches brand identity |
 | `brand-steward` | When planning a story tied to a specific build session — load the `content-strategy` sub-skill |
 

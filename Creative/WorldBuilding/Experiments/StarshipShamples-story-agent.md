@@ -14,15 +14,15 @@ If any other doc summarizes, references, or paraphrases the story JSON structure
 - **Franchise summary / canon reference:** `Creative/WorldBuilding/Franchises/StarshipShamples.md`
 
 ### Ownership rules
-- **Story content, branching, pacing, and authored story files** belong to `lotat-writer`
-- **Story schema, command contract, and engine-facing JSON structure** belong to `lotat-tech`
+- **Story content, branching, pacing, authored story files, and pre-review engine-safety validation of those files** belong to `lotat-writer`
+- **Story schema, command contract, validation taxonomy, and engine-facing JSON structure** belong to `lotat-tech`
 - **Canon, cast, franchise metaphor, and brand-level meaning** escalate to `brand-steward`
 
 ### Change rule
-When the story schema or command contract changes:
+When the story schema, command contract, or validation taxonomy changes:
 1. `lotat-tech` updates this file first
 2. all derived summaries/reference docs must be brought back into sync in the same change
-3. `lotat-writer` guidance must be checked for stale field assumptions
+3. `lotat-writer` guidance must be checked for stale field assumptions and stale validation ownership assumptions
 4. if the change affects canon, cast, or the neurodivergent metaphor, escalate to `brand-steward` before treating it as approved
 
 This file is built on top of the existing backbone prompt for Starship Shamples, which defines the world, tone, crew, ship locations, commands, chaos meter, branching outcomes, and overall mission style. Use that backbone as the foundation for every story you create. The backbone establishes the core premise, short-stage pacing, commander roles, squad-member backgrounds, recurring ship sections, command verbs, and replayable failure-forward design. fileciteturn3file0L1-L49 fileciteturn3file0L70-L126 fileciteturn3file0L130-L221 fileciteturn3file0L257-L331
@@ -182,6 +182,13 @@ They control participation in a live LotAT run and should **not** appear in `cho
 - `!hydrate` / `!orb` — existing Water Wizard commands used by the engine only during an active Water Wizard commander moment
 - `!checkchat` / `!toad` — existing The Director commands used by the engine only during an active The Director commander moment
 
+### Explicitly out of scope for authored LotAT v1
+
+- `!offering` is **not** part of the active LotAT v1 story or runtime contract
+- do **not** place `!offering` in `choices[].command` or `commands_used`
+- do **not** author story logic that assumes offering effects on dice, branching, chaos, commander moments, or voting
+- if a future LotAT/offering mechanic is approved, it must be introduced as a new explicit contract decision rather than inferred from existing experimental scripts
+
 ### Command Deck
 - `!scan`
 - `!target`
@@ -239,9 +246,38 @@ That means:
 - do not assume custom dice systems not already defined
 - do not create technical dependencies that the Technical Agent has not approved
 
-Do not introduce extra metadata fields or extension hooks in v1. Use only the defined contract fields so the runtime can validate stories strictly and consume a fully predictable JSON shape.
+Do not introduce extra metadata fields or extension hooks in v1. Use only the defined contract fields so the writer/review pipeline can validate stories strictly before runtime handoff and the engine can consume a fully predictable JSON shape.
 
 ---
+
+## Validation Ownership
+
+V1 operational rule:
+- engine-breaking story defects must be caught **before** a story is handed to the reviewer/runtime path
+- `lotat-writer` should treat engine-breaking validation as part of the authored-story handoff responsibility
+- `lotat-tech` defines the validation taxonomy and runtime boundary
+- the live engine should remain minimal-safe at session start rather than running a second full validation pass
+
+Treat these as **hard-fatal before runtime handoff** because they can break engine execution or create unsafe/ambiguous live behavior:
+- malformed JSON / parse failure
+- missing required top-level fields
+- missing required node fields
+- missing, empty, or unresolved `starting_node_id`
+- duplicate `node_id`
+- duplicate `choice_id`
+- invalid `node_type`
+- invalid `end_state`
+- invalid authored decision commands
+- runtime-only commands appearing in authored story-choice fields
+- `next_node_id` values that reference missing nodes
+- stage nodes with zero choices in v1
+- stage nodes with more than 2 choices in v1
+- malformed ending nodes
+- malformed commander-moment payloads
+- malformed dice-hook payloads
+- related graph-integrity defects that can strand progression or break node resolution
+
+Warnings are only useful in v1 when the story can still run safely in the engine. If an issue could break runtime execution, treat it as hard-fatal instead of a warning.
 
 # Shared Story File Structure
 

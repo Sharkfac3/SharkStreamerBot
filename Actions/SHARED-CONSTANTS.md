@@ -122,15 +122,15 @@ Used in:
 ---
 
 ## LotAT / Offering (shared)
-- `VAR_LOTAT_ACTIVE` = `lotat_active`
-- `VAR_LOTAT_ANNOUNCEMENT_SENT` = `lotat_announcement_sent`
-- `VAR_LOTAT_OFFERING_STEAL_CHANCE` = `lotat_offering_steal_chance`
-- `VAR_LOTAT_STEAL_MULTIPLIER` = `lotat_steal_multiplier`
+- `VAR_LOTAT_ACTIVE` = `lotat_active` *(active LotAT session flag; do not treat as an offering toggle in LotAT v1 docs/implementation)*
+- `VAR_LOTAT_ANNOUNCEMENT_SENT` = `lotat_announcement_sent` *(legacy / provisional offering-system latch)*
+- `VAR_LOTAT_OFFERING_STEAL_CHANCE` = `lotat_offering_steal_chance` *(legacy / provisional offering variable; not active LotAT v1 engine contract)*
+- `VAR_LOTAT_STEAL_MULTIPLIER` = `lotat_steal_multiplier` *(legacy / provisional offering variable; not active LotAT v1 engine contract)*
 - `TIMER_LOTAT_JOIN_WINDOW` = `LotAT - Join Window`
 - `TIMER_LOTAT_DECISION_WINDOW` = `LotAT - Decision Window`
 - `TIMER_LOTAT_COMMANDER_WINDOW` = `LotAT - Commander Window`
 - `TIMER_LOTAT_DICE_WINDOW` = `LotAT - Dice Window`
-- `PREFIX_BOOST` = `boost_`
+- `PREFIX_BOOST` = `boost_` *(external boost-system prefix; not LotAT v1 engine state by itself)*
 
 Used in:
 - `Actions/Squad/offering.cs`
@@ -141,6 +141,7 @@ Operator note:
 - These are timer **names only**. V1 timer durations stay in the runtime contract / implementation layer.
 - Runtime defaults to preserve when implementation begins: join = `120s`, decision = `120s`.
 - Stream start should disable all four LotAT timers to clear stale state before returning LotAT to `idle`.
+- Current LotAT v1 contract boundary: `!offering` remains out of scope until a future explicit integration decision is documented.
 
 ---
 

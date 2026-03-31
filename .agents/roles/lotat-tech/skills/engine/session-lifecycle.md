@@ -31,6 +31,18 @@ Does **not** belong here:
 - per-story overrides for join/vote lifecycle
 - operator babysitting workflows for normal play
 - changes to `choices[].command` semantics beyond runtime handling
+- assumptions that `!offering` participates in LotAT v1 runtime behavior
+
+## Explicit Offering Boundary for v1
+
+`!offering` is currently **out of scope** for the LotAT v1 runtime contract.
+
+Until a future runtime-contract decision says otherwise:
+- `lotat_active` must be defined only as LotAT session state
+- LotAT session lifecycle should not activate, deactivate, or gate offering behavior
+- LotAT node flow, dice hooks, commander moments, vote handling, and endings must not depend on `!offering`
+- the current `Actions/Squad/offering.cs` script should be treated as separate experimentation, not as authoritative LotAT design
+- any future LotAT/offering integration must be documented explicitly as a new runtime contract rather than inferred from legacy variables
 
 ## Core Runtime Principle
 
@@ -141,19 +153,21 @@ When a LotAT session starts, the engine should:
 1. confirm no conflicting active LotAT session is already running
 2. load **only** the canonical runtime story file at `Creative/WorldBuilding/Storylines/loaded/current-story.json`
 3. perform only the bare-minimum runtime load checks needed to start safely in v1 (`file exists`, `JSON parses`, core runtime fields such as `story_id`, `starting_node_id`, and `nodes` are present enough to begin)
-4. if any of those minimal load checks fail, abort the start attempt immediately
-5. on abort, log the failure verbosely, send the fixed generic chat-safe fault message, trigger the generic Mix It Up failure alert, and leave the runtime in `idle`
-6. initialize fresh session state
-7. clear any stale roster, vote, timer, or branch state from a prior run
-8. set runtime stage to `join_open`
-9. announce the join phase to chat
-10. start the join timer using the fixed v1 runtime default of **120 seconds**
+4. do **not** perform a second full schema/graph validation pass at session start in v1; that responsibility belongs upstream to the story-writing / review pipeline
+5. if any of those minimal load checks fail, abort the start attempt immediately
+6. on abort, log the failure verbosely, send the fixed generic chat-safe fault message, trigger the generic Mix It Up failure alert, and leave the runtime in `idle`
+7. initialize fresh session state
+8. clear any stale roster, vote, timer, or branch state from a prior run
+9. set runtime stage to `join_open`
+10. announce the join phase to chat
+11. start the join timer using the fixed v1 runtime default of **120 seconds**
 
 Recommended v1 expectation:
 - chat is told clearly to type `!join` during the join window to participate in **this** LotAT mission
 - the announcement should make clear that joining is per-session, not permanent
 - the engine is expected to run unattended after the start trigger in normal use
 - the join phase must never open if the runtime story file is missing, malformed, or minimally unusable
+- engine-breaking story defects such as bad nodes, duplicate IDs, invalid commands, empty stage choices, malformed endings, and broken graph references are expected to be caught **before** runtime handoff by the writer/review validation pipeline
 
 ## Join-Phase Contract
 
