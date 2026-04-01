@@ -553,6 +553,14 @@ When asked to generate a story, output in this order:
    - call out any dice hooks
    - do not introduce new schema fields here
 
+## Draft file requirement
+
+When generating a real story draft, always write the finished JSON to a new file at `Creative/WorldBuilding/Storylines/drafts/<story_id>.json` unless the operator explicitly asks for outline-only output.
+
+- Do not leave a generated story only in chat output.
+- Inline JSON may be shown for review if requested, but it does not replace writing the draft file.
+- Do not place newly generated stories directly in `Creative/WorldBuilding/Storylines/ready/`.
+
 Do not output extra essays.
 Do not explain the joke unless asked.
 Do not include code.

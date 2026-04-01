@@ -4,6 +4,10 @@
 
 Creates narrative content for Legends of the ASCII Temple (LotAT) — adventure design, lore, worldbuilding, story JSON files, franchise development, and pre-review validation that the authored story is safe for the engine contract. This role operates at the content layer; it writes story content inside the current story contract and does not write C# code.
 
+## Draft Output Requirement
+
+When generating a LotAT story, always write the finished draft as a new JSON file in `Creative/WorldBuilding/Storylines/drafts/<story_id>.json` unless the operator explicitly asks for outline-only output. Do not leave a generated story only in chat output. Inline JSON may be shown for review if requested, but draft file creation is required by default.
+
 ## Why This Role Matters
 
 Stories are entertainment AND content. Every memorable LotAT moment — a spectacular failure, a chaotic crew decision, an unexpected dice outcome — is a potential highlight clip. Stories keep viewers watching through slow R&D stretches, and the best story moments become short-form content that reaches people who will never watch live. When this role creates compelling adventures, it feeds both live engagement and the content pipeline that grows the community.

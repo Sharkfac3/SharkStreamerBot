@@ -29,17 +29,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-03-30 | pi | Create LotAT human implementation prompt pack | uncommitted |
-| 2026-03-30 | pi | Add human startup prompt for Streamer.bot LotAT implementation planning | uncommitted |
-| 2026-03-30 | pi | Follow-up pass for LotAT v1 offering boundary docs | uncommitted |
-| 2026-03-30 | pi | Clarify LotAT v1 offering boundary as out-of-scope | uncommitted |
-| 2026-03-30 | pi | Clean up LotAT writer contract drift after validation audit | uncommitted |
-| 2026-03-30 | pi | Lock LotAT validation ownership and fatal/warning contract docs | uncommitted |
-| 2026-03-29 | pi | Align LotAT unattended fail-closed recovery docs | uncommitted |
-| 2026-03-29 | pi | Remove LotAT supported_mechanics from story contract | uncommitted |
-| 2026-03-29 | pi | Clarify LotAT v1 schema hard requirements vs editorial guidance | uncommitted |
-| 2026-03-29 | pi | Lock LotAT v1 story loading and preflight contract docs | uncommitted |
-| 2026-03-29 | pi | Lock LotAT v1 runtime storage contract docs | uncommitted |
+| 2026-04-01 | pi | Document current LotAT runtime implementation | uncommitted |
+| 2026-04-01 | pi | Implement LotAT shared session-end cleanup path | uncommitted |
+| 2026-04-01 | pi | Implement LotAT commander window | uncommitted |
+| 2026-04-01 | pi | Implement LotAT decision window + resolution | uncommitted |
+| 2026-03-31 | pi | Implement LotAT node-entry core | uncommitted |
+| 2026-03-31 | pi | Implement LotAT join flow | uncommitted |
+| 2026-03-31 | pi | Implement LotAT shared constants + stream-start reset foundation | uncommitted |
+| 2026-03-31 | pi | Convert LotAT prompt pack to checked-in action-contract workflow for fresh chats | uncommitted |
+| 2026-03-31 | pi | Refine LotAT implementation prompt file-path references | uncommitted |
+| 2026-03-31 | pi | Fix LotAT viewer launcher venv Python selection | uncommitted |
 
 ---
 

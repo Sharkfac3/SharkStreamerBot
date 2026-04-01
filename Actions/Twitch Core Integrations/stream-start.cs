@@ -45,9 +45,32 @@ public class CPHInline
 
     // LotAT
     private const string VAR_LOTAT_ACTIVE = "lotat_active";
+    private const string VAR_LOTAT_SESSION_ID = "lotat_session_id";
+    private const string VAR_LOTAT_SESSION_STAGE = "lotat_session_stage";
+    private const string VAR_LOTAT_SESSION_STORY_ID = "lotat_session_story_id";
+    private const string VAR_LOTAT_SESSION_CURRENT_NODE_ID = "lotat_session_current_node_id";
+    private const string VAR_LOTAT_SESSION_CHAOS_TOTAL = "lotat_session_chaos_total";
+    private const string VAR_LOTAT_SESSION_ROSTER_FROZEN = "lotat_session_roster_frozen";
+    private const string VAR_LOTAT_SESSION_JOINED_ROSTER_JSON = "lotat_session_joined_roster_json";
+    private const string VAR_LOTAT_SESSION_JOINED_COUNT = "lotat_session_joined_count";
+    private const string VAR_LOTAT_NODE_ACTIVE_WINDOW = "lotat_node_active_window";
+    private const string VAR_LOTAT_NODE_WINDOW_RESOLVED = "lotat_node_window_resolved";
+    private const string VAR_LOTAT_NODE_ALLOWED_COMMANDS_JSON = "lotat_node_allowed_commands_json";
+    private const string VAR_LOTAT_VOTE_MAP_JSON = "lotat_vote_map_json";
+    private const string VAR_LOTAT_VOTE_VALID_COUNT = "lotat_vote_valid_count";
+    private const string VAR_LOTAT_NODE_COMMANDER_NAME = "lotat_node_commander_name";
+    private const string VAR_LOTAT_NODE_COMMANDER_TARGET_USER = "lotat_node_commander_target_user";
+    private const string VAR_LOTAT_NODE_COMMANDER_ALLOWED_COMMANDS_JSON = "lotat_node_commander_allowed_commands_json";
+    private const string VAR_LOTAT_NODE_DICE_SUCCESS_THRESHOLD = "lotat_node_dice_success_threshold";
+    private const string VAR_LOTAT_SESSION_LAST_CHOICE_ID = "lotat_session_last_choice_id";
+    private const string VAR_LOTAT_SESSION_LAST_END_STATE = "lotat_session_last_end_state";
     private const string VAR_LOTAT_ANNOUNCEMENT_SENT = "lotat_announcement_sent";
     private const string VAR_LOTAT_OFFERING_STEAL_CHANCE = "lotat_offering_steal_chance";
     private const string VAR_LOTAT_STEAL_MULTIPLIER = "lotat_steal_multiplier";
+    private const string TIMER_LOTAT_JOIN_WINDOW = "LotAT - Join Window";
+    private const string TIMER_LOTAT_DECISION_WINDOW = "LotAT - Decision Window";
+    private const string TIMER_LOTAT_COMMANDER_WINDOW = "LotAT - Commander Window";
+    private const string TIMER_LOTAT_DICE_WINDOW = "LotAT - Dice Window";
 
     // Shared mini-game lock (cross-feature)
     private const string VAR_MINIGAME_ACTIVE = "minigame_active";
@@ -79,18 +102,19 @@ public class CPHInline
      *
      * Required runtime variables:
      * - Reads none.
-     * - Writes/reset many global vars used by Squad mini-games and LotAT offering logic.
+     * - Writes/reset many global vars used by Squad mini-games, LotAT runtime state, and legacy LotAT offering scaffolding.
      *
      * Key outputs/side effects:
      * - Clears global mini-game lock state.
      * - Resets Toothless rarity unlock flags + last roll tracking.
-     * - Resets LotAT mode + offering steal settings.
+     * - Resets LotAT session globals to safe idle defaults and clears legacy offering settings.
+     * - Disables all four LotAT timers to prevent stale session-window fires.
      * - Resets Duck, Clone, and Pedro runtime state.
      * - Resets the rest/focus loop active flag, phase, and timers.
      * - Disables the temporary Temp Focus Timer to prevent stale timer fires.
      * - Sets stream mode to workspace as the default start-of-stream mode.
      * - Hides Duck/Clone/Pedro/Toothless dance sources in OBS.
-     * - Disables Duck, Clone, Pedro, rest/focus, and temporary timers to prevent stale timer fires.
+     * - Disables Duck, Clone, Pedro, LotAT, rest/focus, and temporary timers to prevent stale timer fires.
      *
      * Operator notes:
      * - Keep scene/source names in sync with OBS.
@@ -143,7 +167,38 @@ public class CPHInline
         // -------------------------------------------------
         // LotAT + offerings reset
         // -------------------------------------------------
+        // Clear every active LotAT timer first so stale timeout actions cannot fire
+        // after the stream has already been returned to a clean idle baseline.
+        CPH.DisableTimer(TIMER_LOTAT_JOIN_WINDOW);
+        CPH.DisableTimer(TIMER_LOTAT_DECISION_WINDOW);
+        CPH.DisableTimer(TIMER_LOTAT_COMMANDER_WINDOW);
+        CPH.DisableTimer(TIMER_LOTAT_DICE_WINDOW);
+
+        // LotAT v1 runtime foundation defaults.
+        // These globals are the canonical cross-action contract for future engine work.
         CPH.SetGlobalVar(VAR_LOTAT_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_ID, "", false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_STAGE, PHASE_IDLE, false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_STORY_ID, "", false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_CURRENT_NODE_ID, "", false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_CHAOS_TOTAL, 0, false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_ROSTER_FROZEN, false, false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_JOINED_ROSTER_JSON, "[]", false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_JOINED_COUNT, 0, false);
+        CPH.SetGlobalVar(VAR_LOTAT_NODE_ACTIVE_WINDOW, "none", false);
+        CPH.SetGlobalVar(VAR_LOTAT_NODE_WINDOW_RESOLVED, false, false);
+        CPH.SetGlobalVar(VAR_LOTAT_NODE_ALLOWED_COMMANDS_JSON, "[]", false);
+        CPH.SetGlobalVar(VAR_LOTAT_VOTE_MAP_JSON, "{}", false);
+        CPH.SetGlobalVar(VAR_LOTAT_VOTE_VALID_COUNT, 0, false);
+        CPH.SetGlobalVar(VAR_LOTAT_NODE_COMMANDER_NAME, "", false);
+        CPH.SetGlobalVar(VAR_LOTAT_NODE_COMMANDER_TARGET_USER, "", false);
+        CPH.SetGlobalVar(VAR_LOTAT_NODE_COMMANDER_ALLOWED_COMMANDS_JSON, "[]", false);
+        CPH.SetGlobalVar(VAR_LOTAT_NODE_DICE_SUCCESS_THRESHOLD, 0, false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_LAST_CHOICE_ID, "", false);
+        CPH.SetGlobalVar(VAR_LOTAT_SESSION_LAST_END_STATE, "", false);
+
+        // Keep the older offering-related variables intact as separate legacy state.
+        // They are intentionally not redefined here as active LotAT engine state.
         CPH.SetGlobalVar(VAR_LOTAT_ANNOUNCEMENT_SENT, false, false);
         CPH.SetGlobalVar(VAR_LOTAT_OFFERING_STEAL_CHANCE, 0, false);
         CPH.SetGlobalVar(VAR_LOTAT_STEAL_MULTIPLIER, 1, false);

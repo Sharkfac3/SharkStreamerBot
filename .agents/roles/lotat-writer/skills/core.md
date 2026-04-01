@@ -44,7 +44,9 @@ The story agent produces content. The technical agent produces code. Never mix t
 
 ## Story File Workflow
 
-- Write draft stories to `Creative/WorldBuilding/Storylines/drafts/<story_id>.json`
+- Generated stories must always be written to a new file at `Creative/WorldBuilding/Storylines/drafts/<story_id>.json` unless the operator explicitly asks for outline-only output
+- Do not leave a generated story only in chat output; file creation in `drafts/` is the default requirement
+- Inline JSON may be shown for review if requested, but it does not replace writing the draft file
 - Do not place stories directly in `Creative/WorldBuilding/Storylines/ready/`
 - Before a story is handed to the reviewer/runtime path, run the writer-side validation pass and treat engine-breaking defects as hard-fatal
 - To review: launch the story viewer with `./run-lotat-story-viewer.sh` from the repo root, then open `http://localhost:8000`

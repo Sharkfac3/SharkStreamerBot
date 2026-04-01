@@ -1,0 +1,934 @@
+{
+  "story_id": "warranty_comet",
+  "title": "The Warranty Comet",
+  "tone": "absurd-chaotic-humorous",
+  "version": "1.0",
+  "summary": "The Starship Shamples intercepts a glowing comet made of certified replacement parts whose warranties expire in minutes. Chat must decide whether to trust the official-looking inventory, outsmart it, or survive the moment the ship begins classifying itself as defective merchandise.",
+  "starting_ship_section": "Command Deck",
+  "starting_node_id": "node_001",
+  "cast": {
+    "commanders_used": ["The Director"],
+    "squad_members_used": ["Pedro the Raccoon", "Duck the Duck", "Clone the Clone Trooper", "Toothless the Dragon"]
+  },
+  "ship_sections_used": [
+    "Command Deck",
+    "Cargo Bay",
+    "Engineering",
+    "The Bar",
+    "Security Deck",
+    "Simulation Room"
+  ],
+  "commands_used": [
+    "!scan",
+    "!target",
+    "!inspect",
+    "!analyze",
+    "!drink",
+    "!simulate",
+    "!reroute",
+    "!contain",
+    "!deploy"
+  ],
+  "nodes": [
+    {
+      "node_id": "node_001",
+      "node_type": "stage",
+      "ship_section": "Command Deck",
+      "title": "Authorized Repair Inventory Detected",
+      "read_aloud": "A bright comet drifts across the viewscreen, shedding unopened crates and broadcasting, \"AUTHORIZED REPAIR INVENTORY. FINAL CLEARANCE. NO QUESTIONS ASKED.\" Every alarm on the ship politely suggests you should absolutely buy something before the warranty window closes.",
+      "sfx_hint": "cheerful_ad_then_static",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": null
+      },
+      "chaos": {
+        "delta": 0
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_001_a",
+          "label": "Scan the comet",
+          "command": "!scan",
+          "result_flavor": "The bridge lights dim as the ship tries to read the tiny print before doing anything stupid.",
+          "next_node_id": "node_002"
+        },
+        {
+          "choice_id": "node_001_b",
+          "label": "Target the richest cluster",
+          "command": "!target",
+          "result_flavor": "Cargo tractors warm up immediately, which feels like confidence and probably is not.",
+          "next_node_id": "node_003"
+        }
+      ],
+      "tags": ["opening", "comet", "inventory"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_002",
+      "node_type": "stage",
+      "ship_section": "Cargo Bay",
+      "title": "Suspiciously Official Crates",
+      "read_aloud": "The first crates land gently in the Cargo Bay, each stamped with twelve different logos and one very confident gold sticker reading \"FITS MOST DESTINIES.\" Pedro is already circling them like a raccoon who has discovered sacred garbage.",
+      "sfx_hint": "soft_thuds_and_beeps",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Pedro the Raccoon"
+      },
+      "chaos": {
+        "delta": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_002_a",
+          "label": "Inspect the labels",
+          "command": "!inspect",
+          "result_flavor": "You lean in close enough to discover the labels are updating themselves in real time.",
+          "next_node_id": "node_004"
+        },
+        {
+          "choice_id": "node_002_b",
+          "label": "Analyze the manifests",
+          "command": "!analyze",
+          "result_flavor": "The ship translates the packing list into legal language nobody asked for.",
+          "next_node_id": "node_005"
+        }
+      ],
+      "tags": ["cargo-bay", "inspection", "pedro"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_003",
+      "node_type": "stage",
+      "ship_section": "Cargo Bay",
+      "title": "Fast Grab Procedure",
+      "read_aloud": "The tractors yank in a whole cluster of crates at once, and three of them arrive already playing cheerful hold music. One crate opens a flap and thanks you for your continued compliance.",
+      "sfx_hint": "cargo_clamp_then_hold_music",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": null
+      },
+      "chaos": {
+        "delta": 2
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_003_a",
+          "label": "Inspect the first crate",
+          "command": "!inspect",
+          "result_flavor": "You crack open the nearest box before it can congratulate you again.",
+          "next_node_id": "node_006"
+        },
+        {
+          "choice_id": "node_003_b",
+          "label": "Drink to celebrate early",
+          "command": "!drink",
+          "result_flavor": "Duck appears from nowhere with tiny glasses labeled INSTALLER'S PUNCH.",
+          "next_node_id": "node_007"
+        }
+      ],
+      "tags": ["cargo-bay", "greedy", "fast-grab"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_004",
+      "node_type": "stage",
+      "ship_section": "Cargo Bay",
+      "title": "The Self-Relabeling Box",
+      "read_aloud": "One crate keeps changing its own name from \"universal coupler\" to \"captain-grade soup warmer\" to \"definitely not explosive adapter.\" Pedro points at it with complete certainty and says he knows exactly which end is the important one.",
+      "sfx_hint": "sticker_printer_loop",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Pedro the Raccoon"
+      },
+      "chaos": {
+        "delta": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_004_a",
+          "label": "Analyze Pedro's coupler",
+          "command": "!analyze",
+          "result_flavor": "The scan reports that the part is compatible with engines, doors, and emotional regret.",
+          "next_node_id": "node_008"
+        },
+        {
+          "choice_id": "node_004_b",
+          "label": "Simulate the fit first",
+          "command": "!simulate",
+          "result_flavor": "You drag the crate toward the Simulation Room before Pedro can install destiny by hand.",
+          "next_node_id": "node_009"
+        }
+      ],
+      "tags": ["pedro", "labels", "crate"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_005",
+      "node_type": "stage",
+      "ship_section": "Command Deck",
+      "title": "Manifest of Legal Doom",
+      "read_aloud": "The manifest unrolls across the main screen for twelve feet and then requests initials at the bottom. Buried in the fine print is a note that opening any crate may cause the ship to be \"reclassified as participating inventory.\"",
+      "sfx_hint": "printer_unfurl",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": null
+      },
+      "chaos": {
+        "delta": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_005_a",
+          "label": "Target the claim beacon",
+          "command": "!target",
+          "result_flavor": "You lock onto the one signal labeled CUSTOMER REMEDY DESK and immediately regret how official that sounds.",
+          "next_node_id": "node_010"
+        },
+        {
+          "choice_id": "node_005_b",
+          "label": "Reroute through translation",
+          "command": "!reroute",
+          "result_flavor": "Engineering gets a surge of legalese so dense it starts forming physical menus.",
+          "next_node_id": "node_011"
+        }
+      ],
+      "tags": ["manifest", "legalese", "bridge"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_006",
+      "node_type": "stage",
+      "ship_section": "Engineering",
+      "title": "Adaptive Connector Event",
+      "read_aloud": "Inside the first crate is a gleaming connector that unfolds itself and begins crawling toward the engine core like it knows where rent is due. Pedro proudly announces he has already installed one side of it backward \"to save time.\"",
+      "sfx_hint": "metallic_unfolding",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Pedro the Raccoon"
+      },
+      "chaos": {
+        "delta": 2
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_006_a",
+          "label": "Reroute into the core",
+          "command": "!reroute",
+          "result_flavor": "If this works, it is genius. If not, the ship may become a coupon.",
+          "next_node_id": "node_008"
+        },
+        {
+          "choice_id": "node_006_b",
+          "label": "Contain the crate",
+          "command": "!contain",
+          "result_flavor": "Bulkheads slam down around the connector, which it interprets as a customer challenge.",
+          "next_node_id": "node_012"
+        }
+      ],
+      "tags": ["engineering", "connector", "pedro"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_007",
+      "node_type": "stage",
+      "ship_section": "The Bar",
+      "title": "Installer's Punch",
+      "read_aloud": "Duck serves a neon drink that tastes like confidence and very poor calibration. Two sips in, everyone feels dramatically more qualified to perform warranty work, and Clone walks in wearing a sash that says RETURNS STAFF.",
+      "sfx_hint": "glass_clink_then_duck_quack",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Duck the Duck"
+      },
+      "chaos": {
+        "delta": 2
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_007_a",
+          "label": "Inspect Clone's paperwork",
+          "command": "!inspect",
+          "result_flavor": "Clone nods like this is a normal audit and offers a clipboard with too many signature lines.",
+          "next_node_id": "node_013"
+        },
+        {
+          "choice_id": "node_007_b",
+          "label": "Deploy a hauling crew",
+          "command": "!deploy",
+          "result_flavor": "Fueled by false confidence, the crew starts dragging in even more crates.",
+          "next_node_id": "node_012"
+        }
+      ],
+      "tags": ["bar", "duck", "clone"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_008",
+      "node_type": "stage",
+      "ship_section": "Engineering",
+      "title": "Participating Inventory Status",
+      "read_aloud": "Pedro's backward connector flashes once, stabilizes one engine panel, and then re-registers the entire ship as a valid replacement unit. Smaller parts begin sliding out of nearby crates and auto-installing themselves into anything with bolts.",
+      "sfx_hint": "engine_chime_then_warning",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Pedro the Raccoon"
+      },
+      "chaos": {
+        "delta": 3
+      },
+      "dice_hook": {
+        "enabled": true,
+        "purpose": "Jam the self-installing connector before it locks into the engine core.",
+        "roll_window_seconds": 15,
+        "success_threshold": 72,
+        "failure_text": "The connector snaps into place and cheerfully announces that the ship is now scheduled for approved component replacement.",
+        "success_text": "A lucky jam stalls the mechanism for a moment, buying the crew one beautiful breath of uncertified time."
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_008_a",
+          "label": "Scan the new status",
+          "command": "!scan",
+          "result_flavor": "The ship's own diagnostics now refer to the bridge as a resale surface.",
+          "next_node_id": "node_010"
+        },
+        {
+          "choice_id": "node_008_b",
+          "label": "Contain the replacement foam",
+          "command": "!contain",
+          "result_flavor": "Security barriers rise around a rapidly expanding cloud of approved packing material.",
+          "next_node_id": "node_014"
+        }
+      ],
+      "tags": ["pedro", "dice-hook", "inventory-status"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_009",
+      "node_type": "stage",
+      "ship_section": "Simulation Room",
+      "title": "Safe Test, Unsafe Outcome",
+      "read_aloud": "The simulation runs for three seconds before spawning a perfectly legal digital help desk that demands a claim number to continue. Even your fake ship gets classified as overdue for service.",
+      "sfx_hint": "simulation_boot_then_error",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": null
+      },
+      "chaos": {
+        "delta": 2
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_009_a",
+          "label": "Simulate full installation",
+          "command": "!simulate",
+          "result_flavor": "If the fake ship survives, maybe the real one only gets a little cursed.",
+          "next_node_id": "node_015"
+        },
+        {
+          "choice_id": "node_009_b",
+          "label": "Reroute the test live",
+          "command": "!reroute",
+          "result_flavor": "Someone copies the simulation settings into real engineering, which is the opposite of learning.",
+          "next_node_id": "node_011"
+        }
+      ],
+      "tags": ["simulation", "testing", "warranty"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_010",
+      "node_type": "stage",
+      "ship_section": "Command Deck",
+      "title": "Executive Warranty Arbitration",
+      "read_aloud": "The main screen fills with a blinking message: \"EXECUTIVE APPROVAL REQUIRED FOR EMERGENCY WARRANTY DISPUTE.\" Even the alarms sound calmer now, like they are trying to transfer you to the right department.",
+      "sfx_hint": "calm_corporate_alarm",
+      "crew_focus": {
+        "commander": "The Director",
+        "squad_member": null
+      },
+      "chaos": {
+        "delta": 2
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": true,
+        "commander": "The Director",
+        "prompt": "The warranty system requests executive review. Director, please provide calm bureaucratic authority immediately.",
+        "window_seconds": 15,
+        "success_text": "The Director clears his throat with boardroom serenity, and for one glorious moment the screaming paperwork respects process."
+      },
+      "choices": [
+        {
+          "choice_id": "node_010_a",
+          "label": "Target the claim beacon",
+          "command": "!target",
+          "result_flavor": "You aim every remaining sensor at the one place the forms seem to be coming from.",
+          "next_node_id": "node_015"
+        },
+        {
+          "choice_id": "node_010_b",
+          "label": "Scan the fine print",
+          "command": "!scan",
+          "result_flavor": "Thousands of tiny clauses bloom across the console like hostile flowers.",
+          "next_node_id": "node_014"
+        }
+      ],
+      "tags": ["commander-moment", "director", "bridge"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_011",
+      "node_type": "stage",
+      "ship_section": "Security Deck",
+      "title": "Ticket Storm on Deck Seven",
+      "read_aloud": "The rerouted legal signal mutates into physical service tickets drifting through the corridors like angry snow. Toothless is already trying to glare them into compliance, which only makes them print faster.",
+      "sfx_hint": "paper_storm_and_growl",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Toothless the Dragon"
+      },
+      "chaos": {
+        "delta": 2
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_011_a",
+          "label": "Contain the ticket storm",
+          "command": "!contain",
+          "result_flavor": "Security fields trap most of the forms, but not the ones that are legally considered airborne.",
+          "next_node_id": "node_014"
+        },
+        {
+          "choice_id": "node_011_b",
+          "label": "Deploy emergency breakers",
+          "command": "!deploy",
+          "result_flavor": "Toothless slams down on the breaker array like this is a dragon problem now.",
+          "next_node_id": "node_016"
+        }
+      ],
+      "tags": ["security", "tickets", "toothless"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_012",
+      "node_type": "stage",
+      "ship_section": "Security Deck",
+      "title": "Containment Is Interpreted as Customer Feedback",
+      "read_aloud": "The crates respond to quarantine by opening more enthusiastically. One projects a smiling support representative made of light and packing foam, while another upgrades a bulkhead into a premium waiting area.",
+      "sfx_hint": "bulkhead_lock_then_ad_voice",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Toothless the Dragon"
+      },
+      "chaos": {
+        "delta": 3
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_012_a",
+          "label": "Contain the active crate",
+          "command": "!contain",
+          "result_flavor": "You isolate the loudest box, which takes that as an invitation to become louder.",
+          "next_node_id": "node_014"
+        },
+        {
+          "choice_id": "node_012_b",
+          "label": "Deploy full security",
+          "command": "!deploy",
+          "result_flavor": "Toothless commits so hard that even the crates look briefly concerned.",
+          "next_node_id": "node_016"
+        }
+      ],
+      "tags": ["security", "containment", "escalation"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_013",
+      "node_type": "stage",
+      "ship_section": "Cargo Bay",
+      "title": "Returns Staff Clone",
+      "read_aloud": "Clone scans a crate, scans the floor, scans Pedro, and then solemnly announces that one item on this ship is eligible for immediate return. He will not say which item, and that somehow feels more dangerous.",
+      "sfx_hint": "scanner_beep_series",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Clone the Clone Trooper"
+      },
+      "chaos": {
+        "delta": 2
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_013_a",
+          "label": "Inspect the clipboard",
+          "command": "!inspect",
+          "result_flavor": "The form lists the Starship Shamples itself under \"lightly used merchandise.\"",
+          "next_node_id": "node_015"
+        },
+        {
+          "choice_id": "node_013_b",
+          "label": "Contain Clone's scanner",
+          "command": "!contain",
+          "result_flavor": "Clone shrugs, presses one final button, and several doors become return counters.",
+          "next_node_id": "node_016"
+        }
+      ],
+      "tags": ["clone", "returns", "cargo-bay"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_014",
+      "node_type": "stage",
+      "ship_section": "Engineering",
+      "title": "Warranty Daemon in the Core",
+      "read_aloud": "By now the ship is trying to optimize itself according to customer satisfaction metrics nobody understands. The engine still runs, but only after a cheerful voice reminds you that unauthorized joy may void coverage.",
+      "sfx_hint": "engine_hum_with_voiceover",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Pedro the Raccoon"
+      },
+      "chaos": {
+        "delta": 3
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_014_a",
+          "label": "Reroute through a bad bypass",
+          "command": "!reroute",
+          "result_flavor": "You force the core through a deeply uncertified path and pray the warranty can't read sideways.",
+          "next_node_id": "node_017"
+        },
+        {
+          "choice_id": "node_014_b",
+          "label": "Contain the core chamber",
+          "command": "!contain",
+          "result_flavor": "You lock the daemon in with the engine, which is either strategy or denial.",
+          "next_node_id": "node_018"
+        }
+      ],
+      "tags": ["late-game", "engineering", "warranty-daemon"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_015",
+      "node_type": "stage",
+      "ship_section": "Simulation Room",
+      "title": "Claim Number Gambit",
+      "read_aloud": "The crew builds a fake claims path in the Simulation Room and feeds the comet a sequence of forms, signatures, and deeply confident lies. Somewhere in the system, a polite chime suggests you may have found a loophole or awakened a manager.",
+      "sfx_hint": "typing_then_polite_chime",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Clone the Clone Trooper"
+      },
+      "chaos": {
+        "delta": 2
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_015_a",
+          "label": "Target the approval sequence",
+          "command": "!target",
+          "result_flavor": "You commit to one exact chain of nonsense and hope bureaucracy loves confidence.",
+          "next_node_id": "node_019"
+        },
+        {
+          "choice_id": "node_015_b",
+          "label": "Drink to improvise harder",
+          "command": "!drink",
+          "result_flavor": "Duck upgrades the plan from risky to spiritually unhinged.",
+          "next_node_id": "node_018"
+        }
+      ],
+      "tags": ["simulation", "claims", "loophole"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_016",
+      "node_type": "stage",
+      "ship_section": "Security Deck",
+      "title": "Full Lockout Protocol",
+      "read_aloud": "Security slams half the ship shut while premium support kiosks bloom in the sealed hallways like cursed flowers. Toothless can hold the line, but only if the crew decides whether to sacrifice systems or sacrifice dignity.",
+      "sfx_hint": "bulkhead_slam_then_roar",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Toothless the Dragon"
+      },
+      "chaos": {
+        "delta": 3
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [
+        {
+          "choice_id": "node_016_a",
+          "label": "Deploy total lockdown",
+          "command": "!deploy",
+          "result_flavor": "You choose survival by brute force, which the ship records as a hostile service interaction.",
+          "next_node_id": "node_020"
+        },
+        {
+          "choice_id": "node_016_b",
+          "label": "Reroute power off kiosks",
+          "command": "!reroute",
+          "result_flavor": "You black out the support booths and fling power back into the engines before they can file a complaint.",
+          "next_node_id": "node_017"
+        }
+      ],
+      "tags": ["security", "lockdown", "late-game"],
+      "end_state": null
+    },
+    {
+      "node_id": "node_017",
+      "node_type": "ending",
+      "ship_section": "Engineering",
+      "title": "Operational, With Conditions",
+      "read_aloud": "The ship tears free of the comet's systems and keeps flying, but only after several consoles quietly install monthly maintenance reminders. One engine runs better than ever, two doors now require signatures, and Pedro insists this still counts as a clean fix.",
+      "sfx_hint": "engine_recovery_then_soft_ding",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Pedro the Raccoon"
+      },
+      "chaos": {
+        "delta": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [],
+      "tags": ["ending", "partial", "survival"],
+      "end_state": "partial"
+    },
+    {
+      "node_id": "node_018",
+      "node_type": "ending",
+      "ship_section": "Command Deck",
+      "title": "The Infinite Hold Music Event",
+      "read_aloud": "The crew triggers a full customer support escalation, and the bridge fills with soft jazz hold music that no one can turn off. The ship survives physically, but every command now routes through three menus, one apology, and a representative estimated to arrive next season.",
+      "sfx_hint": "hold_music_forever",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Duck the Duck"
+      },
+      "chaos": {
+        "delta": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [],
+      "tags": ["ending", "failure", "hold-music"],
+      "end_state": "failure"
+    },
+    {
+      "node_id": "node_019",
+      "node_type": "ending",
+      "ship_section": "Simulation Room",
+      "title": "Accidentally Under Warranty",
+      "read_aloud": "Against all logic, the fake claim sequence works. One legitimate replacement part arrives, fixes the original issue perfectly, and then the comet leaves as if nothing ridiculous happened here at all. Clone salutes, takes a signed receipt, and vanishes into a hatch nobody remembers installing.",
+      "sfx_hint": "victory_chime_then_hatch",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Clone the Clone Trooper"
+      },
+      "chaos": {
+        "delta": 0
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [],
+      "tags": ["ending", "success", "loophole"],
+      "end_state": "success"
+    },
+    {
+      "node_id": "node_020",
+      "node_type": "ending",
+      "ship_section": "Cargo Bay",
+      "title": "Certified Total Replacement",
+      "read_aloud": "The lockdown fails in the funniest possible way, and the ship is fully reclassified as authorized mobile inventory. When the dust settles, Starship Shamples still flies, but now only between approved service zones and franchise-ready retail pads. The comet drifts away satisfied, leaving you with a functioning vessel and a deeply cursed business model.",
+      "sfx_hint": "alarm_then_cash_register",
+      "crew_focus": {
+        "commander": null,
+        "squad_member": "Toothless the Dragon"
+      },
+      "chaos": {
+        "delta": 1
+      },
+      "dice_hook": {
+        "enabled": false,
+        "purpose": null,
+        "roll_window_seconds": null,
+        "success_threshold": null,
+        "failure_text": null,
+        "success_text": null
+      },
+      "commander_moment": {
+        "enabled": false,
+        "commander": null,
+        "prompt": null,
+        "window_seconds": null,
+        "success_text": null
+      },
+      "choices": [],
+      "tags": ["ending", "failure", "retail"],
+      "end_state": "failure"
+    }
+  ]
+}
