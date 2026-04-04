@@ -22,9 +22,14 @@ Assigns the current The Director commander slot occupant, finalizes the outgoing
 - Resets `the_director_award_count` to `0` for the new director tenure.
 - Resets all The Director command cooldown vars so the new director starts with no cooldown debt.
 - If outgoing director beat the high score, announces the new record in chat.
+- Triggers Mix It Up command `Commander - The Director - Redeem` after the new director is stored.
 
 ### Mix It Up Actions
-- None.
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Command ID in script: `3bc35b73-da10-409e-bf4b-7ca59f980088`
+- Payload `Arguments`: new The Director username
+- Payload `SpecialIdentifiers.user`: new The Director username
+- Payload `SpecialIdentifiers.commander`: new The Director username
 
 ### OBS Interactions
 - None.

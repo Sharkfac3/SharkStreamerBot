@@ -42,6 +42,32 @@ The story agent produces content. The technical agent produces code. Never mix t
 | `Creative/Brand/CHARACTER-CODEX.md` | Canonical character personalities — do not deviate |
 | `Creative/Brand/BRAND-IDENTITY.md` | Brand metaphor layer — all content must be consistent |
 
+## JSON Encoding Rules for Narrative Text
+
+Story files are parsed by a hand-rolled JSON parser at runtime in Streamer.bot.
+Malformed JSON is a hard-fatal error that breaks the live session.
+LLM-generated text has specific failure modes — avoid all of these:
+
+**Use straight double quotes for JSON structure — never smart/curly quotes.**
+- Wrong: `"read_aloud": "The ship lists sideways."` (curly quotes)
+- Right: `"read_aloud": "The ship lists sideways."`
+
+**Never include literal double quotes inside string values.**
+- Wrong: `"result_flavor": "Pedro says "I meant to do that.""`
+- Right: `"result_flavor": "Pedro says he meant to do that."`
+- Also right (if quotes are genuinely needed): `"result_flavor": "Pedro says \"I meant to do that.\""`
+- Simplest: rewrite the line to avoid quotes entirely.
+
+**Never include literal newlines inside a string value.**
+- All string values (`read_aloud`, `label`, `result_flavor`, `prompt`, `success_text`, `failure_text`) must be single-line.
+- If narration needs a break, write it as two shorter sentences on the same JSON line.
+
+**Avoid backslashes in narrative text.**
+- A backslash in story text must be written as `\\` in JSON — easy to forget.
+- Backslashes do not appear naturally in narration; just don't use them.
+
+**Rule of thumb:** if you would not type the character in a plain URL, be suspicious of it in a JSON string value.
+
 ## Story File Workflow
 
 - Generated stories must always be written to a new file at `Creative/WorldBuilding/Storylines/drafts/<story_id>.json` unless the operator explicitly asks for outline-only output

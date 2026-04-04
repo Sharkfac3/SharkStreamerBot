@@ -51,3 +51,9 @@ When responding:
 - Be practical and implementation-focused.
 - Call out any Streamer.bot UI wiring, variable setup, action ordering, or manual sync steps the operator must do.
 - If requirements are ambiguous and could affect live behavior, ask before making risky changes.
+
+
+
+Your Task:
+
+provide more info on how commander redeem files work

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Text;
 using System.IO;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 public class CPHInline
 {
@@ -176,7 +176,7 @@ public class CPHInline
     {
         failureReason = "";
         var commands = new List<string>();
-        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var seen = new List<string>();
 
         if (node == null)
         {
@@ -199,7 +199,7 @@ public class CPHInline
             }
 
             string command = NormalizeCommand(choice.Command);
-            if (seen.Add(command))
+            if (AddUniqueIgnoreCase(seen, command))
                 commands.Add(command);
         }
 
@@ -214,7 +214,7 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_LOTAT_SESSION_STAGE, STAGE_DECISION_OPEN, false);
         CPH.SetGlobalVar(VAR_LOTAT_NODE_ACTIVE_WINDOW, WINDOW_DECISION, false);
         CPH.SetGlobalVar(VAR_LOTAT_NODE_WINDOW_RESOLVED, false, false);
-        CPH.SetGlobalVar(VAR_LOTAT_NODE_ALLOWED_COMMANDS_JSON, JsonSerializer.Serialize(allowedDecisionCommands), false);
+        CPH.SetGlobalVar(VAR_LOTAT_NODE_ALLOWED_COMMANDS_JSON, SerializeJson(allowedDecisionCommands), false);
         CPH.SetGlobalVar(VAR_LOTAT_VOTE_MAP_JSON, "{}", false);
         CPH.SetGlobalVar(VAR_LOTAT_VOTE_VALID_COUNT, 0, false);
         CPH.SetGlobalVar(VAR_LOTAT_NODE_COMMANDER_NAME, "", false);
@@ -319,8 +319,7 @@ public class CPHInline
 
         try
         {
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            story = JsonSerializer.Deserialize<RuntimeStoryDefinition>(json, options);
+            story = DeserializeJson<RuntimeStoryDefinition>(json);
         }
         catch (Exception ex)
         {
@@ -405,7 +404,7 @@ public class CPHInline
     private List<string> DeduplicatePaths(List<string> candidates)
     {
         var unique = new List<string>();
-        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var seen = new List<string>();
 
         foreach (string candidate in candidates)
         {
@@ -413,52 +412,552 @@ public class CPHInline
                 continue;
 
             string normalized = candidate.Trim();
-            if (seen.Add(normalized))
+            if (AddUniqueIgnoreCase(seen, normalized))
                 unique.Add(normalized);
         }
 
         return unique;
     }
+    [DataContract]
 
     private sealed class RuntimeStoryDefinition
     {
-        [JsonPropertyName("story_id")]
+        [DataMember(Name = "story_id")]
         public string StoryId { get; set; }
 
-        [JsonPropertyName("nodes")]
+        [DataMember(Name = "nodes")]
         public List<RuntimeStoryNode> Nodes { get; set; }
     }
+    [DataContract]
 
     private sealed class RuntimeStoryNode
     {
-        [JsonPropertyName("node_id")]
+        [DataMember(Name = "node_id")]
         public string NodeId { get; set; }
 
-        [JsonPropertyName("dice_hook")]
+        [DataMember(Name = "dice_hook")]
         public RuntimeDiceHook DiceHook { get; set; }
 
-        [JsonPropertyName("choices")]
+        [DataMember(Name = "choices")]
         public List<RuntimeStoryChoice> Choices { get; set; }
     }
+    [DataContract]
 
     private sealed class RuntimeDiceHook
     {
-        [JsonPropertyName("enabled")]
+        [DataMember(Name = "enabled")]
         public bool Enabled { get; set; }
 
-        [JsonPropertyName("success_threshold")]
+        [DataMember(Name = "success_threshold")]
         public int SuccessThreshold { get; set; }
 
-        [JsonPropertyName("failure_text")]
+        [DataMember(Name = "failure_text")]
         public string FailureText { get; set; }
     }
+    [DataContract]
 
     private sealed class RuntimeStoryChoice
     {
-        [JsonPropertyName("label")]
+        [DataMember(Name = "label")]
         public string Label { get; set; }
 
-        [JsonPropertyName("command")]
+        [DataMember(Name = "command")]
         public string Command { get; set; }
     }
+
+    private T DeserializeJson<T>(string json)
+    {
+        object parsed = ParseJsonRoot(json);
+        object converted = ConvertParsedValueToType(parsed, typeof(T));
+        if (converted == null)
+            return default(T);
+
+        return (T)converted;
+    }
+
+    private string SerializeJson<T>(T value)
+    {
+        return SerializeJsonValue(value);
+    }
+
+    private object ParseJsonRoot(string json)
+    {
+        int index = 0;
+        string source = json ?? "";
+        object value = ParseJsonValue(source, ref index);
+        return value;
+    }
+
+    private object ParseJsonValue(string source, ref int index)
+    {
+        SkipJsonWhitespace(source, ref index);
+        if (index >= source.Length)
+            return null;
+
+        char current = source[index];
+        if (current == '{')
+            return ParseJsonObject(source, ref index);
+
+        if (current == '[')
+            return ParseJsonArray(source, ref index);
+
+        if (current == '"')
+            return ParseJsonString(source, ref index);
+
+        if (current == 't' || current == 'f')
+            return ParseJsonBoolean(source, ref index);
+
+        if (current == 'n')
+        {
+            ParseJsonNull(source, ref index);
+            return null;
+        }
+
+        return ParseJsonNumber(source, ref index);
+    }
+
+    private Dictionary<string, object> ParseJsonObject(string source, ref int index)
+    {
+        var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        index++;
+        SkipJsonWhitespace(source, ref index);
+
+        if (index < source.Length && source[index] == '}')
+        {
+            index++;
+            return result;
+        }
+
+        while (index < source.Length)
+        {
+            SkipJsonWhitespace(source, ref index);
+            string key = ParseJsonString(source, ref index);
+            SkipJsonWhitespace(source, ref index);
+
+            if (index >= source.Length || source[index] != ':')
+                throw new InvalidOperationException("Invalid JSON object: expected ':' after key.");
+
+            index++;
+            object value = ParseJsonValue(source, ref index);
+            result[key] = value;
+
+            SkipJsonWhitespace(source, ref index);
+            if (index >= source.Length)
+                break;
+
+            if (source[index] == '}')
+            {
+                index++;
+                break;
+            }
+
+            if (source[index] != ',')
+                throw new InvalidOperationException("Invalid JSON object: expected ',' between properties.");
+
+            index++;
+        }
+
+        return result;
+    }
+
+    private List<object> ParseJsonArray(string source, ref int index)
+    {
+        var result = new List<object>();
+        index++;
+        SkipJsonWhitespace(source, ref index);
+
+        if (index < source.Length && source[index] == ']')
+        {
+            index++;
+            return result;
+        }
+
+        while (index < source.Length)
+        {
+            object value = ParseJsonValue(source, ref index);
+            result.Add(value);
+            SkipJsonWhitespace(source, ref index);
+
+            if (index >= source.Length)
+                break;
+
+            if (source[index] == ']')
+            {
+                index++;
+                break;
+            }
+
+            if (source[index] != ',')
+                throw new InvalidOperationException("Invalid JSON array: expected ',' between values.");
+
+            index++;
+        }
+
+        return result;
+    }
+
+    private string ParseJsonString(string source, ref int index)
+    {
+        if (index >= source.Length || source[index] != '"')
+            throw new InvalidOperationException("Invalid JSON string: expected opening quote.");
+
+        index++;
+        var builder = new StringBuilder();
+
+        while (index < source.Length)
+        {
+            char current = source[index++];
+            if (current == '"')
+                return builder.ToString();
+
+            if (current != '\\')
+            {
+                builder.Append(current);
+                continue;
+            }
+
+            if (index >= source.Length)
+                break;
+
+            char escaped = source[index++];
+            switch (escaped)
+            {
+                case '"': builder.Append('"'); break;
+                case '\\': builder.Append('\\'); break;
+                case '/': builder.Append('/'); break;
+                case 'b': builder.Append('\b'); break;
+                case 'f': builder.Append('\f'); break;
+                case 'n': builder.Append('\n'); break;
+                case 'r': builder.Append('\r'); break;
+                case 't': builder.Append('\t'); break;
+                case 'u':
+                    if (index + 4 > source.Length)
+                        throw new InvalidOperationException("Invalid JSON string: incomplete unicode escape.");
+
+                    string hex = source.Substring(index, 4);
+                    builder.Append((char)int.Parse(hex, System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture));
+                    index += 4;
+                    break;
+                default:
+                    builder.Append(escaped);
+                    break;
+            }
+        }
+
+        throw new InvalidOperationException("Invalid JSON string: missing closing quote.");
+    }
+
+    private bool ParseJsonBoolean(string source, ref int index)
+    {
+        if (source.Length >= index + 4 && string.Compare(source, index, "true", 0, 4, StringComparison.Ordinal) == 0)
+        {
+            index += 4;
+            return true;
+        }
+
+        if (source.Length >= index + 5 && string.Compare(source, index, "false", 0, 5, StringComparison.Ordinal) == 0)
+        {
+            index += 5;
+            return false;
+        }
+
+        throw new InvalidOperationException("Invalid JSON boolean value.");
+    }
+
+    private void ParseJsonNull(string source, ref int index)
+    {
+        if (source.Length >= index + 4 && string.Compare(source, index, "null", 0, 4, StringComparison.Ordinal) == 0)
+        {
+            index += 4;
+            return;
+        }
+
+        throw new InvalidOperationException("Invalid JSON null value.");
+    }
+
+    private object ParseJsonNumber(string source, ref int index)
+    {
+        int start = index;
+        while (index < source.Length)
+        {
+            char current = source[index];
+            if ((current >= '0' && current <= '9') || current == '-' || current == '+' || current == '.' || current == 'e' || current == 'E')
+            {
+                index++;
+                continue;
+            }
+
+            break;
+        }
+
+        string token = source.Substring(start, index - start);
+        if (token.IndexOf('.') >= 0 || token.IndexOf('e') >= 0 || token.IndexOf('E') >= 0)
+        {
+            return double.Parse(token, System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        long longValue;
+        if (long.TryParse(token, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out longValue))
+        {
+            if (longValue >= int.MinValue && longValue <= int.MaxValue)
+                return (int)longValue;
+
+            return longValue;
+        }
+
+        return 0;
+    }
+
+    private void SkipJsonWhitespace(string source, ref int index)
+    {
+        while (index < source.Length)
+        {
+            char current = source[index];
+            if (current == ' ' || current == '\t' || current == '\n' || current == '\r')
+            {
+                index++;
+                continue;
+            }
+
+            break;
+        }
+    }
+
+    private object ConvertParsedValueToType(object value, Type targetType)
+    {
+        if (targetType == null)
+            return null;
+
+        Type nullableUnderlying = Nullable.GetUnderlyingType(targetType);
+        if (nullableUnderlying != null)
+            targetType = nullableUnderlying;
+
+        if (value == null)
+        {
+            if (targetType.IsValueType)
+                return Activator.CreateInstance(targetType);
+
+            return null;
+        }
+
+        if (targetType == typeof(string))
+            return Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture);
+
+        if (targetType == typeof(int))
+            return Convert.ToInt32(value, System.Globalization.CultureInfo.InvariantCulture);
+
+        if (targetType == typeof(long))
+            return Convert.ToInt64(value, System.Globalization.CultureInfo.InvariantCulture);
+
+        if (targetType == typeof(bool))
+            return Convert.ToBoolean(value, System.Globalization.CultureInfo.InvariantCulture);
+
+        if (targetType == typeof(double))
+            return Convert.ToDouble(value, System.Globalization.CultureInfo.InvariantCulture);
+
+        if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(List<>))
+        {
+            Type itemType = targetType.GetGenericArguments()[0];
+            object listInstance = Activator.CreateInstance(targetType);
+            var list = listInstance as System.Collections.IList;
+            var rawList = value as List<object>;
+            if (list == null || rawList == null)
+                return listInstance;
+
+            for (int i = 0; i < rawList.Count; i++)
+                list.Add(ConvertParsedValueToType(rawList[i], itemType));
+
+            return listInstance;
+        }
+
+        if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+        {
+            Type[] args = targetType.GetGenericArguments();
+            if (args.Length == 2 && args[0] == typeof(string))
+            {
+                object dictInstance = Activator.CreateInstance(targetType);
+                var dict = dictInstance as System.Collections.IDictionary;
+                var rawDict = value as Dictionary<string, object>;
+                if (dict == null || rawDict == null)
+                    return dictInstance;
+
+                foreach (KeyValuePair<string, object> pair in rawDict)
+                    dict[pair.Key] = ConvertParsedValueToType(pair.Value, args[1]);
+
+                return dictInstance;
+            }
+        }
+
+        var objectMap = value as Dictionary<string, object>;
+        if (objectMap == null)
+            return Activator.CreateInstance(targetType);
+
+        object instance = Activator.CreateInstance(targetType);
+        System.Reflection.PropertyInfo[] properties = targetType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+        for (int i = 0; i < properties.Length; i++)
+        {
+            System.Reflection.PropertyInfo property = properties[i];
+            if (!property.CanWrite)
+                continue;
+
+            string jsonName = property.Name;
+            object[] attributes = property.GetCustomAttributes(typeof(DataMemberAttribute), true);
+            if (attributes != null && attributes.Length > 0)
+            {
+                DataMemberAttribute member = attributes[0] as DataMemberAttribute;
+                if (member != null && !string.IsNullOrWhiteSpace(member.Name))
+                    jsonName = member.Name;
+            }
+
+            object rawPropertyValue;
+            if (!objectMap.TryGetValue(jsonName, out rawPropertyValue) && !objectMap.TryGetValue(property.Name, out rawPropertyValue))
+                continue;
+
+            property.SetValue(instance, ConvertParsedValueToType(rawPropertyValue, property.PropertyType), null);
+        }
+
+        return instance;
+    }
+
+    private string SerializeJsonValue(object value)
+    {
+        if (value == null)
+            return "null";
+
+        if (value is string)
+            return "\"" + EscapeJsonString((string)value) + "\"";
+
+        if (value is bool)
+            return ((bool)value) ? "true" : "false";
+
+        if (value is int || value is long || value is double || value is float || value is decimal || value is short || value is byte)
+            return Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture);
+
+        var dictionary = value as System.Collections.IDictionary;
+        if (dictionary != null)
+        {
+            var parts = new List<string>();
+            foreach (System.Collections.DictionaryEntry entry in dictionary)
+            {
+                string key = Convert.ToString(entry.Key, System.Globalization.CultureInfo.InvariantCulture) ?? "";
+                parts.Add("\"" + EscapeJsonString(key) + "\":" + SerializeJsonValue(entry.Value));
+            }
+
+            return "{" + string.Join(",", parts.ToArray()) + "}";
+        }
+
+        if (!(value is string))
+        {
+            var enumerable = value as System.Collections.IEnumerable;
+            if (enumerable != null)
+            {
+                var parts = new List<string>();
+                foreach (object item in enumerable)
+                    parts.Add(SerializeJsonValue(item));
+
+                return "[" + string.Join(",", parts.ToArray()) + "]";
+            }
+        }
+
+        var objectParts = new List<string>();
+        System.Reflection.PropertyInfo[] properties = value.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+        for (int i = 0; i < properties.Length; i++)
+        {
+            System.Reflection.PropertyInfo property = properties[i];
+            if (!property.CanRead)
+                continue;
+
+            string jsonName = property.Name;
+            object[] attributes = property.GetCustomAttributes(typeof(DataMemberAttribute), true);
+            if (attributes != null && attributes.Length > 0)
+            {
+                DataMemberAttribute member = attributes[0] as DataMemberAttribute;
+                if (member != null && !string.IsNullOrWhiteSpace(member.Name))
+                    jsonName = member.Name;
+            }
+
+            object propertyValue = property.GetValue(value, null);
+            objectParts.Add("\"" + EscapeJsonString(jsonName) + "\":" + SerializeJsonValue(propertyValue));
+        }
+
+        return "{" + string.Join(",", objectParts.ToArray()) + "}";
+    }
+
+    private string EscapeJsonString(string value)
+    {
+        string source = value ?? "";
+        var builder = new StringBuilder();
+        for (int i = 0; i < source.Length; i++)
+        {
+            char current = source[i];
+
+            if (current == '\\')
+            {
+                builder.Append("\\\\");
+            }
+            else if (current == '"')
+            {
+                builder.Append("\\\"");
+            }
+            else if (current == '\b')
+            {
+                builder.Append("\\b");
+            }
+            else if (current == '\f')
+            {
+                builder.Append("\\f");
+            }
+            else if (current == '\n')
+            {
+                builder.Append("\\n");
+            }
+            else if (current == '\r')
+            {
+                builder.Append("\\r");
+            }
+            else if (current == '\t')
+            {
+                builder.Append("\\t");
+            }
+            else if (current < 32)
+            {
+                builder.Append("\\u" + ((int)current).ToString("x4", System.Globalization.CultureInfo.InvariantCulture));
+            }
+            else
+            {
+                builder.Append(current);
+            }
+        }
+
+        return builder.ToString();
+    }
+
+    private bool ContainsIgnoreCase(List<string> values, string candidate)
+    {
+        if (values == null || string.IsNullOrWhiteSpace(candidate))
+            return false;
+
+        string normalizedCandidate = candidate.Trim();
+        for (int i = 0; i < values.Count; i++)
+        {
+            string entry = values[i] ?? "";
+            if (string.Equals(entry.Trim(), normalizedCandidate, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool AddUniqueIgnoreCase(List<string> values, string candidate)
+    {
+        if (values == null || string.IsNullOrWhiteSpace(candidate))
+            return false;
+
+        if (ContainsIgnoreCase(values, candidate))
+            return false;
+
+        values.Add(candidate);
+        return true;
+    }
+
 }

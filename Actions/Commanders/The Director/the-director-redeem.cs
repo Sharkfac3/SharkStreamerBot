@@ -1,4 +1,7 @@
 using System;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 
 public class CPHInline
 {
@@ -19,11 +22,19 @@ public class CPHInline
     private const string VAR_THE_DIRECTOR_CHECKCHAT_NEXT_ALLOWED_UTC = "the_director_checkchat_next_allowed_utc";
     private const string VAR_THE_DIRECTOR_TOAD_NEXT_ALLOWED_UTC = "the_director_toad_next_allowed_utc";
 
+    // Mix It Up wiring for the commander redeem celebration.
+    private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
+    private const string MIXITUP_COMMAND_ID = "3bc35b73-da10-409e-bf4b-7ca59f980088";
+    private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
+
+    private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
+
     /*
      * Purpose:
      * - Assigns the current The Director commander slot to the redeeming user.
      * - Before replacing the slot owner, finalizes the previous director's award score.
      * - If previous score beats the stored high score, writes a new persistent high score and announces it.
+     * - Triggers The Director Mix It Up redeem command for the new commander takeover.
      *
      * Expected trigger/input:
      * - Commander redeem action for The Director.
@@ -42,6 +53,7 @@ public class CPHInline
      * - Resets the_director_award_count to 0 for the new director tenure.
      * - Resets The Director command cooldowns so the new director starts fresh.
      * - Announces new high score in chat when beaten.
+     * - Calls Mix It Up command "Commander - The Director - Redeem" with the new director name.
      */
     public bool Execute()
     {
@@ -79,6 +91,56 @@ public class CPHInline
         // Reset all Director command cooldowns for the new tenure.
         CPH.SetGlobalVar(VAR_THE_DIRECTOR_CHECKCHAT_NEXT_ALLOWED_UTC, 0L, false);
         CPH.SetGlobalVar(VAR_THE_DIRECTOR_TOAD_NEXT_ALLOWED_UTC, 0L, false);
+
+        // Fire the Mix It Up redeem command after state is updated so downstream logic sees the new director.
+        TriggerMixItUpCommand(
+            MIXITUP_COMMAND_ID,
+            "The Director Redeem",
+            arguments: newDirector,
+            specialIdentifiers: new { user = newDirector, commander = newDirector });
+
         return true;
+    }
+
+    private bool TriggerMixItUpCommand(
+        string commandId,
+        string logPrefix,
+        string arguments = "",
+        object specialIdentifiers = null)
+    {
+        if (string.IsNullOrWhiteSpace(commandId) ||
+            commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
+        {
+            CPH.LogWarn($"[{logPrefix}] Mix It Up command ID is not configured.");
+            return false;
+        }
+
+        try
+        {
+            string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{commandId}";
+            string payload = JsonSerializer.Serialize(new
+            {
+                Platform = MIXITUP_PLATFORM_TWITCH,
+                Arguments = arguments ?? "",
+                SpecialIdentifiers = specialIdentifiers ?? new { },
+                IgnoreRequirements = false
+            });
+
+            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = MIXITUP_HTTP_CLIENT.PostAsync(url, content).GetAwaiter().GetResult();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                CPH.LogWarn($"[{logPrefix}] Mix It Up call failed: {(int)response.StatusCode} {response.ReasonPhrase}");
+                return false;
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
+            return false;
+        }
     }
 }

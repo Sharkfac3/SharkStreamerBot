@@ -29,16 +29,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-03 | pi | Add Mix It Up commander redeem triggers | uncommitted |
+| 2026-04-03 | pi | Convert Mix It Up launcher from .sh to .bat and remove venv usage | uncommitted |
+| 2026-04-03 | pi | Add root shell launcher for Mix It Up command export tool | uncommitted |
+| 2026-04-02 | pi | Fix LotAT compile errors for missing System.IO imports | uncommitted |
+| 2026-04-02 | pi | Make LotAT scripts Streamer.bot-compiler compatible | uncommitted |
 | 2026-04-01 | pi | Document current LotAT runtime implementation | uncommitted |
 | 2026-04-01 | pi | Implement LotAT shared session-end cleanup path | uncommitted |
 | 2026-04-01 | pi | Implement LotAT commander window | uncommitted |
 | 2026-04-01 | pi | Implement LotAT decision window + resolution | uncommitted |
 | 2026-03-31 | pi | Implement LotAT node-entry core | uncommitted |
-| 2026-03-31 | pi | Implement LotAT join flow | uncommitted |
-| 2026-03-31 | pi | Implement LotAT shared constants + stream-start reset foundation | uncommitted |
-| 2026-03-31 | pi | Convert LotAT prompt pack to checked-in action-contract workflow for fresh chats | uncommitted |
-| 2026-03-31 | pi | Refine LotAT implementation prompt file-path references | uncommitted |
-| 2026-03-31 | pi | Fix LotAT viewer launcher venv Python selection | uncommitted |
 
 ---
 

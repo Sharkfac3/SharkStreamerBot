@@ -22,9 +22,14 @@ Assigns the current Captain Stretch commander slot occupant, finalizes the outgo
 - Resets `captain_stretch_thank_count` to `0` for the new captain tenure.
 - Resets all Captain Stretch command cooldown vars so the new captain starts with no cooldown debt.
 - If outgoing captain beat the high score, announces the new record in chat.
+- Triggers Mix It Up command `Commander - Captain Stretch - Redeem` after the new captain is stored.
 
 ### Mix It Up Actions
-- None.
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Command ID in script: `b6cf100f-aa07-47ea-b650-2715719ea434`
+- Payload `Arguments`: new Captain Stretch username
+- Payload `SpecialIdentifiers.user`: new Captain Stretch username
+- Payload `SpecialIdentifiers.commander`: new Captain Stretch username
 
 ### OBS Interactions
 - None.

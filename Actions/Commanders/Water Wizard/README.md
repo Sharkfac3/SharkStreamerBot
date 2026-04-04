@@ -22,9 +22,14 @@ Assigns the current Water Wizard commander slot occupant, finalizes the outgoing
 - Resets `water_wizard_hail_count` to `0` for the new wizard tenure.
 - Resets all Water Wizard command cooldown vars so the new wizard starts with no cooldown debt.
 - If outgoing wizard beat the high score, announces the new record in chat.
+- Triggers Mix It Up command `Commander - Water Wizard - Redeem` after the new wizard is stored.
 
 ### Mix It Up Actions
-- None.
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Command ID in script: `f7ab01c0-780c-4f17-9020-835d91764a9c`
+- Payload `Arguments`: new Water Wizard username
+- Payload `SpecialIdentifiers.user`: new Water Wizard username
+- Payload `SpecialIdentifiers.commander`: new Water Wizard username
 
 ### OBS Interactions
 - None.
