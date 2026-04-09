@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // Overlay is a browser app built by Vite. Bundler resolution is the correct choice.
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    // DOM and DOM.Iterable give us browser globals (document, WebSocket, etc.)
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    // outDir/rootDir intentionally omitted — noEmit: true means Vite owns all output.
+    // Vite handles transpilation and output — tsc is typecheck-only for this package.
+    "noEmit": true
+  },
+  "include": ["src", "vite.config.ts"]
+}

@@ -49,6 +49,41 @@ All Squad scripts share global variable names from `Actions/SHARED-CONSTANTS.md`
 
 `userId` is the preferred player key — stable even if a user changes their display name.
 
+## Overlay Rendering
+
+All four squad games now have overlay visual implementations.  The overlay
+renders game state via `squad.*` broker messages.
+
+**Reference:** `.agents/roles/app-dev/skills/stream-interactions/squad-rendering.md`
+
+### Publish Templates
+
+Each game has a reference template at `Actions/Squad/<Game>/overlay-publish.cs`.
+These are NOT deployed actions — copy the methods into the existing game scripts:
+
+| Script | Method(s) to copy in |
+|--------|---------------------|
+| duck-main.cs | `PublishDuckStart()` |
+| duck-call.cs | `PublishDuckUpdate()`, `PublishDuckEndSuccess()` |
+| duck-resolve.cs | `PublishDuckEndFailure()` |
+| pedro-main.cs | `PublishPedroStart(triggeredBy)` |
+| pedro-call.cs | `PublishPedroUpdate(mentionCount)` |
+| pedro-resolve.cs | `PublishPedroEndSuccess()`, `PublishPedroEndFailure()` |
+| clone-main.cs | `PublishCloneStart(triggeredBy)` |
+| clone-volley.cs | `PublishCloneUpdate()`, `PublishCloneEndWin()`, `PublishCloneEndLoss()` |
+| toothless-main.cs | `PublishToothlessStart(triggeredBy)`, `PublishToothlessEnd(rarity, username, isFirstUnlock)` |
+
+### Broker Topics Published
+
+```
+squad.duck.start / squad.duck.update / squad.duck.end
+squad.pedro.start / squad.pedro.update / squad.pedro.end
+squad.clone.start / squad.clone.update / squad.clone.end
+squad.toothless.start / squad.toothless.end
+```
+
+No `squad.toothless.update` is published (Toothless rolls are instant).
+
 ## Sub-Skills
 
 Load the specific game file when your task is scoped to that game:

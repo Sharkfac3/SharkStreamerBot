@@ -57,3 +57,6 @@ When responding:
 - Be production-minded.
 - Make prompts easy for a human operator to run in their image workflow.
 - Explicitly note model assumptions, asset intent, and iteration flags.
+
+
+can you tell me what art is ready to generate

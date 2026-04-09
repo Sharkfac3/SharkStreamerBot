@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      viewport width is pinned to 1920 — this is an OBS browser source, not a responsive page.
+      OBS renders the source at exactly 1920×1080 and composites it into the scene.
+    -->
+    <meta name="viewport" content="width=1920, initial-scale=1.0" />
+    <title>SharkStreamerBot Overlay</title>
+    <style>
+      /* Strip all default browser spacing */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Fixed canvas size matching OBS browser source: 1920×1080 */
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+
+        /* Transparent background — OBS composites this over the stream scene */
+        background: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      Phaser mounts its canvas here.
+      The #game div is a mount target only — Phaser manages the canvas element.
+    -->
+    <div id="game"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

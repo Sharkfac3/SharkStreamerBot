@@ -29,6 +29,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-08 | claude | Stream overlay ecosystem complete — broker, Phaser overlay, LotAT/Squad visual layers, Streamer.bot scripts, agent docs (`Apps/stream-overlay/`, `Actions/Overlay/`, `Actions/LotAT/`, `Actions/Squad/*/`) | uncommitted |
 | 2026-04-03 | pi | Add Mix It Up commander redeem triggers | uncommitted |
 | 2026-04-03 | pi | Convert Mix It Up launcher from .sh to .bat and remove venv usage | uncommitted |
 | 2026-04-03 | pi | Add root shell launcher for Mix It Up command export tool | uncommitted |

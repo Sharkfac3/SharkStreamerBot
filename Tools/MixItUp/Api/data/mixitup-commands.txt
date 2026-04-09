@@ -1,9 +1,9 @@
 Mix It Up Commands Export
-Command count: 79
-Action Group count: 24
+Command count: 86
+Action Group count: 31
 Pages fetched: 1
 Requested page size: 100
-Reported total count: 79
+Reported total count: 86
 First page command source: root['Commands']
 First page top-level keys: TotalCount, Commands
 
@@ -38,6 +38,13 @@ Action Group Lookup (Exact Name, Alphabetical):
 22. name=Twitch - Bits - Tier 3 | id=23f1afd1-7375-475d-afee-058ef4f7f68d | enabled=True | unlocked=True | group=None
 23. name=Twitch - Bits - Tier 4 | id=3a83b335-ae69-425c-b4d2-a52d1734a9f7 | enabled=True | unlocked=True | group=None
 24. name=Twitch - Bits- Gigantify Emote | id=29d47997-6075-412d-88a0-43619b59bcfd | enabled=True | unlocked=True | group=None
+25. name=Twitch - Core - Gifted Sub - Multiple | id=9dfb65d3-22e6-40f6-92ff-9af5007ee12d | enabled=True | unlocked=True | group=None
+26. name=Twitch - Core - Gifted Sub - Single | id=32402192-f186-48aa-9bde-56ab87d2d2ac | enabled=True | unlocked=True | group=None
+27. name=Twitch - Core - Subscription - Gift Paid Upgrade | id=7658e0d5-fc06-4358-9fb8-2d09906d491b | enabled=True | unlocked=True | group=None
+28. name=Twitch - Core - Subscription - New | id=d0f4d849-de31-4bd3-ab9d-3deb8f8295ed | enabled=True | unlocked=True | group=None
+29. name=Twitch - Core - Subscription - Pay It Forward | id=7b752705-d7bc-4fc7-8fd4-bb1eb43f888f | enabled=True | unlocked=True | group=None
+30. name=Twitch - Core - Subscription - Prime Paid Upgrade | id=65cae042-0274-4e66-98ad-c6d199659ee6 | enabled=True | unlocked=True | group=None
+31. name=Twitch - Core - Subscription - ReSub | id=432049da-5972-4f35-8641-373916ba8b14 | enabled=True | unlocked=True | group=None
 
 Action Group Lookup (Normalized Name):
 1. normalized=commander captain stretch lock in timer end | name=Commander - Captain Stretch - Lock In Timer - End | id=65cf9329-bbbd-48e5-997c-d6e6a7b06781
@@ -64,6 +71,13 @@ Action Group Lookup (Normalized Name):
 22. normalized=twitch bits on screen celebration | name=Twitch - Bits - On Screen Celebration | id=3b9123d2-8d22-40f0-ad9b-baf6530388ee
 23. normalized=twitch bits tier 3 | name=Twitch - Bits - Tier 3 | id=23f1afd1-7375-475d-afee-058ef4f7f68d
 24. normalized=twitch bits tier 4 | name=Twitch - Bits - Tier 4 | id=3a83b335-ae69-425c-b4d2-a52d1734a9f7
+25. normalized=twitch core gifted sub multiple | name=Twitch - Core - Gifted Sub - Multiple | id=9dfb65d3-22e6-40f6-92ff-9af5007ee12d
+26. normalized=twitch core gifted sub single | name=Twitch - Core - Gifted Sub - Single | id=32402192-f186-48aa-9bde-56ab87d2d2ac
+27. normalized=twitch core subscription gift paid upgrade | name=Twitch - Core - Subscription - Gift Paid Upgrade | id=7658e0d5-fc06-4358-9fb8-2d09906d491b
+28. normalized=twitch core subscription new | name=Twitch - Core - Subscription - New | id=d0f4d849-de31-4bd3-ab9d-3deb8f8295ed
+29. normalized=twitch core subscription pay it forward | name=Twitch - Core - Subscription - Pay It Forward | id=7b752705-d7bc-4fc7-8fd4-bb1eb43f888f
+30. normalized=twitch core subscription prime paid upgrade | name=Twitch - Core - Subscription - Prime Paid Upgrade | id=65cae042-0274-4e66-98ad-c6d199659ee6
+31. normalized=twitch core subscription resub | name=Twitch - Core - Subscription - ReSub | id=432049da-5972-4f35-8641-373916ba8b14
 
 Action Group Name -> ID Map (Exact Names):
 {
@@ -90,5 +104,12 @@ Action Group Name -> ID Map (Exact Names):
   "Twitch - Bits - On Screen Celebration": "3b9123d2-8d22-40f0-ad9b-baf6530388ee",
   "Twitch - Bits - Tier 3": "23f1afd1-7375-475d-afee-058ef4f7f68d",
   "Twitch - Bits - Tier 4": "3a83b335-ae69-425c-b4d2-a52d1734a9f7",
-  "Twitch - Bits- Gigantify Emote": "29d47997-6075-412d-88a0-43619b59bcfd"
+  "Twitch - Bits- Gigantify Emote": "29d47997-6075-412d-88a0-43619b59bcfd",
+  "Twitch - Core - Gifted Sub - Multiple": "9dfb65d3-22e6-40f6-92ff-9af5007ee12d",
+  "Twitch - Core - Gifted Sub - Single": "32402192-f186-48aa-9bde-56ab87d2d2ac",
+  "Twitch - Core - Subscription - Gift Paid Upgrade": "7658e0d5-fc06-4358-9fb8-2d09906d491b",
+  "Twitch - Core - Subscription - New": "d0f4d849-de31-4bd3-ab9d-3deb8f8295ed",
+  "Twitch - Core - Subscription - Pay It Forward": "7b752705-d7bc-4fc7-8fd4-bb1eb43f888f",
+  "Twitch - Core - Subscription - Prime Paid Upgrade": "65cae042-0274-4e66-98ad-c6d199659ee6",
+  "Twitch - Core - Subscription - ReSub": "432049da-5972-4f35-8641-373916ba8b14"
 }

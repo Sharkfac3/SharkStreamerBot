@@ -28,7 +28,7 @@ Apps extend the stream's capabilities beyond what Streamer.bot scripts can do al
 
 ## Status
 
-This role is a placeholder. The `Apps/` domain and specific app architecture are defined as the first apps are built. Update `skills/core.md` and `skills/stream-interactions/_index.md` as decisions are made.
+Active. The stream overlay ecosystem (`Apps/stream-overlay/`) is built and operational. The `Apps/` domain is established. Add new skills as new apps are added.
 
 ## Out of Scope
 

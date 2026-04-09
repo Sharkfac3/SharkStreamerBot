@@ -1,0 +1,21 @@
+{
+  "name": "@stream-overlay/overlay",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@stream-overlay/shared": "workspace:*",
+    "phaser": "^3.90.0",
+    "phaser3-rex-plugins": "^1.80.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11"
+  }
+}

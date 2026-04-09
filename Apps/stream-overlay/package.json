@@ -1,0 +1,11 @@
+{
+  "name": "stream-overlay",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev:overlay": "pnpm --filter overlay dev",
+    "dev:broker": "pnpm --filter broker dev",
+    "build": "pnpm --filter shared build && pnpm --filter overlay build",
+    "typecheck": "pnpm -r typecheck"
+  }
+}

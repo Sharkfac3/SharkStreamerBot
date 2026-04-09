@@ -119,6 +119,57 @@ When implementation begins:
 3. disable all four LotAT timers at stream start before returning runtime state to `idle`
 4. reset JSON globals to safe empty JSON values and scalar globals to safe empty defaults
 
+## Overlay Integration
+
+An overlay visual rendering layer now exists in `Apps/stream-overlay/`.
+The engine does not need to know about the overlay internals — it simply
+publishes `lotat.*` broker messages at the right lifecycle moments and the
+overlay renders them.
+
+### Engine → Overlay integration boundary
+
+The engine **publishes** broker messages; the overlay **subscribes** and renders.
+No reverse communication exists — the overlay never sends back to the engine.
+
+### Messages the engine must publish
+
+All methods are provided in `Actions/LotAT/overlay-publish.cs`.
+Copy the relevant `PublishLotat*` method into each engine script.
+
+| When | Method to call |
+|---|---|
+| Session initialised, join timer started | `PublishLotatSessionStart` + `PublishLotatJoinOpen` |
+| Valid !join processed | `PublishLotatJoinUpdate` |
+| Join timer fires | `PublishLotatJoinClose` |
+| Node entered | `PublishLotatNodeEnter` + `PublishLotatChaosUpdate` (if delta > 0) |
+| Node has commander moment | `PublishLotatCommanderOpen` (after node.enter) |
+| Commander responds | `PublishLotatCommanderClose` (outcome: success) |
+| Commander timer expires | `PublishLotatCommanderClose` (outcome: skipped) |
+| Node has dice hook | `PublishLotatDiceOpen` (after node.enter) |
+| Viewer !rolls | `PublishLotatDiceRoll` |
+| Dice succeeds or timer expires | `PublishLotatDiceClose` |
+| Decision window opens | `PublishLotatVoteOpen` |
+| Valid vote cast | `PublishLotatVoteCast` |
+| Decision resolves | `PublishLotatVoteClose` |
+| Session ends (any reason) | `PublishLotatSessionEnd` |
+
+### Payload contract
+
+All payload shapes are defined in `Apps/stream-overlay/packages/shared/src/protocol.ts`.
+The engine should not invent new fields — only the fields defined there are consumed by the overlay.
+
+### Timing note
+
+`PublishLotatNodeEnter` should be called **before** `PublishLotatCommanderOpen`
+or `PublishLotatDiceOpen` on the same node, so the overlay can display the
+narration text first and then transition into the mechanic panel.
+
+### Full rendering doc
+
+`App-dev` skill: `.agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md`
+
+---
+
 ## Sub-Skills
 
 - `docs-map.md` — high-level navigation map for the LotAT engine docs in this folder

@@ -1,0 +1,15 @@
+{
+  // Shared TypeScript configuration — extended by all packages.
+  // Each package sets its own module/moduleResolution and lib based on its runtime target.
+  "compilerOptions": {
+    "target": "ES2022",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  }
+}

@@ -11,3 +11,10 @@ Tools/ContentPipeline/data/
 
 # python virtual environment
 .venv/
+
+# Apps/stream-overlay — Node/pnpm monorepo
+Apps/stream-overlay/node_modules/
+Apps/stream-overlay/packages/*/node_modules/
+Apps/stream-overlay/packages/*/dist/
+Apps/stream-overlay/packages/*/*.tsbuildinfo
+Apps/stream-overlay/.vite/
