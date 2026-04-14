@@ -74,34 +74,25 @@ They are intentionally minimal so they can be expanded later.
 - No script in this folder interacts with OBS.
 - If a command ID is still a placeholder, the script logs a warning and exits safely.
 
-## Script: `subscription-dispatcher.cs`
+## Dedicated Subscription Scripts (5 scripts, one per event)
 
-### Purpose
-Shared template for the 5 simple subscription events that each map 1-to-1 with a single Mix It Up command. Each Streamer.bot action pastes this file and replaces 2 constants — no extra sub-actions or Set Argument steps required.
+Each of the 5 simple subscription events has its own dedicated script. Every script is self-contained — it names the exact event it handles, lists the trigger args available for that event, and has its own command ID constant. No substitutions or guesswork required when pasting.
 
-### Covered Events
+### Shared behavior across all 5 scripts
+- Wire each script to its Streamer.bot action and trigger (see table below).
+- Replace the `MIXITUP_COMMAND_ID` constant before production use.
+- `BuildArguments()` and `BuildSpecialIdentifiers()` are stubs — expand them when you decide what data to forward to Mix It Up.
+- If the command ID is still a placeholder the script logs a warning and exits safely.
 
-| Streamer.bot Action | SB Trigger | Replace `SCRIPT_NAME` with | Replace `MIXITUP_COMMAND_ID` with |
+| Script | Streamer.bot Action | SB Trigger | Requires SB version |
 |---|---|---|---|
-| Subscription New | Twitch → Subscriptions → Subscription | `"Core - Subscription New"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_NEW_COMMAND_ID"` |
-| Subscription Renewed | Twitch → Subscriptions → Resubscription | `"Core - Subscription Renewed"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_RENEWED_COMMAND_ID"` |
-| Prime Paid Upgrade | Twitch → Subscriptions → Prime Paid Upgrade | `"Core - Subscription Prime Paid Upgrade"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_PRIME_PAID_UPGRADE_COMMAND_ID"` |
-| Gift Paid Upgrade | Twitch → Subscriptions → Gift Paid Upgrade | `"Core - Subscription Gift Paid Upgrade"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_PAID_UPGRADE_COMMAND_ID"` |
-| Pay It Forward | Twitch → Subscriptions → Pay It Forward | `"Core - Subscription Pay It Forward"` | `"REPLACE_WITH_CORE_SUBSCRIPTION_PAY_IT_FORWARD_COMMAND_ID"` |
+| `subscription-new.cs` | Subscription New | Twitch → Subscriptions → Subscription | Any |
+| `subscription-renewed.cs` | Subscription Renewed | Twitch → Subscriptions → Resubscription | Any |
+| `subscription-prime-paid-upgrade.cs` | Prime Paid Upgrade | Twitch → Subscriptions → Prime Paid Upgrade | v0.2.5+ |
+| `subscription-gift-paid-upgrade.cs` | Gift Paid Upgrade | Twitch → Subscriptions → Gift Paid Upgrade | v0.2.5+ |
+| `subscription-pay-it-forward.cs` | Pay It Forward | Twitch → Subscriptions → Pay It Forward | v0.2.5+ |
 
-### Expected Trigger / Input
-- Wire each Streamer.bot action to its corresponding trigger (see table above).
-- Paste `subscription-dispatcher.cs` into the action's C# execute sub-action.
-- Replace `SCRIPT_NAME` and `MIXITUP_COMMAND_ID` at the top of the pasted code.
-
-### Required Runtime Variables
-- None.
-
-### Key Outputs / Side Effects
-- Calls Mix It Up when a real command ID is configured.
-- Logs a warning until a real command ID is configured.
-
-### Mix It Up Actions
+### Mix It Up Actions (all 5 scripts)
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Payload shape:
   - `Platform = "Twitch"`
@@ -120,9 +111,8 @@ Shared template for the 5 simple subscription events that each map 1-to-1 with a
 - Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
 
 ### Operator Notes
-- Replace both placeholder constants when ready.
-- Expand `BuildArguments()` and `BuildSpecialIdentifiers()` when the event field contract is finalized. See the Trigger Variables section below for available args per event.
-- Prime Paid Upgrade, Gift Paid Upgrade, and Pay It Forward require Streamer.bot v0.2.5+.
+- `subscription-dispatcher.cs` is the old shared template these replaced — it can be deleted from Streamer.bot once all 5 dedicated actions are wired.
+- See the Trigger Variables section below for the full list of available args per event.
 
 ---
 
