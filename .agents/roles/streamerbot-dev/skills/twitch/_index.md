@@ -10,9 +10,13 @@ Stream lifecycle events and core Twitch behavior: startup resets, bits integrati
 |---|---|---|
 | Stream Start | `Actions/Twitch Core Integrations/stream-start.cs` | Stream → Go Live |
 | Follower New | `Actions/Twitch Core Integrations/follower-new.cs` | Follow event |
-| Subscription Dispatcher | `Actions/Twitch Core Integrations/subscription-dispatcher.cs` | Subscription event routing |
-| Subscription Gift | `Actions/Twitch Core Integrations/subscription-gift.cs` | Gift sub event |
-| Subscription Counter Rollover | `Actions/Twitch Core Integrations/subscription-counter-rollover.cs` | Subscription counter maintenance |
+| Subscription New | `Actions/Twitch Core Integrations/subscription-new.cs` | Twitch → Subscriptions → Subscription |
+| Subscription Renewed | `Actions/Twitch Core Integrations/subscription-renewed.cs` | Twitch → Subscriptions → Resubscription |
+| Subscription Prime Paid Upgrade | `Actions/Twitch Core Integrations/subscription-prime-paid-upgrade.cs` | Twitch → Subscriptions → Prime Paid Upgrade (SB v0.2.5+) |
+| Subscription Gift Paid Upgrade | `Actions/Twitch Core Integrations/subscription-gift-paid-upgrade.cs` | Twitch → Subscriptions → Gift Paid Upgrade (SB v0.2.5+) |
+| Subscription Pay It Forward | `Actions/Twitch Core Integrations/subscription-pay-it-forward.cs` | Twitch → Subscriptions → Pay It Forward (SB v0.2.5+) |
+| Subscription Gift | `Actions/Twitch Core Integrations/subscription-gift.cs` | Gift Subscription + Gift Bomb (dual-trigger, one action) |
+| Subscription Counter Rollover | `Actions/Twitch Core Integrations/subscription-counter-rollover.cs` | Twitch → Subscriptions → Sub Counter Rollover |
 | Bits Tier 1–4 | `Actions/Twitch Bits Integrations/bits-tier-*.cs` | Cheer event (by tier) |
 
 ## Detailed Docs

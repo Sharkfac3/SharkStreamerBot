@@ -19,14 +19,21 @@
 
 ## Subscriptions
 
-`Actions/Twitch Core Integrations/subscription-new.cs`
-`Actions/Twitch Core Integrations/subscription-renewed.cs`
-`Actions/Twitch Core Integrations/subscription-gift-single.cs`
-`Actions/Twitch Core Integrations/subscription-gift-multiple.cs`
+Each subscription event has its own dedicated script. All are currently stubs —
+`BuildArguments()` and `BuildSpecialIdentifiers()` return empty until event field contracts are finalized.
 
-- All four are currently stubs — `BuildArguments()` and `BuildSpecialIdentifiers()` are placeholders
-- Expand when event field contracts are finalized
-- Trigger variables: see `Actions/Twitch Core Integrations/README.md`
+| Script | Event |
+|---|---|
+| `Actions/Twitch Core Integrations/subscription-new.cs` | First-time sub (viewer paid directly) |
+| `Actions/Twitch Core Integrations/subscription-renewed.cs` | Resub (viewer renewing their existing sub) |
+| `Actions/Twitch Core Integrations/subscription-prime-paid-upgrade.cs` | Prime sub converted to paid tier (SB v0.2.5+) |
+| `Actions/Twitch Core Integrations/subscription-gift-paid-upgrade.cs` | Gifted sub converted to paid by recipient (SB v0.2.5+) |
+| `Actions/Twitch Core Integrations/subscription-pay-it-forward.cs` | Gifted sub recipient gifts to someone else (SB v0.2.5+) |
+| `Actions/Twitch Core Integrations/subscription-gift.cs` | Gift subs — smart router handling solo gifts, gift bombs, and bomb deduplication |
+| `Actions/Twitch Core Integrations/subscription-counter-rollover.cs` | Sub counter milestone — counter event, no user context |
+
+- Each script has its own `MIXITUP_COMMAND_ID` constant — replace before production use
+- Trigger variables for each event: see `Actions/Twitch Core Integrations/README.md`
 
 ## Full Trigger Variable Reference
 
