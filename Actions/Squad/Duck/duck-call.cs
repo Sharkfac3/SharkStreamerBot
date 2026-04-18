@@ -18,8 +18,6 @@ public class CPHInline
     private const string VAR_DUCK_UNIQUE_QUACKERS = "duck_unique_quackers";
     private const string VAR_DUCK_UNIQUE_QUACKER_COUNT = "duck_unique_quacker_count";
     private const string TIMER_DUCK_CALL_WINDOW = "Duck - Call Window";
-    private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
-    private const string OBS_SOURCE_DUCK_DANCING = "Duck - Dancing";
 
     // Shared mini-game lock (cross-feature).
     private const string VAR_MINIGAME_ACTIVE = "minigame_active";
@@ -28,7 +26,7 @@ public class CPHInline
 
     // Mix It Up unlock bridge for Duck unlock events.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_DUCK_UNLOCK_COMMAND_ID = "d311b1c1-943a-44cb-9749-b189d1dbd08b";
+    private const string MIXITUP_DUCK_UNLOCK_COMMAND_ID = "c77405db-ac86-454e-bc86-5ff262da0a9a";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
     // Shared unlock pacing rule:
@@ -113,7 +111,6 @@ public class CPHInline
         if (!alreadyUnlocked)
         {
             CPH.SetGlobalVar(VAR_DUCK_UNLOCKED, true, false);
-            ShowDuckDancingSource();
 
             bool unlockTriggered = TriggerMixItUpUnlock();
             if (unlockTriggered)
@@ -203,23 +200,6 @@ public class CPHInline
         }
 
         return count;
-    }
-
-    /// <summary>
-    /// Shows the Duck dancing source in OBS.
-    /// Uses hide -> show to avoid stale visibility cache behavior.
-    /// </summary>
-    private void ShowDuckDancingSource()
-    {
-        try
-        {
-            CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
-            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
-        }
-        catch (Exception ex)
-        {
-            CPH.LogError($"[Squad Duck] OBS show failed for '{OBS_SOURCE_DUCK_DANCING}' in scene '{OBS_SCENE_DISCO_WORKSPACE}': {ex}");
-        }
     }
 
     /// <summary>

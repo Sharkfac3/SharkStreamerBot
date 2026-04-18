@@ -17,8 +17,6 @@ public class CPHInline
     private const string VAR_PEDRO_UNLOCKED = "pedro_unlocked";
     private const string VAR_PEDRO_NEXT_ALLOWED_UTC = "pedro_next_allowed_utc";
     private const string TIMER_PEDRO_CALL_WINDOW = "Pedro - Call Window";
-    private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
-    private const string OBS_SOURCE_PEDRO_DANCING = "Pedro - Dancing";
 
     // Shared mini-game lock (cross-feature).
     private const string VAR_MINIGAME_ACTIVE = "minigame_active";
@@ -30,7 +28,7 @@ public class CPHInline
 
     // Mix It Up unlock bridge for Pedro unlock events.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39";
+    private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "0ffb09da-7104-4062-a6c5-c26c01e49582";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
     // Shared unlock pacing rule:
@@ -89,9 +87,6 @@ public class CPHInline
         {
             CPH.SetGlobalVar(VAR_PEDRO_UNLOCKED, true, false);
 
-            // Use a small visibility refresh (hide -> show) to avoid stale OBS scene-item state.
-            ShowPedroDancingSource();
-
             bool unlockTriggered = TriggerMixItUpUnlock();
 
             if (unlockTriggered)
@@ -115,23 +110,6 @@ public class CPHInline
     {
         string value = nextAllowedUtc.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
         CPH.SetGlobalVar(VAR_PEDRO_NEXT_ALLOWED_UTC, value, false);
-    }
-
-    /// <summary>
-    /// Shows the Pedro dancing source in OBS.
-    /// Uses hide -> show to avoid stale visibility cache behavior.
-    /// </summary>
-    private void ShowPedroDancingSource()
-    {
-        try
-        {
-            CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
-            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
-        }
-        catch (Exception ex)
-        {
-            CPH.LogError($"[Squad Pedro] OBS show failed for '{OBS_SOURCE_PEDRO_DANCING}' in scene '{OBS_SCENE_DISCO_WORKSPACE}': {ex}");
-        }
     }
 
     /// <summary>

@@ -13,7 +13,7 @@ public class CPHInline
     private const string TIMER_TEMP_FOCUS = "Temp Focus Timer";
 
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_TEMPORARY_LOCK_IN_TIMER_COMMAND_ID = "751c2879-4626-4a28-b06f-13a1c520eecf";
+    private const string MIXITUP_TEMPORARY_LOCK_IN_TIMER_COMMAND_ID = "REPLACE_WITH_TEMPORARY_LOCK_IN_TIMER_COMMAND_ID";
 
     private static readonly HttpClient Http = new HttpClient();
 

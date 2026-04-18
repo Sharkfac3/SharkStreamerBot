@@ -20,7 +20,7 @@ public class CPHInline
     private const int SHRIMP_COOLDOWN_MINUTES = 1;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_COMMAND_ID = "0bdb0c8c-20eb-423e-bf59-e4e2f0b33217";
+    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_CAPTAIN_STRETCH_SHRIMP_COMMAND_ID";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
     private static readonly HttpClient Http = new HttpClient();

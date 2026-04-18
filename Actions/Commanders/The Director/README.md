@@ -26,7 +26,7 @@ Assigns the current The Director commander slot occupant, finalizes the outgoing
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `3bc35b73-da10-409e-bf4b-7ca59f980088`
+- Command ID in script: `REPLACE_WITH_DIRECTOR_REDEEM_COMMAND_ID` *(placeholder; must be replaced)*
 - Payload `Arguments`: new The Director username
 - Payload `SpecialIdentifiers.user`: new The Director username
 - Payload `SpecialIdentifiers.commander`: new The Director username
@@ -152,7 +152,7 @@ Handles The Director-only `!toad` command usage.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `REPLACE_WITH_DIRECTOR_TOAD_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID in script: `5440fa4e-b84e-438a-a409-f398b637f3e7`
 - Payload `Arguments`: validated `!toad` text (optional, max 30 words)
 - Payload `SpecialIdentifiers.type`:
   - Default value: `"normal"`
@@ -169,5 +169,5 @@ Handles The Director-only `!toad` command usage.
 - Logs warning/error if Mix It Up call fails.
 
 ### Operator Notes
-- Replace `MIXITUP_COMMAND_ID` placeholder before production use.
+- Current command ID is configured from the saved Mix It Up command export.
 - Wire this script to the `!toad` command trigger action.

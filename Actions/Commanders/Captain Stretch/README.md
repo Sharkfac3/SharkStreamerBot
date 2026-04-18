@@ -26,7 +26,7 @@ Assigns the current Captain Stretch commander slot occupant, finalizes the outgo
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `b6cf100f-aa07-47ea-b650-2715719ea434`
+- Command ID in script: `REPLACE_WITH_CAPTAIN_STRETCH_REDEEM_COMMAND_ID` *(placeholder; must be replaced)*
 - Payload `Arguments`: new Captain Stretch username
 - Payload `SpecialIdentifiers.user`: new Captain Stretch username
 - Payload `SpecialIdentifiers.commander`: new Captain Stretch username

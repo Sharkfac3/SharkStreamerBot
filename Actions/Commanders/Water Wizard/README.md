@@ -26,7 +26,7 @@ Assigns the current Water Wizard commander slot occupant, finalizes the outgoing
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `f7ab01c0-780c-4f17-9020-835d91764a9c`
+- Command ID in script: `REPLACE_WITH_WATER_WIZARD_REDEEM_COMMAND_ID` *(placeholder; must be replaced)*
 - Payload `Arguments`: new Water Wizard username
 - Payload `SpecialIdentifiers.user`: new Water Wizard username
 - Payload `SpecialIdentifiers.commander`: new Water Wizard username
@@ -205,7 +205,7 @@ Handles Water Wizard-only `!orb` command usage.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `REPLACE_WITH_WATER_WIZARD_ORB_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID in script: `6b00a684-8fd4-404c-81b0-c279f241af73`
 - Payload `Arguments`: validated orb text (optional, max 30 words)
 
 ### OBS Interactions
@@ -219,5 +219,5 @@ Handles Water Wizard-only `!orb` command usage.
 - Logs warning/error if Mix It Up call fails.
 
 ### Operator Notes
-- Replace `MIXITUP_COMMAND_ID` placeholder before production use.
+- Current command ID is configured from the saved Mix It Up command export.
 - Wire this script to the `!orb` command trigger action.

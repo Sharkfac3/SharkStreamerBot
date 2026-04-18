@@ -22,8 +22,6 @@ public class CPHInline
     private const string VAR_CLONE_WINNERS = "clone_winners";
     private const string VAR_CLONE_ROUND1_POOL = "clone_round1_pool";
     private const string TIMER_CLONE_VOLLEY = "Clone - Volley Timer";
-    private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
-    private const string OBS_SOURCE_CLONE_DANCING = "Clone - Dancing";
 
     // Shared mini-game lock (cross-feature).
     private const string VAR_MINIGAME_ACTIVE = "minigame_active";
@@ -56,7 +54,7 @@ public class CPHInline
 
     // Mix It Up unlock bridge for Clone unlock events.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_CLONE_UNLOCK_COMMAND_ID = "4681be93-409a-4110-bfdb-7a7aa32df63a";
+    private const string MIXITUP_CLONE_UNLOCK_COMMAND_ID = "REPLACE_WITH_CLONE_UNLOCK_COMMAND_ID";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
     // Shared unlock pacing rule:
@@ -162,9 +160,6 @@ public class CPHInline
 
             CPH.SetGlobalVar(VAR_CLONE_UNLOCKED, true, false);
 
-            // Use a small visibility refresh (hide -> show) to avoid stale OBS scene-item state.
-            ShowCloneDancingSource();
-
             // Notify Mix It Up for unlock side-effects.
             bool unlockTriggered = TriggerMixItUpUnlock();
 
@@ -209,23 +204,6 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_CLONE_GAME_ACTIVE, false, false);
         ReleaseMiniGameLockIfOwned();
         CPH.DisableTimer(timerName);
-    }
-
-    /// <summary>
-    /// Shows the Clone dancing source in OBS.
-    /// Uses hide -> show to avoid stale visibility cache behavior.
-    /// </summary>
-    private void ShowCloneDancingSource()
-    {
-        try
-        {
-            CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
-            CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
-        }
-        catch (Exception ex)
-        {
-            CPH.LogError($"[Squad Clone] OBS show failed for '{OBS_SOURCE_CLONE_DANCING}' in scene '{OBS_SCENE_DISCO_WORKSPACE}': {ex}");
-        }
     }
 
     /// <summary>

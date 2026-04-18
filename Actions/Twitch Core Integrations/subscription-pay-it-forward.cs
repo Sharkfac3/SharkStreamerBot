@@ -31,15 +31,15 @@ public class CPHInline
      *   2. Wire the action to: Twitch → Subscriptions → Pay It Forward
      *   3. Confirm your Streamer.bot version is 0.2.5 or later — this trigger does not
      *      exist in earlier versions.
-     *   4. Replace MIXITUP_COMMAND_ID below with your real Mix It Up command ID.
+     *   4. Confirm MIXITUP_COMMAND_ID still matches your Mix It Up command export.
      *   5. Expand BuildArguments / BuildSpecialIdentifiers if additional args become
      *      available or if you want to forward user info.
      */
 
     private const string SCRIPT_NAME = "Core - Subscription Pay It Forward";
 
-    // OPERATOR: Replace with your real Mix It Up command ID for pay-it-forward events.
-    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_CORE_SUBSCRIPTION_PAY_IT_FORWARD_COMMAND_ID";
+    // Mix It Up command ID for pay-it-forward events.
+    private const string MIXITUP_COMMAND_ID = "f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207";
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";

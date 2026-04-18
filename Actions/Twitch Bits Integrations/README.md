@@ -21,7 +21,7 @@ Forwards Tier 1 cheer text to Mix It Up with sanitization and TTS pacing wait.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_TIER_1_COMMAND_ID` *(placeholder in script; not configured yet)*
+- Command ID: `cdca2818-49c3-43e0-ab2f-cfdce55ac16c`
 - Payload `Arguments`: full cheer text from `messageStripped` when available (no word cap)
 
 ### OBS Interactions
@@ -35,7 +35,7 @@ Forwards Tier 1 cheer text to Mix It Up with sanitization and TTS pacing wait.
 - Sends no chat output.
 
 ### Operator Notes
-- Replace placeholder command ID before production use.
+- Current command ID is configured from the saved Mix It Up command export.
 
 ---
 
@@ -58,7 +58,7 @@ Forwards Tier 2 cheer text to Mix It Up with a 250-word cap.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_TIER_2_COMMAND_ID` *(placeholder in script; not configured yet)*
+- Command ID: `aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0`
 - Payload `Arguments`: cheer text from `messageStripped` when available, capped to first 250 words
 
 ### OBS Interactions
@@ -72,7 +72,7 @@ Forwards Tier 2 cheer text to Mix It Up with a 250-word cap.
 - Sends no chat output.
 
 ### Operator Notes
-- Replace placeholder command ID before production use.
+- Current command ID is configured from the saved Mix It Up command export.
 
 ---
 
@@ -95,7 +95,7 @@ Forwards Tier 3 cheer text to Mix It Up with a 100-word cap.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `23f1afd1-7375-475d-afee-058ef4f7f68d`
+- Command ID: `6d05a5c6-6cd9-471b-9358-18dde2df4318`
 - Payload `Arguments`: cheer text from `messageStripped` when available, capped to first 100 words
 
 ### OBS Interactions
@@ -132,7 +132,7 @@ Forwards Tier 4 cheer text to Mix It Up with a 10-word cap.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `3a83b335-ae69-425c-b4d2-a52d1734a9f7`
+- Command ID: `35405bfe-660f-46f2-bec6-8a1da9ec1af2`
 - Payload `Arguments`: cheer text from `messageStripped` when available, capped to first 10 words
 
 ### OBS Interactions
@@ -173,7 +173,7 @@ Handles the `gigantify emote` automatic reward redemption by calling a Mix It Up
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `29d47997-6075-412d-88a0-43619b59bcfd`
+- Command ID: `REPLACE_WITH_GIGANTIFY_EMOTE_COMMAND_ID` *(placeholder; must be replaced)*
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = "whos that emote?"`
@@ -191,7 +191,7 @@ Handles the `gigantify emote` automatic reward redemption by calling a Mix It Up
 - Logs warning/error messages when the Mix It Up call fails.
 
 ### Operator Notes
-- Current command ID is configured from the saved Mix It Up command export.
+- Replace the placeholder command ID after the matching Mix It Up action group is created and appears in the saved Mix It Up command export.
 - Wire this script to `Twitch -> Channel Reward -> Automatic Reward Redemption`.
 - Filter the action so it only runs for the `gigantify emote` automatic reward.
 
@@ -224,7 +224,7 @@ Handles the `message effects` automatic reward redemption by forwarding the rede
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `28397ebb-7a68-4a52-b448-3044a811c008`
+- Command ID: `REPLACE_WITH_MESSAGE_EFFECTS_COMMAND_ID` *(placeholder; must be replaced)*
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = "<userInput text>"`
@@ -242,7 +242,7 @@ Handles the `message effects` automatic reward redemption by forwarding the rede
 - Logs warning/error messages when the Mix It Up call fails or when `userInput` is blank.
 
 ### Operator Notes
-- Current command ID is configured from the saved Mix It Up command export.
+- Replace the placeholder command ID after the matching Mix It Up action group is created and appears in the saved Mix It Up command export.
 - Wire this script to `Twitch -> Channel Reward -> Automatic Reward Redemption`.
 - Filter the action so it only runs for the `message effects` automatic reward.
 
@@ -266,7 +266,7 @@ Handles the `on screen celebration` automatic reward redemption by calling a Mix
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `3b9123d2-8d22-40f0-ad9b-baf6530388ee`
+- Command ID: `REPLACE_WITH_ON_SCREEN_CELEBRATION_COMMAND_ID` *(placeholder; must be replaced)*
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
@@ -284,6 +284,6 @@ Handles the `on screen celebration` automatic reward redemption by calling a Mix
 - Logs warning/error messages when the Mix It Up call fails.
 
 ### Operator Notes
-- Current command ID is configured from the saved Mix It Up command export.
+- Replace the placeholder command ID after the matching Mix It Up action group is created and appears in the saved Mix It Up command export.
 - Wire this script to `Twitch -> Channel Reward -> Automatic Reward Redemption`.
 - Filter the action so it only runs for the `on screen celebration` automatic reward.

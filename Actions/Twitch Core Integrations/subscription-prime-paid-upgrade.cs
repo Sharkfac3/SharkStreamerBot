@@ -31,15 +31,15 @@ public class CPHInline
      *   2. Wire the action to: Twitch → Subscriptions → Prime Paid Upgrade
      *   3. Confirm your Streamer.bot version is 0.2.5 or later — this trigger does not
      *      exist in earlier versions.
-     *   4. Replace MIXITUP_COMMAND_ID below with your real Mix It Up command ID.
+     *   4. Confirm MIXITUP_COMMAND_ID still matches your Mix It Up command export.
      *   5. Expand BuildArguments / BuildSpecialIdentifiers when you decide
      *      which trigger args to forward (e.g. user, upgradeTierString).
      */
 
     private const string SCRIPT_NAME = "Core - Subscription Prime Paid Upgrade";
 
-    // OPERATOR: Replace with your real Mix It Up command ID for Prime-to-paid upgrades.
-    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_CORE_SUBSCRIPTION_PRIME_PAID_UPGRADE_COMMAND_ID";
+    // Mix It Up command ID for Prime-to-paid upgrades.
+    private const string MIXITUP_COMMAND_ID = "eabfb607-a4f3-4c45-b26f-1968c3f3f1e7";
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";

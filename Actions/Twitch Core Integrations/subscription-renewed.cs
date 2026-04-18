@@ -31,15 +31,15 @@ public class CPHInline
      * Operator steps:
      *   1. Paste this script into the "Subscription Renewed" Streamer.bot action.
      *   2. Wire the action to: Twitch → Subscriptions → Resubscription
-     *   3. Replace MIXITUP_COMMAND_ID below with your real Mix It Up command ID.
+     *   3. Confirm MIXITUP_COMMAND_ID still matches your Mix It Up command export.
      *   4. Expand BuildArguments / BuildSpecialIdentifiers when you decide
      *      which trigger args to forward (e.g. cumulative, monthStreak, tier).
      */
 
     private const string SCRIPT_NAME = "Core - Subscription Renewed";
 
-    // OPERATOR: Replace with your real Mix It Up command ID for resubscriptions.
-    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_CORE_SUBSCRIPTION_RENEWED_COMMAND_ID";
+    // Mix It Up command ID for resubscriptions.
+    private const string MIXITUP_COMMAND_ID = "4af70639-67b5-4d83-8da1-7be0afe1ce76";
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";

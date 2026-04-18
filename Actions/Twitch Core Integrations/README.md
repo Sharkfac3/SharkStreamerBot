@@ -69,7 +69,7 @@ They are intentionally minimal so they can be expanded later.
 ### Shared Behavior
 - All scripts are Streamer.bot C# action scripts.
 - All scripts are prepared to call the Mix It Up Run Command API.
-- All scripts currently use placeholder command IDs.
+- Subscription scripts in this folder now use configured Mix It Up command IDs; some non-subscription helpers may still use placeholders until they are wired.
 - All scripts currently send an empty `SpecialIdentifiers` object.
 - No script in this folder interacts with OBS.
 - If a command ID is still a placeholder, the script logs a warning and exits safely.
@@ -80,9 +80,9 @@ Each of the 5 simple subscription events has its own dedicated script. Every scr
 
 ### Shared behavior across all 5 scripts
 - Wire each script to its Streamer.bot action and trigger (see table below).
-- Replace the `MIXITUP_COMMAND_ID` constant before production use.
+- Each script already includes its configured Mix It Up command ID.
 - `BuildArguments()` and `BuildSpecialIdentifiers()` are stubs — expand them when you decide what data to forward to Mix It Up.
-- If the command ID is still a placeholder the script logs a warning and exits safely.
+- If a command ID is ever cleared or replaced with a placeholder, the script logs a warning and exits safely.
 
 | Script | Streamer.bot Action | SB Trigger | Requires SB version |
 |---|---|---|---|
@@ -94,6 +94,12 @@ Each of the 5 simple subscription events has its own dedicated script. Every scr
 
 ### Mix It Up Actions (all 5 scripts)
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Configured command IDs:
+  - `subscription-new.cs` → `4e5b04b7-b5c6-4b17-a6dd-e90efce4a591`
+  - `subscription-renewed.cs` → `4af70639-67b5-4d83-8da1-7be0afe1ce76`
+  - `subscription-prime-paid-upgrade.cs` → `eabfb607-a4f3-4c45-b26f-1968c3f3f1e7`
+  - `subscription-gift-paid-upgrade.cs` → `0bcd98e5-79a4-4767-8e60-58a747d7b7a1`
+  - `subscription-pay-it-forward.cs` → `f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207`
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
@@ -151,7 +157,9 @@ Paste `subscription-gift.cs` into the action once. No Set Argument steps needed.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command IDs: `REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_SINGLE_COMMAND_ID`, `REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_BOMB_COMMAND_ID`
+- Command IDs:
+  - Single gift → `ce197b79-89d1-4943-8f74-b1a690f5a8e4`
+  - Gift bomb → `27111920-c34b-4991-b284-57d655a20195`
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
@@ -170,7 +178,6 @@ Paste `subscription-gift.cs` into the action once. No Set Argument steps needed.
 - Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
 
 ### Operator Notes
-- Replace both `MIXITUP_COMMAND_ID_GIFT_SINGLE` and `MIXITUP_COMMAND_ID_GIFT_BOMB` before production use.
 - Expand `BuildSingleArguments()` / `BuildBombArguments()` when the event field contracts are finalized. See the Trigger Variables section below for available args.
 - The old "Subscription Gift Multiple" Streamer.bot action can be deleted — its function is now handled by this script's Gift Bomb branch.
 
@@ -254,6 +261,55 @@ Base handler for a Sub Counter Rollover event — fires when Streamer.bot's inte
 - Add argument/special identifier mapping later when the event contract is finalized.
 - This is a counter event, not a per-user event — Twitch Chat and Twitch User variable groups are NOT available.
 - Available trigger args: `rollover` (number — configured threshold), `rolloverCount` (number — times threshold hit), `subCounter` (number — current counter value).
+
+---
+
+## Script: `watch-streak.cs`
+
+### Purpose
+Forwards Twitch watch streak data to Mix It Up when a viewer shares their consecutive stream watch streak in chat. This is the first script to use **populated special identifiers** rather than an empty object.
+
+### Expected Trigger / Input
+- Wire to: Twitch → Chat → Watch Streak (requires Chat Client v0.2.4+)
+
+### Required Runtime Variables
+- None.
+
+### Key Outputs / Side Effects
+- Reads `user`, `watchStreak`, and `systemMessage` from Streamer.bot trigger args.
+- Forwards them to Mix It Up as special identifiers.
+
+### Mix It Up Actions
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Command ID: `d2d21a86-189c-4a52-8df2-f9d46141af3d`
+- Payload shape:
+  - `Platform = "Twitch"`
+  - `Arguments = ""`
+  - `SpecialIdentifiers = { watchstreakuser, watchstreakmessage, watchstreakcount }`
+  - `IgnoreRequirements = false`
+
+### Special Identifiers (Mix It Up)
+| Key | Source | Mix It Up usage |
+|---|---|---|
+| `watchstreakuser` | `user` trigger arg | `$watchstreakuser` |
+| `watchstreakmessage` | `systemMessage` trigger arg | `$watchstreakmessage` |
+| `watchstreakcount` | `watchStreak` trigger arg (as string) | `$watchstreakcount` |
+
+### OBS Interactions
+- None.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- No chat output.
+- Logs info message with the user and streak count.
+- Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
+
+### Operator Notes
+- Current command ID is configured from the saved Mix It Up command export.
+- In Mix It Up, create a command that references `$watchstreakuser`, `$watchstreakmessage`, and `$watchstreakcount`.
+- This is the first Twitch Core script to use populated special identifiers — use it as a reference pattern for backfilling the subscription and follower scripts.
 
 ---
 
@@ -404,5 +460,18 @@ Triggered under Twitch → Subscriptions → Sub Counter Rollover.
 | `subCounter` | number | The current sub counter value (e.g. `20`) |
 
 > This is a counter event — Twitch Chat and Twitch User variable groups are NOT available. Only General and Twitch Broadcaster shared groups apply.
+
+### Watch Streak
+
+Triggered under Twitch → Chat → Watch Streak (Chat Client v0.2.4+).
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the viewer sharing their streak |
+| `userId` | string | Twitch user ID |
+| `watchStreak` | int | Number of consecutive streams watched |
+| `watchStreakId` | string | Unique identifier for this streak event |
+| `copoReward` | int | Channel points Twitch awarded for the streak |
+| `systemMessage` | string | Twitch's system message (e.g. "User watched 5 consecutive streams...") |
 
 > All subscription scripts are currently stubs — expand the `Build*Arguments()` and `Build*SpecialIdentifiers()` methods when event field contracts are finalized. See each script's operator notes for which trigger args are available.

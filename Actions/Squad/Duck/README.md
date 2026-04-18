@@ -69,7 +69,7 @@ Counts `quack` occurrences in chat while Duck event is active and unlocks Duck i
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `d311b1c1-943a-44cb-9749-b189d1dbd08b`
+- Command ID: `c77405db-ac86-454e-bc86-5ff262da0a9a`
 - Payload `Arguments`: empty string (`""`)
 - Called only on first-time unlock.
 

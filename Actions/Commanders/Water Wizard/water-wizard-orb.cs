@@ -20,7 +20,7 @@ public class CPHInline
     private const int ORB_COOLDOWN_MINUTES = 1;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_COMMAND_ID = "a28f6866-c5e6-49ce-bd58-b52a76fcb2c8";
+    private const string MIXITUP_COMMAND_ID = "6b00a684-8fd4-404c-81b0-c279f241af73";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
     private static readonly HttpClient Http = new HttpClient();

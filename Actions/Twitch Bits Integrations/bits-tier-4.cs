@@ -46,7 +46,7 @@ public class CPHInline
 
     // Verified Mix It Up command ID from Tools/MixItUp/Api/data/mixitup-commands.txt
     // Action Group: Twitch - Bits - Tier 4
-    private const string MIXITUP_COMMAND_ID = "3a83b335-ae69-425c-b4d2-a52d1734a9f7";
+    private const string MIXITUP_COMMAND_ID = "35405bfe-660f-46f2-bec6-8a1da9ec1af2";
 
     // Tier 4 maximum number of words sent to Mix It Up.
     private const int MAX_WORDS = 10;

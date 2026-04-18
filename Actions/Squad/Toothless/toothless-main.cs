@@ -12,7 +12,6 @@ public class CPHInline
     // - Actions/Squad/Toothless/toothless-main.cs
     // - Actions/Squad/offering.cs
     // - Actions/Twitch Core Integrations/stream-start.cs
-    private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
     private const string MEMBER_TOOTHLESS = "toothless";
     private const string PREFIX_BOOST = "boost_";
     private const string PREFIX_RARITY = "rarity_";
@@ -48,11 +47,11 @@ public class CPHInline
 
     // Mix It Up unlock bridge for Toothless rarity unlock events.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_REGULAR = "623c2524-0509-45fb-a759-362edf2543b3";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_SMOL = "46ab64e0-6682-442a-83fa-d7e265274919";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_LONG = "c00976c4-ddde-4f56-833a-7551fc106788";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT = "2e0b400a-291c-4d8e-b97e-ced7c7b036e3";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY = "e57d1f2d-716d-41b2-bfbe-d9a8e7974ecb";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_REGULAR = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_REGULAR";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_SMOL = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_SMOL";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_LONG = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_LONG";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
     // Shared unlock pacing rule:
@@ -121,10 +120,6 @@ public class CPHInline
 
                 // Boost is consumed on successful new unlock.
                 CPH.SetGlobalVar(boostKey, 0, false);
-
-                // Make the unlocked variant visible in Disco workspace scene.
-                string dancingSourceName = $"Toothless - Dancing - {rarity}";
-                CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, dancingSourceName);
 
                 // Inform Mix It Up using per-rarity command mapping.
                 bool unlockTriggered = TriggerMixItUpUnlock(rarity);

@@ -30,7 +30,7 @@ public class CPHInline
 
     // Mix It Up unlock bridge for Pedro unlock events.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "a43a1ecd-1607-4dc2-9ae2-fe96f0566f39";
+    private const string MIXITUP_PEDRO_UNLOCK_COMMAND_ID = "0ffb09da-7104-4062-a6c5-c26c01e49582";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
     // Shared unlock pacing rule:

@@ -41,8 +41,7 @@ public class CPHInline
      * - Does not interact with OBS.
      *
      * Operator notes:
-     * - Replace both MIXITUP_COMMAND_ID_GIFT_SINGLE and MIXITUP_COMMAND_ID_GIFT_BOMB
-     *   before production use.
+     * - Confirm both Mix It Up command IDs still match your latest Mix It Up export.
      * - Expand BuildSingleArguments / BuildBombArguments when the final event
      *   field contracts are decided. Refer to README.md for available trigger args.
      * - The "gifts" arg is only injected by the Gift Bomb trigger — this is how
@@ -51,11 +50,11 @@ public class CPHInline
 
     private const string SCRIPT_NAME = "Core - Subscription Gift";
 
-    // OPERATOR: Replace with the real Mix It Up command ID for a single gifted sub.
-    private const string MIXITUP_COMMAND_ID_GIFT_SINGLE = "REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_SINGLE_COMMAND_ID";
+    // Mix It Up command ID for a single gifted sub.
+    private const string MIXITUP_COMMAND_ID_GIFT_SINGLE = "ce197b79-89d1-4943-8f74-b1a690f5a8e4";
 
-    // OPERATOR: Replace with the real Mix It Up command ID for a gift bomb aggregate.
-    private const string MIXITUP_COMMAND_ID_GIFT_BOMB = "REPLACE_WITH_CORE_SUBSCRIPTION_GIFT_BOMB_COMMAND_ID";
+    // Mix It Up command ID for a gift bomb aggregate.
+    private const string MIXITUP_COMMAND_ID_GIFT_BOMB = "27111920-c34b-4991-b284-57d655a20195";
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";

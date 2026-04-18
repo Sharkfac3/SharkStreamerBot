@@ -39,7 +39,7 @@ Handles the `!pedro` command entrypoint.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `a43a1ecd-1607-4dc2-9ae2-fe96f0566f39`
+- Command ID: `0ffb09da-7104-4062-a6c5-c26c01e49582`
 - Payload `Arguments`: empty string (`""`)
 - Uses `IgnoreRequirements = false`
 - Called only when command message is exactly `x500livepedro`.
@@ -133,7 +133,7 @@ Ends Pedro event and resolves success/failure at timer end.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `a43a1ecd-1607-4dc2-9ae2-fe96f0566f39`
+- Command ID: `0ffb09da-7104-4062-a6c5-c26c01e49582`
 - Payload `Arguments`: empty string (`""`)
 - Uses `IgnoreRequirements = false`
 - Called on resolve success when mentions > 100.

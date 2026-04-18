@@ -24,7 +24,7 @@ public class CPHInline
 
     // Mix It Up wiring for the commander redeem celebration.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_COMMAND_ID = "f7ab01c0-780c-4f17-9020-835d91764a9c";
+    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_WATER_WIZARD_REDEEM_COMMAND_ID";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();

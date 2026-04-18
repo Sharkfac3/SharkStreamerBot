@@ -38,15 +38,15 @@ public class CPHInline
      * - Waits based on text length so TTS can finish before next queue item.
      *
      * Operator notes:
-     * - Replace MIXITUP_COMMAND_ID with the Tier 2 command ID from Mix It Up.
+     * - MIXITUP_COMMAND_ID is configured from Tools/MixItUp/Api/data/mixitup-commands.txt.
      */
 
     // Mix It Up local API base URL (default local host/port for Mix It Up app).
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
 
-    // Placeholder command ID for this tier.
-    // IMPORTANT: Replace before using in production.
-    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_TIER_2_COMMAND_ID";
+    // Verified Mix It Up command ID from Tools/MixItUp/Api/data/mixitup-commands.txt
+    // Action Group: Twitch - Bits - Tier 2
+    private const string MIXITUP_COMMAND_ID = "aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0";
 
     // Tier 2 maximum number of words sent to Mix It Up.
     private const int MAX_WORDS = 250;

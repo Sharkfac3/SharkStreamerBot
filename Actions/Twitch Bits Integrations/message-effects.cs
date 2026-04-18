@@ -23,9 +23,9 @@ public class CPHInline
     // Mix It Up API constants.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
 
-    // Verified Mix It Up command ID from Tools/MixItUp/Api/data/mixitup-commands.txt
+    // Placeholder until this action group exists in Tools/MixItUp/Api/data/mixitup-commands.txt.
     // Action Group: Twitch - Bits - Message Effects
-    private const string MIXITUP_MESSAGE_EFFECTS_COMMAND_ID = "28397ebb-7a68-4a52-b448-3044a811c008";
+    private const string MIXITUP_MESSAGE_EFFECTS_COMMAND_ID = "REPLACE_WITH_MESSAGE_EFFECTS_COMMAND_ID";
 
     // Reuse one HttpClient instance for reliability.
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
