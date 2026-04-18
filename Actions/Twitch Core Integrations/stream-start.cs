@@ -80,6 +80,10 @@ public class CPHInline
     private const string VAR_STREAM_MODE = "stream_mode";
     private const string MODE_WORKSPACE = "workspace";
 
+    // Disco Party channel point redeem
+    private const string VAR_DISCO_PARTY_ACTIVE     = "disco_party_active";
+    private const string VAR_DISCO_PARTY_PREV_SCENE = "disco_party_prev_scene";
+
     // Rest / Focus loop
     private const string VAR_REST_FOCUS_LOOP_ACTIVE = "rest_focus_loop_active";
     private const string VAR_REST_FOCUS_LOOP_PHASE = "rest_focus_loop_phase";
@@ -113,6 +117,7 @@ public class CPHInline
      * - Resets the rest/focus loop active flag, phase, and timers.
      * - Disables the temporary Temp Focus Timer to prevent stale timer fires.
      * - Sets stream mode to workspace as the default start-of-stream mode.
+     * - Resets disco_party_active and disco_party_prev_scene so a stale mid-sequence lock cannot carry over.
      * - Hides Duck/Clone/Pedro/Toothless dance sources in OBS.
      * - Disables Duck, Clone, Pedro, LotAT, rest/focus, and temporary timers to prevent stale timer fires.
      *
@@ -125,6 +130,15 @@ public class CPHInline
         // Clear shared lock so no stale mini-game blocks the new stream.
         CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
+
+        // -------------------------------------------------
+        // Disco Party reset
+        // -------------------------------------------------
+        // Clear the re-entry guard and scene memory in case the previous stream
+        // ended while a disco party was mid-sequence (e.g. streamer ended stream
+        // during the 60-second hold).
+        CPH.SetGlobalVar(VAR_DISCO_PARTY_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_DISCO_PARTY_PREV_SCENE, "", false);
 
         // Default stream mode at stream start.
         // This gives downstream actions/commands a known baseline mode.

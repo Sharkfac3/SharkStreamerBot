@@ -26,7 +26,7 @@ Assigns the current Water Wizard commander slot occupant, finalizes the outgoing
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `REPLACE_WITH_WATER_WIZARD_REDEEM_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID in script: `d5452a4f-1bf3-4ce8-a6d8-dd7a74887752`
 - Payload `Arguments`: new Water Wizard username
 - Payload `SpecialIdentifiers.user`: new Water Wizard username
 - Payload `SpecialIdentifiers.commander`: new Water Wizard username
@@ -106,7 +106,7 @@ Handles Water Wizard-only `!hydrate X` command usage.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `REPLACE_WITH_WATER_WIZARD_HYDRATE_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID in script: `53244f6a-6882-4457-bc9f-b429ecd9ce9d`
 - Payload `Arguments`: the hydrate value `X` (as text)
 
 ### OBS Interactions

@@ -20,7 +20,7 @@ public class CPHInline
     private const int STRETCH_COOLDOWN_MINUTES = 5;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_CAPTAIN_STRETCH_COMMAND_ID";
+    private const string MIXITUP_COMMAND_ID = "60b43da9-accb-4dbe-968a-d57846a7dc4c";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
     // Reuse one HttpClient instance for reliability/performance.

@@ -30,11 +30,11 @@ Runs Toothless rarity roll and first-time unlock handling.
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command IDs by rarity:
-  - `regular` → `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_REGULAR`
-  - `smol` → `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_SMOL`
-  - `long` → `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_LONG`
-  - `flight` → `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT`
-  - `party` → `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY`
+  - `regular` → `d391a388-3891-49ad-ba04-0ccc37f6c329`
+  - `smol` → `dd0224e2-88fc-4eb2-90ae-976d0fffe410`
+  - `long` → `d82e7462-7e78-4dc4-b19d-e989001c9f6e`
+  - `flight` → `47027e14-e971-4db0-b129-b2adf79c65d0`
+  - `party` → `a71a89cc-a255-4f00-a8f2-5f61a33e7da5`
 - Payload `Arguments`: empty string (`""`) in current script.
 - Called only on first-time unlock.
 

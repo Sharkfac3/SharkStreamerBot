@@ -47,11 +47,11 @@ public class CPHInline
 
     // Mix It Up unlock bridge for Toothless rarity unlock events.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_REGULAR = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_REGULAR";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_SMOL = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_SMOL";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_LONG = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_LONG";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT";
-    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY = "REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_REGULAR = "d391a388-3891-49ad-ba04-0ccc37f6c329";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_SMOL = "dd0224e2-88fc-4eb2-90ae-976d0fffe410";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_LONG = "d82e7462-7e78-4dc4-b19d-e989001c9f6e";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT = "47027e14-e971-4db0-b129-b2adf79c65d0";
+    private const string MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY = "a71a89cc-a255-4f00-a8f2-5f61a33e7da5";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
     // Shared unlock pacing rule:
@@ -242,11 +242,6 @@ public class CPHInline
             case "long": return MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_LONG;
             case "flight": return MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT;
             case "party": return MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY;
-            default: return string.Empty;
-        }
-    }
-}
-return MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY;
             default: return string.Empty;
         }
     }

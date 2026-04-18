@@ -56,4 +56,4 @@ When responding:
 
 Your Task:
 
-provide more info on how commander redeem files work
+tell me if any of our squad unlocks do more than just mixitup

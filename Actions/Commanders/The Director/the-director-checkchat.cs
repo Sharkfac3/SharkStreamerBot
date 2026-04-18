@@ -20,7 +20,7 @@ public class CPHInline
     private const int CHECKCHAT_COOLDOWN_MINUTES = 1;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_COMMAND_ID = "REPLACE_WITH_DIRECTOR_CHECKCHAT_COMMAND_ID";
+    private const string MIXITUP_COMMAND_ID = "06e3851f-81a2-40cb-a911-33c5ec04a3f2";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
 
     // Reuse one HttpClient instance for reliability/performance.

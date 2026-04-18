@@ -32,6 +32,21 @@ Used in:
 
 ---
 
+## Disco Party (shared)
+- `VAR_DISCO_PARTY_ACTIVE` = `disco_party_active` — re-entry guard; true while the 60s dance sequence is running
+- `VAR_DISCO_PARTY_PREV_SCENE` = `disco_party_prev_scene` — OBS scene name saved before switching to Disco; used to return afterward
+
+Used in:
+- `Actions/Twitch Channel Points/disco-party.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
+
+Operator notes:
+- Both vars are non-persisted. `stream-start.cs` resets them to `false` / `""` at stream start.
+- Dance command IDs (one per squad member/Toothless rarity) live as constants inside `disco-party.cs`.
+  Replace all `REPLACE_WITH_*` placeholders after creating "Squad - \<Member\> - Dance" commands in Mix It Up.
+
+---
+
 ## Mini-game Lock (shared)
 - `VAR_MINIGAME_ACTIVE` = `minigame_active`
 - `VAR_MINIGAME_NAME` = `minigame_name`
@@ -195,6 +210,25 @@ Used in:
 - `Actions/Commanders/The Director/the-director-award.cs`
 - `Actions/Commanders/The Director/the-director-checkchat.cs`
 - `Actions/Commanders/The Director/the-director-toad.cs`
+- `Actions/Commanders/The Director/the-director-primary.cs`
+- `Actions/Commanders/The Director/the-director-secondary.cs`
+
+### The Director — Scene Source Map
+
+`the-director-primary.cs` and `the-director-secondary.cs` each contain a `SCENE_SOURCE_MAP` dictionary
+that maps OBS scene names to a `(primarySource, secondarySource)` pair.
+
+When The Director uses `!primary` or `!secondary`, the script reads the current OBS scene,
+looks it up in the map, then shows one source and hides the other.
+
+**Before adding any new scene source switching logic**, check this map first.
+**When adding a new scene entry**, update `SCENE_SOURCE_MAP` in **both** scripts and add the
+source names to the table below.
+
+| OBS Scene | Primary Source | Secondary Source |
+|---|---|---|
+| `Workspace: Main` | `Main Screen Capture` | `Quest POV` |
+| *(others TBD — add rows here as sources are confirmed)* | | |
 - `Actions/Commanders/Water Wizard/water-wizard-redeem.cs`
 - `Actions/Commanders/Water Wizard/water-wizard-hail.cs`
 - `Actions/Commanders/Water Wizard/wizard-hydrate.cs`

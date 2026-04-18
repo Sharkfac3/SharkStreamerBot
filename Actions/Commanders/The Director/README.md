@@ -26,7 +26,7 @@ Assigns the current The Director commander slot occupant, finalizes the outgoing
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `REPLACE_WITH_DIRECTOR_REDEEM_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID in script: `51146998-c2bc-4f46-b6a8-13069565a562`
 - Payload `Arguments`: new The Director username
 - Payload `SpecialIdentifiers.user`: new The Director username
 - Payload `SpecialIdentifiers.commander`: new The Director username
@@ -107,7 +107,7 @@ Handles The Director-only `!checkchat` command usage.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `REPLACE_WITH_DIRECTOR_CHECKCHAT_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID in script: `06e3851f-81a2-40cb-a911-33c5ec04a3f2`
 - Payload `Arguments`: validated `!checkchat` text (optional, max 10 words)
 
 ### OBS Interactions
@@ -123,6 +123,100 @@ Handles The Director-only `!checkchat` command usage.
 ### Operator Notes
 - Replace `MIXITUP_COMMAND_ID` placeholder before production use.
 - Wire this script to the `!checkchat` command trigger action.
+
+---
+
+## Script: `the-director-primary.cs`
+
+### Purpose
+Lets the active The Director switch the current OBS scene to its primary source layout.
+
+### Expected Trigger / Input
+- Streamer.bot action trigger for `!primary`.
+- Reads `user`.
+
+### Required Runtime Variables
+- Reads `current_the_director`.
+
+### Key Outputs / Side Effects
+- Shows the primary source and hides the secondary source in the current OBS scene.
+- Source pairs per scene are defined in `SCENE_SOURCE_MAP` inside the script.
+- If Mix It Up command ID is configured, triggers the primary switch command.
+- No chat output.
+
+### Mix It Up Actions
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Placeholder: `MIXITUP_COMMAND_ID_PRIMARY`
+- Payload `Arguments`: `"primary"`
+- Payload `SpecialIdentifiers.state`: `"primary"`
+- **Not active until command ID is replaced.**
+
+### OBS Interactions
+- `ObsGetCurrentScene()` — reads the active scene. **VERIFY:** unconfirmed method signature — test before relying on in production.
+- `ObsShowSource(scene, primarySource)` / `ObsHideSource(scene, secondarySource)`
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- No chat output.
+- Logs warn on guard exits (wrong caller, no Director, unmapped scene).
+- Logs warn on success showing which source was shown/hidden.
+
+### Operator Notes
+- Wire `!primary` action → run this script. No action argument needed.
+- Add scene→source entries to `SCENE_SOURCE_MAP` inside the script as sources are confirmed.
+- Keep `SCENE_SOURCE_MAP` in sync with `the-director-secondary.cs`.
+- Currently mapped: `Workspace: Main` (primary: `Main Screen Capture`, secondary: `Quest POV`).
+- Replace `REPLACE_WITH_PRIMARY_COMMAND_ID` when Mix It Up command exists.
+- Verify `ObsGetCurrentScene()` resolves in Streamer.bot before shipping.
+
+---
+
+## Script: `the-director-secondary.cs`
+
+### Purpose
+Lets the active The Director switch the current OBS scene to its secondary source layout.
+
+### Expected Trigger / Input
+- Streamer.bot action trigger for `!secondary`.
+- Reads `user`.
+
+### Required Runtime Variables
+- Reads `current_the_director`.
+
+### Key Outputs / Side Effects
+- Shows the secondary source and hides the primary source in the current OBS scene.
+- Source pairs per scene are defined in `SCENE_SOURCE_MAP` inside the script.
+- If Mix It Up command ID is configured, triggers the secondary switch command.
+- No chat output.
+
+### Mix It Up Actions
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Placeholder: `MIXITUP_COMMAND_ID_SECONDARY`
+- Payload `Arguments`: `"secondary"`
+- Payload `SpecialIdentifiers.state`: `"secondary"`
+- **Not active until command ID is replaced.**
+
+### OBS Interactions
+- `ObsGetCurrentScene()` — reads the active scene. **VERIFY:** unconfirmed method signature — test before relying on in production.
+- `ObsShowSource(scene, secondarySource)` / `ObsHideSource(scene, primarySource)`
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- No chat output.
+- Logs warn on guard exits (wrong caller, no Director, unmapped scene).
+- Logs warn on success showing which source was shown/hidden.
+
+### Operator Notes
+- Wire `!secondary` action → run this script. No action argument needed.
+- Add scene→source entries to `SCENE_SOURCE_MAP` inside the script as sources are confirmed.
+- Keep `SCENE_SOURCE_MAP` in sync with `the-director-primary.cs`.
+- Currently mapped: `Workspace: Main` (primary: `Main Screen Capture`, secondary: `Quest POV`).
+- Replace `REPLACE_WITH_SECONDARY_COMMAND_ID` when Mix It Up command exists.
+- Verify `ObsGetCurrentScene()` resolves in Streamer.bot before shipping.
 
 ---
 

@@ -117,7 +117,7 @@ Resolves each Clone volley timer tick by eliminating one open position.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `REPLACE_WITH_CLONE_UNLOCK_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID: `e40600b1-53f4-42d3-89b1-04e12af1e35b`
 - Payload `Arguments`: empty string (`""`)
 - Called only on win path.
 

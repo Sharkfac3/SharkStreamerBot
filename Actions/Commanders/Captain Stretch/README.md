@@ -26,7 +26,7 @@ Assigns the current Captain Stretch commander slot occupant, finalizes the outgo
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `REPLACE_WITH_CAPTAIN_STRETCH_REDEEM_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID in script: `1facdbe6-f292-4d1b-9b66-ad71ae6de310`
 - Payload `Arguments`: new Captain Stretch username
 - Payload `SpecialIdentifiers.user`: new Captain Stretch username
 - Payload `SpecialIdentifiers.commander`: new Captain Stretch username
@@ -106,7 +106,7 @@ Handles Captain Stretch-only `!stretch` command usage.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `REPLACE_WITH_CAPTAIN_STRETCH_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID in script: `60b43da9-accb-4dbe-968a-d57846a7dc4c`
 - Payload `Arguments`: the validated stretch phrase (0 to 5 words)
 
 ### OBS Interactions
@@ -204,7 +204,7 @@ Handles Captain Stretch-only `!shrimp` command usage.
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID in script: `REPLACE_WITH_CAPTAIN_STRETCH_SHRIMP_COMMAND_ID` *(placeholder; must be replaced)*
+- Command ID in script: `af5567d1-ac94-49bf-ad7b-0b7e034cb05d`
 - Payload `Arguments`: the validated shrimp phrase (up to 30 words)
 
 ### OBS Interactions

@@ -1,9 +1,9 @@
 Mix It Up Commands Export
-Command count: 75
-Action Group count: 16
+Command count: 96
+Action Group count: 37
 Pages fetched: 1
 Requested page size: 100
-Reported total count: 75
+Reported total count: 96
 First page command source: root['Commands']
 First page top-level keys: TotalCount, Commands
 
@@ -14,47 +14,110 @@ Agent Lookup Workflow:
 4. If no matching Action Group exists here, treat the command ID as not yet available in Mix It Up.
 
 Action Group Lookup (Exact Name, Alphabetical):
-1. name=Commander - The Director - Toad | id=5440fa4e-b84e-438a-a409-f398b637f3e7 | enabled=True | unlocked=True | group=None
-2. name=Commander - Water Wizard - Orb | id=6b00a684-8fd4-404c-81b0-c279f241af73 | enabled=True | unlocked=True | group=None
-3. name=Squad - Duck - Unlock | id=c77405db-ac86-454e-bc86-5ff262da0a9a | enabled=True | unlocked=True | group=None
-4. name=Squad - Pedro - Unlock | id=0ffb09da-7104-4062-a6c5-c26c01e49582 | enabled=True | unlocked=True | group=None
-5. name=Twitch - Bits - Tier 1 | id=cdca2818-49c3-43e0-ab2f-cfdce55ac16c | enabled=True | unlocked=True | group=None
-6. name=Twitch - Bits - Tier 2 | id=aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0 | enabled=True | unlocked=True | group=None
-7. name=Twitch - Bits - Tier 3 | id=6d05a5c6-6cd9-471b-9358-18dde2df4318 | enabled=True | unlocked=True | group=None
-8. name=Twitch - Bits - Tier 4 | id=35405bfe-660f-46f2-bec6-8a1da9ec1af2 | enabled=True | unlocked=True | group=None
-9. name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195 | enabled=True | unlocked=True | group=None
-10. name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4 | enabled=True | unlocked=True | group=None
-11. name=Twitch Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d | enabled=True | unlocked=True | group=None
-12. name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1 | enabled=True | unlocked=True | group=None
-13. name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591 | enabled=True | unlocked=True | group=None
-14. name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207 | enabled=True | unlocked=True | group=None
-15. name=Twitch Core - Subscription - Prime Paid Upgrade | id=eabfb607-a4f3-4c45-b26f-1968c3f3f1e7 | enabled=True | unlocked=True | group=None
-16. name=Twitch Core - Subscription - Renewed | id=4af70639-67b5-4d83-8da1-7be0afe1ce76 | enabled=True | unlocked=True | group=None
+1. name=Commander - Captain Stretch - Redeem | id=1facdbe6-f292-4d1b-9b66-ad71ae6de310 | enabled=True | unlocked=True | group=None
+2. name=Commander - Captain Stretch - Shrimp | id=af5567d1-ac94-49bf-ad7b-0b7e034cb05d | enabled=True | unlocked=True | group=None
+3. name=Commander - Captain Stretch - Stretch | id=60b43da9-accb-4dbe-968a-d57846a7dc4c | enabled=True | unlocked=True | group=None
+4. name=Commander - The Director - Check Chat | id=06e3851f-81a2-40cb-a911-33c5ec04a3f2 | enabled=True | unlocked=True | group=None
+5. name=Commander - The Director - Redeem | id=51146998-c2bc-4f46-b6a8-13069565a562 | enabled=True | unlocked=True | group=None
+6. name=Commander - The Director - Toad | id=5440fa4e-b84e-438a-a409-f398b637f3e7 | enabled=True | unlocked=True | group=None
+7. name=Commander - Water Wizard - Hydrate | id=53244f6a-6882-4457-bc9f-b429ecd9ce9d | enabled=True | unlocked=True | group=None
+8. name=Commander - Water Wizard - Orb | id=6b00a684-8fd4-404c-81b0-c279f241af73 | enabled=True | unlocked=True | group=None
+9. name=Commander - Water Wizard - Redeem | id=d5452a4f-1bf3-4ce8-a6d8-dd7a74887752 | enabled=True | unlocked=True | group=None
+10. name=Squad - Clone - Dance | id=decd533d-1263-4f38-ab99-2eacf7452c41 | enabled=True | unlocked=True | group=None
+11. name=Squad - Clone - Unlock | id=e40600b1-53f4-42d3-89b1-04e12af1e35b | enabled=True | unlocked=False | group=None
+12. name=Squad - Duck - Dance | id=2aa776f8-a7f5-452d-bfe7-ef15a7f4df51 | enabled=True | unlocked=True | group=None
+13. name=Squad - Duck - Unlock | id=c77405db-ac86-454e-bc86-5ff262da0a9a | enabled=True | unlocked=True | group=None
+14. name=Squad - Pedro - Dance | id=5d63ec44-90f8-47ea-bd4d-8aadb89df845 | enabled=True | unlocked=True | group=None
+15. name=Squad - Pedro - Unlock | id=0ffb09da-7104-4062-a6c5-c26c01e49582 | enabled=True | unlocked=True | group=None
+16. name=Squad - Toothless - Dance - Flight | id=56493860-2f38-4cbf-9482-80422e42f025 | enabled=True | unlocked=True | group=None
+17. name=Squad - Toothless - Dance - Long | id=a48fd2ef-6e9b-4481-839e-fdd94edd602d | enabled=True | unlocked=True | group=None
+18. name=Squad - Toothless - Dance - Party | id=b3154c28-2c23-4f31-b9e7-58da52eb7913 | enabled=True | unlocked=True | group=None
+19. name=Squad - Toothless - Dance - Regular | id=2650f080-20af-4b9e-92a0-725259bd86a3 | enabled=True | unlocked=True | group=None
+20. name=Squad - Toothless - Dance - Smol | id=282cb38c-444f-4d78-b26f-acae7ee660aa | enabled=True | unlocked=True | group=None
+21. name=Squad - Toothless - Unlock - Flight | id=47027e14-e971-4db0-b129-b2adf79c65d0 | enabled=True | unlocked=True | group=None
+22. name=Squad - Toothless - Unlock - Long | id=d82e7462-7e78-4dc4-b19d-e989001c9f6e | enabled=True | unlocked=True | group=None
+23. name=Squad - Toothless - Unlock - Party | id=a71a89cc-a255-4f00-a8f2-5f61a33e7da5 | enabled=True | unlocked=False | group=None
+24. name=Squad - Toothless - Unlock - Regular | id=d391a388-3891-49ad-ba04-0ccc37f6c329 | enabled=True | unlocked=False | group=None
+25. name=Squad - Toothless - Unlock - Smol | id=dd0224e2-88fc-4eb2-90ae-976d0fffe410 | enabled=True | unlocked=False | group=None
+26. name=Twitch - Bits - Tier 1 | id=cdca2818-49c3-43e0-ab2f-cfdce55ac16c | enabled=True | unlocked=True | group=None
+27. name=Twitch - Bits - Tier 2 | id=aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0 | enabled=True | unlocked=True | group=None
+28. name=Twitch - Bits - Tier 3 | id=6d05a5c6-6cd9-471b-9358-18dde2df4318 | enabled=True | unlocked=True | group=None
+29. name=Twitch - Bits - Tier 4 | id=35405bfe-660f-46f2-bec6-8a1da9ec1af2 | enabled=True | unlocked=True | group=None
+30. name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195 | enabled=True | unlocked=True | group=None
+31. name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4 | enabled=True | unlocked=True | group=None
+32. name=Twitch Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d | enabled=True | unlocked=True | group=None
+33. name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1 | enabled=True | unlocked=True | group=None
+34. name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591 | enabled=True | unlocked=True | group=None
+35. name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207 | enabled=True | unlocked=True | group=None
+36. name=Twitch Core - Subscription - Prime Paid Upgrade | id=eabfb607-a4f3-4c45-b26f-1968c3f3f1e7 | enabled=True | unlocked=True | group=None
+37. name=Twitch Core - Subscription - Renewed | id=4af70639-67b5-4d83-8da1-7be0afe1ce76 | enabled=True | unlocked=True | group=None
 
 Action Group Lookup (Normalized Name):
-1. normalized=commander the director toad | name=Commander - The Director - Toad | id=5440fa4e-b84e-438a-a409-f398b637f3e7
-2. normalized=commander water wizard orb | name=Commander - Water Wizard - Orb | id=6b00a684-8fd4-404c-81b0-c279f241af73
-3. normalized=squad duck unlock | name=Squad - Duck - Unlock | id=c77405db-ac86-454e-bc86-5ff262da0a9a
-4. normalized=squad pedro unlock | name=Squad - Pedro - Unlock | id=0ffb09da-7104-4062-a6c5-c26c01e49582
-5. normalized=twitch bits tier 1 | name=Twitch - Bits - Tier 1 | id=cdca2818-49c3-43e0-ab2f-cfdce55ac16c
-6. normalized=twitch bits tier 2 | name=Twitch - Bits - Tier 2 | id=aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0
-7. normalized=twitch bits tier 3 | name=Twitch - Bits - Tier 3 | id=6d05a5c6-6cd9-471b-9358-18dde2df4318
-8. normalized=twitch bits tier 4 | name=Twitch - Bits - Tier 4 | id=35405bfe-660f-46f2-bec6-8a1da9ec1af2
-9. normalized=twitch core gift subscription multiple | name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195
-10. normalized=twitch core gift subscription single | name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4
-11. normalized=twitch core stream streak | name=Twitch Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d
-12. normalized=twitch core subscription gift paid upgrade | name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1
-13. normalized=twitch core subscription new sub | name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591
-14. normalized=twitch core subscription pay it forward | name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207
-15. normalized=twitch core subscription prime paid upgrade | name=Twitch Core - Subscription - Prime Paid Upgrade | id=eabfb607-a4f3-4c45-b26f-1968c3f3f1e7
-16. normalized=twitch core subscription renewed | name=Twitch Core - Subscription - Renewed | id=4af70639-67b5-4d83-8da1-7be0afe1ce76
+1. normalized=commander captain stretch redeem | name=Commander - Captain Stretch - Redeem | id=1facdbe6-f292-4d1b-9b66-ad71ae6de310
+2. normalized=commander captain stretch shrimp | name=Commander - Captain Stretch - Shrimp | id=af5567d1-ac94-49bf-ad7b-0b7e034cb05d
+3. normalized=commander captain stretch stretch | name=Commander - Captain Stretch - Stretch | id=60b43da9-accb-4dbe-968a-d57846a7dc4c
+4. normalized=commander the director check chat | name=Commander - The Director - Check Chat | id=06e3851f-81a2-40cb-a911-33c5ec04a3f2
+5. normalized=commander the director redeem | name=Commander - The Director - Redeem | id=51146998-c2bc-4f46-b6a8-13069565a562
+6. normalized=commander the director toad | name=Commander - The Director - Toad | id=5440fa4e-b84e-438a-a409-f398b637f3e7
+7. normalized=commander water wizard hydrate | name=Commander - Water Wizard - Hydrate | id=53244f6a-6882-4457-bc9f-b429ecd9ce9d
+8. normalized=commander water wizard orb | name=Commander - Water Wizard - Orb | id=6b00a684-8fd4-404c-81b0-c279f241af73
+9. normalized=commander water wizard redeem | name=Commander - Water Wizard - Redeem | id=d5452a4f-1bf3-4ce8-a6d8-dd7a74887752
+10. normalized=squad clone dance | name=Squad - Clone - Dance | id=decd533d-1263-4f38-ab99-2eacf7452c41
+11. normalized=squad clone unlock | name=Squad - Clone - Unlock | id=e40600b1-53f4-42d3-89b1-04e12af1e35b
+12. normalized=squad duck dance | name=Squad - Duck - Dance | id=2aa776f8-a7f5-452d-bfe7-ef15a7f4df51
+13. normalized=squad duck unlock | name=Squad - Duck - Unlock | id=c77405db-ac86-454e-bc86-5ff262da0a9a
+14. normalized=squad pedro dance | name=Squad - Pedro - Dance | id=5d63ec44-90f8-47ea-bd4d-8aadb89df845
+15. normalized=squad pedro unlock | name=Squad - Pedro - Unlock | id=0ffb09da-7104-4062-a6c5-c26c01e49582
+16. normalized=squad toothless dance flight | name=Squad - Toothless - Dance - Flight | id=56493860-2f38-4cbf-9482-80422e42f025
+17. normalized=squad toothless dance long | name=Squad - Toothless - Dance - Long | id=a48fd2ef-6e9b-4481-839e-fdd94edd602d
+18. normalized=squad toothless dance party | name=Squad - Toothless - Dance - Party | id=b3154c28-2c23-4f31-b9e7-58da52eb7913
+19. normalized=squad toothless dance regular | name=Squad - Toothless - Dance - Regular | id=2650f080-20af-4b9e-92a0-725259bd86a3
+20. normalized=squad toothless dance smol | name=Squad - Toothless - Dance - Smol | id=282cb38c-444f-4d78-b26f-acae7ee660aa
+21. normalized=squad toothless unlock flight | name=Squad - Toothless - Unlock - Flight | id=47027e14-e971-4db0-b129-b2adf79c65d0
+22. normalized=squad toothless unlock long | name=Squad - Toothless - Unlock - Long | id=d82e7462-7e78-4dc4-b19d-e989001c9f6e
+23. normalized=squad toothless unlock party | name=Squad - Toothless - Unlock - Party | id=a71a89cc-a255-4f00-a8f2-5f61a33e7da5
+24. normalized=squad toothless unlock regular | name=Squad - Toothless - Unlock - Regular | id=d391a388-3891-49ad-ba04-0ccc37f6c329
+25. normalized=squad toothless unlock smol | name=Squad - Toothless - Unlock - Smol | id=dd0224e2-88fc-4eb2-90ae-976d0fffe410
+26. normalized=twitch bits tier 1 | name=Twitch - Bits - Tier 1 | id=cdca2818-49c3-43e0-ab2f-cfdce55ac16c
+27. normalized=twitch bits tier 2 | name=Twitch - Bits - Tier 2 | id=aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0
+28. normalized=twitch bits tier 3 | name=Twitch - Bits - Tier 3 | id=6d05a5c6-6cd9-471b-9358-18dde2df4318
+29. normalized=twitch bits tier 4 | name=Twitch - Bits - Tier 4 | id=35405bfe-660f-46f2-bec6-8a1da9ec1af2
+30. normalized=twitch core gift subscription multiple | name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195
+31. normalized=twitch core gift subscription single | name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4
+32. normalized=twitch core stream streak | name=Twitch Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d
+33. normalized=twitch core subscription gift paid upgrade | name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1
+34. normalized=twitch core subscription new sub | name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591
+35. normalized=twitch core subscription pay it forward | name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207
+36. normalized=twitch core subscription prime paid upgrade | name=Twitch Core - Subscription - Prime Paid Upgrade | id=eabfb607-a4f3-4c45-b26f-1968c3f3f1e7
+37. normalized=twitch core subscription renewed | name=Twitch Core - Subscription - Renewed | id=4af70639-67b5-4d83-8da1-7be0afe1ce76
 
 Action Group Name -> ID Map (Exact Names):
 {
+  "Commander - Captain Stretch - Redeem": "1facdbe6-f292-4d1b-9b66-ad71ae6de310",
+  "Commander - Captain Stretch - Shrimp": "af5567d1-ac94-49bf-ad7b-0b7e034cb05d",
+  "Commander - Captain Stretch - Stretch": "60b43da9-accb-4dbe-968a-d57846a7dc4c",
+  "Commander - The Director - Check Chat": "06e3851f-81a2-40cb-a911-33c5ec04a3f2",
+  "Commander - The Director - Redeem": "51146998-c2bc-4f46-b6a8-13069565a562",
   "Commander - The Director - Toad": "5440fa4e-b84e-438a-a409-f398b637f3e7",
+  "Commander - Water Wizard - Hydrate": "53244f6a-6882-4457-bc9f-b429ecd9ce9d",
   "Commander - Water Wizard - Orb": "6b00a684-8fd4-404c-81b0-c279f241af73",
+  "Commander - Water Wizard - Redeem": "d5452a4f-1bf3-4ce8-a6d8-dd7a74887752",
+  "Squad - Clone - Dance": "decd533d-1263-4f38-ab99-2eacf7452c41",
+  "Squad - Clone - Unlock": "e40600b1-53f4-42d3-89b1-04e12af1e35b",
+  "Squad - Duck - Dance": "2aa776f8-a7f5-452d-bfe7-ef15a7f4df51",
   "Squad - Duck - Unlock": "c77405db-ac86-454e-bc86-5ff262da0a9a",
+  "Squad - Pedro - Dance": "5d63ec44-90f8-47ea-bd4d-8aadb89df845",
   "Squad - Pedro - Unlock": "0ffb09da-7104-4062-a6c5-c26c01e49582",
+  "Squad - Toothless - Dance - Flight": "56493860-2f38-4cbf-9482-80422e42f025",
+  "Squad - Toothless - Dance - Long": "a48fd2ef-6e9b-4481-839e-fdd94edd602d",
+  "Squad - Toothless - Dance - Party": "b3154c28-2c23-4f31-b9e7-58da52eb7913",
+  "Squad - Toothless - Dance - Regular": "2650f080-20af-4b9e-92a0-725259bd86a3",
+  "Squad - Toothless - Dance - Smol": "282cb38c-444f-4d78-b26f-acae7ee660aa",
+  "Squad - Toothless - Unlock - Flight": "47027e14-e971-4db0-b129-b2adf79c65d0",
+  "Squad - Toothless - Unlock - Long": "d82e7462-7e78-4dc4-b19d-e989001c9f6e",
+  "Squad - Toothless - Unlock - Party": "a71a89cc-a255-4f00-a8f2-5f61a33e7da5",
+  "Squad - Toothless - Unlock - Regular": "d391a388-3891-49ad-ba04-0ccc37f6c329",
+  "Squad - Toothless - Unlock - Smol": "dd0224e2-88fc-4eb2-90ae-976d0fffe410",
   "Twitch - Bits - Tier 1": "cdca2818-49c3-43e0-ab2f-cfdce55ac16c",
   "Twitch - Bits - Tier 2": "aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0",
   "Twitch - Bits - Tier 3": "6d05a5c6-6cd9-471b-9358-18dde2df4318",

@@ -29,6 +29,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-18 | pi | Wire available Mix It Up command IDs into placeholder Actions scripts | uncommitted |
 | 2026-04-15 | pi | Add Mix It Up placeholder checklist for humans | uncommitted |
 | 2026-04-15 | pi | Reconcile Mix It Up IDs against export file | uncommitted |
 | 2026-04-15 | pi | Update Pedro Mix It Up unlock ID | uncommitted |
@@ -38,8 +39,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-04-03 | pi | Add Mix It Up commander redeem triggers | uncommitted |
 | 2026-04-03 | pi | Convert Mix It Up launcher from .sh to .bat and remove venv usage | uncommitted |
 | 2026-04-03 | pi | Add root shell launcher for Mix It Up command export tool | uncommitted |
-| 2026-04-02 | pi | Fix LotAT compile errors for missing System.IO imports | uncommitted |
-| 2026-04-02 | pi | Make LotAT scripts Streamer.bot-compiler compatible | uncommitted |
 
 ---
 

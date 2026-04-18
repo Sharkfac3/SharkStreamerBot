@@ -54,7 +54,7 @@ public class CPHInline
 
     // Mix It Up unlock bridge for Clone unlock events.
     private const string MIXITUP_API_BASE_URL = "http://localhost:8911";
-    private const string MIXITUP_CLONE_UNLOCK_COMMAND_ID = "REPLACE_WITH_CLONE_UNLOCK_COMMAND_ID";
+    private const string MIXITUP_CLONE_UNLOCK_COMMAND_ID = "e40600b1-53f4-42d3-89b1-04e12af1e35b";
     private static readonly HttpClient MIXITUP_HTTP_CLIENT = new HttpClient();
 
     // Shared unlock pacing rule:
@@ -309,11 +309,6 @@ public class CPHInline
         catch (Exception ex)
         {
             CPH.LogError($"[{logPrefix}] Exception while calling Mix It Up: {ex}");
-            return false;
-        }
-    }
-}
-ogPrefix}] Exception while calling Mix It Up: {ex}");
             return false;
         }
     }

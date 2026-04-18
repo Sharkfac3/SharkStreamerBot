@@ -1,6 +1,6 @@
 # Mix It Up Placeholder Checklist
 
-Last updated: 2026-04-15
+Last updated: 2026-04-18
 Source of truth: `Tools/MixItUp/Api/data/mixitup-commands.txt`
 
 Rule used for this checklist:
@@ -22,41 +22,15 @@ For each item below:
 
 ## Captain Stretch
 
-- [ ] `Actions/Commanders/Captain Stretch/captain-stretch-redeem.cs`
-  - Constant: `MIXITUP_COMMAND_ID`
-  - Placeholder: `REPLACE_WITH_CAPTAIN_STRETCH_REDEEM_COMMAND_ID`
-
-- [ ] `Actions/Commanders/Captain Stretch/captain-stretch-stretch.cs`
-  - Constant: `MIXITUP_COMMAND_ID`
-  - Placeholder: `REPLACE_WITH_CAPTAIN_STRETCH_COMMAND_ID`
-
 - [ ] `Actions/Commanders/Captain Stretch/captain-stretch-generalfocus.cs`
   - Constant: `MIXITUP_CAPTAINS_FOCUS_COMMAND_ID`
   - Placeholder: `REPLACE_WITH_CAPTAINS_FOCUS_COMMAND_ID`
 
-- [ ] `Actions/Commanders/Captain Stretch/captain-stretch-shrimp.cs`
-  - Constant: `MIXITUP_COMMAND_ID`
-  - Placeholder: `REPLACE_WITH_CAPTAIN_STRETCH_SHRIMP_COMMAND_ID`
-
 ## The Director
 
-- [ ] `Actions/Commanders/The Director/the-director-redeem.cs`
-  - Constant: `MIXITUP_COMMAND_ID`
-  - Placeholder: `REPLACE_WITH_DIRECTOR_REDEEM_COMMAND_ID`
-
-- [ ] `Actions/Commanders/The Director/the-director-checkchat.cs`
-  - Constant: `MIXITUP_COMMAND_ID`
-  - Placeholder: `REPLACE_WITH_DIRECTOR_CHECKCHAT_COMMAND_ID`
+All current placeholder entries in this section have been resolved.
 
 ## Water Wizard
-
-- [ ] `Actions/Commanders/Water Wizard/water-wizard-redeem.cs`
-  - Constant: `MIXITUP_COMMAND_ID`
-  - Placeholder: `REPLACE_WITH_WATER_WIZARD_REDEEM_COMMAND_ID`
-
-- [ ] `Actions/Commanders/Water Wizard/wizard-hydrate.cs`
-  - Constant: `MIXITUP_COMMAND_ID`
-  - Placeholder: `REPLACE_WITH_WATER_WIZARD_HYDRATE_COMMAND_ID`
 
 - [ ] `Actions/Commanders/Water Wizard/water-wizard-castrest.cs`
   - Constant: `MIXITUP_WIZARDS_REST_COMMAND_ID`
@@ -82,29 +56,7 @@ For each item below:
 
 ## Squad
 
-- [ ] `Actions/Squad/Clone/clone-volley.cs`
-  - Constant: `MIXITUP_CLONE_UNLOCK_COMMAND_ID`
-  - Placeholder: `REPLACE_WITH_CLONE_UNLOCK_COMMAND_ID`
-
-- [ ] `Actions/Squad/Toothless/toothless-main.cs`
-  - Constant: `MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_REGULAR`
-  - Placeholder: `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_REGULAR`
-
-- [ ] `Actions/Squad/Toothless/toothless-main.cs`
-  - Constant: `MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_SMOL`
-  - Placeholder: `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_SMOL`
-
-- [ ] `Actions/Squad/Toothless/toothless-main.cs`
-  - Constant: `MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_LONG`
-  - Placeholder: `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_LONG`
-
-- [ ] `Actions/Squad/Toothless/toothless-main.cs`
-  - Constant: `MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT`
-  - Placeholder: `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_FLIGHT`
-
-- [ ] `Actions/Squad/Toothless/toothless-main.cs`
-  - Constant: `MIXITUP_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY`
-  - Placeholder: `REPLACE_WITH_TOOTHLESS_UNLOCK_COMMAND_ID_PARTY`
+All current placeholder entries in this section have been resolved.
 
 ## Temporary
 
@@ -163,7 +115,16 @@ These do **not** need placeholder work right now because their IDs exist in `Too
 - `Actions/Squad/Pedro/pedro-main.cs`
 - `Actions/Squad/Pedro/pedro-resolve.cs`
 - `Actions/Squad/Duck/duck-call.cs`
+- `Actions/Squad/Clone/clone-volley.cs`
+- `Actions/Squad/Toothless/toothless-main.cs`
+- `Actions/Commanders/Captain Stretch/captain-stretch-redeem.cs`
+- `Actions/Commanders/Captain Stretch/captain-stretch-stretch.cs`
+- `Actions/Commanders/Captain Stretch/captain-stretch-shrimp.cs`
+- `Actions/Commanders/The Director/the-director-redeem.cs`
+- `Actions/Commanders/The Director/the-director-checkchat.cs`
 - `Actions/Commanders/The Director/the-director-toad.cs`
+- `Actions/Commanders/Water Wizard/water-wizard-redeem.cs`
+- `Actions/Commanders/Water Wizard/wizard-hydrate.cs`
 - `Actions/Commanders/Water Wizard/water-wizard-orb.cs`
 - `Actions/Twitch Core Integrations/watch-streak.cs`
 - `Actions/Twitch Core Integrations/subscription-new.cs`
