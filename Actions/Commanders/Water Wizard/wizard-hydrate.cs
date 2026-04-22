@@ -19,20 +19,33 @@ public class CPHInline
 
     private const int HYDRATE_MIN_VALUE = 1;
     private const int HYDRATE_MAX_VALUE = 10;
+    private const int HYDRATE_MAX_MESSAGE_WORDS = 5;
     private const int HYDRATE_COOLDOWN_MINUTES = 5;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_COMMAND_ID = "53244f6a-6882-4457-bc9f-b429ecd9ce9d";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
+    private const string MIXITUP_TYPE_AMOUNT = "amount";
+    private const string MIXITUP_TYPE_MESSAGE = "message";
 
     // Reuse one HttpClient instance for reliability/performance.
     private static readonly HttpClient Http = new HttpClient();
 
+    private sealed class HydrateRequest
+    {
+        public string PayloadText { get; set; }
+        public string PayloadType { get; set; }
+    }
+
     /*
      * Purpose:
-     * - Handles the Water Wizard-only !hydrate X command (X must be 1..10).
+     * - Handles the Water Wizard-only !hydrate command.
+     * - Accepts either:
+     *   1) a whole number from 1 to 10, or
+     *   2) a short custom message up to 5 words.
      * - Applies a 5-minute cooldown for the active Water Wizard.
-     * - For valid wizard usage, forwards X to Mix It Up command API as Arguments.
+     * - For valid wizard usage, forwards the payload to Mix It Up as Arguments,
+     *   plus hydratemessage / hydratetype special identifiers.
      *
      * Expected trigger/input:
      * - Chat command/action for !hydrate.
@@ -45,7 +58,8 @@ public class CPHInline
      * Key outputs/side effects:
      * - Non-wizard caller: sends encouragement chat instruction to use !hail.
      * - Wizard caller on cooldown: sends remaining cooldown message.
-     * - Wizard caller with valid X: triggers Mix It Up command with X as message text.
+     * - Wizard caller with valid input: triggers Mix It Up command with both
+     *   the raw payload text and an explicit payload type.
      */
     public bool Execute()
     {
@@ -62,11 +76,12 @@ public class CPHInline
             return true;
         }
 
-        // Parse hydrate amount. Must be integer 1..10.
-        int hydrateAmount = ParseHydrateAmount();
-        if (hydrateAmount < HYDRATE_MIN_VALUE || hydrateAmount > HYDRATE_MAX_VALUE)
+        // Parse hydrate input. We support either a numeric intensity (1..10)
+        // or a short custom message (up to 5 words).
+        HydrateRequest hydrateRequest = ParseHydrateRequest();
+        if (hydrateRequest == null)
         {
-            CPH.SendMessage($"@{caller} use !hydrate <1-10> (example: !hydrate 7). 💧");
+            CPH.SendMessage($"@{caller} use !hydrate <1-10> or !hydrate <short message> (up to 5 words). Example: !hydrate 7 or !hydrate hydrate the crew 💧");
             return true;
         }
 
@@ -82,8 +97,9 @@ public class CPHInline
             return true;
         }
 
-        // Trigger Mix It Up with X as Arguments/message text.
-        bool mixitupOk = TriggerMixItUp(hydrateAmount.ToString());
+        // Trigger Mix It Up with both the payload text and an explicit type marker
+        // so Mix It Up can branch safely without guessing.
+        bool mixitupOk = TriggerMixItUp(hydrateRequest);
         if (!mixitupOk)
         {
             // Do not start cooldown on failed external call.
@@ -123,48 +139,99 @@ public class CPHInline
         CPH.SendMessage($"@{caller} there is no current Water Wizard right now—redeem to become the Water Wizard and unlock !hydrate! 🌊");
     }
 
-    private int ParseHydrateAmount()
+    private HydrateRequest ParseHydrateRequest()
     {
-        // Preferred path: first command argument (input0).
+        // Preferred path: first command argument (input0). This is the cleanest way
+        // to capture a one-word number like !hydrate 7.
         string input0 = GetArg(ARG_INPUT0);
-        if (int.TryParse(input0, out int parsed))
-            return parsed;
+        if (int.TryParse(input0, out int parsedAmount)
+            && parsedAmount >= HYDRATE_MIN_VALUE
+            && parsedAmount <= HYDRATE_MAX_VALUE)
+        {
+            return new HydrateRequest
+            {
+                PayloadText = parsedAmount.ToString(),
+                PayloadType = MIXITUP_TYPE_AMOUNT
+            };
+        }
 
-        // Fallback path: parse first integer from raw input or full message.
-        string rawInput = GetArg(ARG_RAW_INPUT);
-        parsed = ExtractFirstInt(rawInput);
-        if (parsed != 0)
-            return parsed;
+        // Fallback path: parse the text after the command from rawInput/message.
+        // This keeps the script working across different Streamer.bot trigger setups.
+        string commandText = ParseCommandText("!hydrate");
+        if (string.IsNullOrWhiteSpace(commandText))
+            return null;
 
-        string message = GetArg(ARG_MESSAGE);
-        return ExtractFirstInt(message);
+        if (int.TryParse(commandText, out parsedAmount)
+            && parsedAmount >= HYDRATE_MIN_VALUE
+            && parsedAmount <= HYDRATE_MAX_VALUE)
+        {
+            return new HydrateRequest
+            {
+                PayloadText = parsedAmount.ToString(),
+                PayloadType = MIXITUP_TYPE_AMOUNT
+            };
+        }
+
+        int wordCount = CountWords(commandText);
+        if (wordCount < 1 || wordCount > HYDRATE_MAX_MESSAGE_WORDS)
+            return null;
+
+        return new HydrateRequest
+        {
+            PayloadText = commandText,
+            PayloadType = MIXITUP_TYPE_MESSAGE
+        };
     }
 
-    private int ExtractFirstInt(string text)
+    private string ParseCommandText(string commandName)
+    {
+        string input = GetArg(ARG_RAW_INPUT);
+        if (string.IsNullOrWhiteSpace(input))
+            input = GetArg(ARG_MESSAGE);
+
+        if (string.IsNullOrWhiteSpace(input))
+            return string.Empty;
+
+        string[] parts = input.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 0)
+            return string.Empty;
+
+        int startIndex = 0;
+        if (parts[0].StartsWith(commandName, StringComparison.OrdinalIgnoreCase))
+            startIndex = 1;
+
+        if (startIndex >= parts.Length)
+            return string.Empty;
+
+        return string.Join(" ", parts, startIndex, parts.Length - startIndex).Trim();
+    }
+
+    private int CountWords(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
             return 0;
 
-        string[] parts = text.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        foreach (string part in parts)
-        {
-            if (int.TryParse(part.Trim(), out int value))
-                return value;
-        }
-
-        return 0;
+        return text.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
     }
 
-    private bool TriggerMixItUp(string argumentText)
+    private bool TriggerMixItUp(HydrateRequest hydrateRequest)
     {
         try
         {
             string url = $"{MIXITUP_BASE_URL.TrimEnd('/')}/api/v2/commands/{MIXITUP_COMMAND_ID}";
 
+            string payloadText = hydrateRequest?.PayloadText ?? string.Empty;
+            string payloadType = hydrateRequest?.PayloadType ?? MIXITUP_TYPE_MESSAGE;
+
             string payload = JsonSerializer.Serialize(new
             {
                 Platform = MIXITUP_PLATFORM_TWITCH,
-                Arguments = argumentText,
+                Arguments = payloadText,
+                SpecialIdentifiers = new
+                {
+                    hydratemessage = payloadText,
+                    hydratetype = payloadType
+                },
                 IgnoreRequirements = false
             });
 

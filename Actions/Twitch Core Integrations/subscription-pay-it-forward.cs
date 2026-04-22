@@ -25,6 +25,9 @@ public class CPHInline
      * What this script does:
      *   Calls the Mix It Up Run Command API so Mix It Up can handle the
      *   on-stream reaction (alert, chat callout, etc.).
+     *   This script now forwards the documented user details as Mix It Up
+     *   special identifiers so the Mix It Up command can distinguish this
+     *   event from other subscription flows.
      *
      * Operator steps:
      *   1. Paste this script into the "Subscription Pay It Forward" Streamer.bot action.
@@ -32,8 +35,8 @@ public class CPHInline
      *   3. Confirm your Streamer.bot version is 0.2.5 or later — this trigger does not
      *      exist in earlier versions.
      *   4. Confirm MIXITUP_COMMAND_ID still matches your Mix It Up command export.
-     *   5. Expand BuildArguments / BuildSpecialIdentifiers if additional args become
-     *      available or if you want to forward user info.
+     *   5. In Mix It Up, reference these special identifiers:
+     *      $subuser, $subuserid, $subtype
      */
 
     private const string SCRIPT_NAME = "Core - Subscription Pay It Forward";
@@ -70,16 +73,23 @@ public class CPHInline
 
     private string BuildArguments()
     {
-        // Expand this when you decide what data to forward.
-        // Available args: user, userId.
-        // No additional event-specific args are documented for this trigger.
+        // We are using special identifiers for structured subscription data.
+        // Keep Arguments empty unless a future Mix It Up command needs a
+        // plain-text argument string as well.
         return string.Empty;
     }
 
     private object BuildSpecialIdentifiers()
     {
-        // Expand this when you decide what data to forward.
-        return new { };
+        string user = GetStringArg("user");
+        string userId = GetStringArg("userId");
+
+        return new
+        {
+            subuser = user,
+            subuserid = userId,
+            subtype = "payitforward"
+        };
     }
 
     private void RunMixItUpCommand(string arguments, object specialIdentifiers)
@@ -106,5 +116,12 @@ public class CPHInline
     {
         return string.IsNullOrWhiteSpace(commandId)
             || commandId.IndexOf("replace", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private string GetStringArg(string argName)
+    {
+        string value = "";
+        CPH.TryGetArg(argName, out value);
+        return value ?? "";
     }
 }

@@ -17,9 +17,10 @@ public class CPHInline
      *   user             (string) : Display name of the viewer
      *   userId           (string) : Twitch user ID
      *   watchStreak      (int)    : Number of consecutive streams watched
-     *   watchStreakId     (string) : Unique identifier for this streak event
+     *   watchStreakId    (string) : Unique identifier for this streak event
      *   copoReward       (int)    : Channel points Twitch awarded for the streak
-     *   systemMessage    (string) : Twitch's system message (e.g. "User watched 5 consecutive streams...")
+     *   message          (string) : The viewer's own shared watch streak chat message
+     *   systemMessage    (string) : Twitch's system message (available from Twitch, but no longer forwarded)
      *
      * What this script does:
      *   Reads the watch streak data from the trigger and forwards it to
@@ -28,15 +29,17 @@ public class CPHInline
      *
      * Special identifiers sent to Mix It Up:
      *   watchstreakuser    — display name of the viewer who shared the streak
-     *   watchstreakmessage — Twitch's system message about the streak
+     *   watchstreakmessage — the viewer's own shared streak message (empty when no message was provided)
+     *   watchstreaktype    — "message" when viewer text exists, otherwise "none"
      *   watchstreakcount   — the number of consecutive streams watched
      *
      * Operator steps:
      *   1. Paste this script into a new "Watch Streak" Streamer.bot action.
      *   2. Wire the action to: Twitch → Chat → Watch Streak
      *   3. Confirm MIXITUP_COMMAND_ID still matches the current Mix It Up export.
-     *   4. In Mix It Up, create a command that references:
-     *      $watchstreakuser, $watchstreakmessage, $watchstreakcount
+     *   4. In Mix It Up, create/update a command that references:
+     *      $watchstreakuser, $watchstreakmessage, $watchstreaktype,
+     *      $watchstreakcount
      */
 
     private const string SCRIPT_NAME = "Core - Watch Streak";
@@ -67,19 +70,30 @@ public class CPHInline
             int watchStreak = 0;
             CPH.TryGetArg("watchStreak", out watchStreak);
 
-            string systemMessage = "";
-            CPH.TryGetArg("systemMessage", out systemMessage);
-            systemMessage = systemMessage ?? "";
+            string message = "";
+            CPH.TryGetArg("message", out message);
+            message = message ?? "";
+
+            // Keep the user message exactly as provided.
+            // If Twitch/Streamer.bot sends no viewer-authored message,
+            // forward an empty string and mark the type as "none" so
+            // Mix It Up can decide how to branch its response.
+            string watchStreakMessage = message;
+            string watchStreakType = string.IsNullOrWhiteSpace(watchStreakMessage)
+                ? "none"
+                : "message";
 
             CPH.LogWarn($"[{SCRIPT_NAME}] {user} shared a watch streak of {watchStreak} streams.");
 
             // Build special identifiers so Mix It Up can reference them by name.
-            // In Mix It Up, use: $watchstreakuser, $watchstreakmessage, $watchstreakcount
+            // In Mix It Up, use: $watchstreakuser, $watchstreakmessage,
+            // $watchstreaktype, $watchstreakcount
             // NOTE: Mix It Up special identifier keys must be lowercase with no spaces.
             object specialIdentifiers = new
             {
                 watchstreakuser = user,
-                watchstreakmessage = systemMessage,
+                watchstreakmessage = watchStreakMessage,
+                watchstreaktype = watchStreakType,
                 watchstreakcount = watchStreak.ToString()
             };
 

@@ -43,9 +43,9 @@ Action Group Lookup (Exact Name, Alphabetical):
 27. name=Twitch - Bits - Tier 2 | id=aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0 | enabled=True | unlocked=True | group=None
 28. name=Twitch - Bits - Tier 3 | id=6d05a5c6-6cd9-471b-9358-18dde2df4318 | enabled=True | unlocked=True | group=None
 29. name=Twitch - Bits - Tier 4 | id=35405bfe-660f-46f2-bec6-8a1da9ec1af2 | enabled=True | unlocked=True | group=None
-30. name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195 | enabled=True | unlocked=True | group=None
-31. name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4 | enabled=True | unlocked=True | group=None
-32. name=Twitch Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d | enabled=True | unlocked=True | group=None
+30. name=Twitch - Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d | enabled=True | unlocked=True | group=None
+31. name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195 | enabled=True | unlocked=True | group=None
+32. name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4 | enabled=True | unlocked=True | group=None
 33. name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1 | enabled=True | unlocked=True | group=None
 34. name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591 | enabled=True | unlocked=True | group=None
 35. name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207 | enabled=True | unlocked=True | group=None
@@ -84,7 +84,7 @@ Action Group Lookup (Normalized Name):
 29. normalized=twitch bits tier 4 | name=Twitch - Bits - Tier 4 | id=35405bfe-660f-46f2-bec6-8a1da9ec1af2
 30. normalized=twitch core gift subscription multiple | name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195
 31. normalized=twitch core gift subscription single | name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4
-32. normalized=twitch core stream streak | name=Twitch Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d
+32. normalized=twitch core stream streak | name=Twitch - Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d
 33. normalized=twitch core subscription gift paid upgrade | name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1
 34. normalized=twitch core subscription new sub | name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591
 35. normalized=twitch core subscription pay it forward | name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207
@@ -122,9 +122,9 @@ Action Group Name -> ID Map (Exact Names):
   "Twitch - Bits - Tier 2": "aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0",
   "Twitch - Bits - Tier 3": "6d05a5c6-6cd9-471b-9358-18dde2df4318",
   "Twitch - Bits - Tier 4": "35405bfe-660f-46f2-bec6-8a1da9ec1af2",
+  "Twitch - Core - Stream Streak": "d2d21a86-189c-4a52-8df2-f9d46141af3d",
   "Twitch Core - Gift Subscription - Multiple": "27111920-c34b-4991-b284-57d655a20195",
   "Twitch Core - Gift Subscription - Single": "ce197b79-89d1-4943-8f74-b1a690f5a8e4",
-  "Twitch Core - Stream Streak": "d2d21a86-189c-4a52-8df2-f9d46141af3d",
   "Twitch Core - Subscription - Gift Paid Upgrade": "0bcd98e5-79a4-4767-8e60-58a747d7b7a1",
   "Twitch Core - Subscription - New Sub": "4e5b04b7-b5c6-4b17-a6dd-e90efce4a591",
   "Twitch Core - Subscription - Pay it Forward": "f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207",

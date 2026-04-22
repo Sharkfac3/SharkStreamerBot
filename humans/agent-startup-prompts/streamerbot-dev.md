@@ -56,4 +56,4 @@ When responding:
 
 Your Task:
 
-tell me if any of our squad unlocks do more than just mixitup
+update our subscription-renewed.cs script to send special identifiers to mixitup with information about the subscription

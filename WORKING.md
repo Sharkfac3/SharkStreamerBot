@@ -29,16 +29,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-04-18 | pi | Wire available Mix It Up command IDs into placeholder Actions scripts | uncommitted |
-| 2026-04-15 | pi | Add Mix It Up placeholder checklist for humans | uncommitted |
-| 2026-04-15 | pi | Reconcile Mix It Up IDs against export file | uncommitted |
-| 2026-04-15 | pi | Update Pedro Mix It Up unlock ID | uncommitted |
-| 2026-04-15 | pi | Update Twitch Bits Mix It Up IDs | uncommitted |
-| 2026-04-14 | pi | Fix Twitch subscription Mix It Up command IDs | uncommitted |
-| 2026-04-08 | claude | Stream overlay ecosystem complete — broker, Phaser overlay, LotAT/Squad visual layers, Streamer.bot scripts, agent docs (`Apps/stream-overlay/`, `Actions/Overlay/`, `Actions/LotAT/`, `Actions/Squad/*/`) | uncommitted |
-| 2026-04-03 | pi | Add Mix It Up commander redeem triggers | uncommitted |
-| 2026-04-03 | pi | Convert Mix It Up launcher from .sh to .bat and remove venv usage | uncommitted |
-| 2026-04-03 | pi | Add root shell launcher for Mix It Up command export tool | uncommitted |
+| 2026-04-21 | pi | Trim commander help command list | uncommitted |
+| 2026-04-21 | pi | Add commander help chat script | uncommitted |
+| 2026-04-21 | pi | Add special orb type for bowtome message | uncommitted |
+| 2026-04-21 | pi | Add Mix It Up identifiers to gift subscription router | uncommitted |
+| 2026-04-21 | pi | Backfill Mix It Up identifiers in remaining subscription scripts | uncommitted |
+| 2026-04-21 | pi | Update subscription renewed Mix It Up identifiers | uncommitted |
+| 2026-04-21 | pi | Update Water Wizard hydrate parsing and Mix It Up payload | uncommitted |
+| 2026-04-21 | pi | Add Mix It Up optional-message snippet note | uncommitted |
+| 2026-04-21 | pi | Document Mix It Up type-plus-message pattern | uncommitted |
+| 2026-04-21 | pi | Update watch streak Mix It Up type payload | uncommitted |
 
 ---
 

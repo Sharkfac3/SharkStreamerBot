@@ -70,7 +70,8 @@ They are intentionally minimal so they can be expanded later.
 - All scripts are Streamer.bot C# action scripts.
 - All scripts are prepared to call the Mix It Up Run Command API.
 - Subscription scripts in this folder now use configured Mix It Up command IDs; some non-subscription helpers may still use placeholders until they are wired.
-- All scripts currently send an empty `SpecialIdentifiers` object.
+- Some scripts in this folder still send an empty `SpecialIdentifiers` object.
+- All 5 dedicated subscription scripts plus `watch-streak.cs` now send populated special identifiers to Mix It Up.
 - No script in this folder interacts with OBS.
 - If a command ID is still a placeholder, the script logs a warning and exits safely.
 
@@ -81,7 +82,8 @@ Each of the 5 simple subscription events has its own dedicated script. Every scr
 ### Shared behavior across all 5 scripts
 - Wire each script to its Streamer.bot action and trigger (see table below).
 - Each script already includes its configured Mix It Up command ID.
-- `BuildArguments()` and `BuildSpecialIdentifiers()` are stubs — expand them when you decide what data to forward to Mix It Up.
+- All 5 scripts now forward their documented trigger data to Mix It Up as special identifiers.
+- All 5 scripts keep `Arguments = ""` and use `SpecialIdentifiers` for structured subscription data.
 - If a command ID is ever cleared or replaced with a placeholder, the script logs a warning and exits safely.
 
 | Script | Streamer.bot Action | SB Trigger | Requires SB version |
@@ -103,8 +105,43 @@ Each of the 5 simple subscription events has its own dedicated script. Every scr
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
+  - `SpecialIdentifiers = { ... }`
   - `IgnoreRequirements = false`
+- Special identifiers by script:
+  - `subscription-new.cs`
+    - `subuser`
+    - `subuserid`
+    - `subtier`
+    - `subtype` = `new`
+    - `subismultimonth`
+    - `submultimonthduration`
+    - `submultimonthtenure`
+  - `subscription-renewed.cs`
+    - `subuser`
+    - `subuserid`
+    - `subtier`
+    - `subtype` = `renewed`
+    - `subcumulative`
+    - `submonthstreak`
+    - `substreakshared`
+    - `subismultimonth`
+    - `submultimonthduration`
+    - `submultimonthtenure`
+  - `subscription-prime-paid-upgrade.cs`
+    - `subuser`
+    - `subuserid`
+    - `subtype` = `primepaidupgrade`
+    - `subsystemmessage`
+    - `subupgradetier`
+    - `subupgradetierstring`
+  - `subscription-gift-paid-upgrade.cs`
+    - `subuser`
+    - `subuserid`
+    - `subtype` = `giftpaidupgrade`
+  - `subscription-pay-it-forward.cs`
+    - `subuser`
+    - `subuserid`
+    - `subtype` = `payitforward`
 
 ### OBS Interactions
 - None.
@@ -163,8 +200,36 @@ Paste `subscription-gift.cs` into the action once. No Set Argument steps needed.
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
+  - `SpecialIdentifiers = { ... }`
   - `IgnoreRequirements = false`
+- Single gift special identifiers:
+  - `subuser`
+  - `subuserid`
+  - `subtier`
+  - `subtype` = `gift`
+  - `subrecipientuser`
+  - `subrecipientid`
+  - `subrecipientusername`
+  - `subanonymous`
+  - `subrandom`
+  - `subcumulativemonths`
+  - `submonthsgifted`
+  - `subfromgiftbomb`
+  - `subbombcount`
+  - `subsystemmessage`
+  - `subtotalgifted`
+  - `subtotalgiftedshared`
+- Gift bomb special identifiers:
+  - `subuser`
+  - `subuserid`
+  - `subtier`
+  - `subtype` = `giftbomb`
+  - `subanonymous`
+  - `subgifts`
+  - `subbonusgifts`
+  - `subsystemmessage`
+  - `subtotalgifted`
+  - `subtotalgiftedshared`
 
 ### OBS Interactions
 - None.
@@ -178,7 +243,8 @@ Paste `subscription-gift.cs` into the action once. No Set Argument steps needed.
 - Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
 
 ### Operator Notes
-- Expand `BuildSingleArguments()` / `BuildBombArguments()` when the event field contracts are finalized. See the Trigger Variables section below for available args.
+- `subscription-gift.cs` now uses the same `sub*` special identifier naming pattern as the other subscription scripts.
+- Use `subtype` inside Mix It Up to branch between `gift` and `giftbomb` behavior.
 - The old "Subscription Gift Multiple" Streamer.bot action can be deleted — its function is now handled by this script's Gift Bomb branch.
 
 ---
@@ -276,8 +342,11 @@ Forwards Twitch watch streak data to Mix It Up when a viewer shares their consec
 - None.
 
 ### Key Outputs / Side Effects
-- Reads `user`, `watchStreak`, and `systemMessage` from Streamer.bot trigger args.
-- Forwards them to Mix It Up as special identifiers.
+- Reads `user`, `watchStreak`, and `message` from Streamer.bot trigger args.
+- Forwards the viewer's `message` to Mix It Up unchanged.
+- Sends a companion `watchstreaktype` special identifier so Mix It Up can branch safely:
+  - `message` when viewer text exists
+  - `none` when the viewer message is blank or missing
 
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
@@ -285,14 +354,15 @@ Forwards Twitch watch streak data to Mix It Up when a viewer shares their consec
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
-  - `SpecialIdentifiers = { watchstreakuser, watchstreakmessage, watchstreakcount }`
+  - `SpecialIdentifiers = { watchstreakuser, watchstreakmessage, watchstreaktype, watchstreakcount }`
   - `IgnoreRequirements = false`
 
 ### Special Identifiers (Mix It Up)
 | Key | Source | Mix It Up usage |
 |---|---|---|
 | `watchstreakuser` | `user` trigger arg | `$watchstreakuser` |
-| `watchstreakmessage` | `systemMessage` trigger arg | `$watchstreakmessage` |
+| `watchstreakmessage` | `message` trigger arg (empty when missing) | `$watchstreakmessage` |
+| `watchstreaktype` | `message` when viewer text exists, otherwise `none` | `$watchstreaktype` |
 | `watchstreakcount` | `watchStreak` trigger arg (as string) | `$watchstreakcount` |
 
 ### OBS Interactions
@@ -308,7 +378,9 @@ Forwards Twitch watch streak data to Mix It Up when a viewer shares their consec
 
 ### Operator Notes
 - Current command ID is configured from the saved Mix It Up command export.
-- In Mix It Up, create a command that references `$watchstreakuser`, `$watchstreakmessage`, and `$watchstreakcount`.
+- In Mix It Up, create/update the command so it references `$watchstreakuser`, `$watchstreakmessage`, `$watchstreaktype`, and `$watchstreakcount`.
+- `$watchstreakmessage` is now intentionally empty when Twitch does not provide a viewer-authored message.
+- Use `$watchstreaktype` to branch inside Mix It Up instead of relying on a fallback system message.
 - This is the first Twitch Core script to use populated special identifiers — use it as a reference pattern for backfilling the subscription and follower scripts.
 
 ---
@@ -472,6 +544,7 @@ Triggered under Twitch → Chat → Watch Streak (Chat Client v0.2.4+).
 | `watchStreak` | int | Number of consecutive streams watched |
 | `watchStreakId` | string | Unique identifier for this streak event |
 | `copoReward` | int | Channel points Twitch awarded for the streak |
+| `message` | string | The viewer's own shared watch streak chat message |
 | `systemMessage` | string | Twitch's system message (e.g. "User watched 5 consecutive streams...") |
 
-> All subscription scripts are currently stubs — expand the `Build*Arguments()` and `Build*SpecialIdentifiers()` methods when event field contracts are finalized. See each script's operator notes for which trigger args are available.
+> All 5 dedicated subscription scripts now forward their documented trigger fields to Mix It Up via special identifiers. Use the per-script lists above when building or updating the matching Mix It Up commands.

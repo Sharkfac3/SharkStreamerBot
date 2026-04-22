@@ -24,13 +24,17 @@ public class CPHInline
      * What this script does:
      *   Calls the Mix It Up Run Command API so Mix It Up can handle the
      *   on-stream reaction (alert, chat message, sound, etc.).
+     *   This script now forwards the new-subscription details as Mix It Up
+     *   special identifiers so the Mix It Up command can branch on tier
+     *   and multi-month status.
      *
      * Operator steps:
      *   1. Paste this script into the "Subscription New" Streamer.bot action.
      *   2. Wire the action to: Twitch → Subscriptions → Subscription
      *   3. Confirm MIXITUP_COMMAND_ID still matches your Mix It Up command export.
-     *   4. Expand BuildArguments / BuildSpecialIdentifiers when you decide
-     *      which trigger args to forward to Mix It Up.
+     *   4. In Mix It Up, reference these special identifiers:
+     *      $subuser, $subuserid, $subtier, $subtype,
+     *      $subismultimonth, $submultimonthduration, $submultimonthtenure
      */
 
     private const string SCRIPT_NAME = "Core - Subscription New";
@@ -67,15 +71,31 @@ public class CPHInline
 
     private string BuildArguments()
     {
-        // Expand this when you decide what data to forward.
-        // Available args: user, userId, tier, isMultiMonth, multiMonthDuration, multiMonthTenure.
+        // We are using special identifiers for structured subscription data.
+        // Keep Arguments empty unless a future Mix It Up command needs a
+        // plain-text argument string as well.
         return string.Empty;
     }
 
     private object BuildSpecialIdentifiers()
     {
-        // Expand this when you decide what data to forward.
-        return new { };
+        string user = GetStringArg("user");
+        string userId = GetStringArg("userId");
+        string tier = GetStringArg("tier");
+        bool isMultiMonth = GetBoolArg("isMultiMonth");
+        int multiMonthDuration = GetIntArg("multiMonthDuration");
+        int multiMonthTenure = GetIntArg("multiMonthTenure");
+
+        return new
+        {
+            subuser = user,
+            subuserid = userId,
+            subtier = tier,
+            subtype = "new",
+            subismultimonth = isMultiMonth ? "true" : "false",
+            submultimonthduration = multiMonthDuration.ToString(),
+            submultimonthtenure = multiMonthTenure.ToString()
+        };
     }
 
     private void RunMixItUpCommand(string arguments, object specialIdentifiers)
@@ -102,5 +122,26 @@ public class CPHInline
     {
         return string.IsNullOrWhiteSpace(commandId)
             || commandId.IndexOf("replace", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private string GetStringArg(string argName)
+    {
+        string value = "";
+        CPH.TryGetArg(argName, out value);
+        return value ?? "";
+    }
+
+    private int GetIntArg(string argName)
+    {
+        int value = 0;
+        CPH.TryGetArg(argName, out value);
+        return value;
+    }
+
+    private bool GetBoolArg(string argName)
+    {
+        bool value = false;
+        CPH.TryGetArg(argName, out value);
+        return value;
     }
 }

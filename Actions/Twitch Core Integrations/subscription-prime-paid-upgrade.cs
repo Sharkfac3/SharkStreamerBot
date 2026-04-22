@@ -25,6 +25,8 @@ public class CPHInline
      * What this script does:
      *   Calls the Mix It Up Run Command API so Mix It Up can handle the
      *   on-stream reaction (alert, chat callout, etc.).
+     *   This script now forwards the upgrade details as Mix It Up special
+     *   identifiers so the Mix It Up command can branch on upgrade tier.
      *
      * Operator steps:
      *   1. Paste this script into the "Subscription Prime Paid Upgrade" Streamer.bot action.
@@ -32,8 +34,9 @@ public class CPHInline
      *   3. Confirm your Streamer.bot version is 0.2.5 or later — this trigger does not
      *      exist in earlier versions.
      *   4. Confirm MIXITUP_COMMAND_ID still matches your Mix It Up command export.
-     *   5. Expand BuildArguments / BuildSpecialIdentifiers when you decide
-     *      which trigger args to forward (e.g. user, upgradeTierString).
+     *   5. In Mix It Up, reference these special identifiers:
+     *      $subuser, $subuserid, $subtype, $subsystemmessage,
+     *      $subupgradetier, $subupgradetierstring
      */
 
     private const string SCRIPT_NAME = "Core - Subscription Prime Paid Upgrade";
@@ -70,15 +73,29 @@ public class CPHInline
 
     private string BuildArguments()
     {
-        // Expand this when you decide what data to forward.
-        // Available args: user, userId, systemMessage, upgradeTier, upgradeTierString.
+        // We are using special identifiers for structured subscription data.
+        // Keep Arguments empty unless a future Mix It Up command needs a
+        // plain-text argument string as well.
         return string.Empty;
     }
 
     private object BuildSpecialIdentifiers()
     {
-        // Expand this when you decide what data to forward.
-        return new { };
+        string user = GetStringArg("user");
+        string userId = GetStringArg("userId");
+        string systemMessage = GetStringArg("systemMessage");
+        int upgradeTier = GetIntArg("upgradeTier");
+        string upgradeTierString = GetStringArg("upgradeTierString");
+
+        return new
+        {
+            subuser = user,
+            subuserid = userId,
+            subtype = "primepaidupgrade",
+            subsystemmessage = systemMessage,
+            subupgradetier = upgradeTier.ToString(),
+            subupgradetierstring = upgradeTierString
+        };
     }
 
     private void RunMixItUpCommand(string arguments, object specialIdentifiers)
@@ -105,5 +122,19 @@ public class CPHInline
     {
         return string.IsNullOrWhiteSpace(commandId)
             || commandId.IndexOf("replace", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private string GetStringArg(string argName)
+    {
+        string value = "";
+        CPH.TryGetArg(argName, out value);
+        return value ?? "";
+    }
+
+    private int GetIntArg(string argName)
+    {
+        int value = 0;
+        CPH.TryGetArg(argName, out value);
+        return value;
     }
 }

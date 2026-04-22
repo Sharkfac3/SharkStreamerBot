@@ -37,13 +37,14 @@ public class CPHInline
      *
      * Key outputs/side effects:
      * - Calls one of two Mix It Up commands depending on detected event type.
+     * - Sends gift-specific Mix It Up special identifiers using the same
+     *   `sub*` naming pattern as the other subscription scripts.
      * - Suppresses (logs only) the per-recipient Gift Subscription fires from bombs.
      * - Does not interact with OBS.
      *
      * Operator notes:
      * - Confirm both Mix It Up command IDs still match your latest Mix It Up export.
-     * - Expand BuildSingleArguments / BuildBombArguments when the final event
-     *   field contracts are decided. Refer to README.md for available trigger args.
+     * - In Mix It Up, use the documented `sub*` special identifiers from the README.
      * - The "gifts" arg is only injected by the Gift Bomb trigger — this is how
      *   the script distinguishes a bomb from a solo gift without any extra UI setup.
      */
@@ -127,14 +128,49 @@ public class CPHInline
 
     private string BuildSingleArguments()
     {
-        // Expand this when the final event field contract is decided.
+        // We are using special identifiers for structured subscription data.
+        // Keep Arguments empty unless a future Mix It Up command needs a
+        // plain-text argument string as well.
         return string.Empty;
     }
 
     private object BuildSingleSpecialIdentifiers()
     {
-        // Expand this when the final event field contract is decided.
-        return new { };
+        string user = GetStringArg("user");
+        string userId = GetStringArg("userId");
+        string tier = GetStringArg("tier");
+        string recipientUser = GetStringArg("recipientUser");
+        string recipientId = GetStringArg("recipientId");
+        string recipientUserName = GetStringArg("recipientUserName");
+        bool anonymous = GetBoolArg("anonymous");
+        bool random = GetBoolArg("random");
+        int cumulativeMonths = GetIntArg("cumulativeMonths");
+        int monthsGifted = GetIntArg("monthsGifted");
+        bool fromGiftBomb = GetBoolArg("fromGiftBomb");
+        int subBombCount = GetIntArg("subBombCount");
+        string systemMessage = GetStringArg("systemMessage");
+        int totalSubsGifted = GetIntArg("totalSubsGifted");
+        bool totalSubsGiftedShared = GetBoolArg("totalSubsGiftedShared");
+
+        return new
+        {
+            subuser = user,
+            subuserid = userId,
+            subtier = tier,
+            subtype = "gift",
+            subrecipientuser = recipientUser,
+            subrecipientid = recipientId,
+            subrecipientusername = recipientUserName,
+            subanonymous = anonymous ? "true" : "false",
+            subrandom = random ? "true" : "false",
+            subcumulativemonths = cumulativeMonths.ToString(),
+            submonthsgifted = monthsGifted.ToString(),
+            subfromgiftbomb = fromGiftBomb ? "true" : "false",
+            subbombcount = subBombCount.ToString(),
+            subsystemmessage = systemMessage,
+            subtotalgifted = totalSubsGifted.ToString(),
+            subtotalgiftedshared = totalSubsGiftedShared ? "true" : "false"
+        };
     }
 
     // --- Gift Bomb aggregate argument builders ---
@@ -144,14 +180,37 @@ public class CPHInline
 
     private string BuildBombArguments()
     {
-        // Expand this when the final event field contract is decided.
+        // We are using special identifiers for structured subscription data.
+        // Keep Arguments empty unless a future Mix It Up command needs a
+        // plain-text argument string as well.
         return string.Empty;
     }
 
     private object BuildBombSpecialIdentifiers()
     {
-        // Expand this when the final event field contract is decided.
-        return new { };
+        string user = GetStringArg("user");
+        string userId = GetStringArg("userId");
+        string tier = GetStringArg("tier");
+        bool anonymous = GetBoolArg("anonymous");
+        int gifts = GetIntArg("gifts");
+        bool bonusGifts = GetBoolArg("bonusGifts");
+        string systemMessage = GetStringArg("systemMessage");
+        int totalGifts = GetIntArg("totalGifts");
+        bool totalGiftsShared = GetBoolArg("totalGiftsShared");
+
+        return new
+        {
+            subuser = user,
+            subuserid = userId,
+            subtier = tier,
+            subtype = "giftbomb",
+            subanonymous = anonymous ? "true" : "false",
+            subgifts = gifts.ToString(),
+            subbonusgifts = bonusGifts ? "true" : "false",
+            subsystemmessage = systemMessage,
+            subtotalgifted = totalGifts.ToString(),
+            subtotalgiftedshared = totalGiftsShared ? "true" : "false"
+        };
     }
 
     // --- Shared helpers ---
@@ -180,5 +239,26 @@ public class CPHInline
     {
         return string.IsNullOrWhiteSpace(commandId)
             || commandId.IndexOf("replace", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private string GetStringArg(string argName)
+    {
+        string value = "";
+        CPH.TryGetArg(argName, out value);
+        return value ?? "";
+    }
+
+    private int GetIntArg(string argName)
+    {
+        int value = 0;
+        CPH.TryGetArg(argName, out value);
+        return value;
+    }
+
+    private bool GetBoolArg(string argName)
+    {
+        bool value = false;
+        CPH.TryGetArg(argName, out value);
+        return value;
     }
 }

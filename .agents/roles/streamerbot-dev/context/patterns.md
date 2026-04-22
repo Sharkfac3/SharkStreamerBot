@@ -19,3 +19,16 @@ Pedro's secret unlock is intentionally allowed to trigger Mix It Up multiple tim
 ## stream_mode Fallback
 
 All scripts that read `stream_mode` should fall back to `"workspace"` if the value is null, empty, or unrecognized. Never hard-fail on an unknown mode value.
+
+## Mix It Up Optional Message Pattern
+
+When a Streamer.bot event includes an optional user-authored text field and that value needs to be forwarded to Mix It Up, prefer sending **both**:
+
+- the user text itself as a special identifier (for example `watchstreakmessage`)
+- a companion type/status special identifier (for example `watchstreaktype`)
+
+Default contract:
+- user text present → send the text unchanged and set type to `message`
+- user text missing/blank → send empty string and set type to `none`
+
+Do not silently swap in `systemMessage` or another fallback string unless the operator explicitly wants that behavior. This keeps Mix It Up branching explicit and preserves the difference between "viewer wrote something" and "no viewer message existed." 

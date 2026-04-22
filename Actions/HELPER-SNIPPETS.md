@@ -153,6 +153,38 @@ TriggerMixItUpCommand(
     specialIdentifiers: new { test = "True" });
 ```
 
+### Optional user-message pattern
+When a trigger includes **optional user-authored text** and Mix It Up needs to know both
+"what the user wrote" and "whether they wrote anything at all," send two special identifiers:
+
+- the message text itself (example: `watchstreakmessage`)
+- a companion type/status field (example: `watchstreaktype`)
+
+Preferred contract:
+- message exists → keep the text unchanged and set type to `message`
+- message missing/blank → send empty string and set type to `none`
+
+Do **not** silently swap in `systemMessage` or another fallback string unless the operator
+explicitly asks for that behavior.
+
+Example:
+```csharp
+string userMessage = message ?? "";
+string messageType = string.IsNullOrWhiteSpace(userMessage)
+    ? "none"
+    : "message";
+
+TriggerMixItUpCommand(
+    MIXITUP_UNLOCK_COMMAND_ID,
+    "Core Watch Streak",
+    arguments: "",
+    specialIdentifiers: new
+    {
+        watchstreakmessage = userMessage,
+        watchstreaktype = messageType
+    });
+```
+
 ### Unlock pacing guidance
 When a script triggers a **Mix It Up unlock command** and then waits for the unlock sequence to finish,
 include a **3000ms startup buffer** before the effect's own duration.

@@ -84,19 +84,25 @@ Handles public `!hail` support calls for the current Water Wizard.
 ## Script: `wizard-hydrate.cs`
 
 ### Purpose
-Handles Water Wizard-only `!hydrate X` command usage.
+Handles Water Wizard-only `!hydrate` command usage.
 
 ### Expected Trigger / Input
 - Chat command/action trigger for `!hydrate`.
-- Expects `X` to be a number from `1` to `10` (reads `input0` first, then falls back to `rawInput` / `message`).
+- Accepts either:
+  - a number from `1` to `10`, or
+  - a short custom message up to `5` words.
+- Reads `input0` first, then falls back to `rawInput` / `message`.
 
 ### Required Runtime Variables
 - Reads `current_water_wizard` (active Water Wizard username).
 - Reads/writes `water_wizard_hydrate_next_allowed_utc` (Unix timestamp, UTC, used for 5-minute cooldown).
 
 ### Key Outputs / Side Effects
-- If caller **is** current Water Wizard and `X` is valid and off cooldown:
-  - Triggers Mix It Up command and forwards `X` as payload `Arguments`.
+- If caller **is** current Water Wizard and hydrate input is valid and off cooldown:
+  - Triggers Mix It Up command and forwards the parsed hydrate payload as `Arguments`.
+  - Also sends `SpecialIdentifiers.hydratemessage` and `SpecialIdentifiers.hydratetype` so Mix It Up can branch intentionally.
+  - Uses `hydratetype = "amount"` for numeric `1..10` input.
+  - Uses `hydratetype = "message"` for short custom text.
   - Starts/refreshes 5-minute cooldown.
 - If caller **is not** current Water Wizard:
   - If a Water Wizard is active, sends Twitch chat instruction to type `!hail` for encouragement.
@@ -107,7 +113,9 @@ Handles Water Wizard-only `!hydrate X` command usage.
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID in script: `53244f6a-6882-4457-bc9f-b429ecd9ce9d`
-- Payload `Arguments`: the hydrate value `X` (as text)
+- Payload `Arguments`: the validated hydrate payload text (either `1..10` or the short custom message)
+- Payload `SpecialIdentifiers.hydratemessage`: same validated hydrate payload text
+- Payload `SpecialIdentifiers.hydratetype`: `amount` or `message`
 
 ### OBS Interactions
 - None.
@@ -117,11 +125,13 @@ Handles Water Wizard-only `!hydrate X` command usage.
 
 ### Chat / Log Output
 - Sends chat guidance/feedback for unauthorized use, invalid usage, and cooldown status.
+- Invalid usage guidance now explains both accepted input shapes: numeric `1..10` or short custom text up to `5` words.
 - Logs warning/error if Mix It Up call fails.
 
 ### Operator Notes
-- Replace `MIXITUP_COMMAND_ID` placeholder before production use.
+- Current command ID is configured from the saved Mix It Up command export.
 - Wire this script to the `!hydrate` command trigger action.
+- Update the receiving Mix It Up command to use `$hydratemessage` and `$hydratetype` instead of assuming hydrate input is always numeric.
 - Cooldown is role-specific and tracked globally by key `water_wizard_hydrate_next_allowed_utc`.
 
 ---
@@ -196,6 +206,10 @@ Handles Water Wizard-only `!orb` command usage.
 ### Key Outputs / Side Effects
 - If caller **is** current Water Wizard and phrase is valid and off cooldown:
   - Triggers Mix It Up command and forwards optional orb text (`0` to `30` words) as payload `Arguments`.
+  - Also sends `SpecialIdentifiers.orbmessage` and `SpecialIdentifiers.orbtype` so Mix It Up can branch intentionally.
+  - Uses `orbtype = "none"` when no orb text was provided.
+  - Uses `orbtype = "message"` for normal custom text.
+  - Uses `orbtype = "special"` when the user message is exactly `bowtome` (case-insensitive).
   - Starts/refreshes 5-minute cooldown.
 - If caller **is not** current Water Wizard:
   - If a Water Wizard is active, sends Twitch chat instruction to type `!hail` for encouragement.
@@ -207,6 +221,8 @@ Handles Water Wizard-only `!orb` command usage.
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID in script: `6b00a684-8fd4-404c-81b0-c279f241af73`
 - Payload `Arguments`: validated orb text (optional, max 30 words)
+- Payload `SpecialIdentifiers.orbmessage`: same validated orb text
+- Payload `SpecialIdentifiers.orbtype`: `none`, `message`, or `special`
 
 ### OBS Interactions
 - None.
@@ -221,3 +237,4 @@ Handles Water Wizard-only `!orb` command usage.
 ### Operator Notes
 - Current command ID is configured from the saved Mix It Up command export.
 - Wire this script to the `!orb` command trigger action.
+- Update the receiving Mix It Up command to use `$orbmessage` and `$orbtype` if you want a dedicated branch for the `bowtome` special case.

@@ -22,8 +22,18 @@ public class CPHInline
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
     private const string MIXITUP_COMMAND_ID = "6b00a684-8fd4-404c-81b0-c279f241af73";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
+    private const string MIXITUP_TYPE_NONE = "none";
+    private const string MIXITUP_TYPE_MESSAGE = "message";
+    private const string MIXITUP_TYPE_SPECIAL = "special";
+    private const string SPECIAL_ORB_PHRASE_BOW_TO_ME = "bowtome";
 
     private static readonly HttpClient Http = new HttpClient();
+
+    private sealed class OrbRequest
+    {
+        public string PayloadText { get; set; }
+        public string PayloadType { get; set; }
+    }
 
     /*
      * Purpose:
@@ -31,6 +41,8 @@ public class CPHInline
      * - Accepts up to 30 words after !orb (message text is optional).
      * - Applies a 5-minute cooldown for the active Water Wizard.
      * - For valid wizard usage, forwards optional orb text (0-30 words) to Mix It Up as Arguments.
+     * - Also sends orbmessage / orbtype special identifiers so Mix It Up can branch safely.
+     * - Uses orbtype = "special" when the user message is exactly "bowtome".
      */
     public bool Execute()
     {
@@ -46,8 +58,8 @@ public class CPHInline
             return true;
         }
 
-        string orbText = ParseCommandText("!orb", ORB_MAX_WORD_COUNT);
-        if (orbText == null)
+        OrbRequest orbRequest = ParseOrbRequest();
+        if (orbRequest == null)
         {
             CPH.SendMessage($"@{caller} use !orb with optional text (0-30 words max). Example: !orb or !orb your message here 🔮");
             return true;
@@ -64,7 +76,7 @@ public class CPHInline
             return true;
         }
 
-        bool mixitupOk = TriggerMixItUp(orbText);
+        bool mixitupOk = TriggerMixItUp(orbRequest);
         if (!mixitupOk)
             return true;
 
@@ -100,6 +112,20 @@ public class CPHInline
         CPH.SendMessage($"@{caller} there is no current Water Wizard right now—redeem to become the Water Wizard and unlock !orb! 🌊");
     }
 
+    private OrbRequest ParseOrbRequest()
+    {
+        string orbText = ParseCommandText("!orb", ORB_MAX_WORD_COUNT);
+        if (orbText == null)
+            return null;
+
+        string orbType = ResolveOrbType(orbText);
+        return new OrbRequest
+        {
+            PayloadText = orbText,
+            PayloadType = orbType
+        };
+    }
+
     private string ParseCommandText(string commandName, int maxWords)
     {
         string input = GetArg(ARG_RAW_INPUT);
@@ -126,19 +152,38 @@ public class CPHInline
         if (wordCount == 0)
             return string.Empty;
 
-        return string.Join(" ", parts, startIndex, wordCount);
+        return string.Join(" ", parts, startIndex, wordCount).Trim();
     }
 
-    private bool TriggerMixItUp(string argumentText)
+    private string ResolveOrbType(string orbText)
+    {
+        if (string.IsNullOrWhiteSpace(orbText))
+            return MIXITUP_TYPE_NONE;
+
+        if (string.Equals(orbText.Trim(), SPECIAL_ORB_PHRASE_BOW_TO_ME, StringComparison.OrdinalIgnoreCase))
+            return MIXITUP_TYPE_SPECIAL;
+
+        return MIXITUP_TYPE_MESSAGE;
+    }
+
+    private bool TriggerMixItUp(OrbRequest orbRequest)
     {
         try
         {
             string url = $"{MIXITUP_BASE_URL.TrimEnd('/')}/api/v2/commands/{MIXITUP_COMMAND_ID}";
 
+            string payloadText = orbRequest?.PayloadText ?? string.Empty;
+            string payloadType = orbRequest?.PayloadType ?? MIXITUP_TYPE_NONE;
+
             string payload = JsonSerializer.Serialize(new
             {
                 Platform = MIXITUP_PLATFORM_TWITCH,
-                Arguments = argumentText,
+                Arguments = payloadText,
+                SpecialIdentifiers = new
+                {
+                    orbmessage = payloadText,
+                    orbtype = payloadType
+                },
                 IgnoreRequirements = false
             });
 
