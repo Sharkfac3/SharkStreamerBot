@@ -66,27 +66,37 @@ public class CPHInline
     {
         const string LOG_PREFIX = "[BrokerConnect]";
 
-        // ── Guard: already connected ─────────────────────────────────────────
-        // WebsocketIsConnected() queries the live socket state, not our global var.
-        // If Streamer.bot already has an open connection (e.g. manual retry),
-        // update the flag and return immediately.
-        if (CPH.WebsocketIsConnected(BROKER_WS_INDEX))
+        // ── Guard: already connected AND hello already sent ──────────────────
+        // WebsocketIsConnected() checks TCP state only — not whether ClientHello
+        // was sent. Streamer.bot may auto-connect the socket at startup without
+        // this script running, leaving the broker with a raw TCP connection but
+        // no registered client. Only skip the full handshake if we know the
+        // broker already has this client in its registry (VAR_BROKER_CONNECTED).
+        bool alreadyConnected = CPH.WebsocketIsConnected(BROKER_WS_INDEX);
+        bool helloSent = (CPH.GetGlobalVar<bool?>(VAR_BROKER_CONNECTED, false) ?? false);
+        if (alreadyConnected && helloSent)
         {
-            CPH.LogWarn($"{LOG_PREFIX} Already connected to broker. No action needed.");
-            CPH.SetGlobalVar(VAR_BROKER_CONNECTED, true, false);
+            CPH.LogWarn($"{LOG_PREFIX} Already connected and registered with broker. No action needed.");
             return true;
         }
 
         // ── Mark disconnected before attempt ─────────────────────────────────
-        // Ensures downstream publish helpers see a clean false state if we fail.
         CPH.SetGlobalVar(VAR_BROKER_CONNECTED, false, false);
-        CPH.LogWarn($"{LOG_PREFIX} Connecting to broker (WS client index {BROKER_WS_INDEX})...");
 
-        // ── Attempt connection ────────────────────────────────────────────────
-        // WebsocketConnect is non-blocking — it opens the socket in the background.
-        // We wait WAIT_CONNECT_MS milliseconds before checking whether it succeeded.
-        CPH.WebsocketConnect(BROKER_WS_INDEX);
-        CPH.Wait(WAIT_CONNECT_MS);
+        // ── Attempt connection (skip if TCP already open) ─────────────────────
+        // WebsocketConnect is non-blocking. If Streamer.bot auto-connected the
+        // socket at startup, the TCP channel is already open — calling Connect
+        // again may be a no-op or cause an error depending on the version.
+        if (!alreadyConnected)
+        {
+            CPH.LogWarn($"{LOG_PREFIX} Connecting to broker (WS client index {BROKER_WS_INDEX})...");
+            CPH.WebsocketConnect(BROKER_WS_INDEX);
+            CPH.Wait(WAIT_CONNECT_MS);
+        }
+        else
+        {
+            CPH.LogWarn($"{LOG_PREFIX} TCP already open. Sending ClientHello to register with broker...");
+        }
 
         // ── Verify connection established ─────────────────────────────────────
         if (!CPH.WebsocketIsConnected(BROKER_WS_INDEX))

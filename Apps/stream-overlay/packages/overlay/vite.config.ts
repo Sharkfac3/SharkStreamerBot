@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite';
 
-export default defineConfig({
-  // base: './' is required for OBS local file loading.
+export default defineConfig(({ command }) => ({
+  // base: './' is required for OBS local file loading (production build only).
   // When OBS loads dist/index.html as a local file, all asset paths must be relative.
-  // Without this, Vite generates absolute paths (/assets/...) that break in file:// context.
-  base: './',
+  // Dev server uses '/' so Vite serves public/ static files correctly instead of index.html.
+  base: command === 'build' ? './' : '/',
 
   build: {
     outDir: 'dist',
@@ -20,4 +20,4 @@ export default defineConfig({
     port: 5173,
     strictPort: true, // Fail fast if 5173 is occupied — no silent port fallback.
   },
-});
+}));
