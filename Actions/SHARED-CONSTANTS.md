@@ -373,6 +373,35 @@ Operator notes:
 
 ---
 
+## Destroyer (shared)
+- `DESTROYER_ASSET_ID`       = `destroyer`
+- `DESTROYER_ASSET_SRC`      = `images/destroyer.jpg`
+- `DESTROYER_START_X`        = `960`
+- `DESTROYER_START_Y`        = `540`
+- `DESTROYER_SIZE`           = `200` *(width and height in pixels)*
+- `DESTROYER_HALF_SIZE`      = `100` *(half of DESTROYER_SIZE; used for boundary clamping)*
+- `DESTROYER_STEP`           = `50` *(pixels per !up/!down/!left/!right command)*
+- `DESTROYER_TWEEN_MS`       = `150` *(move tween duration in ms)*
+- `DESTROYER_LIFETIME_MS`    = `300000` *(5 minutes; overlay auto-removes after this)*
+- `DESTROYER_DEPTH`          = `10`
+- `VAR_DESTROYER_ACTIVE`     = `destroyer_active` *(non-persisted bool; true while on screen)*
+- `VAR_DESTROYER_X`          = `destroyer_x` *(non-persisted int; current canvas x)*
+- `VAR_DESTROYER_Y`          = `destroyer_y` *(non-persisted int; current canvas y)*
+- `VAR_DESTROYER_EXPIRE_UTC` = `destroyer_expire_utc` *(non-persisted long; unix ms when lifetime ends)*
+
+Used in:
+- `Actions/Destroyer/destroyer-spawn.cs`
+- `Actions/Destroyer/destroyer-move.cs`
+
+Operator notes:
+- `!destroyer` spawns the image; `!up` / `!down` / `!left` / `!right` move it.
+- All four move commands should trigger the **same** destroyer-move.cs action in Streamer.bot.
+- `destroyer_active` resets to false automatically when the first move command fires after expiry.
+- Image is 200×200px at Phaser center-origin. Boundary clamp keeps the full image on canvas.
+- `destroyer.jpg` must exist at `Apps/stream-overlay/packages/overlay/public/images/destroyer.jpg`.
+
+---
+
 ## Operator Sync Notes
 1. Update constants in source files in this repo.
 2. Paste updated scripts into Streamer.bot actions.
