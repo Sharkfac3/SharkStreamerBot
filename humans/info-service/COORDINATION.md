@@ -62,5 +62,5 @@ Append a row each time a prompt runs. Newest first.
 
 | Date | Prompt | Agent | Outcome | Commit |
 |------|--------|-------|---------|--------|
-| 2026-04-24 | 00-seed-plan.md | claude | Created `Docs/INFO-SERVICE-PLAN.md` with all 10 required sections | tbd |
+| 2026-04-24 | 00-seed-plan.md | claude | Created `Docs/INFO-SERVICE-PLAN.md` with all 10 required sections | fa64c29 |
 | 2026-04-24 | seed prompt series | claude | Created `humans/info-service/` with README, COORDINATION, P0-P3 prompts | uncommitted |

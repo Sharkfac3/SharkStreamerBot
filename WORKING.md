@@ -28,7 +28,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-04-24 | claude | Seed INFO-SERVICE-PLAN.md | tbd |
+| 2026-04-24 | claude | Seed INFO-SERVICE-PLAN.md | fa64c29 |
 | 2026-04-24 | claude | Seed info-service prompt series + coordination scaffolding | uncommitted |
 | 2026-04-24 | pi | Clone Grid integration cleanup + self-destruct | uncommitted |
 | 2026-04-24 | pi | Clone Grid overlay renderer rewrite | uncommitted |
