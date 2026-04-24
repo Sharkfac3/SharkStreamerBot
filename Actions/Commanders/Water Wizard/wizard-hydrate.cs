@@ -20,6 +20,7 @@ public class CPHInline
     private const int HYDRATE_MIN_VALUE = 1;
     private const int HYDRATE_MAX_VALUE = 10;
     private const int HYDRATE_MAX_MESSAGE_WORDS = 5;
+    private const int HYDRATE_MAX_MESSAGE_CHARS = 40;
     private const int HYDRATE_COOLDOWN_MINUTES = 5;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
@@ -81,7 +82,7 @@ public class CPHInline
         HydrateRequest hydrateRequest = ParseHydrateRequest();
         if (hydrateRequest == null)
         {
-            CPH.SendMessage($"@{caller} use !hydrate <1-10> or !hydrate <short message> (up to 5 words). Example: !hydrate 7 or !hydrate hydrate the crew 💧");
+            CPH.SendMessage($"@{caller} use !hydrate <1-10> or !hydrate <short message> (up to {HYDRATE_MAX_MESSAGE_WORDS} words / {HYDRATE_MAX_MESSAGE_CHARS} chars). Example: !hydrate 7 or !hydrate hydrate the crew 💧");
             return true;
         }
 
@@ -174,6 +175,10 @@ public class CPHInline
 
         int wordCount = CountWords(commandText);
         if (wordCount < 1 || wordCount > HYDRATE_MAX_MESSAGE_WORDS)
+            return null;
+
+        // Also reject messages that exceed the character limit.
+        if (commandText.Length > HYDRATE_MAX_MESSAGE_CHARS)
             return null;
 
         return new HydrateRequest

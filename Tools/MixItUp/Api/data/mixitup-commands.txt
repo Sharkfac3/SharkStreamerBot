@@ -1,9 +1,9 @@
 Mix It Up Commands Export
-Command count: 96
-Action Group count: 37
+Command count: 98
+Action Group count: 39
 Pages fetched: 1
 Requested page size: 100
-Reported total count: 96
+Reported total count: 98
 First page command source: root['Commands']
 First page top-level keys: TotalCount, Commands
 
@@ -43,14 +43,16 @@ Action Group Lookup (Exact Name, Alphabetical):
 27. name=Twitch - Bits - Tier 2 | id=aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0 | enabled=True | unlocked=True | group=None
 28. name=Twitch - Bits - Tier 3 | id=6d05a5c6-6cd9-471b-9358-18dde2df4318 | enabled=True | unlocked=True | group=None
 29. name=Twitch - Bits - Tier 4 | id=35405bfe-660f-46f2-bec6-8a1da9ec1af2 | enabled=True | unlocked=True | group=None
-30. name=Twitch - Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d | enabled=True | unlocked=True | group=None
-31. name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195 | enabled=True | unlocked=True | group=None
-32. name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4 | enabled=True | unlocked=True | group=None
-33. name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1 | enabled=True | unlocked=True | group=None
-34. name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591 | enabled=True | unlocked=True | group=None
-35. name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207 | enabled=True | unlocked=True | group=None
-36. name=Twitch Core - Subscription - Prime Paid Upgrade | id=eabfb607-a4f3-4c45-b26f-1968c3f3f1e7 | enabled=True | unlocked=True | group=None
-37. name=Twitch Core - Subscription - Renewed | id=4af70639-67b5-4d83-8da1-7be0afe1ce76 | enabled=True | unlocked=True | group=None
+30. name=Twitch - Channel Points - Disco Party - End | id=d8af386f-e3f5-4eb0-9b53-ca3aaa6853fd | enabled=True | unlocked=True | group=None
+31. name=Twitch - Channel Points - Disco Party - Start | id=9d642983-c438-4b4d-85f9-eccf49251a68 | enabled=True | unlocked=True | group=None
+32. name=Twitch - Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d | enabled=True | unlocked=True | group=None
+33. name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195 | enabled=True | unlocked=True | group=None
+34. name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4 | enabled=True | unlocked=True | group=None
+35. name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1 | enabled=True | unlocked=True | group=None
+36. name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591 | enabled=True | unlocked=True | group=None
+37. name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207 | enabled=True | unlocked=True | group=None
+38. name=Twitch Core - Subscription - Prime Paid Upgrade | id=eabfb607-a4f3-4c45-b26f-1968c3f3f1e7 | enabled=True | unlocked=True | group=None
+39. name=Twitch Core - Subscription - Renewed | id=4af70639-67b5-4d83-8da1-7be0afe1ce76 | enabled=True | unlocked=True | group=None
 
 Action Group Lookup (Normalized Name):
 1. normalized=commander captain stretch redeem | name=Commander - Captain Stretch - Redeem | id=1facdbe6-f292-4d1b-9b66-ad71ae6de310
@@ -82,14 +84,16 @@ Action Group Lookup (Normalized Name):
 27. normalized=twitch bits tier 2 | name=Twitch - Bits - Tier 2 | id=aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0
 28. normalized=twitch bits tier 3 | name=Twitch - Bits - Tier 3 | id=6d05a5c6-6cd9-471b-9358-18dde2df4318
 29. normalized=twitch bits tier 4 | name=Twitch - Bits - Tier 4 | id=35405bfe-660f-46f2-bec6-8a1da9ec1af2
-30. normalized=twitch core gift subscription multiple | name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195
-31. normalized=twitch core gift subscription single | name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4
-32. normalized=twitch core stream streak | name=Twitch - Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d
-33. normalized=twitch core subscription gift paid upgrade | name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1
-34. normalized=twitch core subscription new sub | name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591
-35. normalized=twitch core subscription pay it forward | name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207
-36. normalized=twitch core subscription prime paid upgrade | name=Twitch Core - Subscription - Prime Paid Upgrade | id=eabfb607-a4f3-4c45-b26f-1968c3f3f1e7
-37. normalized=twitch core subscription renewed | name=Twitch Core - Subscription - Renewed | id=4af70639-67b5-4d83-8da1-7be0afe1ce76
+30. normalized=twitch channel points disco party end | name=Twitch - Channel Points - Disco Party - End | id=d8af386f-e3f5-4eb0-9b53-ca3aaa6853fd
+31. normalized=twitch channel points disco party start | name=Twitch - Channel Points - Disco Party - Start | id=9d642983-c438-4b4d-85f9-eccf49251a68
+32. normalized=twitch core gift subscription multiple | name=Twitch Core - Gift Subscription - Multiple | id=27111920-c34b-4991-b284-57d655a20195
+33. normalized=twitch core gift subscription single | name=Twitch Core - Gift Subscription - Single | id=ce197b79-89d1-4943-8f74-b1a690f5a8e4
+34. normalized=twitch core stream streak | name=Twitch - Core - Stream Streak | id=d2d21a86-189c-4a52-8df2-f9d46141af3d
+35. normalized=twitch core subscription gift paid upgrade | name=Twitch Core - Subscription - Gift Paid Upgrade | id=0bcd98e5-79a4-4767-8e60-58a747d7b7a1
+36. normalized=twitch core subscription new sub | name=Twitch Core - Subscription - New Sub | id=4e5b04b7-b5c6-4b17-a6dd-e90efce4a591
+37. normalized=twitch core subscription pay it forward | name=Twitch Core - Subscription - Pay it Forward | id=f50ca2a7-cc1d-44c2-b0b8-f4abf9bf2207
+38. normalized=twitch core subscription prime paid upgrade | name=Twitch Core - Subscription - Prime Paid Upgrade | id=eabfb607-a4f3-4c45-b26f-1968c3f3f1e7
+39. normalized=twitch core subscription renewed | name=Twitch Core - Subscription - Renewed | id=4af70639-67b5-4d83-8da1-7be0afe1ce76
 
 Action Group Name -> ID Map (Exact Names):
 {
@@ -122,6 +126,8 @@ Action Group Name -> ID Map (Exact Names):
   "Twitch - Bits - Tier 2": "aa960b7a-7e9e-42e1-be65-fd4f4b3ca6b0",
   "Twitch - Bits - Tier 3": "6d05a5c6-6cd9-471b-9358-18dde2df4318",
   "Twitch - Bits - Tier 4": "35405bfe-660f-46f2-bec6-8a1da9ec1af2",
+  "Twitch - Channel Points - Disco Party - End": "d8af386f-e3f5-4eb0-9b53-ca3aaa6853fd",
+  "Twitch - Channel Points - Disco Party - Start": "9d642983-c438-4b4d-85f9-eccf49251a68",
   "Twitch - Core - Stream Streak": "d2d21a86-189c-4a52-8df2-f9d46141af3d",
   "Twitch Core - Gift Subscription - Multiple": "27111920-c34b-4991-b284-57d655a20195",
   "Twitch Core - Gift Subscription - Single": "ce197b79-89d1-4943-8f74-b1a690f5a8e4",

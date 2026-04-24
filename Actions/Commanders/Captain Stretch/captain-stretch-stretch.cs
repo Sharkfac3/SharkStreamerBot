@@ -17,6 +17,7 @@ public class CPHInline
     private const string VAR_CAPTAIN_STRETCH_NEXT_ALLOWED_UTC = "captain_stretch_stretch_next_allowed_utc";
 
     private const int STRETCH_MAX_WORD_COUNT = 10;
+    private const int STRETCH_MAX_CHAR_COUNT = 40;
     private const int STRETCH_COOLDOWN_MINUTES = 5;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
@@ -65,7 +66,7 @@ public class CPHInline
         // Parse optional stretch phrase (0 to 5 words allowed).
         if (!TryParseStretchText(out string stretchText))
         {
-            CPH.SendMessage($"@{caller} keep !stretch to 5 words max (or no extra words at all). Example: !stretch shoulders up breathe and hold 💪");
+            CPH.SendMessage($"@{caller} keep !stretch to {STRETCH_MAX_WORD_COUNT} words and {STRETCH_MAX_CHAR_COUNT} characters max (or no extra words at all). Example: !stretch shoulders up breathe 💪");
             return true;
         }
 
@@ -148,11 +149,15 @@ public class CPHInline
         if (wordCount <= 0)
             return true;
 
-        // Enforce max word count only.
         if (wordCount > STRETCH_MAX_WORD_COUNT)
             return false;
 
         stretchText = string.Join(" ", parts, startIndex, wordCount);
+
+        // Also reject if the combined text exceeds the character limit.
+        if (stretchText.Length > STRETCH_MAX_CHAR_COUNT)
+            return false;
+
         return true;
     }
 

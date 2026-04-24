@@ -56,4 +56,4 @@ When responding:
 
 Your Task:
 
-update our subscription-renewed.cs script to send special identifiers to mixitup with information about the subscription
+tell me more about the special identifers we send to mixitup for our 'subscription-gift.cs' action script

@@ -25,6 +25,16 @@ public class CPHInline
      * - Both triggers run this same script. The script detects which event fired
      *   by checking which runtime arguments Streamer.bot injected.
      *
+     * Mix It Up commands — TWO separate commands, one per event type:
+     * - MIXITUP_COMMAND_ID_GIFT_SINGLE  (ce197b79-89d1-4943-8f74-b1a690f5a8e4)
+     *     → Fired for a solo gift (one viewer gifts one sub to one recipient)
+     *     → Configure your single-gift alert/TTS/animation in THIS command in Mix It Up
+     * - MIXITUP_COMMAND_ID_GIFT_BOMB    (27111920-c34b-4991-b284-57d655a20195)
+     *     → Fired once for a gift bomb aggregate (one viewer drops N subs at once)
+     *     → Configure your gift bomb alert/TTS/animation in THIS command in Mix It Up
+     * Both commands receive `subtype` in SpecialIdentifiers ("gift" vs "giftbomb")
+     * so Mix It Up can also branch internally if needed.
+     *
      * Routing logic:
      * - Has "gifts" arg  → Gift Bomb aggregate event  → calls MIXITUP_COMMAND_ID_GIFT_BOMB
      * - fromGiftBomb = false → Solo Gift Subscription → calls MIXITUP_COMMAND_ID_GIFT_SINGLE
@@ -122,9 +132,27 @@ public class CPHInline
     }
 
     // --- Solo Gift Subscription argument builders ---
-    // Available args: user, userId, tier, recipientUser, recipientId, recipientUserName,
-    //                 anonymous, random, cumulativeMonths, monthsGifted, fromGiftBomb (false),
-    //                 subBombCount, systemMessage, totalSubsGifted, totalSubsGiftedShared.
+    // Streamer.bot args available: user, userId, tier, recipientUser, recipientId,
+    //   recipientUserName, anonymous, random, cumulativeMonths, monthsGifted,
+    //   fromGiftBomb (false), subBombCount, systemMessage, totalSubsGifted, totalSubsGiftedShared.
+    //
+    // Mix It Up SpecialIdentifiers sent (use these names inside your MIU command):
+    //   subuser              — gifter's login name
+    //   subuserid            — gifter's Twitch user ID
+    //   subtier              — sub tier: "1", "2", or "3"
+    //   subtype              — always "gift" for this path
+    //   subrecipientuser     — recipient's login name
+    //   subrecipientid       — recipient's Twitch user ID
+    //   subrecipientusername — recipient's display name
+    //   subanonymous         — "true" if gifter is anonymous
+    //   subrandom            — "true" if Twitch randomly picked the recipient
+    //   subcumulativemonths  — recipient's total months subbed (including this gift)
+    //   submonthsgifted      — months included in this gift
+    //   subfromgiftbomb      — always "false" for solo gifts
+    //   subbombcount         — usually 0 for solo gifts
+    //   subsystemmessage     — raw Twitch system message string
+    //   subtotalgifted       — gifter's all-time gifted sub count
+    //   subtotalgiftedshared — "true" if gifter's total is publicly visible
 
     private string BuildSingleArguments()
     {
@@ -174,9 +202,24 @@ public class CPHInline
     }
 
     // --- Gift Bomb aggregate argument builders ---
-    // Available args: user, userId, tier, anonymous, gifts, bonusGifts, systemMessage,
-    //                 totalGifts, totalGiftsShared, gift.recipientId#, gift.recipientUser#,
-    //                 gift.recipientUserName# (0-based index suffix).
+    // Streamer.bot args available: user, userId, tier, anonymous, gifts, bonusGifts,
+    //   systemMessage, totalGifts, totalGiftsShared,
+    //   gift.recipientId#, gift.recipientUser#, gift.recipientUserName# (0-based index — NOT forwarded).
+    //
+    // Mix It Up SpecialIdentifiers sent (use these names inside your MIU command):
+    //   subuser              — bomber's login name
+    //   subuserid            — bomber's Twitch user ID
+    //   subtier              — sub tier for all gifts: "1", "2", or "3"
+    //   subtype              — always "giftbomb" for this path
+    //   subanonymous         — "true" if bomber is anonymous
+    //   subgifts             — number of subs in this bomb
+    //   subbonusgifts        — "true" if Twitch added bonus gifts to the bomb
+    //   subsystemmessage     — raw Twitch system message string
+    //   subtotalgifted       — bomber's all-time gifted sub count
+    //   subtotalgiftedshared — "true" if bomber's total is publicly visible
+    // Note: per-recipient lists (gift.recipientUser0, etc.) are intentionally NOT forwarded —
+    //   only aggregate counts are sent. Handle individual recipients via the suppressed
+    //   Gift Subscription fires if needed in the future.
 
     private string BuildBombArguments()
     {

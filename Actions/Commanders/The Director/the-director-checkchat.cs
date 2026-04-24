@@ -17,6 +17,7 @@ public class CPHInline
     private const string VAR_DIRECTOR_CHECKCHAT_NEXT_ALLOWED_UTC = "the_director_checkchat_next_allowed_utc";
 
     private const int CHECKCHAT_MAX_WORD_COUNT = 20;
+    private const int CHECKCHAT_MAX_CHAR_COUNT = 40;
     private const int CHECKCHAT_COOLDOWN_MINUTES = 1;
 
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
@@ -69,7 +70,7 @@ public class CPHInline
 
         if (tooManyWords)
         {
-            CPH.SendMessage($"@{caller} !checkchat can include up to {CHECKCHAT_MAX_WORD_COUNT} words (message text is optional). Please shorten your message and try again. 🎬");
+            CPH.SendMessage($"@{caller} !checkchat can include up to {CHECKCHAT_MAX_WORD_COUNT} words and {CHECKCHAT_MAX_CHAR_COUNT} characters (message is optional). Please shorten and try again. 🎬");
             return true;
         }
 
@@ -160,6 +161,13 @@ public class CPHInline
         }
 
         text = string.Join(" ", parts, startIndex, wordCount);
+
+        // Also reject if the combined text exceeds the character limit.
+        if (text.Length > CHECKCHAT_MAX_CHAR_COUNT)
+        {
+            tooManyWords = true;
+            text = string.Empty;
+        }
     }
 
     private bool TriggerMixItUp(string argumentText)

@@ -96,6 +96,9 @@ public class CPHInline
     // Temporary timers
     private const string TIMER_TEMP_FOCUS = "Temp Focus Timer";
 
+    // XJ Drivethrough
+    private const string VAR_XJ_ACTIVE = "xj_drivethrough_active";
+
     /*
      * Purpose:
      * - Runs at stream start to reset shared state for Squad, LotAT, and Twitch integrations.
@@ -276,6 +279,13 @@ public class CPHInline
         // Temporary timer reset
         // -------------------------------------------------
         CPH.DisableTimer(TIMER_TEMP_FOCUS);
+
+        // -------------------------------------------------
+        // XJ Drivethrough reset
+        // -------------------------------------------------
+        // Clear the re-entry guard in case a drivethrough was mid-sequence when
+        // the previous stream ended (e.g., stream ended during the 10-second drive).
+        CPH.SetGlobalVar(VAR_XJ_ACTIVE, false, false);
 
         return true;
     }

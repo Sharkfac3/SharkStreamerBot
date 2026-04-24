@@ -25,6 +25,8 @@ public class CPHInline
 
     // How long the disco party lasts before returning to the previous scene.
     private const int DISCO_PARTY_DURATION_MS = 60000;
+    // Mix It Up intro/outro commands each take 5 seconds to complete.
+    private const int MIXITUP_DISCO_PARTY_TRANSITION_WAIT_MS = 5000;
 
     // Squad member unlock flags — checked before firing each dance command.
     private const string VAR_DUCK_UNLOCKED  = "duck_unlocked";
@@ -43,6 +45,8 @@ public class CPHInline
     // Mix It Up dance command IDs.
     // Replace the REPLACE_WITH_* placeholders after creating "Squad - <Member> - Dance"
     // commands in Mix It Up, then run Tools/MixItUp/Api/get_commands.py to get their IDs.
+    private const string MIXITUP_DISCO_PARTY_START_ID          = "9d642983-c438-4b4d-85f9-eccf49251a68";
+    private const string MIXITUP_DISCO_PARTY_END_ID            = "d8af386f-e3f5-4eb0-9b53-ca3aaa6853fd";
     private const string MIXITUP_DUCK_DANCE_ID                 = "2aa776f8-a7f5-452d-bfe7-ef15a7f4df51";
     private const string MIXITUP_CLONE_DANCE_ID                = "decd533d-1263-4f38-ab99-2eacf7452c41";
     private const string MIXITUP_PEDRO_DANCE_ID                = "5d63ec44-90f8-47ea-bd4d-8aadb89df845";
@@ -55,16 +59,22 @@ public class CPHInline
     /*
      * Purpose:
      * - Handles the "disco party" channel point redeem.
-     * - Saves the current OBS scene, then switches to the Disco Party scene matching
-     *   the active stream mode (Garage / Workspace / Gamer).
+     * - Saves the current OBS scene.
+     * - Triggers a Mix It Up disco-party intro command with the redeeming user's name,
+     *   waits 5 seconds for that intro to complete, then switches to the Disco Party
+     *   scene matching the active stream mode (Garage / Workspace / Gamer).
      * - Fires Mix It Up dance commands for every squad member that is currently unlocked.
      *   Duck, Clone, and Pedro each have a single unlock flag.
      *   Toothless has one flag per rarity — each unlocked rarity triggers its own dance command.
      * - After 60 seconds, returns to the original scene (unless the operator navigated away).
+     * - Triggers a Mix It Up disco-party outro command with the redeeming user's name
+     *   after the return step, then waits 5 seconds for that outro to complete.
      *
      * Expected trigger/input:
      * - Streamer.bot action wired to the "disco party" channel point redeem.
      * - No chat args required.
+     * - Reads the standard Twitch reward redemption `user` trigger variable so the
+     *   redeeming username can be passed into Mix It Up as a special identifier.
      *
      * Required runtime variables (all global, non-persisted):
      * - stream_mode        — set by mode-garage / mode-workspace / mode-gamer scripts
@@ -77,9 +87,10 @@ public class CPHInline
      * - disco_party_prev_scene — set and cleared by this script (scene memory)
      *
      * Key outputs/side effects:
+     * - Calls Mix It Up intro/outro commands with `SpecialIdentifiers = { user = <redeemer> }`.
      * - Switches OBS to the appropriate Disco Party scene.
      * - Calls Mix It Up for every dance command whose squad member is currently unlocked.
-     * - Waits 60 seconds on the Disco Party scene.
+     * - Waits 5 seconds for intro, 60 seconds on the Disco Party scene, then 5 seconds for outro.
      * - Switches OBS back to the previous scene (only if still on a Disco Party scene;
      *   if the operator manually navigated away, the auto-return is skipped).
      * - Sends a chat message when blocked by an already-running disco party.
@@ -88,6 +99,7 @@ public class CPHInline
      * - stream-start.cs resets disco_party_active and disco_party_prev_scene at stream start.
      * - Mix It Up dance commands fire simultaneously (no waits between them). Their
      *   internal duration / looping is handled inside Mix It Up, not here.
+     * - Intro/outro command IDs were verified from Tools/MixItUp/Api/data/mixitup-commands.txt.
      */
     public bool Execute()
     {
@@ -114,6 +126,20 @@ public class CPHInline
                 .ToLowerInvariant();
             string discoScene = ResolveDiscoScene(mode);
 
+            // Pull the redeeming user's name from the reward redemption payload.
+            // This gets forwarded into Mix It Up so intro/outro commands can personalize output.
+            string redeemUser = GetRedeemingUser();
+            var discoSpecialIdentifiers = new { user = redeemUser };
+
+            // Run the disco intro command before taking over OBS.
+            // The operator said this command takes 5 seconds, so wait for it to finish.
+            bool startCommandTriggered = TriggerMixItUpCommand(
+                MIXITUP_DISCO_PARTY_START_ID,
+                "Disco Party / Start",
+                specialIdentifiers: discoSpecialIdentifiers);
+            if (startCommandTriggered)
+                CPH.Wait(MIXITUP_DISCO_PARTY_TRANSITION_WAIT_MS);
+
             CPH.ObsSetScene(discoScene);
             CPH.LogWarn($"[Twitch Redeem: Disco Party] Scene -> '{discoScene}'. Saved previous: '{prevScene}'.");
 
@@ -138,6 +164,15 @@ public class CPHInline
             {
                 CPH.LogWarn($"[Twitch Redeem: Disco Party] Operator navigated away during party (current: '{sceneAfterWait}'). Skipping auto-return.");
             }
+
+            // Run the disco outro command after the OBS return step.
+            // This still fires even if the operator manually changed scenes during the party.
+            bool endCommandTriggered = TriggerMixItUpCommand(
+                MIXITUP_DISCO_PARTY_END_ID,
+                "Disco Party / End",
+                specialIdentifiers: discoSpecialIdentifiers);
+            if (endCommandTriggered)
+                CPH.Wait(MIXITUP_DISCO_PARTY_TRANSITION_WAIT_MS);
         }
         finally
         {
@@ -228,10 +263,27 @@ public class CPHInline
     }
 
     /// <summary>
+    /// Reads the Twitch reward redemption user name from the trigger payload.
+    /// Returns an empty string when the variable is unavailable.
+    /// </summary>
+    private string GetRedeemingUser()
+    {
+        string user = "";
+        if (!CPH.TryGetArg("user", out user) || string.IsNullOrWhiteSpace(user))
+            return "";
+
+        return user.Trim();
+    }
+
+    /// <summary>
     /// POSTs to the Mix It Up API to trigger the command with the given ID.
     /// Silently skips if the ID is still a REPLACE_WITH_* placeholder.
     /// </summary>
-    private bool TriggerMixItUpCommand(string commandId, string logPrefix)
+    private bool TriggerMixItUpCommand(
+        string commandId,
+        string logPrefix,
+        string arguments = "",
+        object specialIdentifiers = null)
     {
         if (string.IsNullOrWhiteSpace(commandId) ||
             commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
@@ -245,10 +297,10 @@ public class CPHInline
             string url = $"{MIXITUP_API_BASE_URL.TrimEnd('/')}/api/v2/commands/{commandId}";
             string payload = JsonSerializer.Serialize(new
             {
-                Platform             = "Twitch",
-                Arguments            = "",
-                SpecialIdentifiers   = new { },
-                IgnoreRequirements   = false
+                Platform = "Twitch",
+                Arguments = arguments ?? "",
+                SpecialIdentifiers = specialIdentifiers ?? new { },
+                IgnoreRequirements = false
             });
 
             using var content = new StringContent(payload, Encoding.UTF8, "application/json");

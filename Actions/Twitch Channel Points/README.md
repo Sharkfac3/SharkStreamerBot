@@ -8,39 +8,62 @@ This folder contains channel point redeem scripts that map to the Streamer.bot `
 ## Script: `disco-party.cs`
 
 ### Purpose
-Handles the `disco party` channel point redeem by switching to the correct Disco Party OBS scene based on the current stream mode.
+Handles the `disco party` channel point redeem by running Mix It Up intro/outro commands, switching to the correct Disco Party OBS scene based on the current stream mode, and firing dance commands for unlocked squad members.
 
 ### Expected Trigger / Input
 - Channel point redeem action for `disco party`.
 - No chat arguments required.
+- Reads the standard Twitch reward redemption `user` trigger variable and forwards it to Mix It Up as a special identifier.
 
 ### Required Runtime Variables
 - Reads `stream_mode`.
+- Reads unlock flags for Duck / Clone / Pedro / Toothless rarities.
+- Uses `disco_party_active` and `disco_party_prev_scene` for re-entry protection and scene return.
 
 ### Key Outputs / Side Effects
+- Runs `Twitch - Channel Points - Disco Party - Start` before switching OBS scenes.
+- Waits 5 seconds for the start command to finish when the Mix It Up API call succeeds.
 - If `stream_mode = garage`, switches to `Disco Party: Garage`.
 - If `stream_mode = workspace`, switches to `Disco Party: Workspace`.
 - If `stream_mode = gamer`, switches to `Disco Party: Gamer`.
 - If `stream_mode` is missing/unknown, logs a warning and falls back to `Disco Party: Workspace`.
+- Fires Mix It Up dance commands for every unlocked squad member / Toothless rarity.
+- Waits 60 seconds on the disco scene.
+- Returns to the previous scene if OBS is still on a `Disco Party*` scene.
+- Runs `Twitch - Channel Points - Disco Party - End` after the OBS return step.
+- Waits 5 seconds for the end command to finish when the Mix It Up API call succeeds.
 
 ### Mix It Up Actions
-- None.
+- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
+- Start command:
+  - Name: `Twitch - Channel Points - Disco Party - Start`
+  - ID: `9d642983-c438-4b4d-85f9-eccf49251a68`
+- End command:
+  - Name: `Twitch - Channel Points - Disco Party - End`
+  - ID: `d8af386f-e3f5-4eb0-9b53-ca3aaa6853fd`
+- Special identifiers sent to both commands:
+  - `user = <redeeming Twitch display name>`
 
 ### OBS Interactions
-- Switches current OBS scene using available CPH OBS scene methods.
+- Saves the current OBS scene before takeover.
+- Switches to the mode-matched Disco Party scene.
+- Switches back to the saved scene after the party only if the operator has not manually navigated away.
 
 ### Wait Behavior
-- None.
+- 5000ms after the Mix It Up start command when the API call succeeds.
+- 60000ms on the Disco Party scene.
+- 5000ms after the Mix It Up end command when the API call succeeds.
 
 ### Chat / Log Output
-- No chat output.
-- Logs warning messages if stream mode is unknown or OBS scene switching fails.
+- Sends chat only when a second redeem tries to start while a disco party is already active.
+- Logs warning messages if stream mode is unknown, OBS is manually changed during the party, or Mix It Up calls fail.
 
 ### Operator Notes
 - Ensure the three OBS scenes exist with exact names:
   - `Disco Party: Garage`
   - `Disco Party: Workspace`
   - `Disco Party: Gamer`
+- Ensure Mix It Up is running locally and both disco-party transition commands exist with the IDs above.
 - Wire this script into the Streamer.bot action tied to your `disco party` channel point redeem.
 
 ---

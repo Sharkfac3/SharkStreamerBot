@@ -29,16 +29,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-04-21 | pi | Trim commander help command list | uncommitted |
-| 2026-04-21 | pi | Add commander help chat script | uncommitted |
-| 2026-04-21 | pi | Add special orb type for bowtome message | uncommitted |
-| 2026-04-21 | pi | Add Mix It Up identifiers to gift subscription router | uncommitted |
+| 2026-04-24 | pi | Clone Empire movement + tick scripts | uncommitted |
+| 2026-04-24 | pi | Clone Grid join-phase Streamer.bot scripts | uncommitted |
+| 2026-04-24 | pi | Clone Grid Game protocol types + shared constants docs | uncommitted |
 | 2026-04-21 | pi | Backfill Mix It Up identifiers in remaining subscription scripts | uncommitted |
 | 2026-04-21 | pi | Update subscription renewed Mix It Up identifiers | uncommitted |
 | 2026-04-21 | pi | Update Water Wizard hydrate parsing and Mix It Up payload | uncommitted |
 | 2026-04-21 | pi | Add Mix It Up optional-message snippet note | uncommitted |
 | 2026-04-21 | pi | Document Mix It Up type-plus-message pattern | uncommitted |
 | 2026-04-21 | pi | Update watch streak Mix It Up type payload | uncommitted |
+| 2026-04-22 | claude | Add XJ drivethrough overlay script | uncommitted |
 
 ---
 

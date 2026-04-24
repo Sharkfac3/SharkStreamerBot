@@ -82,22 +82,62 @@ Used in:
 
 ---
 
-## Clone (shared)
-- `VAR_CLONE_UNLOCKED` = `clone_unlocked`
-- `VAR_CLONE_GAME_ACTIVE` = `clone_game_active`
-- `VAR_CLONE_ROUND` = `clone_round`
-- `VAR_CLONE_POSITIONS_COUNT` = `clone_positions_count`
-- `VAR_CLONE_POSITIONS_OPEN` = `clone_positions_open`
-- `VAR_CLONE_POSITION_REMOVED_LAST` = `clone_position_removed_last`
-- `VAR_CLONE_WINNERS` = `clone_winners`
-- `VAR_CLONE_ROUND1_POOL` = `clone_round1_pool`
-- `OBS_SOURCE_CLONE_DANCING` = `Clone - Dancing`
-- `TIMER_CLONE_VOLLEY` = `Clone - Volley Timer`
+## Clone Grid Game (shared)
 
-Used in:
-- `Actions/Squad/Clone/clone-main.cs`
-- `Actions/Squad/Clone/clone-position.cs`
-- `Actions/Squad/Clone/clone-volley.cs`
+> The old Clone musical-chairs game has been replaced by the Empire Grid survival game.
+> `clone_unlocked` and `OBS_SOURCE_CLONE_DANCING` are preserved for Disco Party integration.
+
+### Preserved from old Clone
+- `VAR_CLONE_UNLOCKED` = `clone_unlocked` *(persisted bool; true once Clone is unlocked)*
+- `OBS_SOURCE_CLONE_DANCING` = `Clone - Dancing` *(OBS source shown during unlock celebration)*
+
+### Grid game — global state vars (non-persisted)
+- `VAR_EMPIRE_GAME_ACTIVE`    = `empire_game_active`    — true while game is running (join or movement phase)
+- `VAR_EMPIRE_JOIN_ACTIVE`    = `empire_join_active`    — true only during 60-second join window
+- `VAR_EMPIRE_GAME_START_UTC` = `empire_game_start_utc` — Unix ms when movement phase opened (0 = not started)
+- `VAR_EMPIRE_PLAYERS_JSON`   = `empire_players_json`   — JSON array of living players (see structure below)
+- `VAR_EMPIRE_CELLS_JSON`     = `empire_cells_json`     — JSON array of empire cells (see structure below)
+
+### Grid game — timers
+- `TIMER_CLONE_JOIN_WINDOW` = `Clone - Join Window`   — 60-second one-shot; fires clone-empire-start.cs
+- `TIMER_CLONE_GAME_TICK`   = `Clone - Game Tick`     — 5-second repeating; fires clone-empire-tick.cs
+
+### Grid game — constants (not stored in globals; defined as C# constants in scripts)
+- `EMPIRE_GRID_COLS`          = `32`
+- `EMPIRE_GRID_ROWS`          = `18`
+- `EMPIRE_SPAWN_COL`          = `16`   (center column)
+- `EMPIRE_SPAWN_ROW`          = `9`    (center row)
+- `EMPIRE_JOIN_WINDOW_S`      = `60`   (seconds)
+- `EMPIRE_WIN_DURATION_MS`    = `300000` (5 minutes in ms)
+- `EMPIRE_INACTIVITY_KILL_MS` = `30000`  (30 seconds in ms)
+- `EMPIRE_INITIAL_COUNT`      = `5`   (empire ships spawned at game start)
+- `EMPIRE_MOVE_COOLDOWN_MS`   = `1000` (1 second per-player move cooldown)
+- `MINIGAME_NAME_CLONE_EMPIRE`= `clone_empire`
+
+### JSON structures stored in global vars
+
+**empire_players_json** — array of living player objects:
+```json
+[
+  { "userId": "12345", "userName": "alice", "col": 16, "row": 9, "lastMoveUtc": 1714000000000 }
+]
+```
+`lastMoveUtc` is set to `empire_game_start_utc` when movement opens. Used for inactivity detection.
+
+**empire_cells_json** — array of empire cell positions:
+```json
+[
+  { "col": 5, "row": 3 },
+  { "col": 12, "row": 7 }
+]
+```
+
+### Used in
+- `Actions/Squad/Clone/clone-empire-main.cs`
+- `Actions/Squad/Clone/clone-empire-join.cs`
+- `Actions/Squad/Clone/clone-empire-start.cs`
+- `Actions/Squad/Clone/clone-empire-move.cs`
+- `Actions/Squad/Clone/clone-empire-tick.cs`
 - `Actions/Twitch Core Integrations/stream-start.cs`
 
 ---
@@ -370,6 +410,32 @@ Operator notes:
   broker-connect sub-action runs, to clear any stale state from a previous session.
 - `BROKER_WS_INDEX` must match the position of the "Overlay Broker" entry in the Streamer.bot
   WebSocket Clients list (Servers/Clients → WebSocket Clients). Default is 0 (first entry).
+
+---
+
+## XJ Drivethrough (shared)
+- `XJ_ASSET_ID`           = `xj-drivethrough`
+- `XJ_ASSET_SRC`          = `images/xj-drivethrough.png`
+- `XJ_SOUND_ID`           = `xj-rev-limiter`
+- `XJ_SOUND_SRC`          = `audio/xj-rev-limiter.mp3`
+- `XJ_WIDTH`              = `400` *(display width in pixels)*
+- `XJ_HEIGHT`             = `250` *(display height in pixels)*
+- `XJ_DEPTH`              = `20`
+- `XJ_Y`                  = `750` *(vertical canvas position — lower-third road position on 1920×1080)*
+- `XJ_START_X`            = `-200` *(image center starts off-screen left; right edge at x=0)*
+- `XJ_END_X`              = `2120` *(image center exits off-screen right; left edge at x=1920)*
+- `XJ_DRIVE_DURATION_MS`  = `10000` *(10 seconds left-to-right tween)*
+- `VAR_XJ_ACTIVE`         = `xj_drivethrough_active` *(non-persisted bool; true while sequence is running)*
+
+Used in:
+- `Actions/XJ Drivethrough/xj-drivethrough-main.cs`
+- `Actions/Twitch Core Integrations/stream-start.cs`
+
+Operator notes:
+- Image must exist at: `Apps/stream-overlay/packages/overlay/public/images/xj-drivethrough.png`
+  Use a side-facing XJ image (facing right). 400×250 px recommended.
+- Audio must exist at: `Apps/stream-overlay/packages/overlay/public/audio/xj-rev-limiter.mp3`
+- OBS browser source must have audio enabled for the rev limiter sound to hit stream output.
 
 ---
 

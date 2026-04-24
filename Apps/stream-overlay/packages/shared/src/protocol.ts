@@ -617,8 +617,22 @@ export interface SquadDuckStartPayload extends SquadGameStartPayload {
   game: "duck";
 }
 
-export interface SquadCloneStartPayload extends SquadGameStartPayload {
+/**
+ * squad.clone.start
+ * Sent when the join window opens (immediately after !clone).
+ * Empire array is empty at this point — empire spawns after join window closes.
+ */
+export interface SquadCloneGridStartPayload extends SquadGameStartPayload {
   game: "clone";
+  /** Always "join" on the start event — join window is opening */
+  phase: "join";
+  /** Seconds the join window stays open (60) */
+  joinWindowSeconds: number;
+  /** Players already in the game (just the initiator at start) */
+  players: CloneGridPlayer[];
+  /** Grid dimensions */
+  gridCols: number;
+  gridRows: number;
 }
 
 export interface SquadPedroStartPayload extends SquadGameStartPayload {
@@ -661,21 +675,94 @@ export interface SquadPedroEndResult {
   finalMentionCount: number;
 }
 
-/** squad.clone.update — state field shape (published on each volley) */
-export interface SquadCloneUpdateState {
-  round: number;
-  /** Comma-separated open positions, e.g. "1,2,4,5" */
-  positionsOpen: string;
-  eliminatedPosition: number;
+// ── Clone Grid Game (replacement for old Clone musical-chairs types) ──────────
+
+/** Player entry in the grid game */
+export interface CloneGridPlayer {
+  userId: string;
+  userName: string;
+  /** Grid column, 1-indexed, range 1–32 */
+  col: number;
+  /** Grid row, 1-indexed, range 1–18 */
+  row: number;
 }
 
-/** squad.clone.end — result field shape */
-export interface SquadCloneEndResult {
-  outcome: "win" | "loss";
-  eliminatedPosition: number;
-  /** Comma-separated winner usernames, or "" if no survivors */
-  winners: string;
+/** Empire cell position */
+export interface CloneGridCell {
+  col: number;
+  row: number;
 }
+
+/**
+ * squad.clone.update — state field shape
+ * Sent after every meaningful state change during the game.
+ */
+export interface SquadCloneGridUpdateState {
+  /**
+   * What triggered this update:
+   * - "game_start"           join window closed, empire spawned, movement open
+   * - "player_joined"        a new player joined during join phase
+   * - "player_moved"         a player moved to a new cell
+   * - "player_died"          a player moved into empire
+   * - "player_inactivity"    a player was killed for not moving (30s)
+   * - "empire_spawned"       empire growth rule created a new empire cell
+   * - "empire_killed"        empire surrounded on all sides, removed
+   */
+  event:
+    | "game_start"
+    | "player_joined"
+    | "player_moved"
+    | "player_died"
+    | "player_inactivity"
+    | "empire_spawned"
+    | "empire_killed";
+  /** Full current player list (only living players) */
+  players: CloneGridPlayer[];
+  /** Full current empire cell list */
+  empire: CloneGridCell[];
+  gridCols: number;
+  gridRows: number;
+  /** Seconds elapsed since movement phase opened */
+  elapsedSeconds: number;
+  survivorCount: number;
+  empireCount: number;
+  /**
+   * Human-readable detail about the event — e.g. username for player events,
+   * "col,row" for empire events. Optional.
+   */
+  eventDetail?: string;
+}
+
+/**
+ * squad.clone.end — result field shape
+ */
+export interface SquadCloneGridEndResult {
+  outcome: "win" | "loss";
+  /** Survivors still alive when the game ended (empty on loss) */
+  survivors: CloneGridPlayer[];
+}
+
+// Keep old names as type aliases so existing squad-renderer import lines don't break.
+// The overlay renderer (clone-renderer.ts) will be fully rewritten in Prompt 04
+// and will switch to the Grid types directly.
+/** @deprecated Use SquadCloneGridStartPayload */
+export type SquadCloneStartPayload = SquadCloneGridStartPayload;
+/** @deprecated Use SquadCloneGridUpdateState */
+export type SquadCloneUpdateState = SquadCloneGridUpdateState & {
+  /** Legacy clone renderer compatibility only. */
+  round: number;
+  /** Legacy clone renderer compatibility only. */
+  positionsOpen: string;
+  /** Legacy clone renderer compatibility only. */
+  eliminatedPosition: number;
+};
+/** @deprecated Use SquadCloneGridEndResult */
+export type SquadCloneEndResult = SquadCloneGridEndResult & {
+  /** Legacy clone renderer compatibility only. */
+  eliminatedPosition: number;
+  /** Legacy clone renderer compatibility only. */
+  winners: string;
+};
 
 /** Rarity tiers for Toothless rolls */
 export type ToothlessRarity = "regular" | "smol" | "long" | "flight" | "party";
@@ -779,8 +866,8 @@ export interface TopicPayloadMap {
   "squad.duck.update": SquadGameUpdatePayload;
   "squad.duck.end": SquadGameEndPayload;
 
-  // Squad — Clone
-  "squad.clone.start": SquadCloneStartPayload;
+  // Squad — Clone (grid game)
+  "squad.clone.start": SquadCloneGridStartPayload;
   "squad.clone.update": SquadGameUpdatePayload;
   "squad.clone.end": SquadGameEndPayload;
 
