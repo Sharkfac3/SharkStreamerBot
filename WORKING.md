@@ -12,7 +12,6 @@
 
 | Agent | Task | Domain | Files Being Edited | Started |
 |-------|------|--------|--------------------|---------|
-
 *Empty table = no active agent work. If you see entries here, check the files listed before editing anything in that domain.*
 
 ---
@@ -29,16 +28,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-24 | claude | Seed INFO-SERVICE-PLAN.md | tbd |
+| 2026-04-24 | claude | Seed info-service prompt series + coordination scaffolding | uncommitted |
+| 2026-04-24 | pi | Clone Grid integration cleanup + self-destruct | uncommitted |
+| 2026-04-24 | pi | Clone Grid overlay renderer rewrite | uncommitted |
 | 2026-04-24 | pi | Clone Empire movement + tick scripts | uncommitted |
 | 2026-04-24 | pi | Clone Grid join-phase Streamer.bot scripts | uncommitted |
 | 2026-04-24 | pi | Clone Grid Game protocol types + shared constants docs | uncommitted |
 | 2026-04-21 | pi | Backfill Mix It Up identifiers in remaining subscription scripts | uncommitted |
 | 2026-04-21 | pi | Update subscription renewed Mix It Up identifiers | uncommitted |
 | 2026-04-21 | pi | Update Water Wizard hydrate parsing and Mix It Up payload | uncommitted |
-| 2026-04-21 | pi | Add Mix It Up optional-message snippet note | uncommitted |
-| 2026-04-21 | pi | Document Mix It Up type-plus-message pattern | uncommitted |
-| 2026-04-21 | pi | Update watch streak Mix It Up type payload | uncommitted |
-| 2026-04-22 | claude | Add XJ drivethrough overlay script | uncommitted |
 
 ---
 
