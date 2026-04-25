@@ -20,7 +20,7 @@ public class CPHInline
      * Purpose:
      * - Handles the Twitch automatic reward redemption for the on-screen celebration bits purchase.
      * - Triggers a Mix It Up command using the standard payload shape.
-     * - Does not send any message text or special identifiers for now.
+     * - Sends celebration metadata as Mix It Up special identifiers.
      *
      * Expected trigger/input:
      * - Streamer.bot action wired to:
@@ -31,8 +31,8 @@ public class CPHInline
      *
      * Key outputs/side effects:
      * - POSTs to the Mix It Up command endpoint.
-     * - Sends Arguments = ""
-     * - Sends SpecialIdentifiers = { }
+     * - Sends Arguments = "" for compatibility with the current Mix It Up command.
+     * - Sends populated SpecialIdentifiers for Mix It Up branching/text fields.
      * - Logs warnings/errors instead of throwing, so the action queue stays stable.
      *
      * Operator notes:
@@ -45,10 +45,86 @@ public class CPHInline
             MIXITUP_ON_SCREEN_CELEBRATION_COMMAND_ID,
             "Twitch Automatic Reward: On-Screen Celebration",
             arguments: string.Empty,
-            specialIdentifiers: new { }
+            specialIdentifiers: BuildSpecialIdentifiers()
         );
 
         return true;
+    }
+
+    /// <summary>
+    /// Builds the Mix It Up special identifier payload with stable lowercase keys.
+    /// Values are strings so Mix It Up commands can consume them consistently.
+    /// </summary>
+    private object BuildSpecialIdentifiers()
+    {
+        string celebrationMessage = GetFirstStringArg("userInput", "input0", "message", "rawInput");
+
+        return new
+        {
+            celebrationuser = GetStringArg("user"),
+            celebrationuserid = GetStringArg("userId"),
+            celebrationtype = "onscreencelebration",
+            celebrationrewardid = GetFirstStringArg("reward", "rewardId"),
+            celebrationrewardname = GetFirstStringArg("rewardName", "rewardTitle"),
+            celebrationmessage = celebrationMessage,
+            celebrationmessagetype = string.IsNullOrWhiteSpace(celebrationMessage) ? "none" : "message"
+        };
+    }
+
+    /// <summary>
+    /// Reads the first non-empty string arg from Streamer.bot using a defensive fallback chain.
+    /// </summary>
+    private string GetFirstStringArg(params string[] argNames)
+    {
+        foreach (string argName in argNames)
+        {
+            string value = GetStringArg(argName);
+            if (!string.IsNullOrWhiteSpace(value))
+                return value;
+        }
+
+        return string.Empty;
+    }
+
+    /// <summary>
+    /// Reads a string arg from Streamer.bot safely and returns a trimmed fallback empty string.
+    /// </summary>
+    private string GetStringArg(string argName)
+    {
+        if (CPH.TryGetArg(argName, out string value) && !string.IsNullOrWhiteSpace(value))
+            return value.Trim();
+
+        return string.Empty;
+    }
+
+    /// <summary>
+    /// Reads an int arg from Streamer.bot safely and returns the provided fallback when missing/non-numeric.
+    /// </summary>
+    private int GetIntArg(string argName, int fallback = 0)
+    {
+        if (CPH.TryGetArg(argName, out int intValue))
+            return intValue;
+
+        string rawValue = GetStringArg(argName);
+        if (int.TryParse(rawValue, out int parsedValue))
+            return parsedValue;
+
+        return fallback;
+    }
+
+    /// <summary>
+    /// Reads a bool arg from Streamer.bot safely and returns the provided fallback when missing/unparseable.
+    /// </summary>
+    private bool GetBoolArg(string argName, bool fallback = false)
+    {
+        if (CPH.TryGetArg(argName, out bool boolValue))
+            return boolValue;
+
+        string rawValue = GetStringArg(argName);
+        if (bool.TryParse(rawValue, out bool parsedValue))
+            return parsedValue;
+
+        return fallback;
     }
 
     /// <summary>

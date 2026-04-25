@@ -15,6 +15,9 @@ public class CPHInline
     private const string ARG_MESSAGE_STRIPPED = "messageStripped";
     private const string ARG_MESSAGE = "message";
     private const string ARG_RAW_INPUT = "rawInput";
+    private const string ARG_USER = "user";
+    private const string ARG_USER_ID = "userId";
+    private const string ARG_BITS = "bits";
     private const string MIXITUP_PLATFORM_TWITCH = "Twitch";
     private const int WAIT_BASE_PREP_MS = 3000;
     private const int WAIT_MS_PER_WORD = 400;
@@ -27,6 +30,7 @@ public class CPHInline
      * Expected trigger/input:
      * - Streamer.bot Trigger: Twitch -> Chat -> Cheer (Tier 2 action wiring).
      * - Reads: messageStripped (fallback: message, then rawInput).
+     * - Reads metadata when available: user, userId, bits.
      *
      * Required runtime variables:
      * - None.
@@ -60,27 +64,44 @@ public class CPHInline
         {
             // 1) Read cheer text from Streamer.bot args.
             // We prefer messageStripped because Streamer.bot already removes CheerXXX tokens for us.
-            string cleanedMessage = GetArg(ARG_MESSAGE_STRIPPED);
+            string cleanedMessage = GetStringArg(ARG_MESSAGE_STRIPPED);
             if (string.IsNullOrWhiteSpace(cleanedMessage))
             {
-                cleanedMessage = GetArg(ARG_MESSAGE);
+                cleanedMessage = GetStringArg(ARG_MESSAGE);
             }
             if (string.IsNullOrWhiteSpace(cleanedMessage))
             {
-                cleanedMessage = GetArg(ARG_RAW_INPUT);
+                cleanedMessage = GetStringArg(ARG_RAW_INPUT);
             }
 
             // 2) Enforce tier cap (Tier 2 => first 250 words only).
             string finalMessage = LimitToWordCount(cleanedMessage, MAX_WORDS);
 
-            // 3) Forward the cheer text to Mix It Up.
+            // 3) Build structured metadata for Mix It Up branching/logging.
+            // Arguments stays as the final capped message text for compatibility with the existing Mix It Up command.
+            int finalWordCount = CountWords(finalMessage);
+            var specialIdentifiers = new
+            {
+                bitsuser = GetStringArg(ARG_USER),
+                bitsuserid = GetStringArg(ARG_USER_ID),
+                bitsamount = GetIntArg(ARG_BITS).ToString(),
+                bitstier = "2",
+                bitstype = "tier2",
+                bitsmessage = finalMessage ?? string.Empty,
+                bitsmessagetype = string.IsNullOrWhiteSpace(finalMessage) ? "none" : "message",
+                bitswordcount = finalWordCount.ToString(),
+                bitscap = "250 words"
+            };
+
+            // 4) Forward the cheer text to Mix It Up.
             bool mixItUpTriggered = TriggerMixItUpReadout(
                 MIXITUP_COMMAND_ID,
                 "Bits Tier 2",
-                finalMessage
+                finalMessage,
+                specialIdentifiers
             );
 
-            // 4) Only wait when Mix It Up accepted the request.
+            // 5) Only wait when Mix It Up accepted the request.
             if (mixItUpTriggered)
             {
                 int waitMs = CalculateReadoutWaitMs(finalMessage);
@@ -100,7 +121,7 @@ public class CPHInline
     /// Safely reads an argument from Streamer.bot.
     /// Returns empty string when missing/null.
     /// </summary>
-    private string GetArg(string key)
+    private string GetStringArg(string key)
     {
         if (CPH.TryGetArg(key, out string value) && !string.IsNullOrEmpty(value))
         {
@@ -108,6 +129,46 @@ public class CPHInline
         }
 
         return string.Empty;
+    }
+
+    /// <summary>
+    /// Safely reads an integer argument from Streamer.bot.
+    /// Returns the fallback value when missing/null/non-numeric.
+    /// </summary>
+    private int GetIntArg(string key, int fallback = 0)
+    {
+        if (CPH.TryGetArg(key, out int intValue))
+        {
+            return intValue;
+        }
+
+        string rawValue = GetStringArg(key);
+        if (int.TryParse(rawValue, out int parsedValue))
+        {
+            return parsedValue;
+        }
+
+        return fallback;
+    }
+
+    /// <summary>
+    /// Safely reads a boolean argument from Streamer.bot.
+    /// Returns the fallback value when missing/null/non-boolean.
+    /// </summary>
+    private bool GetBoolArg(string key, bool fallback = false)
+    {
+        if (CPH.TryGetArg(key, out bool boolValue))
+        {
+            return boolValue;
+        }
+
+        string rawValue = GetStringArg(key);
+        if (bool.TryParse(rawValue, out bool parsedValue))
+        {
+            return parsedValue;
+        }
+
+        return fallback;
     }
 
     /// <summary>
@@ -135,7 +196,7 @@ public class CPHInline
     /// This helper is intentionally kept in sync with the other bits-tier scripts so
     /// all cheer readouts follow the same API and waiting behavior.
     /// </summary>
-    private bool TriggerMixItUpReadout(string commandId, string logPrefix, string arguments)
+    private bool TriggerMixItUpReadout(string commandId, string logPrefix, string arguments, object specialIdentifiers)
     {
         if (string.IsNullOrWhiteSpace(commandId) ||
             commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
@@ -149,7 +210,7 @@ public class CPHInline
         {
             Platform = MIXITUP_PLATFORM_TWITCH,
             Arguments = arguments ?? string.Empty,
-            SpecialIdentifiers = new { },
+            SpecialIdentifiers = specialIdentifiers ?? new { },
             IgnoreRequirements = false
         });
 

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -11,19 +12,20 @@ public class CPHInline
      *
      * Expected trigger/input:
      * - Wire this script to the Streamer.bot Twitch event for hype train ended.
-     * - Add trigger-specific argument mapping later when the final payload contract is decided.
+     * - Reads the hype train end trigger variables defensively when present.
      *
      * Required runtime variables:
      * - None.
      *
      * Key outputs/side effects:
      * - Calls the Mix It Up Run Command API when a real command ID is configured.
-     * - Sends empty Arguments and empty SpecialIdentifiers for now.
+     * - Keeps Arguments empty for current Mix It Up command compatibility.
+     * - Sends populated SpecialIdentifiers for shared Mix It Up hype train command logic.
      * - Does not interact with OBS.
      *
      * Operator notes:
      * - Replace MIXITUP_COMMAND_ID before production use.
-     * - Expand BuildArguments / BuildSpecialIdentifiers later when the final event fields are known.
+     * - Mix It Up identifiers are lowercase/no-space keys and values are string-friendly.
      */
 
     private const string SCRIPT_NAME = "Hype Train - End";
@@ -62,7 +64,85 @@ public class CPHInline
 
     private object BuildSpecialIdentifiers()
     {
-        return new { };
+        return new
+        {
+            hypetrainlevel = GetIntArg("level").ToString(CultureInfo.InvariantCulture),
+            hypetrainpercent = GetIntArg("percent").ToString(CultureInfo.InvariantCulture),
+            hypetrainpercentdecimal = GetStringArg("percentDecimal"),
+            hypetraintype = GetStringArg("trainType"),
+            hypetraingoldenkappa = GetBoolArg("isGoldenKappaTrain").ToString().ToLowerInvariant(),
+            hypetraintreasure = GetBoolArg("isTreasureTrain").ToString().ToLowerInvariant(),
+            hypetrainshared = GetBoolArg("isSharedTrain").ToString().ToLowerInvariant(),
+            hypetrainstartedat = GetStringArg("startedAt"),
+            hypetrainid = GetStringArg("id"),
+            hypetraintopbitsuser = GetStringArg("top.bits.user"),
+            hypetraintopbitsuserid = GetStringArg("top.bits.userId"),
+            hypetraintopbitstotal = GetIntArg("top.bits.total").ToString(CultureInfo.InvariantCulture),
+            hypetraintopsubuser = GetStringArg("top.subscription.user"),
+            hypetraintopsubuserid = GetStringArg("top.subscription.userId"),
+            hypetraintopsubtotal = GetIntArg("top.subscription.total").ToString(CultureInfo.InvariantCulture),
+            hypetraintopotheruser = GetStringArg("top.other.user"),
+            hypetraintopotheruserid = GetStringArg("top.other.userId"),
+            hypetraintopothertotal = GetIntArg("top.other.total").ToString(CultureInfo.InvariantCulture),
+            hypetrainevent = "end"
+        };
+    }
+
+    private string GetStringArg(string name)
+    {
+        if (CPH.TryGetArg(name, out string stringValue))
+        {
+            return stringValue ?? string.Empty;
+        }
+
+        if (CPH.TryGetArg(name, out object objectValue) && objectValue != null)
+        {
+            return Convert.ToString(objectValue, CultureInfo.InvariantCulture) ?? string.Empty;
+        }
+
+        return string.Empty;
+    }
+
+    private int GetIntArg(string name)
+    {
+        if (CPH.TryGetArg(name, out int intValue))
+        {
+            return intValue;
+        }
+
+        if (CPH.TryGetArg(name, out long longValue))
+        {
+            return (int)longValue;
+        }
+
+        if (CPH.TryGetArg(name, out double doubleValue))
+        {
+            return (int)doubleValue;
+        }
+
+        string stringValue = GetStringArg(name);
+        if (int.TryParse(stringValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsedInt))
+        {
+            return parsedInt;
+        }
+
+        if (double.TryParse(stringValue, NumberStyles.Float, CultureInfo.InvariantCulture, out double parsedDouble))
+        {
+            return (int)parsedDouble;
+        }
+
+        return 0;
+    }
+
+    private bool GetBoolArg(string name)
+    {
+        if (CPH.TryGetArg(name, out bool boolValue))
+        {
+            return boolValue;
+        }
+
+        string stringValue = GetStringArg(name);
+        return bool.TryParse(stringValue, out bool parsedBool) && parsedBool;
     }
 
     private void RunMixItUpCommand(string arguments, object specialIdentifiers)

@@ -72,7 +72,7 @@ They are intentionally minimal so they can be expanded later.
 - All scripts are prepared to call the Mix It Up Run Command API.
 - Subscription scripts in this folder now use configured Mix It Up command IDs; some non-subscription helpers may still use placeholders until they are wired.
 - Some scripts in this folder still send an empty `SpecialIdentifiers` object.
-- All 5 dedicated subscription scripts plus `watch-streak.cs` now send populated special identifiers to Mix It Up.
+- `follower-new.cs`, all 5 dedicated subscription scripts, `subscription-counter-rollover.cs`, and `watch-streak.cs` now send populated special identifiers to Mix It Up.
 - No script in this folder interacts with OBS.
 - If a command ID is still a placeholder, the script logs a warning and exits safely.
 
@@ -253,16 +253,19 @@ Paste `subscription-gift.cs` into the action once. No Set Argument steps needed.
 ## Script: `follower-new.cs`
 
 ### Purpose
-Base handler for a new follower event.
+Forwards new follower event data to Mix It Up.
 
 ### Expected Trigger / Input
 - Wire to the Twitch follow event.
+- Reads `user` and `userId` from Streamer.bot trigger args.
 
 ### Required Runtime Variables
 - None.
 
 ### Key Outputs / Side Effects
 - Ready to call Mix It Up.
+- Keeps `Arguments = ""` for compatibility with the current Mix It Up command.
+- Sends follower metadata as Mix It Up special identifiers.
 - Logs a warning until a real command ID is configured.
 
 ### Mix It Up Actions
@@ -271,8 +274,15 @@ Base handler for a new follower event.
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
+  - `SpecialIdentifiers = { followuser, followuserid, followtype }`
   - `IgnoreRequirements = false`
+
+### Special Identifiers (Mix It Up)
+| Key | Source | Mix It Up usage |
+|---|---|---|
+| `followuser` | `user` trigger arg (empty when missing) | `$followuser` |
+| `followuserid` | `userId` trigger arg (empty when missing) | `$followuserid` |
+| `followtype` | Literal `new` | `$followtype` |
 
 ### OBS Interactions
 - None.
@@ -286,7 +296,7 @@ Base handler for a new follower event.
 
 ### Operator Notes
 - Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
+- In Mix It Up, create/update the command so it references `$followuser`, `$followuserid`, and `$followtype`.
 
 ## Script: `subscription-counter-rollover.cs`
 
@@ -310,8 +320,16 @@ Base handler for a Sub Counter Rollover event — fires when Streamer.bot's inte
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
+  - `SpecialIdentifiers = { subtype, subrollover, subrollovercount, subcounter }`
   - `IgnoreRequirements = false`
+
+### Special Identifiers (Mix It Up)
+| Key | Source | Mix It Up usage |
+|---|---|---|
+| `subtype` | Literal `counterrollover` | `$subtype` |
+| `subrollover` | `rollover` trigger arg (as string; `0` when missing) | `$subrollover` |
+| `subrollovercount` | `rolloverCount` trigger arg (as string; `0` when missing) | `$subrollovercount` |
+| `subcounter` | `subCounter` trigger arg (as string; `0` when missing) | `$subcounter` |
 
 ### OBS Interactions
 - None.
@@ -325,7 +343,7 @@ Base handler for a Sub Counter Rollover event — fires when Streamer.bot's inte
 
 ### Operator Notes
 - Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
+- In Mix It Up, create/update the command so it references `$subtype`, `$subrollover`, `$subrollovercount`, and `$subcounter`.
 - This is a counter event, not a per-user event — Twitch Chat and Twitch User variable groups are NOT available.
 - Available trigger args: `rollover` (number — configured threshold), `rolloverCount` (number — times threshold hit), `subCounter` (number — current counter value).
 

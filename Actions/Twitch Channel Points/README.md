@@ -76,6 +76,7 @@ Handles the `Explain: Current Task` channel point redeem by ensuring recording i
 ### Expected Trigger / Input
 - Channel point redeem action for `Explain: Current Task`.
 - No chat arguments required.
+- Reads Twitch reward redemption args defensively; optional viewer text is accepted from `userInput`, `input0`, `message`, or `rawInput` when present.
 
 ### Required Runtime Variables
 - None.
@@ -92,8 +93,17 @@ Handles the `Explain: Current Task` channel point redeem by ensuring recording i
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
-  - `SpecialIdentifiers = {}`
+  - `SpecialIdentifiers = { ... }`
   - `IgnoreRequirements = false`
+- Special identifiers:
+  - `explaintaskuser = <user arg or empty string>`
+  - `explaintaskuserid = <userId arg or empty string>`
+  - `explaintasktype = "explaincurrenttask"`
+  - `explaintaskrewardid = <reward arg, rewardId arg, or empty string>`
+  - `explaintaskrewardname = <rewardName arg, rewardTitle arg, or empty string>`
+  - `explaintaskmessage = <userInput/input0/message/rawInput arg or empty string>`
+  - `explaintaskmessagetype = "message" when viewer text exists, otherwise "none"`
+  - `explaintaskrecordingcheck = "attempted"`
 
 ### OBS Interactions
 - Uses CPH OBS recording methods (start/toggle as fallback) to ensure recording is active.

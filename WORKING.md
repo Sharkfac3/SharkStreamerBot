@@ -27,16 +27,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-04-25 | pi | C11 — info-service docs + app-dev scaffolding sweep | uncommitted |
-| 2026-04-24 | claude | Drip-meta: drafted C11 prompt `19-docs-scaffolding-sweep.md`; COORDINATION C11 → prompt-ready | uncommitted |
-| 2026-04-24 | claude | C9 — MixItUp Custom Intro command spec (`.agents/_shared/mixitup-api.md`) | uncommitted |
-| 2026-04-24 | claude | C8 — SB first-chat intro script (`Actions/Intros/first-chat-intro.cs`) | uncommitted |
-| 2026-04-24 | claude | C10 — pending-intros collection + redeem-capture SB script | uncommitted |
-| 2026-04-24 | claude | Draft C10 prompt (drip-meta) — `18-redeem-capture.md`, O14 open question | uncommitted |
-| 2026-04-24 | claude | C7 — production-manager: user-intros page (table, modal form, CRUD, nav) | uncommitted |
-| 2026-04-24 | claude | C6 — production-manager skeleton (React+Vite+Tailwind, HealthPage) | uncommitted |
-| 2026-04-24 | claude | C5 — REST routes (read/write plugins, server registry, index wiring) | uncommitted |
-| 2026-04-24 | claude | C4 — user-intros collection (schema + instance + index wiring) | uncommitted |
+| 2026-04-24 | pi | Message Effects Mix It Up special identifiers | uncommitted |
+| 2026-04-24 | pi | Hype Train Start Mix It Up special identifiers | uncommitted |
+| 2026-04-25 | pi | New Follower Mix It Up special identifiers | uncommitted |
+| 2026-04-25 | pi | Explain Current Task Mix It Up special identifiers | uncommitted |
+| 2026-04-24 | pi | Bits Tier 3 Mix It Up special identifiers | uncommitted |
+| 2026-04-24 | pi | Hype Train End Mix It Up special identifiers | uncommitted |
+| 2026-04-24 | pi | Hype Train Level Up Mix It Up special identifiers | uncommitted |
+| 2026-04-25 | pi | Mix It Up SpecialIdentifiers scaffolding rule | uncommitted |
+| 2026-04-25 | pi | Bits Tier 4 Mix It Up special identifiers | uncommitted |
+| 2026-04-24 | pi | Subscription Counter Rollover Mix It Up special identifiers | uncommitted |
 
 ---
 

@@ -49,8 +49,8 @@ public class CPHInline
      *
      * Key outputs/side effects:
      * - POSTs to the Mix It Up command endpoint.
-     * - Sends Arguments = the trimmed userInput value.
-     * - Sends SpecialIdentifiers = { } for now.
+     * - Sends Arguments = the final trimmed message value.
+     * - Sends populated SpecialIdentifiers for Mix It Up branching/text fields.
      * - Uses the same 3000ms + 400ms/word + 500ms pacing wait as the bits-tier cheer scripts.
      * - Logs warnings/errors instead of throwing, so the action queue stays stable.
      *
@@ -79,7 +79,8 @@ public class CPHInline
             bool mixItUpTriggered = TriggerMixItUpReadout(
                 MIXITUP_MESSAGE_EFFECTS_COMMAND_ID,
                 "Twitch Automatic Reward: Message Effects",
-                userInput
+                userInput,
+                inputSource
             );
 
             // Only pause the action when Mix It Up actually accepted the request.
@@ -108,7 +109,7 @@ public class CPHInline
 
         foreach (string argName in candidateArgs)
         {
-            string value = GetArg(argName);
+            string value = GetStringArg(argName);
             if (!string.IsNullOrWhiteSpace(value))
             {
                 sourceArg = argName;
@@ -123,7 +124,7 @@ public class CPHInline
     /// <summary>
     /// Reads a string arg from Streamer.bot safely and returns a trimmed fallback empty string.
     /// </summary>
-    private string GetArg(string argName)
+    private string GetStringArg(string argName)
     {
         if (CPH.TryGetArg(argName, out string value) && !string.IsNullOrWhiteSpace(value))
             return value.Trim();
@@ -132,10 +133,40 @@ public class CPHInline
     }
 
     /// <summary>
+    /// Reads an int arg from Streamer.bot safely and returns the provided fallback when missing/non-numeric.
+    /// </summary>
+    private int GetIntArg(string argName, int fallback = 0)
+    {
+        if (CPH.TryGetArg(argName, out int intValue))
+            return intValue;
+
+        string rawValue = GetStringArg(argName);
+        if (int.TryParse(rawValue, out int parsedValue))
+            return parsedValue;
+
+        return fallback;
+    }
+
+    /// <summary>
+    /// Reads a bool arg from Streamer.bot safely and returns the provided fallback when missing/unparseable.
+    /// </summary>
+    private bool GetBoolArg(string argName, bool fallback = false)
+    {
+        if (CPH.TryGetArg(argName, out bool boolValue))
+            return boolValue;
+
+        string rawValue = GetStringArg(argName);
+        if (bool.TryParse(rawValue, out bool parsedValue))
+            return parsedValue;
+
+        return fallback;
+    }
+
+    /// <summary>
     /// Triggers a Mix It Up readout-style command via local API.
     /// Uses the same payload convention and success/failure behavior as the bits-tier scripts.
     /// </summary>
-    private bool TriggerMixItUpReadout(string commandId, string logPrefix, string arguments)
+    private bool TriggerMixItUpReadout(string commandId, string logPrefix, string arguments, string sourceArg)
     {
         if (string.IsNullOrWhiteSpace(commandId) ||
             commandId.StartsWith("REPLACE_WITH_", StringComparison.OrdinalIgnoreCase))
@@ -149,7 +180,7 @@ public class CPHInline
         {
             Platform = MIXITUP_PLATFORM_TWITCH,
             Arguments = arguments ?? string.Empty,
-            SpecialIdentifiers = new { },
+            SpecialIdentifiers = BuildSpecialIdentifiers(arguments, sourceArg),
             IgnoreRequirements = false
         });
 
@@ -163,6 +194,26 @@ public class CPHInline
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Builds the Mix It Up special identifier payload with stable lowercase keys.
+    /// Values are strings so Mix It Up commands can consume them consistently.
+    /// </summary>
+    private object BuildSpecialIdentifiers(string message, string sourceArg)
+    {
+        string finalMessage = message ?? string.Empty;
+        int wordCount = CountWords(finalMessage);
+
+        return new
+        {
+            messageeffectsuser = GetStringArg("user"),
+            messageeffectsuserid = GetStringArg("userId"),
+            messageeffectsmessage = finalMessage,
+            messageeffectstype = string.IsNullOrWhiteSpace(finalMessage) ? "none" : "message",
+            messageeffectssourcearg = sourceArg ?? string.Empty,
+            messageeffectswordcount = wordCount.ToString()
+        };
     }
 
     /// <summary>
