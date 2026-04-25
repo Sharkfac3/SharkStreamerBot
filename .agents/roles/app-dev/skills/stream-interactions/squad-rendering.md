@@ -46,7 +46,7 @@ Apps/stream-overlay/packages/broker/src/
 |-----------|--------|-------|
 | Duck      | ✅ Full | Counter + progress bar + timer + win/fail result |
 | Pedro     | ✅ Full | Same structure as Duck, hot pink accent |
-| Clone     | ✅ Full | 5 position boxes, elimination animation, round counter |
+| Clone     | ✅ Full | 32×18 grid, player/empire tracking, grid-based collision |
 | Toothless | ✅ Full | Upper-right pop-up, rarity per-colour, NEW UNLOCK label |
 
 ---
@@ -120,9 +120,9 @@ Toothless rarity colours:
 
 | Topic | Publisher script | Payload |
 |-------|-----------------|---------|
-| `squad.clone.start` | clone-main.cs | `{ game, triggeredBy }` |
-| `squad.clone.update` | clone-volley.cs (continue path) | `{ game, state: { round, positionsOpen, eliminatedPosition } }` |
-| `squad.clone.end` | clone-volley.cs (win/loss paths) | `{ game, result: { outcome, eliminatedPosition, winners } }` |
+| `squad.clone.start` | clone-main.cs | `{ game, triggeredBy, phase: "join", joinWindowSeconds, players, gridCols, gridRows }` |
+| `squad.clone.update` | clone-volley.cs | `{ game, state: { event, players, empire, gridCols, gridRows, elapsedSeconds, survivorCount, empireCount, eventDetail? } }` |
+| `squad.clone.end` | clone-volley.cs (win/loss paths) | `{ game, result: { outcome: "win"|"loss", survivors: CloneGridPlayer[] } }` |
 
 ### Toothless (`squad.toothless.*`)
 

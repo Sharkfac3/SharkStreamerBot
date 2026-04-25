@@ -59,8 +59,10 @@ The stream overlay ecosystem is a multi-package TypeScript monorepo (`Apps/strea
 | Overlay (Phaser) | `packages/overlay/` | `app-dev` | OBS browser source — complete |
 | Asset system | `packages/overlay/src/systems/` | `app-dev` | AssetManager, AnimationSystem, AudioManager — complete |
 | Streamer.bot broker scripts | `Actions/Overlay/` | `streamerbot-dev` | broker-connect, broker-publish, test-overlay, broker-disconnect — complete |
-| LotAT visual layer | `packages/overlay/src/lotat/` | `app-dev` | 11 components + lotat-renderer + OverlayScene wiring — complete |
-| Squad visual layer | `packages/overlay/src/squad/` | `app-dev` | 4 game renderers + squad-renderer + per-game overlay-publish.cs — complete |
+| LotAT visual layer | `packages/overlay/src/components/lotat/` (components) + `src/systems/lotat-renderer.ts` | `app-dev` | 11 components + lotat-renderer + OverlayScene wiring — complete |
+| Squad visual layer | `packages/overlay/src/components/squad/` (components) + `src/systems/squad-renderer.ts` | `app-dev` | 4 game renderers + squad-renderer + per-game overlay-publish.cs — complete |
+| info-service | `Apps/info-service/` | `app-dev` | File-backed JSON REST API for per-viewer data — complete |
+| production-manager | `Apps/production-manager/` | `app-dev` | React admin app for managing info-service collections — complete |
 | Future: Web dashboard | TBD | `app-dev` | Operator-facing view of stream state |
 | Future: AI agent client | TBD | `app-dev` | Connects to broker, reacts to events autonomously |
 

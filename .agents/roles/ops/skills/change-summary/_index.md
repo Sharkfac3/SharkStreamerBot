@@ -38,3 +38,7 @@ After completing **any code change** in this repo. This is the last step.
 ## For Tools/ Changes
 
 Provide **run instructions** (command + expected output file path) instead of paste targets. Validation checklist: see `ops/skills/sync/_index.md`.
+
+## For Apps/ Changes
+
+Provide **run instructions** (start command + port) instead of paste targets. Note which app was changed (stream-overlay, info-service, or production-manager). Validation checklist: type-check must pass, build must succeed, app must start without errors.

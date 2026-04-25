@@ -30,6 +30,7 @@ SharkFac3's R&D company streams are powered by a Twitch streaming platform built
 | Domain | Path | Contents |
 |---|---|---|
 | Actions | `Actions/` | Streamer.bot C# runtime scripts — manually copy/pasted into Streamer.bot |
+| Apps | `Apps/` | Standalone TypeScript apps: `stream-overlay/` (Phaser OBS source + broker), `info-service/` (REST API, port 8766), `production-manager/` (React admin UI, port 5174) |
 | Tools | `Tools/` | Local utilities, Mix It Up API helpers, validators, sync tools |
 | Creative | `Creative/` | Brand docs, character codex, art agents, worldbuilding, lore |
 | Docs | `Docs/` | Architecture, workflow, onboarding |
@@ -61,6 +62,7 @@ SharkFac3's R&D company streams are powered by a Twitch streaming platform built
 
 **In scope:**
 - Implement/maintain C# scripts under `Actions/`
+- Implement/maintain TypeScript apps under `Apps/`
 - Implement/maintain local tooling under `Tools/`
 - Implement/maintain creative scaffolding under `Creative/` when explicitly requested
 - Focused, minimal-risk fixes

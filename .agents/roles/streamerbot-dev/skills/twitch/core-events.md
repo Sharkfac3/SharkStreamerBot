@@ -31,6 +31,7 @@ Each subscription event has its own dedicated script. All are currently stubs �
 | `Actions/Twitch Core Integrations/subscription-pay-it-forward.cs` | Gifted sub recipient gifts to someone else (SB v0.2.5+) |
 | `Actions/Twitch Core Integrations/subscription-gift.cs` | Gift subs — smart router handling solo gifts, gift bombs, and bomb deduplication |
 | `Actions/Twitch Core Integrations/subscription-counter-rollover.cs` | Sub counter milestone — counter event, no user context |
+| `Actions/Twitch Core Integrations/watch-streak.cs` | Watch streak milestone — forwards to Mix It Up |
 
 - Each script has its own `MIXITUP_COMMAND_ID` constant — replace before production use
 - Trigger variables for each event: see `Actions/Twitch Core Integrations/README.md`

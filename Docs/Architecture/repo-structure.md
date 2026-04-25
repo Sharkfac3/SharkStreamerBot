@@ -1,8 +1,9 @@
 # Repository Structure
 
-Five top-level working domains:
+Six top-level working domains:
 
 - `Actions/` — Streamer.bot runtime action source only
+- `Apps/` — standalone TypeScript apps (stream-overlay, info-service, production-manager)
 - `Tools/` — external/local utilities, integrations, validators, sync helpers
 - `Creative/` — art, world-building, marketing, and reusable agent scaffolding
 - `Docs/` — architecture, workflow, convention, and integration docs
@@ -21,6 +22,15 @@ Does not belong here:
 - Mix It Up export tools
 - Creative prompt scaffolding
 - Architecture notes unrelated to runtime actions
+
+### `Apps/`
+Belongs here:
+- Standalone TypeScript apps: `stream-overlay/` (Phaser OBS source + WebSocket broker), `info-service/` (file-backed REST API, port 8766), `production-manager/` (React admin UI, port 5174 dev / 4174 preview)
+- App-level docs tied directly to those apps
+
+Does not belong here:
+- Streamer.bot runtime action source
+- Utility scripts or Streamer.bot helpers
 
 ### `Tools/`
 Belongs here:
@@ -72,6 +82,9 @@ Does not belong here:
 
 ## Current Ownership Notes
 
+- Stream overlay ecosystem → `Apps/stream-overlay/`
+- Info service (REST API) → `Apps/info-service/`
+- Production manager (React admin UI) → `Apps/production-manager/`
 - Mix It Up tooling → `Tools/MixItUp/`
 - Streamer.bot support tooling → `Tools/StreamerBot/`
 - Art agent scaffolding → `Creative/Art/`

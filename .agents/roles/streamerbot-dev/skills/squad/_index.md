@@ -8,7 +8,7 @@ Chat-triggered mini-games and interaction behavior. Each action folder is a self
 
 | Folder | Path | Scripts |
 |---|---|---|
-| Clone | `Actions/Squad/Clone/` | `clone-main.cs`, `clone-position.cs`, `clone-volley.cs` |
+| Clone | `Actions/Squad/Clone/` | `clone-empire-main.cs`, `clone-empire-join.cs`, `clone-empire-start.cs`, `clone-empire-move.cs`, `clone-empire-tick.cs` |
 | Duck | `Actions/Squad/Duck/` | `duck-main.cs`, `duck-call.cs`, `duck-resolve.cs` |
 | Pedro | `Actions/Squad/Pedro/` | `pedro-main.cs` |
 | Toothless | `Actions/Squad/Toothless/` | `toothless-main.cs` |
@@ -28,7 +28,7 @@ Read the relevant README before making changes:
 All Squad scripts share global variable names from `Actions/SHARED-CONSTANTS.md`:
 - **Mini-game Lock** — `minigame_active`, `minigame_name`
 - **Duck** — `duck_event_active`, `duck_quack_count`, `duck_caller`, `duck_unlocked`
-- **Clone** — `clone_unlocked`, `clone_game_active`, `clone_round`, `clone_positions_*`, `clone_winners`
+- **Clone** — `clone_unlocked`, `empire_game_active`, `empire_join_active`, `empire_game_start_utc`, `empire_players_json`, `empire_cells_json`
 - **Pedro** — `pedro_game_enabled`, `pedro_mention_count`, `pedro_unlocked`
 - **Toothless** — `rarity_*`, `last_roll`, `last_rarity`, `last_user`
 - **LotAT / Offering** — `lotat_active`, `lotat_announcement_sent`, `lotat_offering_steal_chance`, `boost_*`
@@ -69,8 +69,11 @@ These are NOT deployed actions — copy the methods into the existing game scrip
 | pedro-main.cs | `PublishPedroStart(triggeredBy)` |
 | pedro-call.cs | `PublishPedroUpdate(mentionCount)` |
 | pedro-resolve.cs | `PublishPedroEndSuccess()`, `PublishPedroEndFailure()` |
-| clone-main.cs | `PublishCloneStart(triggeredBy)` |
-| clone-volley.cs | `PublishCloneUpdate()`, `PublishCloneEndWin()`, `PublishCloneEndLoss()` |
+| clone-empire-main.cs | `PublishCloneStart(triggeredBy)` |
+| clone-empire-join.cs | `PublishCloneUpdate()` (player_joined event) |
+| clone-empire-start.cs | `PublishCloneUpdate()` (game_start event) |
+| clone-empire-move.cs | `PublishCloneUpdate()` (player_moved / player_died event) |
+| clone-empire-tick.cs | `PublishCloneUpdate()` (empire events), `PublishCloneEndWin()`, `PublishCloneEndLoss()` |
 | toothless-main.cs | `PublishToothlessStart(triggeredBy)`, `PublishToothlessEnd(rarity, username, isFirstUnlock)` |
 
 ### Broker Topics Published

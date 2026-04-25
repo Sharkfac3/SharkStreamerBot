@@ -12,6 +12,7 @@ Executive function, authority, shrimp denial. The commander trying to maintain o
 | `captain-stretch-stretch.cs` | Captain Stretch's primary command |
 | `captain-stretch-shrimp.cs` | Shrimp-related interaction (character's defining denial mechanic) |
 | `captain-stretch-thank.cs` | Handles `!thank` support command |
+| `captain-stretch-generalfocus.cs` | General-focus utility command |
 
 ## State Variables
 

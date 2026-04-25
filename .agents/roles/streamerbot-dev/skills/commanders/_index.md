@@ -11,9 +11,9 @@
 
 | Commander | Path | Scripts |
 |---|---|---|
-| Captain Stretch | `Actions/Commanders/Captain Stretch/` | `captain-stretch-redeem.cs`, `captain-stretch-stretch.cs`, `captain-stretch-shrimp.cs`, `captain-stretch-thank.cs` |
-| The Director | `Actions/Commanders/The Director/` | `the-director-redeem.cs`, `the-director-checkchat.cs`, `the-director-toad.cs`, `the-director-award.cs` |
-| Water Wizard | `Actions/Commanders/Water Wizard/` | `water-wizard-redeem.cs`, `water-wizard-hail.cs`, `wizard-hydrate.cs`, `water-wizard-orb.cs` |
+| Captain Stretch | `Actions/Commanders/Captain Stretch/` | `captain-stretch-redeem.cs`, `captain-stretch-stretch.cs`, `captain-stretch-shrimp.cs`, `captain-stretch-thank.cs`, `captain-stretch-generalfocus.cs` |
+| The Director | `Actions/Commanders/The Director/` | `the-director-redeem.cs`, `the-director-checkchat.cs`, `the-director-toad.cs`, `the-director-award.cs`, `the-director-primary.cs`, `the-director-secondary.cs` |
+| Water Wizard | `Actions/Commanders/Water Wizard/` | `water-wizard-redeem.cs`, `water-wizard-hail.cs`, `wizard-hydrate.cs`, `water-wizard-orb.cs`, `water-wizard-castrest.cs` |
 
 ## Detailed Docs
 

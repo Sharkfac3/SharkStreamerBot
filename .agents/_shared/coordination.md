@@ -14,7 +14,7 @@ It contains:
 Add a row to **Active Work** in `WORKING.md`:
 - Agent name (`pi`, `claude`, or descriptive name)
 - Short task description (one line)
-- Domain (`Actions/`, `Creative/`, `Docs/`, `Tools/`, `.agents/`, `.pi/skills/`)
+- Domain (`Actions/`, `Apps/`, `Creative/`, `Docs/`, `Tools/`, `.agents/`, `.pi/skills/`)
 - Files you expect to touch (or `TBD` if scouting)
 - Today's date (`YYYY-MM-DD`)
 
