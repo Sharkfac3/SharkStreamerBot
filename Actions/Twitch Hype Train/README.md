@@ -7,7 +7,7 @@ They are intentionally minimal so they can be expanded later.
 - All scripts are Streamer.bot C# action scripts.
 - All scripts are prepared to call the Mix It Up Run Command API.
 - All scripts currently use placeholder command IDs.
-- All scripts currently send an empty `SpecialIdentifiers` object.
+- All scripts send populated `SpecialIdentifiers` for Mix It Up command logic.
 - No script in this folder interacts with OBS.
 - If a command ID is still a placeholder, the script logs a warning and exits safely.
 
@@ -16,7 +16,7 @@ They are intentionally minimal so they can be expanded later.
 ## Script: `hype-train-start.cs`
 
 ### Purpose
-Base handler for a hype train start event.
+Handler for a hype train start event that forwards event metadata to Mix It Up.
 
 ### Expected Trigger / Input
 - Wire to the Twitch hype train started event.
@@ -26,6 +26,7 @@ Base handler for a hype train start event.
 
 ### Key Outputs / Side Effects
 - Ready to call Mix It Up.
+- Sends hype train start metadata through Mix It Up `SpecialIdentifiers`.
 - Logs a warning until a real command ID is configured.
 
 ### Mix It Up Actions
@@ -34,8 +35,36 @@ Base handler for a hype train start event.
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
+  - `SpecialIdentifiers` populated with the lowercase/no-space keys below
   - `IgnoreRequirements = false`
+
+#### Special Identifiers
+
+| Identifier | Source |
+|---|---|
+| `hypetrainlevel` | `level` as string; defaults to `0` |
+| `hypetrainpercent` | `percent` as string; defaults to `0` |
+| `hypetrainpercentdecimal` | `percentDecimal` as string; defaults to empty string |
+| `hypetraintype` | `trainType`; defaults to empty string |
+| `hypetraingoldenkappa` | `isGoldenKappaTrain` as `true`/`false`; defaults to `false` |
+| `hypetraintreasure` | `isTreasureTrain` as `true`/`false`; defaults to `false` |
+| `hypetrainshared` | `isSharedTrain` as `true`/`false`; defaults to `false` |
+| `hypetrainstartedat` | `startedAt` as string; defaults to empty string |
+| `hypetrainid` | `id`; defaults to empty string |
+| `hypetraintopbitsuser` | `top.bits.user`; defaults to empty string |
+| `hypetraintopbitsuserid` | `top.bits.userId` as string; defaults to empty string |
+| `hypetraintopbitstotal` | `top.bits.total` as string; defaults to `0` |
+| `hypetraintopsubuser` | `top.subscription.user`; defaults to empty string |
+| `hypetraintopsubuserid` | `top.subscription.userId` as string; defaults to empty string |
+| `hypetraintopsubtotal` | `top.subscription.total` as string; defaults to `0` |
+| `hypetraintopotheruser` | `top.other.user`; defaults to empty string |
+| `hypetraintopotheruserid` | `top.other.userId` as string; defaults to empty string |
+| `hypetraintopothertotal` | `top.other.total` as string; defaults to `0` |
+| `hypetrainevent` | Literal `start` |
+| `hypetrainexpiresat` | `expiresAt` as string; defaults to empty string |
+| `hypetrainduration` | `duration` as string; defaults to `0` |
+| `hypetrainalltimehighlevel` | `allTimeHighLevel` as string; defaults to `0` |
+| `hypetrainalltimehightotal` | `allTimeHighTotal` as string; defaults to `0` |
 
 ### OBS Interactions
 - None.
@@ -49,14 +78,15 @@ Base handler for a hype train start event.
 
 ### Operator Notes
 - Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
+- `Arguments` intentionally remains empty for compatibility with the current Mix It Up command.
+- Missing trigger args resolve to empty strings, `0`, or `false` strings instead of throwing.
 
 ---
 
 ## Script: `hype-train-level-up.cs`
 
 ### Purpose
-Base handler for a hype train level-up event.
+Handler for a hype train level-up event that forwards event metadata to Mix It Up.
 
 ### Expected Trigger / Input
 - Wire to the Twitch hype train progress/level-up event.
@@ -66,6 +96,7 @@ Base handler for a hype train level-up event.
 
 ### Key Outputs / Side Effects
 - Ready to call Mix It Up.
+- Sends hype train level-up metadata through Mix It Up `SpecialIdentifiers`.
 - Logs a warning until a real command ID is configured.
 
 ### Mix It Up Actions
@@ -74,8 +105,37 @@ Base handler for a hype train level-up event.
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
+  - `SpecialIdentifiers` populated with the lowercase/no-space keys below
   - `IgnoreRequirements = false`
+
+#### Special Identifiers
+
+| Identifier | Source |
+|---|---|
+| `hypetrainlevel` | `level` as string; defaults to `0` |
+| `hypetrainpercent` | `percent` as string; defaults to `0` |
+| `hypetrainpercentdecimal` | `percentDecimal` as string; defaults to empty string |
+| `hypetraintype` | `trainType`; defaults to empty string |
+| `hypetraingoldenkappa` | `isGoldenKappaTrain` as `true`/`false`; defaults to `false` |
+| `hypetraintreasure` | `isTreasureTrain` as `true`/`false`; defaults to `false` |
+| `hypetrainshared` | `isSharedTrain` as `true`/`false`; defaults to `false` |
+| `hypetrainstartedat` | `startedAt` as string; defaults to empty string |
+| `hypetrainid` | `id`; defaults to empty string |
+| `hypetraintopbitsuser` | `top.bits.user`; defaults to empty string |
+| `hypetraintopbitsuserid` | `top.bits.userId` as string; defaults to empty string |
+| `hypetraintopbitstotal` | `top.bits.total` as string; defaults to `0` |
+| `hypetraintopsubuser` | `top.subscription.user`; defaults to empty string |
+| `hypetraintopsubuserid` | `top.subscription.userId` as string; defaults to empty string |
+| `hypetraintopsubtotal` | `top.subscription.total` as string; defaults to `0` |
+| `hypetraintopotheruser` | `top.other.user`; defaults to empty string |
+| `hypetraintopotheruserid` | `top.other.userId` as string; defaults to empty string |
+| `hypetraintopothertotal` | `top.other.total` as string; defaults to `0` |
+| `hypetrainevent` | Literal `levelup` |
+| `hypetrainprevlevel` | `prevLevel` as string; defaults to `0` |
+| `hypetrainexpiresat` | `expiresAt` as string; defaults to empty string |
+| `hypetrainduration` | `duration` as string; defaults to `0` |
+| `hypetrainalltimehighlevel` | `allTimeHighLevel` as string; defaults to `0` |
+| `hypetrainalltimehightotal` | `allTimeHighTotal` as string; defaults to `0` |
 
 ### OBS Interactions
 - None.
@@ -89,14 +149,15 @@ Base handler for a hype train level-up event.
 
 ### Operator Notes
 - Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
+- `Arguments` intentionally remains empty for compatibility with the current Mix It Up command.
+- Missing trigger args resolve to empty strings, `0`, or `false` strings instead of throwing.
 
 ---
 
 ## Script: `hype-train-end.cs`
 
 ### Purpose
-Base handler for a hype train end event.
+Handler for a hype train end event that forwards event metadata to Mix It Up.
 
 ### Expected Trigger / Input
 - Wire to the Twitch hype train ended event.
@@ -106,6 +167,7 @@ Base handler for a hype train end event.
 
 ### Key Outputs / Side Effects
 - Ready to call Mix It Up.
+- Sends hype train end metadata through Mix It Up `SpecialIdentifiers`.
 - Logs a warning until a real command ID is configured.
 
 ### Mix It Up Actions
@@ -114,8 +176,32 @@ Base handler for a hype train end event.
 - Payload shape:
   - `Platform = "Twitch"`
   - `Arguments = ""`
-  - `SpecialIdentifiers = { }`
+  - `SpecialIdentifiers` populated with the lowercase/no-space keys below
   - `IgnoreRequirements = false`
+
+#### Special Identifiers
+
+| Identifier | Source |
+|---|---|
+| `hypetrainlevel` | `level` as string; defaults to `0` |
+| `hypetrainpercent` | `percent` as string; defaults to `0` |
+| `hypetrainpercentdecimal` | `percentDecimal` as string; defaults to empty string |
+| `hypetraintype` | `trainType`; defaults to empty string |
+| `hypetraingoldenkappa` | `isGoldenKappaTrain` as `true`/`false`; defaults to `false` |
+| `hypetraintreasure` | `isTreasureTrain` as `true`/`false`; defaults to `false` |
+| `hypetrainshared` | `isSharedTrain` as `true`/`false`; defaults to `false` |
+| `hypetrainstartedat` | `startedAt` as string; defaults to empty string |
+| `hypetrainid` | `id`; defaults to empty string |
+| `hypetraintopbitsuser` | `top.bits.user`; defaults to empty string |
+| `hypetraintopbitsuserid` | `top.bits.userId` as string; defaults to empty string |
+| `hypetraintopbitstotal` | `top.bits.total` as string; defaults to `0` |
+| `hypetraintopsubuser` | `top.subscription.user`; defaults to empty string |
+| `hypetraintopsubuserid` | `top.subscription.userId` as string; defaults to empty string |
+| `hypetraintopsubtotal` | `top.subscription.total` as string; defaults to `0` |
+| `hypetraintopotheruser` | `top.other.user`; defaults to empty string |
+| `hypetraintopotheruserid` | `top.other.userId` as string; defaults to empty string |
+| `hypetraintopothertotal` | `top.other.total` as string; defaults to `0` |
+| `hypetrainevent` | Literal `end` |
 
 ### OBS Interactions
 - None.
@@ -129,7 +215,8 @@ Base handler for a hype train end event.
 
 ### Operator Notes
 - Replace the placeholder command ID when ready.
-- Add argument/special identifier mapping later when the event contract is finalized.
+- `Arguments` intentionally remains empty for compatibility with the current Mix It Up command.
+- Missing trigger args resolve to empty strings, `0`, or `false` strings instead of throwing.
 
 ---
 

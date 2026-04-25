@@ -24,6 +24,10 @@ var payload = new {
 - Extra variables for Mix It Up command usage go inside `SpecialIdentifiers`, not as top-level fields.
 - `Arguments` carries the primary string payload (e.g., a chat message or display text).
 - `IgnoreRequirements = false` unless the operator explicitly asks to bypass cooldowns/conditions.
+- Any new or modified Streamer.bot action that calls Mix It Up should build populated `SpecialIdentifiers` for useful event metadata and branching values.
+- Use lowercase, no-space special identifier keys.
+- Send special identifier values as strings where practical for consistent Mix It Up consumption.
+- Empty `SpecialIdentifiers = new { }` is acceptable only when the event truly has no useful metadata or the field contract is intentionally unresolved; document that in the matching `Actions/**/README.md`.
 
 ## Preferred Pattern — Optional User Message + Explicit Type
 

@@ -19,7 +19,7 @@ public class CPHInline
      *
      * Key outputs/side effects:
      * - Calls the Mix It Up Run Command API when a real command ID is configured.
-     * - Sends empty Arguments and empty SpecialIdentifiers for now.
+     * - Sends empty Arguments and populated SpecialIdentifiers for Mix It Up branching.
      * - Does not interact with OBS.
      *
      * Trigger-specific arguments (available via CPH.TryGetArg):
@@ -33,7 +33,7 @@ public class CPHInline
      *
      * Operator notes:
      * - Replace MIXITUP_COMMAND_ID before production use.
-     * - Expand BuildArguments / BuildSpecialIdentifiers later when the final event fields are known.
+     * - In Mix It Up, reference $subtype, $subrollover, $subrollovercount, and $subcounter.
      * - Set your rollover threshold in Streamer.bot UI: Actions → Sub Counter settings.
      */
 
@@ -68,15 +68,27 @@ public class CPHInline
 
     private string BuildArguments()
     {
-        // Expand this when the final event field contract is decided.
-        // Available args: rollover, rolloverCount, subCounter.
+        // Preserve existing Mix It Up command compatibility: this counter event
+        // does not need a plain-text argument string. Structured values are sent
+        // through SpecialIdentifiers instead.
         return string.Empty;
     }
 
     private object BuildSpecialIdentifiers()
     {
-        // Expand this when the final event field contract is decided.
-        return new { };
+        // This trigger is a counter event, not a user event. Do not include user
+        // identifiers unless Streamer.bot later documents user args for it.
+        int rollover = GetIntArg("rollover");
+        int rolloverCount = GetIntArg("rolloverCount");
+        int subCounter = GetIntArg("subCounter");
+
+        return new
+        {
+            subtype = "counterrollover",
+            subrollover = rollover.ToString(),
+            subrollovercount = rolloverCount.ToString(),
+            subcounter = subCounter.ToString()
+        };
     }
 
     private void RunMixItUpCommand(string arguments, object specialIdentifiers)
@@ -103,5 +115,26 @@ public class CPHInline
     {
         return string.IsNullOrWhiteSpace(commandId)
             || commandId.IndexOf("replace", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private string GetStringArg(string argName)
+    {
+        string value = "";
+        CPH.TryGetArg(argName, out value);
+        return value ?? "";
+    }
+
+    private int GetIntArg(string argName)
+    {
+        int value = 0;
+        CPH.TryGetArg(argName, out value);
+        return value;
+    }
+
+    private bool GetBoolArg(string argName)
+    {
+        bool value = false;
+        CPH.TryGetArg(argName, out value);
+        return value;
     }
 }

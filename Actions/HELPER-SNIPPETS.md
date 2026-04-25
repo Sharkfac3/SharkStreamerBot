@@ -113,7 +113,8 @@ private bool TriggerMixItUpCommand(
             Platform = "Twitch",
             Arguments = arguments ?? "",
             // Keep SpecialIdentifiers present by default.
-            // If no extra values are provided, send an empty object.
+            // Prefer passing useful event metadata for Mix It Up branching/logging.
+            // Send an empty object only when there is truly no useful metadata yet.
             SpecialIdentifiers = specialIdentifiers ?? new { },
             IgnoreRequirements = false
         });
@@ -142,15 +143,21 @@ private bool TriggerMixItUpCommand(
 private const string MIXITUP_UNLOCK_COMMAND_ID = "REPLACE_WITH_UNLOCK_COMMAND_ID";
 private const int WAIT_MIXITUP_UNLOCK_STARTUP_MS = 3000;
 
-// On unlock (no extra params): sends SpecialIdentifiers = {}
-TriggerMixItUpCommand(MIXITUP_UNLOCK_COMMAND_ID, "Squad Duck");
-
-// With extra params available in Mix It Up as special identifiers:
+// Prefer including useful metadata as lowercase/no-space special identifiers.
 TriggerMixItUpCommand(
     MIXITUP_UNLOCK_COMMAND_ID,
     "Squad Duck",
     arguments: "hello chat",
-    specialIdentifiers: new { test = "True" });
+    specialIdentifiers: new
+    {
+        squaduser = "viewername",
+        squadtype = "duck",
+        squadmessage = "hello chat"
+    });
+
+// If an event truly has no useful metadata yet, omit specialIdentifiers.
+// The helper will still send SpecialIdentifiers = {} so the payload shape stays stable.
+TriggerMixItUpCommand(MIXITUP_UNLOCK_COMMAND_ID, "Squad Duck");
 ```
 
 ### Optional user-message pattern

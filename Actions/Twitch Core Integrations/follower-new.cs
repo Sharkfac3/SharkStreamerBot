@@ -11,19 +11,19 @@ public class CPHInline
      *
      * Expected trigger/input:
      * - Wire this script to the Streamer.bot Twitch event for a new follow.
-     * - Add trigger-specific argument mapping later when the final payload contract is decided.
+     * - Reads the new follower's display name and Twitch user ID from trigger args.
      *
      * Required runtime variables:
      * - None.
      *
      * Key outputs/side effects:
      * - Calls the Mix It Up Run Command API when a real command ID is configured.
-     * - Sends empty Arguments and empty SpecialIdentifiers for now.
+     * - Sends populated follower SpecialIdentifiers for Mix It Up branching.
      * - Does not interact with OBS.
      *
      * Operator notes:
      * - Replace MIXITUP_COMMAND_ID before production use.
-     * - Expand BuildArguments / BuildSpecialIdentifiers later when the final event fields are known.
+     * - In Mix It Up, reference: $followuser, $followuserid, $followtype.
      */
 
     private const string SCRIPT_NAME = "Core - Follower New";
@@ -62,7 +62,15 @@ public class CPHInline
 
     private object BuildSpecialIdentifiers()
     {
-        return new { };
+        string user = GetStringArg("user");
+        string userId = GetStringArg("userId");
+
+        return new
+        {
+            followuser = user,
+            followuserid = userId,
+            followtype = "new"
+        };
     }
 
     private void RunMixItUpCommand(string arguments, object specialIdentifiers)
@@ -89,5 +97,26 @@ public class CPHInline
     {
         return string.IsNullOrWhiteSpace(commandId)
             || commandId.IndexOf("replace", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private string GetStringArg(string argName)
+    {
+        string value = "";
+        CPH.TryGetArg(argName, out value);
+        return value ?? "";
+    }
+
+    private int GetIntArg(string argName)
+    {
+        int value = 0;
+        CPH.TryGetArg(argName, out value);
+        return value;
+    }
+
+    private bool GetBoolArg(string argName)
+    {
+        bool value = false;
+        CPH.TryGetArg(argName, out value);
+        return value;
     }
 }

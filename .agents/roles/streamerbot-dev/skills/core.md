@@ -19,6 +19,15 @@ Scripts are **not auto-deployed**. Each `.cs` file is manually copy/pasted into 
 - Prefer self-contained logic per script
 - If a change depends on Streamer.bot UI setup (variables, trigger wiring, action ordering), note those dependencies clearly
 
+## Mix It Up Payload Rule
+
+When a Streamer.bot action calls Mix It Up:
+- Preserve existing `Arguments` behavior for compatibility with the current Mix It Up command.
+- Put structured event metadata and branching values in `SpecialIdentifiers`, not as extra top-level payload fields.
+- Use lowercase, no-space special identifier keys.
+- Send values as strings where practical, and read Streamer.bot args defensively with helper methods.
+- Avoid leaving `SpecialIdentifiers` empty unless the event truly has no useful metadata or the field contract is intentionally unresolved; document the final payload shape in the matching `Actions/**/README.md`.
+
 ## State Management
 
 - Document where state is read/written (global vars, persisted vars, in-action flow)

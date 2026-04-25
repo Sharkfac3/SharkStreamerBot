@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -37,14 +38,88 @@ public class CPHInline
     {
         EnsureRecordingIsActive();
 
+        string user = GetStringArg("user");
+        string userId = GetStringArg("userId");
+        string rewardId = GetStringArg("reward", "rewardId");
+        string rewardName = GetStringArg("rewardName", "rewardTitle");
+        string message = GetStringArg("userInput", "input0", "message", "rawInput");
+        string messageType = string.IsNullOrWhiteSpace(message) ? "none" : "message";
+
         TriggerMixItUpCommand(
             MIXITUP_EXPLAIN_CURRENT_TASK_COMMAND_ID,
             "Twitch Redeem: Explain Current Task",
             arguments: "",
-            specialIdentifiers: new { }
+            specialIdentifiers: new
+            {
+                explaintaskuser = user,
+                explaintaskuserid = userId,
+                explaintasktype = "explaincurrenttask",
+                explaintaskrewardid = rewardId,
+                explaintaskrewardname = rewardName,
+                explaintaskmessage = message,
+                explaintaskmessagetype = messageType,
+                explaintaskrecordingcheck = "attempted"
+            }
         );
 
         return true;
+    }
+
+    /// <summary>
+    /// Reads the first available Streamer.bot argument as a string.
+    /// Missing or null values are normalized to an empty string so the Mix It Up payload stays stable.
+    /// </summary>
+    private string GetStringArg(params string[] names)
+    {
+        foreach (string name in names)
+        {
+            if (CPH.TryGetArg(name, out object value) && value != null)
+                return value.ToString() ?? "";
+        }
+
+        return "";
+    }
+
+    /// <summary>
+    /// Reads the first available Streamer.bot argument as an integer.
+    /// Missing or invalid values are normalized to 0.
+    /// </summary>
+    private int GetIntArg(params string[] names)
+    {
+        foreach (string name in names)
+        {
+            if (!CPH.TryGetArg(name, out object value) || value == null)
+                continue;
+
+            if (value is int intValue)
+                return intValue;
+
+            if (int.TryParse(value.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsedValue))
+                return parsedValue;
+        }
+
+        return 0;
+    }
+
+    /// <summary>
+    /// Reads the first available Streamer.bot argument as a boolean.
+    /// Missing or invalid values are normalized to false.
+    /// </summary>
+    private bool GetBoolArg(params string[] names)
+    {
+        foreach (string name in names)
+        {
+            if (!CPH.TryGetArg(name, out object value) || value == null)
+                continue;
+
+            if (value is bool boolValue)
+                return boolValue;
+
+            if (bool.TryParse(value.ToString(), out bool parsedValue))
+                return parsedValue;
+        }
+
+        return false;
     }
 
     /// <summary>
