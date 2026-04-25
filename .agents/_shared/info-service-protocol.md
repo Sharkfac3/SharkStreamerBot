@@ -1,7 +1,6 @@
 # Info Service — Protocol Reference
 
 > Full schema definitions live in `Docs/INFO-SERVICE-PLAN.md §Schemas`.
-> Final polish in C11.
 
 ## Health
 
@@ -9,7 +8,7 @@
 
 Response `200`:
 ```json
-{ "ok": true, "uptime": 12.345, "collections": ["user-intros"] }
+{ "ok": true, "uptime": 12.345, "collections": ["user-intros", "pending-intros"] }
 ```
 
 `collections` lists loaded collection names.
@@ -68,9 +67,9 @@ Status lifecycle:
 - `pending` → `rejected`: operator rejects the redeem. PM sets `resolvedUtc`.
 - No reverse transition. If a promoted intro needs reworking, edit the `user-intros` record directly.
 
-> Note: production-manager UI for the pending-intros fulfillment queue is not yet implemented. Pending Open Question Q14 in `humans/info-service/COORDINATION.md`.
+> Note: production-manager PM UI for pending-intros fulfillment (C10.5) is pending operator decision on Open Question Q14 in `humans/info-service/COORDINATION.md`.
 
-## Planned routes (C5 — not yet implemented)
+## Routes
 
 - `GET /info/:collection` — return all records in collection
 - `GET /info/:collection/:key` — return single record by key
@@ -78,15 +77,38 @@ Status lifecycle:
 - `PUT /info/:collection/:key` — update record (same as POST in v1)
 - `DELETE /info/:collection/:key` — delete record (production-manager only)
 
-404 on unknown collection name. 400 on schema validation failure.
-
 ## Envelope schema
 
 All collection JSON files on disk follow the envelope defined in `Docs/INFO-SERVICE-PLAN.md §Schemas §1`.
 
-## Error conventions (C5 — not yet specified)
+## Error conventions
 
-Placeholder. C5 prompt will define error shapes.
+### `404 Not Found`
+
+Returned when the collection name is unknown, or when a known collection does not contain the requested key.
+
+Unknown collection example:
+```json
+{ "error": "unknown collection" }
+```
+
+Missing record example:
+```json
+{ "error": "not found" }
+```
+
+### `400 Bad Request`
+
+Returned by write routes when record validation fails inside `Collection<T>.set()`. In the current implementation, the response body is a plain object with a single `error` string containing zod's formatted validation message.
+
+Example:
+```json
+{
+  "error": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"userId\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+}
+```
+
+No `409` conflict response is currently implemented.
 
 ## Service constants
 

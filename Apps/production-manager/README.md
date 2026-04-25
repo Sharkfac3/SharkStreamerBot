@@ -42,10 +42,13 @@ Preview serves at `http://127.0.0.1:4174`.
 npm run typecheck
 ```
 
-## What's here (C6)
+## Pages
 
-- `src/pages/HealthPage.tsx` — fetches `GET /health` from info-service and displays status, uptime, and collections.
+| Page | Path | Purpose |
+|------|------|---------|
+| Health | `/` | Fetches `GET /health` from info-service; shows status, uptime, and collections. |
+| User Intros | `/user-intros` | Table of all user-intros records; create/edit/delete via modal form; soft-disable toggle. |
 
-## Coming next
+## Pending
 
-- C7: user-intros management page — table, create/edit form, file picker for `Assets/user-intros/`.
+- **Pending Intros fulfillment page** (C10.5): table of `pending-intros` records + fulfill/reject workflow. Blocked on operator decision for Open Question Q14 in `humans/info-service/COORDINATION.md`.

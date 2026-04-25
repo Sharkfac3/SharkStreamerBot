@@ -1,5 +1,9 @@
 # info-service — Agent Orientation
 
+## Current state
+
+All C1–C10 chunks merged as of 2026-04-24. C11 docs sweep in progress.
+
 ## What it is
 
 File-backed JSON REST service replacing ad-hoc Streamer.bot user-variable storage for per-viewer data. Lives at `Apps/info-service/` as a standalone Node/TypeScript app.
@@ -28,10 +32,25 @@ npm run dev
 
 | Chunk | What it adds |
 |-------|-------------|
-| C3 | `Collection<T>` class, atomic write, schema version guard |
-| C4 | `user-intros` + `pending-intros` collections with zod schemas |
-| C5 | REST routes: `GET /info/:collection`, `GET /info/:collection/:key`, write routes |
-| C6+ | `production-manager` React admin app |
+| C3 | Collection engine |
+| C4 | `user-intros` collection + zod schema |
+| C5 | REST routes |
+| C6 | `production-manager` React admin app (skeleton) |
+| C7 | `production-manager` user-intros page (table, form, CRUD) |
+| C8 | `Actions/Intros/first-chat-intro.cs` — SB first-chat intro handler |
+| C9 | MixItUp Custom Intro command spec (`.agents/_shared/mixitup-api.md`) |
+| C10 | `pending-intros` collection + `Actions/Intros/redeem-capture.cs` |
+
+## Key files
+
+- `Apps/info-service/src/index.ts` — server entry, collections wired
+- `Apps/info-service/src/store/collection.ts` — generic `Collection<T>` engine
+- `Apps/info-service/src/store/schemas/` — zod schemas per collection
+- `Apps/info-service/src/collections/` — collection instances
+- `Apps/info-service/src/routes/read.ts` + `write.ts` — REST route plugins
+- `Apps/production-manager/src/pages/UserIntrosPage.tsx` — user-intros CRUD UI
+- `Actions/Intros/first-chat-intro.cs` — SB first-chat lookup
+- `Actions/Intros/redeem-capture.cs` — SB channel-point redeem handler
 
 ## Schema mismatch policy
 
@@ -41,5 +60,5 @@ Hard stop on boot if `schemaVersion` in data file does not match code constant (
 
 - Architecture: `Docs/INFO-SERVICE-PLAN.md` §Tech Stack, §Schemas
 - Decisions 1–28: `humans/info-service/COORDINATION.md`
-- REST contract (stub): `.agents/_shared/info-service-protocol.md`
+- REST contract: `.agents/_shared/info-service-protocol.md`
 - Port + URL constants: `Actions/SHARED-CONSTANTS.md` §Info Service / Assets

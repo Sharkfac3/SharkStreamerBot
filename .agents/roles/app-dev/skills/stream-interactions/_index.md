@@ -84,3 +84,22 @@ The stream overlay ecosystem is a multi-package TypeScript monorepo (`Apps/strea
 
 - [`broker.md`](broker.md) — What the broker is, how it works, what it explicitly does NOT do
 - [`overlay.md`](overlay.md) — What the Phaser overlay is, OBS integration model, rendering principles
+
+## Info Service REST Interactions
+
+`info-service` exposes REST routes consumed by Streamer.bot scripts (read-only) and `production-manager` (read + write).
+
+Base URL: `http://127.0.0.1:8766`
+
+| Pattern | Who calls it | Notes |
+|---------|-------------|-------|
+| `GET /health` | Anyone; health checks | Returns `{ ok, uptime, collections }` |
+| `GET /info/:collection` | production-manager | All records in collection |
+| `GET /info/:collection/:key` | SB scripts (read-only) | Single record by key |
+| `POST /info/:collection/:key` | production-manager only | Create/replace record |
+| `PUT /info/:collection/:key` | production-manager only | Update record |
+| `DELETE /info/:collection/:key` | production-manager only | Delete record |
+
+Collections registered at boot: `user-intros`, `pending-intros`.
+
+Unknown collection name → `404`. Zod validation failure → `400`. Full contract in `.agents/_shared/info-service-protocol.md`.

@@ -27,6 +27,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-25 | pi | C11 — info-service docs + app-dev scaffolding sweep | uncommitted |
 | 2026-04-24 | claude | Drip-meta: drafted C11 prompt `19-docs-scaffolding-sweep.md`; COORDINATION C11 → prompt-ready | uncommitted |
 | 2026-04-24 | claude | C9 — MixItUp Custom Intro command spec (`.agents/_shared/mixitup-api.md`) | uncommitted |
 | 2026-04-24 | claude | C8 — SB first-chat intro script (`Actions/Intros/first-chat-intro.cs`) | uncommitted |
@@ -36,7 +37,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-04-24 | claude | C6 — production-manager skeleton (React+Vite+Tailwind, HealthPage) | uncommitted |
 | 2026-04-24 | claude | C5 — REST routes (read/write plugins, server registry, index wiring) | uncommitted |
 | 2026-04-24 | claude | C4 — user-intros collection (schema + instance + index wiring) | uncommitted |
-| 2026-04-24 | claude | C3 — Collection engine (Collection<T>, atomic write, buildServer opts) | uncommitted |
 
 ---
 

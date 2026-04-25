@@ -29,15 +29,29 @@ GET http://127.0.0.1:8766/health
 Response:
 
 ```json
-{ "ok": true, "uptime": 12.345, "collections": [] }
+{ "ok": true, "uptime": 12.345, "collections": ["user-intros", "pending-intros"] }
 ```
 
 ## Data folder
 
 `Apps/info-service/data/` — created at runtime, gitignored. Operator is responsible for backup.
 
-## What's coming
+## Collections
 
-- **C3** — Collection engine (`Collection<T>`, atomic write, schema version guard)
-- **C4** — `user-intros` collection + `pending-intros` collection
-- **C5** — REST routes (`GET /info/:collection`, `GET /info/:collection/:key`, write routes)
+| Collection | Key | Data file |
+|------------|-----|-----------|
+| `user-intros` | Twitch `userId` | `data/user-intros.json` |
+| `pending-intros` | Twitch `redeemId` | `data/pending-intros.json` |
+
+See `.agents/_shared/info-service-protocol.md` for field reference and schema details.
+
+## Routes
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `GET` | `/health` | Service health + loaded collections |
+| `GET` | `/info/:collection` | All records in collection |
+| `GET` | `/info/:collection/:key` | Single record by key |
+| `POST` | `/info/:collection/:key` | Create/replace record |
+| `PUT` | `/info/:collection/:key` | Update record |
+| `DELETE` | `/info/:collection/:key` | Delete record |

@@ -113,3 +113,22 @@ Apps in this project integrate with:
 - **Mix It Up** — via REST API (see `.agents/_shared/mixitup-api.md`); called from Streamer.bot side only
 - **OBS** — overlay is an OBS browser source; no obs-websocket needed for the overlay itself
 - **Twitch** — events arrive via Streamer.bot, not directly from the overlay
+
+## Info Service + Production Manager
+
+Two standalone apps added in the info-service build (C1–C11):
+
+| App | Path | Port | Role |
+|-----|------|------|------|
+| `info-service` | `Apps/info-service/` | `8766` | File-backed JSON REST API for per-viewer data |
+| `production-manager` | `Apps/production-manager/` | `5174` (dev) / `4174` (preview) | React admin app for managing info-service collections |
+
+Both bind `127.0.0.1` only. No auth. No LAN exposure.
+
+Key patterns:
+- Collections use `Collection<T>` generic engine with atomic writes and zod schema validation.
+- Single-writer: only `production-manager` calls write routes. Streamer.bot and overlay are read-only clients.
+- Data lives in `Apps/info-service/data/` — gitignored, operator backs up manually.
+- Binary assets (mp3, gif) live in `Assets/` at repo root — also gitignored.
+- See `.agents/_shared/info-service-protocol.md` for REST route contracts and collection schemas.
+- See `.agents/roles/app-dev/context/info-service.md` for key files and architecture orientation.
