@@ -6,7 +6,23 @@ Legends of the ASCII Temple (LotAT) is the interactive D&D-style adventure syste
 
 ## Current Status
 
-Reserved / in-progress. The `Actions/LotAT/` folder is the target location for all LotAT C# engine scripts.
+Engine built. Scripts exist in `Actions/LotAT/`:
+
+| Script | Purpose |
+|---|---|
+| `lotat-start-main.cs` | Opens a LotAT session — triggers join phase |
+| `lotat-join.cs` | Registers a `!join` participant |
+| `lotat-join-timeout.cs` | Fires when join window closes; transitions to first node |
+| `lotat-node-enter.cs` | Enters a story node; publishes overlay event |
+| `lotat-decision-input.cs` | Handles a vote command from an eligible participant |
+| `lotat-decision-timeout.cs` | Fires when decision window closes |
+| `lotat-decision-resolve.cs` | Resolves the winning vote and advances to next node |
+| `lotat-dice-roll.cs` | Handles `!roll` during a dice-hook window |
+| `lotat-dice-timeout.cs` | Fires when dice window closes without a success |
+| `lotat-commander-input.cs` | Handles the assigned commander's input during commander moment |
+| `lotat-commander-timeout.cs` | Fires when commander window closes without input |
+| `lotat-end-session.cs` | Tears down the session and publishes session-end overlay event |
+| `overlay-publish.cs` | Reference template — all `lotat.*` topic publish methods (copy into engine scripts) |
 
 ## Role Boundary
 
@@ -47,6 +63,6 @@ Treat those lotat-tech docs as the runtime contract source. This `streamerbot-de
 
 Any new LotAT global variable must be reset in `Actions/Twitch Core Integrations/stream-start.cs` and added to `Actions/SHARED-CONSTANTS.md`.
 
-## When This Expands
+## When Adding Scripts
 
-As the LotAT engine is built out, add specific skill files here (e.g., `engine-commands.md`, `node-runner.md`). Update this index when new scripts are added to `Actions/LotAT/`.
+Update the script table above when new scripts are added to `Actions/LotAT/`.

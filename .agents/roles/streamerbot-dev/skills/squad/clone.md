@@ -4,18 +4,21 @@
 
 | Script | Path | Purpose |
 |---|---|---|
-| `clone-main.cs` | `Actions/Squad/Clone/` | Entry point — handles chat trigger, lock acquisition, round setup |
-| `clone-position.cs` | `Actions/Squad/Clone/` | Processes position selections during active round |
-| `clone-volley.cs` | `Actions/Squad/Clone/` | Resolves the volley outcome |
+| `clone-empire-main.cs` | `Actions/Squad/Clone/` | Entry point — handles `!clone` trigger, lock acquisition, join-phase setup |
+| `clone-empire-join.cs` | `Actions/Squad/Clone/` | Registers a player during the 60-second join window |
+| `clone-empire-start.cs` | `Actions/Squad/Clone/` | Fired by join-window timer; spawns empire cells and opens movement phase |
+| `clone-empire-move.cs` | `Actions/Squad/Clone/` | Processes player movement commands (`!up`/`!down`/`!left`/`!right`) |
+| `clone-empire-tick.cs` | `Actions/Squad/Clone/` | 5-second repeating tick — grows empire, kills inactive players, checks win/loss |
 
 ## Key State Variables
 
 From `Actions/SHARED-CONSTANTS.md`:
-- `clone_unlocked` — whether Clone mini-game is available this stream
-- `clone_game_active` — active game flag (part of mini-game lock pattern)
-- `clone_round` — current round number
-- `clone_positions_*` — player position tracking
-- `clone_winners` — winner tracking across rounds
+- `clone_unlocked` — whether Clone is unlocked (persisted; preserved from old game)
+- `empire_game_active` — true while the Empire Grid game is running
+- `empire_join_active` — true only during the 60-second join window
+- `empire_game_start_utc` — Unix ms when movement phase opened (0 = not started)
+- `empire_players_json` — JSON array of living players (userId, userName, col, row, lastMoveUtc)
+- `empire_cells_json` — JSON array of empire cell positions (col, row)
 
 ## Detailed Docs
 
@@ -24,4 +27,5 @@ From `Actions/SHARED-CONSTANTS.md`:
 ## Notes
 
 - Clone is the "wildcard" character — random intrusive thoughts, unexplained presence
-- Lock pattern: acquire in `clone-main.cs`, release in `clone-volley.cs` on all terminal paths
+- Lock pattern: acquire in `clone-empire-main.cs`, release in `clone-empire-tick.cs` on all terminal paths (win/loss/fault)
+- Timers: `Clone - Join Window` (one-shot 60s → fires `clone-empire-start.cs`), `Clone - Game Tick` (5s repeating → fires `clone-empire-tick.cs`)

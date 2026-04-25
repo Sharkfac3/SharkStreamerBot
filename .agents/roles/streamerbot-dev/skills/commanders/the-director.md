@@ -12,6 +12,8 @@ Committee consensus, executive process, four-eyed calm. Deliberate, procedural, 
 | `the-director-checkchat.cs` | The Director's primary command — reviews chat state |
 | `the-director-toad.cs` | The Director's toad-related interaction |
 | `the-director-award.cs` | Handles `!award` support command |
+| `the-director-primary.cs` | Switches active OBS source to primary for current scene |
+| `the-director-secondary.cs` | Switches active OBS source to secondary for current scene |
 
 ## State Variables
 

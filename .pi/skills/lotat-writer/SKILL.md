@@ -15,6 +15,7 @@ Full context: `.agents/roles/lotat-writer/role.md`
 
 | Task | Load |
 |---|---|
+| Cast, universe rules, or world elements involved | `.agents/roles/lotat-writer/skills/universe/_index.md` |
 | Writing any character into a scene | `.agents/roles/lotat-writer/skills/universe/cast.md` |
 | Universe rules, ship sections, space regions | `.agents/roles/lotat-writer/skills/universe/rules.md` |
 | Designing an adventure | `.agents/roles/lotat-writer/skills/adventures/_index.md` |

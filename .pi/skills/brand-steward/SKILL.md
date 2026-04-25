@@ -18,6 +18,7 @@ Full context: `.agents/roles/brand-steward/role.md`
 | Stream titles, community posts, chat messages | `.agents/roles/brand-steward/skills/voice/_index.md` |
 | Reviewing story/lore for canon | `.agents/roles/brand-steward/skills/canon-guardian/_index.md` |
 | Planning story tied to a build session | `.agents/roles/brand-steward/skills/content-strategy/_index.md` |
+| Community engagement, audience development, growth strategy | `.agents/roles/brand-steward/skills/community-growth/_index.md` |
 
 ## Sub-Skills
 

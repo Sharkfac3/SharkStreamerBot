@@ -12,6 +12,7 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 - Stream start action trigger.
 
 ### Required Runtime Variables
+- Resets `minigame_active` (bool) to `false` and `minigame_name` (string) to `""` so no stale mini-game lock carries over.
 - Resets `rarity_regular`, `rarity_smol`, `rarity_long`, `rarity_flight`, `rarity_party` (bool) to false.
 - Resets `last_roll` (int) to `0`.
 - Resets `last_rarity` (string) to empty.

@@ -9,12 +9,42 @@ This folder contains Squad mini-game and interaction scripts.
 - `Pedro/README.md`
 - `Toothless/README.md`
 
+## Overlay Integration
+Duck, Pedro, and Toothless each have an `overlay-publish.cs` reference template in their folder. These are **not standalone deployed actions** — copy the `Publish*` methods into the target game scripts at integration time. See each game's README for the integration map.
+
 ## Shared Constants
 - Cross-script key/timer/OBS sync reference: `Actions/SHARED-CONSTANTS.md`
 
 ## Helper Snippets
 - Reusable copy/paste patterns: `Actions/HELPER-SNIPPETS.md`
 - Required mini-game contract: see root `README.md` > "Mini-game Contribution Contract (All Features)"
+
+---
+
+## Script: `squad-game-help.cs`
+
+### Purpose
+Handles the `!game` command. `!game` lists all available Squad mini-games in chat; `!game <name>` explains the rules of the named mini-game.
+
+### Expected Trigger / Input
+- Chat command wired to `!game`.
+- Reads `user`, `input0` (first word after command).
+
+### Required Runtime Variables
+- None (read-only; no globals written).
+
+### Key Outputs / Side Effects
+- Sends one chat message: either the full game list or the rules for the named game.
+
+### Mix It Up Actions
+- None.
+
+### OBS Interactions
+- None.
+
+### Operator Notes
+- Wire to the `!game` chat command trigger.
+- Add new games to the `helpMessages` dictionary inside the script as they are built.
 
 ---
 

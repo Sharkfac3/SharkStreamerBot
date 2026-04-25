@@ -5,6 +5,8 @@
 | Script | Path | Purpose |
 |---|---|---|
 | `pedro-main.cs` | `Actions/Squad/Pedro/` | Handles Pedro mention counting, secret unlock, cooldown/lock behavior |
+| `pedro-call.cs` | `Actions/Squad/Pedro/` | Handles chat trigger during active Pedro event |
+| `pedro-resolve.cs` | `Actions/Squad/Pedro/` | Resolves the Pedro event outcome |
 
 ## Key State Variables
 

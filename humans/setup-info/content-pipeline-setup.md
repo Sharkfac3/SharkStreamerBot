@@ -158,7 +158,7 @@ Install Ollama on native Windows 11 if it is not already installed.
 Use the Windows setup guide in:
 
 ```text
-humans/ollama-windows-11-setup.md
+humans/setup-info/ollama-windows-11-setup.md
 ```
 
 Then, from Windows, pull the required model:

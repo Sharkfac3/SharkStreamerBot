@@ -262,7 +262,7 @@ Per-game state and result shapes are defined in `protocol.ts`:
 |---|---|---|
 | Duck | `SquadDuckUpdateState` | `SquadDuckEndResult` |
 | Pedro | `SquadPedroUpdateState` | `SquadPedroEndResult` |
-| Clone | `SquadCloneUpdateState` | `SquadCloneEndResult` |
+| Clone | `SquadCloneGridUpdateState` | `SquadCloneGridEndResult` |
 | Toothless | *(no update event)* | `SquadToothlessEndResult` |
 
 Renderers cast the generic `state` / `result` fields to the typed shape after reading the `game` discriminant. Do not add fields to squad payloads speculatively.

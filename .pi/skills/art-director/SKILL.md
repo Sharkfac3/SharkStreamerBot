@@ -15,6 +15,7 @@ Full context: `.agents/roles/art-director/role.md`
 
 | Task | Load |
 |---|---|
+| Running or extending `Tools/ArtPipeline/` | `.agents/roles/art-director/skills/pipeline/_index.md` |
 | Any character art | `.agents/roles/art-director/skills/characters/_index.md` + relevant character file |
 | Captain Stretch art | `.agents/roles/art-director/skills/characters/captain-stretch.md` |
 | The Director art | `.agents/roles/art-director/skills/characters/the-director.md` |

@@ -371,18 +371,3 @@ If everything is working, an operator starting from scratch should be able to:
 - hand it off into `Creative/WorldBuilding/Storylines/ready/`
 
 That means the LotAT story review tooling is set up correctly.
-ctly.
-t.json
-```
-
----
-
-## Expected result
-
-If everything is working, an operator starting from scratch should be able to:
-- open the viewer in a browser
-- see available draft stories
-- select and review a story
-- hand it off into `Creative/WorldBuilding/Storylines/ready/`
-
-That means the LotAT story review tooling is set up correctly.

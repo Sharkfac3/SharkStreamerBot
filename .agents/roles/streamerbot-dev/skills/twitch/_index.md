@@ -17,6 +17,7 @@ Stream lifecycle events and core Twitch behavior: startup resets, bits integrati
 | Subscription Pay It Forward | `Actions/Twitch Core Integrations/subscription-pay-it-forward.cs` | Twitch → Subscriptions → Pay It Forward (SB v0.2.5+) |
 | Subscription Gift | `Actions/Twitch Core Integrations/subscription-gift.cs` | Gift Subscription + Gift Bomb (dual-trigger, one action) |
 | Subscription Counter Rollover | `Actions/Twitch Core Integrations/subscription-counter-rollover.cs` | Twitch → Subscriptions → Sub Counter Rollover |
+| Watch Streak | `Actions/Twitch Core Integrations/watch-streak.cs` | Watch streak milestone event |
 | Bits Tier 1–4 | `Actions/Twitch Bits Integrations/bits-tier-*.cs` | Cheer event (by tier) |
 
 ## Detailed Docs
@@ -29,7 +30,7 @@ Stream lifecycle events and core Twitch behavior: startup resets, bits integrati
 `Actions/Twitch Core Integrations/stream-start.cs` is the **central reset point** for all session state. Resets:
 - Squad (Duck, Clone, Pedro, Toothless, offering/LotAT)
 - OBS sources (hide dancing sources, cycle rarity sources)
-- Timers (disable Duck Call Window, Clone Volley Timer)
+- Timers (disable Duck Call Window, Clone Join Window, Clone Game Tick, LotAT timers)
 
 **Any new global variable added by any feature must also be reset here and added to `Actions/SHARED-CONSTANTS.md`.**
 

@@ -113,6 +113,7 @@ Apps in this project integrate with:
 - **Mix It Up** — via REST API (see `.agents/_shared/mixitup-api.md`); called from Streamer.bot side only
 - **OBS** — overlay is an OBS browser source; no obs-websocket needed for the overlay itself
 - **Twitch** — events arrive via Streamer.bot, not directly from the overlay
+- **info-service** — REST API; Streamer.bot scripts call `GET /info/:collection/:key` (read-only) to look up per-viewer data. `production-manager` is the sole write client.
 
 ## Info Service + Production Manager
 

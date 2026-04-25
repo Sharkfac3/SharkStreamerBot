@@ -150,3 +150,6 @@ Both scripts are triggered via Twitch → Channel Reward → Reward Redemption.
 ## Known Gap
 - `Explain: Ask Away` exists in Streamer.bot, but there is currently no matching repo script under `Actions/Twitch Channel Points/` yet.
 - Once that action is exported into the repo, place it in this folder so the project stays aligned with Streamer.bot.
+
+## Related: Custom Intro Redemptions
+Custom Intro channel-point redemptions are **not** handled in this folder. `redeem-capture.cs` (in `Actions/Intros/`) captures the redemption and writes a pending-intro record to the info-service. Playback is triggered later via `first-chat-intro.cs` on the viewer's next first-chat event.

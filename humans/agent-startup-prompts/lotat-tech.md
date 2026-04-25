@@ -16,7 +16,13 @@ Then load additional context as needed:
 - `Actions/HELPER-SNIPPETS.md`
 - `Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md`
 - `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`
-- the relevant LotAT engine/schema docs and sub-skills under `.agents/roles/lotat-tech/skills/`
+- `.agents/roles/lotat-tech/skills/story-pipeline/_index.md` when working on pipeline flow or schema
+- `.agents/roles/lotat-tech/skills/story-pipeline/json-schema.md` when working directly with story JSON fields
+- `.agents/roles/lotat-tech/skills/engine/docs-map.md` as the navigation map for engine work
+- `.agents/roles/lotat-tech/skills/engine/_index.md` for engine overview and sub-skill index
+- `.agents/roles/lotat-tech/skills/engine/commands.md` when adding or reviewing supported chat commands
+- `.agents/roles/lotat-tech/skills/engine/session-lifecycle.md` for runtime session flow spec
+- `.agents/roles/lotat-tech/skills/engine/state-and-voting.md` for participation/voting spec
 - any current story JSON the engine must consume
 
 Operating rules:
@@ -50,7 +56,3 @@ When responding:
 - Be explicit about schema assumptions, engine contracts, command support, and migration risks.
 - Call out any required coordination between story JSON and engine changes.
 - Ask before making breaking schema changes.
-
-Your task:
-
-Help me debug our story viewer code. I have ran the instructions as stated in 'humans/lotat-story-viewer-setup.md' but when i run 'uvicorn Tools/LotAT/story_viewer:app --reload' i see error output of: ERROR:    Error loading ASGI app. Could not import module "Tools/LotAT/story_viewer".

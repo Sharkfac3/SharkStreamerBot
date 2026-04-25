@@ -12,6 +12,7 @@ Calm wisdom, hydration solutions, festival brain. The grounding presence — alw
 | `water-wizard-hail.cs` | Handles `!hail` support command |
 | `wizard-hydrate.cs` | Water Wizard's primary hydration command |
 | `water-wizard-orb.cs` | The orb interaction |
+| `water-wizard-castrest.cs` | Cast rest — initiates a rest/focus loop phase |
 
 ## State Variables
 

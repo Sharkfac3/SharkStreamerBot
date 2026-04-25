@@ -11,7 +11,7 @@ Apps extend the stream's capabilities beyond what Streamer.bot scripts can do al
 ## Activate When
 
 - Building a new stream interaction application
-- Maintaining or extending an existing app under `Apps/` (when that domain is created)
+- Maintaining or extending an existing app under `Apps/`
 - Integrating external APIs or services into a standalone app
 - Building UI for stream overlays that require their own runtime
 

@@ -18,7 +18,10 @@ Full context: `.agents/roles/lotat-tech/role.md`
 | Story pipeline, schema validation | `.agents/roles/lotat-tech/skills/story-pipeline/_index.md` |
 | JSON schema field reference | `.agents/roles/lotat-tech/skills/story-pipeline/json-schema.md` |
 | C# engine architecture | `.agents/roles/lotat-tech/skills/engine/_index.md` |
+| Engine navigation map (start here for engine work) | `.agents/roles/lotat-tech/skills/engine/docs-map.md` |
 | Supported commands | `.agents/roles/lotat-tech/skills/engine/commands.md` |
+| Runtime session flow (stages, join, teardown, recovery) | `.agents/roles/lotat-tech/skills/engine/session-lifecycle.md` |
+| Participation and voting spec | `.agents/roles/lotat-tech/skills/engine/state-and-voting.md` |
 
 ## Terminal
 

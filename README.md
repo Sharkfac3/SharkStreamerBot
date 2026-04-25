@@ -2,6 +2,7 @@
 
 This repo stores:
 - **Streamer.bot C# action scripts** in `Actions/`
+- **standalone TypeScript apps** in `Apps/` (stream overlay, info service, production manager)
 - **local/external tooling** in `Tools/`
 - **creative scaffolding** in `Creative/`
 - **architecture/workflow docs** in `Docs/`
@@ -18,6 +19,7 @@ It identifies the available roles, how to navigate context on demand, and where 
 ## Top-level routing
 
 - `Actions/` — Streamer.bot action source. This remains the runtime source area.
+- `Apps/` — standalone TypeScript apps: `stream-overlay/` (Phaser OBS browser source + WebSocket broker), `info-service/` (file-backed REST API for per-viewer data, port 8766), `production-manager/` (React admin UI, port 5174 dev / 4174 preview).
 - `Tools/` — Mix It Up utilities, Streamer.bot support tooling, overlays, validators, and related local scripts.
 - `Creative/` — art-generation, world-building, marketing, and other reusable creative scaffolding.
 - `Docs/` — architecture and workflow documentation.
@@ -37,6 +39,9 @@ All script docs use the same template sections:
 - Operator Notes
 
 ## Docs Index
+
+### Apps
+- `Apps/stream-overlay/README.md`
 
 ### Squad
 - `Actions/Squad/README.md`

@@ -19,3 +19,6 @@ Run this after editing `.agents/routing-manifest.json` to rewrite generated rout
 - [ ] Any new Pi-exposed sub-skill wrapper uses the flat `<role>-<subskill>` naming pattern
 - [ ] `.pi/skills/README.md` generated tables and route surfacing still align with `.agents/routing-manifest.json`
 - [ ] Pi wrapper references point only to existing flat wrappers
+- [ ] For `Apps/` changes: TypeScript type-check passes (`npm run typecheck` in the affected app)
+- [ ] For `Apps/` changes: build succeeds without errors (`npm run build`)
+- [ ] For `Apps/` changes: app starts and responds on its expected port (stream-overlay broker: 8765, info-service: 8766, production-manager: 5174)

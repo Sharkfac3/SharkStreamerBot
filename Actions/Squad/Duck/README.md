@@ -129,3 +129,15 @@ Fails the Duck event if chat does not reach the live threshold before the timer 
 ### Operator Notes
 - This script is now timeout/failure-only.
 - Success happens inside `duck-call.cs` the moment the threshold is reached.
+
+---
+
+## Script: `overlay-publish.cs`
+
+**Reference template — not a standalone deployed action.**
+
+Provides `PublishDuckStart()`, `PublishDuckUpdate()`, `PublishDuckEndSuccess()`, and `PublishDuckEndFailure()` helper methods for publishing Duck overlay events to the broker.
+
+Copy the constants block and the needed `Publish*` methods into the target Duck scripts. Copy `PublishBrokerMessage` from `Actions/Overlay/broker-publish.cs`.
+
+Integration map: `duck-main.cs` → `PublishDuckStart`, `duck-call.cs` → `PublishDuckUpdate` / `PublishDuckEndSuccess`, `duck-resolve.cs` → `PublishDuckEndFailure`.

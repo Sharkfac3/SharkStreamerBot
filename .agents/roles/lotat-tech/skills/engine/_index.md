@@ -31,7 +31,23 @@ The C# engine running in Streamer.bot actions under `Actions/LotAT/`:
 
 ## Current Status
 
-`Actions/LotAT/` is reserved and in active development. As engine scripts are created, document each one here.
+The v1 engine is implemented. All scripts live under `Actions/LotAT/`:
+
+| Script | Responsibility |
+|---|---|
+| `lotat-start-main.cs` | Session start — load story, open join phase |
+| `lotat-join.cs` | Process `!join` during join phase |
+| `lotat-join-timeout.cs` | Join timer expiry — freeze roster or end zero-join session |
+| `lotat-node-enter.cs` | Enter a node — apply chaos, surface narration, open mechanic windows |
+| `lotat-commander-input.cs` | Process commander-input commands during `commander_open` |
+| `lotat-commander-timeout.cs` | Commander timer expiry — skip silently, open decision window |
+| `lotat-dice-roll.cs` | Process `!roll` during `dice_open` |
+| `lotat-dice-timeout.cs` | Dice timer expiry — resolve failure, open decision window |
+| `lotat-decision-input.cs` | Process chat votes during `decision_open` |
+| `lotat-decision-resolve.cs` | Tally votes, advance to next node or end session |
+| `lotat-decision-timeout.cs` | Decision timer expiry — resolve or end unresolved |
+| `lotat-end-session.cs` | Shared teardown — clear state, disable timers, return to `idle` |
+| `overlay-publish.cs` | Shared overlay publish helpers — copy `PublishLotat*` methods into each script |
 
 ## Runtime Session Spec — Start Here
 

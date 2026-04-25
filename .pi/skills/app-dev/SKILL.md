@@ -19,11 +19,9 @@ Full context: `.agents/roles/app-dev/role.md`
 
 ## Purpose
 
-This role exists so Pi can route future standalone app work into a dedicated lane instead of overloading `streamerbot-dev` or `ops`.
-
-Use it for apps that:
+Use this role for standalone apps under `Apps/` that:
 - run outside Streamer.bot
 - provide richer UI, dashboards, overlays, or persistent interaction state
 - integrate with Streamer.bot, Mix It Up, Twitch, or OBS as external systems
 
-Even while the app domain is still a placeholder, load this role first when the task is clearly about a standalone app rather than an `Actions/` script or local utility.
+Active apps: `Apps/stream-overlay/` (Phaser overlay + broker), `Apps/info-service/` (per-viewer JSON REST service), `Apps/production-manager/` (React admin UI).

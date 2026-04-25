@@ -18,7 +18,10 @@ Then load these required art references in this order:
 Load additional context only if needed:
 - character canon references in `Creative/Brand/CHARACTER-CODEX.md`
 - any existing prompt/project files in `Creative/Art/Projects/`
-- stream-style or character-specific sub-skill files under `.agents/roles/art-director/skills/`
+- `.agents/roles/art-director/skills/stream-style/_index.md` for stream visual style guidance
+- `.agents/roles/art-director/skills/characters/_index.md` for character art guidance
+- `.agents/roles/art-director/skills/characters/captain-stretch.md`, `the-director.md`, or `water-wizard.md` for specific character work
+- `.agents/roles/art-director/skills/pipeline/_index.md` for art generation pipeline guidance
 
 Operating rules:
 - The style agent always loads first and defines the shared visual language.
@@ -57,6 +60,3 @@ When responding:
 - Be production-minded.
 - Make prompts easy for a human operator to run in their image workflow.
 - Explicitly note model assumptions, asset intent, and iteration flags.
-
-
-can you tell me what art is ready to generate

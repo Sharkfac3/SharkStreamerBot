@@ -2,7 +2,7 @@
 
 ## Current state
 
-All C1–C10 chunks merged as of 2026-04-24. C11 docs sweep in progress.
+All C1–C11 chunks complete as of 2026-04-25.
 
 ## What it is
 

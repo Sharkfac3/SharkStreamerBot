@@ -37,6 +37,7 @@ The project spans Streamer.bot runtime actions, interactive entertainment featur
 - `conventions.md` — git, naming, file routing
 - `coordination.md` — WORKING.md protocol, conflict rules
 - `mixitup-api.md` — Mix It Up API payload spec
+- `info-service-protocol.md` — info-service REST routes, collection schemas, error conventions
 
 ## Adding a New Role
 

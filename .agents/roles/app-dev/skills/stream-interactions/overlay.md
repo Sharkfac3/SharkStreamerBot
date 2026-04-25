@@ -276,6 +276,11 @@ Apps/stream-overlay/packages/overlay/
       asset-manager.ts    # Spawn/move/animate/remove/clear visual assets
       animation-system.ts # Phaser tween wrappers for AnimationPreset strings
       audio-manager.ts    # MP3 load and play via Phaser WebAudio
+      lotat-renderer.ts   # Orchestrator for all lotat.* broker messages
+      squad-renderer.ts   # Orchestrator for all squad.* broker messages
+    components/
+      lotat/              # 11 LotAT UI components + lotat-constants.ts
+      squad/              # 4 squad game renderers + squad-constants.ts + shared components
     types/
       phaser3-rex-plugins.d.ts  # Type declarations for GIFImage game object
   public/

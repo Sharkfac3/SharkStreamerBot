@@ -55,3 +55,15 @@ Runs Toothless rarity roll and first-time unlock handling.
 ### Operator Notes
 - Keep rarity variable names and Mix It Up IDs stable for continuity.
 - If shared keys/names change, sync with `Actions/SHARED-CONSTANTS.md` and `stream-start.cs`.
+
+---
+
+## Script: `overlay-publish.cs`
+
+**Reference template — not a standalone deployed action.**
+
+Provides `PublishToothlessStart(triggeredBy)` and `PublishToothlessEnd(rarity, username, isFirstUnlock)` helper methods for publishing Toothless overlay events to the broker.
+
+Copy the constants block and both `Publish*` methods into `toothless-main.cs`. Copy `PublishBrokerMessage` from `Actions/Overlay/broker-publish.cs`.
+
+Integration map (all in `toothless-main.cs`): call `PublishToothlessStart` after acquiring the mini-game lock; call `PublishToothlessEnd` after rarity is determined, on all paths including non-unlock rolls.

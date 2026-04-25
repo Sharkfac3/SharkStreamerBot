@@ -37,7 +37,7 @@ Use for: multi-file, experimental, or parallel-agent work.
 ## Routing Rules
 
 - `Actions/` — Streamer.bot runtime source only
-- `Apps/` — TypeScript applications (overlay, broker, future web apps)
+- `Apps/` — TypeScript applications (stream-overlay, info-service, production-manager)
 - `Tools/` — Mix It Up scripts, validators, sync helpers, Python utilities
 - `Creative/` — art generation, worldbuilding, brand scaffolding
 - `Docs/` — architecture, workflow, onboarding

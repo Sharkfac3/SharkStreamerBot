@@ -46,7 +46,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 Add a row to **Active Work** with:
 - Your agent name (`pi`, `claude`, `diffusion`, or a descriptive name)
 - Short task description (one line)
-- Primary domain (`Actions/`, `Creative/`, `Docs/`, `Tools/`, `.pi/skills/`)
+- Primary domain (`Actions/`, `Apps/`, `Creative/`, `Docs/`, `Tools/`, `.agents/`, `.pi/skills/`)
 - Files you expect to touch (comma-separated paths, or `TBD` if scouting)
 - Today's date (`YYYY-MM-DD`)
 
