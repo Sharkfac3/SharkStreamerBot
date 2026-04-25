@@ -17,10 +17,10 @@ Then always read these brand references before producing output:
 - `Creative/Brand/CHARACTER-CODEX.md` when any character is referenced
 
 Load additional sub-skills when needed:
-- voice guidance for public-facing copy
-- canon-guardian guidance for new lore, characters, world elements, or permanent mechanics
-- content-strategy guidance when connecting story content to a real build session
-- community-growth guidance for Discord, Twitch, or broader audience strategy
+- `.agents/roles/brand-steward/skills/voice/_index.md` for public-facing copy
+- `.agents/roles/brand-steward/skills/canon-guardian/_index.md` for new lore, characters, world elements, or permanent mechanics
+- `.agents/roles/brand-steward/skills/content-strategy/_index.md` when connecting story content to a real build session
+- `.agents/roles/brand-steward/skills/community-growth/_index.md` for Discord, Twitch, or broader audience strategy
 
 Operating rules:
 - Maintain the five pillars: authenticity, accessibility, neurodivergent celebration, community as crew, and chaos with purpose.

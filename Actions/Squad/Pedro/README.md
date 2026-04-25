@@ -154,3 +154,15 @@ Ends Pedro event and resolves success/failure at timer end.
 ### Operator Notes
 - Keep timer wiring so this script runs exactly once after the call window.
 - After Pedro unlocks, the normal `!pedro` mini-game should stay unavailable until the next stream reset.
+
+---
+
+## Script: `overlay-publish.cs`
+
+**Reference template — not a standalone deployed action.**
+
+Provides `PublishPedroStart()`, `PublishPedroUpdate()`, `PublishPedroEndSuccess()`, and `PublishPedroEndFailure()` helper methods for publishing Pedro overlay events to the broker.
+
+Copy the constants block and the needed `Publish*` methods into the target Pedro scripts. Copy `PublishBrokerMessage` from `Actions/Overlay/broker-publish.cs`.
+
+Integration map: `pedro-main.cs` → `PublishPedroStart`, `pedro-call.cs` → `PublishPedroUpdate`, `pedro-resolve.cs` → `PublishPedroEndSuccess` / `PublishPedroEndFailure`.

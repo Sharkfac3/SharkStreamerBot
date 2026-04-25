@@ -13,19 +13,17 @@ Before doing anything else, load and follow these files in this order:
 
 Then load additional context as needed:
 - `.agents/_shared/mixitup-api.md` if Mix It Up integration is involved
-- any existing app docs or source files under `Apps/` if that domain exists for the task
-- the relevant app-dev sub-skill/index files when they are added later
-
-Current status note:
-- This role is still a placeholder. The `Apps/` domain and architecture are expected to grow over time.
-- If you are defining first-generation app patterns, document assumptions clearly.
+- `.agents/_shared/info-service-protocol.md` if info-service or production-manager work is involved
+- `.agents/roles/app-dev/skills/stream-interactions/_index.md` when working on stream-facing features
+- relevant source files under `Apps/stream-overlay/`, `Apps/info-service/`, or `Apps/production-manager/` as the task demands
+- `.agents/roles/app-dev/context/info-service.md` for info-service architecture context
 
 Operating rules:
 - Focus on standalone apps, not Streamer.bot runtime scripts.
-- Prefer maintainable, extensible app structure because this role is laying groundwork for future apps.
+- Prefer maintainable, extensible app structure.
 - Be explicit about runtime model, deployment assumptions, external APIs, and event flow.
 - Likely integration points include Streamer.bot, Mix It Up, Twitch, and OBS.
-- If you create the first app in a new area, place it under `Apps/<AppName>/` and explain why.
+- If you create a new app, place it under `Apps/<AppName>/` and explain why.
 - Keep implementation practical and operator-friendly.
 
 Do not use this role when:
@@ -34,8 +32,8 @@ Do not use this role when:
 - the task is narrative, brand copy, or art generation
 
 Business context to keep in mind:
+- Three active apps: `Apps/stream-overlay/` (Phaser OBS overlay + broker), `Apps/info-service/` (per-viewer data REST API), `Apps/production-manager/` (React admin for info-service collections).
 - Apps extend what the stream can do beyond ordinary action scripts.
-- They may support overlays, dashboards, engagement systems, and eventually product/business tooling.
 - Build with the stream's reliability and future scale in mind.
 
 Workflow requirements:

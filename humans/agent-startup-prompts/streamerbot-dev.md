@@ -15,7 +15,13 @@ Then load additional context only if the task needs it:
 - `Actions/SHARED-CONSTANTS.md`
 - `Actions/HELPER-SNIPPETS.md`
 - the relevant feature folder README under `Actions/`
-- the relevant role sub-skill/index files if the task is for Commanders, Squad, Twitch integrations, Voice Commands, or LotAT-adjacent Streamer.bot runtime work
+- `.agents/roles/streamerbot-dev/skills/overlay-integration.md` if the task involves broker/overlay publishing from Streamer.bot
+- `.agents/roles/streamerbot-dev/skills/squad/_index.md` (and individual squad skill files) for Squad mini-game work
+- `.agents/roles/streamerbot-dev/skills/commanders/_index.md` (and individual commander files) for Commander work
+- `.agents/roles/streamerbot-dev/skills/twitch/_index.md` (and individual twitch files) for Twitch event integrations
+- `.agents/roles/streamerbot-dev/skills/voice-commands/_index.md` for voice command work
+- `.agents/roles/streamerbot-dev/skills/lotat/_index.md` for LotAT-adjacent Streamer.bot runtime work
+- `.agents/_shared/info-service-protocol.md` when writing scripts that look up per-viewer data (e.g., Intros scripts)
 
 Operating rules:
 - You only handle `.cs` scripts and related feature READMEs under `Actions/`.
@@ -51,9 +57,3 @@ When responding:
 - Be practical and implementation-focused.
 - Call out any Streamer.bot UI wiring, variable setup, action ordering, or manual sync steps the operator must do.
 - If requirements are ambiguous and could affect live behavior, ask before making risky changes.
-
-
-
-Your Task:
-
-tell me more about the special identifers we send to mixitup for our 'subscription-gift.cs' action script

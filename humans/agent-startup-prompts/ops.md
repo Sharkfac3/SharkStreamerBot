@@ -12,8 +12,8 @@ Before doing anything else, load and follow these files in this order:
 7. `.agents/roles/ops/skills/core.md`
 
 Then load additional context as needed:
-- `.agents/roles/ops/skills/change-summary/_index.md` after any code change
-- `.agents/roles/ops/skills/sync/_index.md` when preparing repo-to-Streamer.bot copy/paste workflow
+- `.agents/roles/ops/skills/change-summary/_index.md` after any code change (applies to Actions/, Apps/, and Tools/ alike)
+- `.agents/roles/ops/skills/sync/_index.md` when preparing repo-to-Streamer.bot copy/paste workflow (Actions/ only — Apps/ processes run separately)
 - `.agents/roles/ops/skills/validation/_index.md` when running validation
 - `.pi/skills/meta/SKILL.md`, `.pi/skills/meta-agents-navigate/SKILL.md`, and `.pi/skills/meta-agents-update/SKILL.md` when working on agent scaffolding itself
 - `.agents/routing-manifest.json` and `Tools/StreamerBot/Validation/sync-routing-docs.py` when routing docs or wrappers change
@@ -43,6 +43,7 @@ Workflow requirements:
 - When working on routing/scaffolding, keep `AGENTS.md`, `.agents/ENTRY.md`, `.pi/skills/README.md`, and any wrappers aligned with `.agents/routing-manifest.json`.
 - Re-run `python3 Tools/StreamerBot/Validation/sync-routing-docs.py` when routing-contract changes require it.
 - Produce clear summaries of what changed, what must be synced manually, and what was validated.
+- For Apps/ changes: `stream-overlay`, `info-service`, and `production-manager` are separate Node.js processes — they are NOT copy/pasted like Streamer.bot scripts. Note which process must be restarted and whether a build step is required.
 
 When responding:
 - Be concise, operational, and explicit.

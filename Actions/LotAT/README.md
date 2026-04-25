@@ -73,6 +73,7 @@ Important current implementation note:
 | `lotat-decision-timeout.cs` | Decision timer-end handler; unresolved end on zero valid votes or handoff to resolve |
 | `lotat-decision-resolve.cs` | Tally votes, apply tie-break, emit `result_flavor`, store winning choice, set next node |
 | `lotat-end-session.cs` | Shared terminal cleanup back to idle |
+| `overlay-publish.cs` | Reference template — copy `PublishLotat*` methods and the constants block into LotAT engine scripts; not a standalone deployed action |
 
 ---
 

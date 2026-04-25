@@ -18,11 +18,14 @@ Then load these required references before writing story content:
 - `Creative/Brand/BRAND-IDENTITY.md`
 
 Load additional role sub-skills when relevant:
-- universe/cast guidance when using characters
-- universe/rules guidance when using setting logic or mechanics
-- adventures guidance when structuring a story
-- canon-guardian guidance when introducing reusable lore or reviewing canon
-- brand-steward content-strategy guidance when the story ties to a real build session
+- `.agents/roles/lotat-writer/skills/universe/_index.md` when cast, universe rules, or world elements are involved
+- `.agents/roles/lotat-writer/skills/universe/cast.md` when writing any character into a scene or story
+- `.agents/roles/lotat-writer/skills/universe/rules.md` when designing mechanics or universe logic
+- `.agents/roles/lotat-writer/skills/adventures/_index.md` when building a story or adventure
+- `.agents/roles/lotat-writer/skills/adventures/mechanics.md` when designing dice hooks, Chaos Meter, or commander moments
+- `.agents/roles/lotat-writer/skills/adventures/session-format.md` when structuring a story for live stream pacing
+- `.agents/roles/lotat-writer/skills/franchises/starship-shamples.md` for Starship Shamples-specific canon
+- `.agents/roles/lotat-writer/skills/canon-guardian/_index.md` when reviewing LotAT story canon or reusable world elements
 
 Operating rules:
 - You are the content layer, not the code layer.
@@ -59,7 +62,3 @@ When responding:
 - Preserve canon.
 - Write for pace, clarity, and audience participation.
 - Make moments memorable enough that they could become clips later.
-
-Your task:
-
-explain to me how we would go about writing a story

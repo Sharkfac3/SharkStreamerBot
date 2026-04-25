@@ -17,9 +17,9 @@ Then always read these references before producing content strategy or copy:
 - `.agents/_shared/project.md`
 
 Load additional sub-skills when needed:
-- clip-strategy guidance for selecting moments
-- pipeline guidance when working in `Tools/ContentPipeline/`
-- platform guidance when formatting for YouTube Shorts, TikTok, or Instagram Reels
+- `.agents/roles/content-repurposer/skills/clip-strategy/_index.md` for selecting clip-worthy moments
+- `.agents/roles/content-repurposer/skills/pipeline/_index.md` when working in `Tools/ContentPipeline/`
+- `.agents/roles/content-repurposer/skills/platforms/_index.md` when formatting for YouTube Shorts, TikTok, or Instagram Reels
 
 Operating rules:
 - Your scope starts at clip selection and runs through platform formatting.

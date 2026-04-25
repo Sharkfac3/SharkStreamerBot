@@ -399,7 +399,6 @@ Used in:
 - `Actions/Overlay/test-overlay.cs`
 - `Actions/LotAT/overlay-publish.cs`
 - `Actions/Squad/Duck/overlay-publish.cs`
-- `Actions/Squad/Clone/overlay-publish.cs`
 - `Actions/Squad/Pedro/overlay-publish.cs`
 - `Actions/Squad/Toothless/overlay-publish.cs`
 - `Actions/Twitch Core Integrations/stream-start.cs` *(must reset broker_connected = false at startup)*
