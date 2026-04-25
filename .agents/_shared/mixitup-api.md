@@ -73,3 +73,36 @@ var payload = new {
 
 To fetch available Mix It Up commands: `Tools/MixItUp/Api/get_commands.py`
 Output written to: `Tools/MixItUp/Api/data/mixitup-commands.txt`
+
+---
+
+## Custom Intro Command
+
+**Command name in Mix It Up:** `Custom Intro`
+
+**Triggered by:** Streamer.bot action `Intros - Play Custom Intro`
+
+**How the argument arrives:**
+Streamer.bot sets global var `intro_sound_file_path` (non-persisted) immediately before calling
+`CPH.RunAction("Intros - Play Custom Intro", true)`. The sub-action chain must read this global var
+and pass it as the argument to the Mix It Up command.
+
+**Argument:** Full absolute path to the sound file.
+Example: `C:\Users\sharkfac3\Workspace\coding\SharkStreamerBot\Assets\user-intros\sound\alice.mp3`
+
+**Mix It Up command setup (operator checklist):**
+1. Create a command named exactly `Custom Intro` in Mix It Up.
+2. Add a "Play Sound" action that reads the path from `$specialidentifier[intro_sound_file_path]`
+   (or the equivalent Streamer.bot → Mix It Up variable passthrough mechanism).
+3. No cooldowns required — SB "First Chat" trigger fires at most once per viewer per stream session.
+4. `IgnoreRequirements = false` (default) is fine.
+
+**Streamer.bot sub-action chain setup (operator checklist):**
+1. Create action named `Intros - Play Custom Intro` in Streamer.bot.
+2. Add sub-action: Read global var `intro_sound_file_path` → store as local arg.
+3. Add sub-action: Call Mix It Up command `Custom Intro`, passing the path as argument.
+
+**Notes:**
+- Path constructed in `first-chat-intro.cs` from `ASSETS_ROOT + SOUND_SUBPATH + soundFile`.
+- Operator must ensure the sound file exists at the constructed path before enabling an intro in production-manager.
+- No overlay work — audio playback fully owned by Mix It Up.

@@ -19,13 +19,14 @@ public class CPHInline
     private const string TIMER_DUCK_CALL_WINDOW = "Duck - Call Window";
 
     // Clone
-    private const string VAR_CLONE_UNLOCKED = "clone_unlocked";
-    private const string VAR_CLONE_GAME_ACTIVE = "clone_game_active";
-    private const string VAR_CLONE_ROUND = "clone_round";
-    private const string VAR_CLONE_POSITIONS_OPEN = "clone_positions_open";
-    private const string VAR_CLONE_WINNERS = "clone_winners";
+    private const string VAR_EMPIRE_GAME_ACTIVE = "empire_game_active";
+    private const string VAR_EMPIRE_JOIN_ACTIVE = "empire_join_active";
+    private const string VAR_EMPIRE_GAME_START_UTC = "empire_game_start_utc";
+    private const string VAR_EMPIRE_PLAYERS_JSON = "empire_players_json";
+    private const string VAR_EMPIRE_CELLS_JSON = "empire_cells_json";
     private const string OBS_SOURCE_CLONE_DANCING = "Clone - Dancing";
-    private const string TIMER_CLONE_VOLLEY = "Clone - Volley Timer";
+    private const string TIMER_CLONE_JOIN_WINDOW = "Clone - Join Window";
+    private const string TIMER_CLONE_GAME_TICK = "Clone - Game Tick";
 
     // Pedro
     private const string VAR_PEDRO_GAME_ENABLED = "pedro_game_enabled";
@@ -116,13 +117,13 @@ public class CPHInline
      * - Resets Toothless rarity unlock flags + last roll tracking.
      * - Resets LotAT session globals to safe idle defaults and clears legacy offering settings.
      * - Disables all four LotAT timers to prevent stale session-window fires.
-     * - Resets Duck, Clone, and Pedro runtime state.
+     * - Resets Duck, Clone Empire, and Pedro runtime state.
      * - Resets the rest/focus loop active flag, phase, and timers.
      * - Disables the temporary Temp Focus Timer to prevent stale timer fires.
      * - Sets stream mode to workspace as the default start-of-stream mode.
      * - Resets disco_party_active and disco_party_prev_scene so a stale mid-sequence lock cannot carry over.
      * - Hides Duck/Clone/Pedro/Toothless dance sources in OBS.
-     * - Disables Duck, Clone, Pedro, LotAT, rest/focus, and temporary timers to prevent stale timer fires.
+     * - Disables Duck, Clone Empire, Pedro, LotAT, rest/focus, and temporary timers to prevent stale timer fires.
      *
      * Operator notes:
      * - Keep scene/source names in sync with OBS.
@@ -242,13 +243,19 @@ public class CPHInline
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
         CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
-        CPH.SetGlobalVar(VAR_CLONE_UNLOCKED, false, false);
-        CPH.SetGlobalVar(VAR_CLONE_GAME_ACTIVE, false, false);
-        CPH.SetGlobalVar(VAR_CLONE_ROUND, 0, false);
-        CPH.SetGlobalVar(VAR_CLONE_POSITIONS_OPEN, "", false);
-        CPH.SetGlobalVar(VAR_CLONE_WINNERS, "", false);
 
-        CPH.DisableTimer(TIMER_CLONE_VOLLEY);
+        // Clone Grid Game — reset all non-persisted state at stream start.
+        // Keep clone_unlocked untouched because it is persisted and should
+        // survive stream restarts for Disco Party eligibility.
+        CPH.SetGlobalVar(VAR_EMPIRE_GAME_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_EMPIRE_JOIN_ACTIVE, false, false);
+        CPH.SetGlobalVar(VAR_EMPIRE_GAME_START_UTC, 0L, false);
+        CPH.SetGlobalVar(VAR_EMPIRE_PLAYERS_JSON, "[]", false);
+        CPH.SetGlobalVar(VAR_EMPIRE_CELLS_JSON, "[]", false);
+
+        // Disable Clone timers in case the previous stream crashed mid-game.
+        CPH.DisableTimer(TIMER_CLONE_JOIN_WINDOW);
+        CPH.DisableTimer(TIMER_CLONE_GAME_TICK);
 
         // -------------------------------------------------
         // Pedro reset

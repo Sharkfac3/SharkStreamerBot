@@ -114,3 +114,13 @@ export const SQUAD_FONT = {
   sizeLG:  '28px',
   sizeXL:  '40px',
 } as const;
+
+// ── Clone Grid Game ────────────────────────────────────────────────────────
+export const CLONE_GRID = {
+  cols:      32,
+  rows:      18,
+  cellSize:  52,
+  originX:   128,   // pixel x of top-left corner of cell (1,1)
+  originY:   72,    // pixel y of top-left corner of cell (1,1)
+  hudHeight: 64,
+} as const;

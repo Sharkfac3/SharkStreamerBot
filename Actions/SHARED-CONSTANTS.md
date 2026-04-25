@@ -52,8 +52,9 @@ Operator notes:
 - `VAR_MINIGAME_NAME` = `minigame_name`
 
 Used in:
-- `Actions/Squad/Clone/clone-main.cs`
-- `Actions/Squad/Clone/clone-volley.cs`
+- `Actions/Squad/Clone/clone-empire-main.cs`
+- `Actions/Squad/Clone/clone-empire-move.cs`
+- `Actions/Squad/Clone/clone-empire-tick.cs`
 - `Actions/Squad/Duck/duck-main.cs`
 - `Actions/Squad/Duck/duck-call.cs`
 - `Actions/Squad/Duck/duck-resolve.cs`
@@ -465,6 +466,26 @@ Operator notes:
 - `destroyer_active` resets to false automatically when the first move command fires after expiry.
 - Image is 200×200px at Phaser center-origin. Boundary clamp keeps the full image on canvas.
 - `destroyer.jpg` must exist at `Apps/stream-overlay/packages/overlay/public/images/destroyer.jpg`.
+
+---
+
+## Info Service / Assets (shared)
+
+- `ASSETS_ROOT` = `C:\Users\sharkfac3\Workspace\coding\SharkStreamerBot\Assets`
+- `INFO_SERVICE_URL` = `http://127.0.0.1:8766` — base URL for all info-service HTTP requests from Streamer.bot
+- `INFO_SERVICE_PORT` = `8766` — info-service listen port
+- `PRODUCTION_MANAGER_PORT` = `5174` — production-manager dev server port
+- `ASSETS_USER_INTROS_SOUND_SUBPATH` = `user-intros/sound/` — relative path from `ASSETS_ROOT` to user-intro sound files
+- `ASSETS_USER_INTROS_GIF_SUBPATH` = `user-intros/gif/` — relative path from `ASSETS_ROOT` to user-intro gif files
+- `COLLECTION_USER_INTROS` = `"user-intros"` — collection name for the user-intros collection
+- `COLLECTION_PENDING_INTROS` = `"pending-intros"` — collection name for the pending-intros collection
+
+Operator notes:
+- `ASSETS_ROOT` is machine-specific. Value above is set for this machine. If deploying on a different machine, update to that machine's absolute path. No trailing slash.
+
+Used in:
+- `Actions/Intros/first-chat-intro.cs`
+- `Actions/Intros/redeem-capture.cs`
 
 ---
 

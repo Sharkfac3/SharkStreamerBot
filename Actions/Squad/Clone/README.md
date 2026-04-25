@@ -1,139 +1,90 @@
-# Clone Script Reference
+# Clone Grid Game
 
-## Script: `clone-main.cs`
+## Purpose
+Star Wars-themed grid survival mini-game. Viewers pilot Rebel ships across a 32×18 grid, avoiding Empire-controlled territory. Surviving 5 minutes unlocks the Clone squad member.
 
-### Purpose
-Starts the Clone event and initializes clean game state.
+## Commands
 
-### Expected Trigger / Input
-- Event/action trigger that starts the Clone mini-game.
+| Command | Who | Phase | Effect |
+|---|---|---|---|
+| `!clone` | Any viewer | Idle | Starts the game, opens 60-second join window |
+| `!join` | Any viewer | Join window | Joins the game as a Rebel pilot |
+| `!up` | Joined players | Movement phase | Move one cell up |
+| `!down` | Joined players | Movement phase | Move one cell down |
+| `!left` | Joined players | Movement phase | Move one cell left |
+| `!right` | Joined players | Movement phase | Move one cell right |
 
-### Required Runtime Variables
-- Reads/writes shared mini-game lock:
-  - `minigame_active`
-  - `minigame_name` (`clone` while this mini-game owns the lock)
-- Writes `clone_game_active` = `true`.
-- Writes `clone_positions_count` = `5`.
-- Writes `clone_round` = `1`.
-- Writes `clone_position_removed_last` = `0`.
-- Writes `clone_positions_open` = `1,2,3,4,5`.
-- Writes `clone_winners` = empty.
-- Writes `clone_round1_pool` = empty.
-- Writes `clone_pos_<n>` rosters = empty.
-- Does **not** globally clear `clone_player_pos_<userId>` keys.
+## Game Flow
 
-### Key Outputs / Side Effects
-- Starts a fresh Clone run.
-- Claims shared mini-game lock so no other mini-game can start.
-- Enables timer `Clone - Volley Timer`.
+1. **Join phase (60 seconds):** After `!clone`, viewers type `!join`. The initiator is automatically the first player. All players spawn at grid center (col 16, row 9).
+2. **Movement phase opens:** 5 empire ships spawn randomly. Players may now move. Inactivity timer starts (30s per player).
+3. **Survival:** Players navigate the grid avoiding empire cells.
+4. **Win:** Any players alive after 5 minutes win together — Clone is unlocked.
+5. **Loss:** All players die before 5 minutes — no unlock.
 
-### Mix It Up Actions
-- None.
+## Grid Rules
 
-### OBS Interactions
-- None.
+### Death
+- Move into an empire cell → instant death.
+- No movement for 30 seconds → auto-death; empire spawns on that cell.
 
-### Wait Behavior
-- None.
+### Empire Growth (Rule 2)
+When a player leaves a cell: if that cell is orthogonally adjacent to empire E1, and E1 has another orthogonal empire neighbor E2 (not the vacated cell), then the vacated cell becomes empire.
 
-### Chat / Log Output
-- Sends mini-game-in-progress warning if another mini-game owns the lock.
-- Sends already-active warning if `clone_game_active` is already `true`.
-- Sends Clone event start message.
+### Empire Death (Rule 3)
+If an empire cell's all 4 orthogonal neighbors are occupied (by empire, players, or grid edges), that empire cell is destroyed.
 
-### Operator Notes
-- Use as the game-entry action before `clone-position.cs` and `clone-volley.cs` processing.
+## Scripts
 
----
+| File | Trigger | Purpose |
+|---|---|---|
+| `clone-empire-main.cs` | `!clone` | Start, join window, acquire lock |
+| `clone-empire-join.cs` | `!join` | Add player during join window |
+| `clone-empire-start.cs` | Timer: Clone - Join Window | Spawn empire, open movement |
+| `clone-empire-move.cs` | `!up/!down/!left/!right` | Move player, apply rules |
+| `clone-empire-tick.cs` | Timer: Clone - Game Tick | Inactivity + win check |
 
-## Script: `clone-position.cs`
+## Timers
 
-### Purpose
-Handles `!rebel` position picks/moves while the Clone event is active.
+| Timer Name | Interval | Repeat | Purpose |
+|---|---|---|---|
+| `Clone - Join Window` | 60s | No | Fires clone-empire-start.cs |
+| `Clone - Game Tick` | 5s | Yes | Fires clone-empire-tick.cs |
 
-### Expected Trigger / Input
-- Chat command containing requested position.
+## Global Variables (non-persisted)
 
-### Required Runtime Variables
-- Reads `clone_game_active` to gate command handling.
-- Reads `clone_positions_count` to validate range.
-- Reads `clone_positions_open` to ensure selected position is still open.
-- Reads/writes `clone_pos_<n>` when moving a user between rosters.
-- Reads/writes `clone_player_pos_<userId>` for current user position.
-- Reads `clone_round` for round-1 eligibility rule.
-- Reads/writes `clone_winners` (adds user during round 1 only).
+| Variable | Type | Purpose |
+|---|---|---|
+| `empire_game_active` | bool | True while game is running |
+| `empire_join_active` | bool | True only during join window |
+| `empire_game_start_utc` | long | Unix ms when movement opened |
+| `empire_players_json` | string | JSON array of living players |
+| `empire_cells_json` | string | JSON array of empire cells |
 
-### Key Outputs / Side Effects
-- Moves/assigns player roster position when valid.
-- Preserves silent reject behavior for invalid picks.
+## Persisted Variables
 
-### Mix It Up Actions
-- None.
+| Variable | Type | Purpose |
+|---|---|---|
+| `clone_unlocked` | bool | Set true on win; survives stream restart; used by Disco Party |
 
-### OBS Interactions
-- None.
+## Mix It Up Integration
 
-### Wait Behavior
-- None.
+On win, triggers the Clone unlock Mix It Up command (ID configured as constant `MIXITUP_CLONE_UNLOCK_COMMAND_ID` in `clone-empire-tick.cs`). Operator must replace `REPLACE_WITH_CLONE_UNLOCK_COMMAND_ID` with the actual Mix It Up command ID after creating the command.
 
-### Chat / Log Output
-- None (silent accept/reject behavior).
+## OBS Integration
 
-### Operator Notes
-- Keep this action wired to the `!rebel` command path only while game is active.
+`Clone - Dancing` OBS source shown during unlock celebration (triggered by Mix It Up, not directly by these scripts).
 
----
+## Overlay Integration
 
-## Script: `clone-volley.cs`
+Sends broker messages via WebSocket (index 0) to the stream-overlay broker:
+- `squad.clone.start` — join phase opened
+- `squad.clone.update` — any game state change
+- `squad.clone.end` — game over (win or loss)
 
-### Purpose
-Resolves each Clone volley timer tick by eliminating one open position.
+## Operator Notes
 
-### Expected Trigger / Input
-- Timer trigger (`Clone - Volley Timer`).
-
-### Required Runtime Variables
-- Reads/writes shared mini-game lock:
-  - `minigame_active`
-  - `minigame_name` (released on Clone end when owned by Clone)
-- Reads `clone_game_active` as execution guard.
-- Reads `clone_positions_count` (fallback board size).
-- Reads/writes `clone_round` (increments on continue path).
-- Reads/writes `clone_positions_open` (removes one position each volley).
-- Writes `clone_position_removed_last`.
-- Reads/writes `clone_pos_<n>` (clears eliminated position and scans survivors).
-- Writes `clone_player_pos_<userId>` = `0` for eliminated users.
-- Reads/writes `clone_round1_pool` (frozen once on round 1).
-- Reads/writes `clone_winners` (alive ∩ round1 pool).
-- Writes `clone_unlocked` on win.
-- Reads/writes `clone_rng_counter` for RNG seed entropy.
-- Writes `clone_game_active` = `false` when game ends.
-
-### Key Outputs / Side Effects
-- Decides continue/loss/win path for each volley.
-- Disables timer on inactive/loss/win end paths.
-- Releases shared mini-game lock on loss/win end paths.
-- Re-enables timer on continue path.
-
-### Mix It Up Actions
-- Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
-- Command ID: `e40600b1-53f4-42d3-89b1-04e12af1e35b`
-- Payload `Arguments`: empty string (`""`)
-- Called only on win path.
-
-### OBS Interactions
-- On win: visibility refresh `ObsHideSource("Disco Party: Workspace", "Clone - Dancing")` then `ObsShowSource(...)`.
-- Logs an error if OBS call throws (helps diagnose scene/source mismatch).
-
-### Wait Behavior
-- On win, waits 11 seconds after the Mix It Up unlock command succeeds.
-- That 11-second wait is intentionally composed as `3000ms` Mix It Up startup buffer + `8000ms` Clone unlock playtime.
-- Continue, loss, and inactive-guard paths do not wait.
-
-### Chat / Log Output
-- Sends loss message when no winner-eligible survivors remain.
-- Sends win message when final position resolves with survivors.
-- Sends round update message on continue path.
-
-### Operator Notes
-- Ensure timer wiring points to this script and uses expected cadence.
+- `!join` is shared with LotAT — both scripts guard themselves internally; no conflict.
+- `!up/!down/!left/!right` are shared with Destroyer — mini-game lock prevents conflicts.
+- Replace `REPLACE_WITH_CLONE_UNLOCK_COMMAND_ID` in `clone-empire-tick.cs` before going live.
+- After stream-start.cs update, run a manual stream-start test to confirm no errors.

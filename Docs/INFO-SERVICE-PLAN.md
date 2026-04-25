@@ -169,23 +169,220 @@ Records stored as a keyed object: `{ "12345": { "userId": "12345", ... } }`. Loo
 
 ---
 
+## Schemas
+
+All schemas use **zod** for runtime validation. The `Collection<T>` generic in `info-service` accepts a zod schema for `T` and validates at load and write time.
+
+---
+
+### 1. Envelope schema
+
+Every `<collection>.json` file on disk uses this outer envelope. `T` is the per-collection record type.
+
+**Zod pseudocode:**
+
+```typescript
+const EnvelopeSchema = <T extends z.ZodTypeAny>(recordSchema: T) =>
+  z.object({
+    schemaVersion: z.number().int().positive(),
+    collection:    z.string().min(1),
+    updatedUtc:    z.number().int().positive(),
+    records:       z.record(z.string(), recordSchema),
+  });
+```
+
+**Canonical JSON example (`user-intros.json` with one placeholder record):**
+
+```json
+{
+  "schemaVersion": 1,
+  "collection": "user-intros",
+  "updatedUtc": 1745500000000,
+  "records": {
+    "12345": {
+      "userId": "12345",
+      "userLogin": "alice",
+      "soundFile": "alice.mp3",
+      "gifFile": "alice.gif",
+      "enabled": true,
+      "updatedUtc": 1745500000000
+    }
+  }
+}
+```
+
+Field rules:
+
+| Field | Type | Notes |
+|---|---|---|
+| `schemaVersion` | `number` (integer) | Starts at `1`. Bump on breaking record shape changes. |
+| `collection` | `string` | Must match filename base (e.g., `user-intros` for `user-intros.json`). Validated on load. |
+| `updatedUtc` | `number` | Unix milliseconds of last write to this file. |
+| `records` | `Record<string, T>` | Keyed map of record objects. Key rules are per-collection (see §2). |
+
+---
+
+### 2. Record key policy
+
+| Collection | Key | Why |
+|---|---|---|
+| `user-intros` | Twitch numeric `userId` as string (e.g., `"12345"`) | Stable — does not change when a user renames their account |
+| `pending-intros` | Twitch `redeemId` as string | Stable per-redemption identifier from the SB event payload |
+
+**Rule:** Keys must be stable identifiers. Never use Twitch login names or display names as record keys — both can change.
+
+---
+
+### 3. Timestamp policy
+
+- All timestamps are **Unix milliseconds** stored as `number`.
+- UTC always. No timezone offsets.
+- No ISO 8601 strings in any schema field. The high-level Data Model section above used ISO strings as a placeholder; this section supersedes that.
+- Both envelope `updatedUtc` and every per-record `updatedUtc` follow this policy.
+- Example: `1745500000000` — not `"2025-04-24T00:00:00Z"`.
+
+---
+
+### 4. Optional field policy
+
+- Optional fields are typed `T | undefined` in TypeScript and `z.T().optional()` in zod.
+- **Never use `null`** for absent optional fields. If a field is absent it is `undefined` in memory and omitted from the serialized JSON (zod `.optional()` omits on round-trip).
+- Callers must guard `field !== undefined` before use. No silent coalescing to empty string unless explicitly documented per field.
+
+---
+
+### 5. `user-intros` record schema
+
+**Zod schema:**
+
+```typescript
+export const UserIntroRecordSchema = z.object({
+  userId:     z.string().min(1),
+  userLogin:  z.string().min(1),
+  soundFile:  z.string().min(1).optional(),
+  gifFile:    z.string().min(1).optional(),
+  enabled:    z.boolean(),
+  notes:      z.string().optional(),
+  updatedUtc: z.number().int().positive(),
+});
+
+export type UserIntroRecord = z.infer<typeof UserIntroRecordSchema>;
+```
+
+**Field reference:**
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `userId` | `string` | required | Numeric Twitch userId. Also the record key in `records`. Never empty. |
+| `userLogin` | `string` | required | Lowercase Twitch login at time of capture. Stored for human readability; not used as key. May become stale if user renames. |
+| `soundFile` | `string \| undefined` | optional | Filename only — no path, no leading slash. Resolves under `Assets/user-intros/sound/`. |
+| `gifFile` | `string \| undefined` | optional | Filename only — no path. Resolves under `Assets/user-intros/gif/`. |
+| `enabled` | `boolean` | required | Soft-disable flag. `false` = skip intro without deleting the record. |
+| `notes` | `string \| undefined` | optional | Operator-facing notes. Never shown on stream. |
+| `updatedUtc` | `number` | required | Unix ms of last write to this record. |
+
+Notes:
+- Both `soundFile` and `gifFile` may be absent if the operator has not yet assigned assets. The SB first-chat script must check `enabled === true` and that at least one asset field is present before dispatching.
+- Asset paths are resolved by consumers as `ASSETS_ROOT + "/user-intros/sound/" + soundFile` and `ASSETS_ROOT + "/user-intros/gif/" + gifFile`.
+
+---
+
+### 6. `pending-intros` record schema
+
+Confirmed in scope (Q10 = A — full automation target). Populated by the SB channel-point redeem handler; fulfilled or rejected via production-manager.
+
+**Zod schema:**
+
+```typescript
+export const PendingIntroRecordSchema = z.object({
+  userId:       z.string().min(1),
+  userLogin:    z.string().min(1),
+  redeemId:     z.string().min(1),
+  redeemUtc:    z.number().int().positive(),
+  rewardTitle:  z.string().min(1),
+  userInput:    z.string().optional(),
+  status:       z.enum(['pending', 'fulfilled', 'rejected']),
+  resolvedUtc:  z.number().int().positive().optional(),
+});
+
+export type PendingIntroRecord = z.infer<typeof PendingIntroRecordSchema>;
+```
+
+**Field reference:**
+
+| Field | Type | Required | Constraints |
+|---|---|---|---|
+| `userId` | `string` | required | Twitch userId. |
+| `userLogin` | `string` | required | Lowercase Twitch login at time of redeem. |
+| `redeemId` | `string` | required | Channel-point redemption ID from SB event. Also used as the record key. |
+| `redeemUtc` | `number` | required | Unix ms when the redeem fired. |
+| `rewardTitle` | `string` | required | Channel-point reward title as received from SB. |
+| `userInput` | `string \| undefined` | optional | Raw user-supplied message from the redeem. Absent if the reward has no user-input field. |
+| `status` | `'pending' \| 'fulfilled' \| 'rejected'` | required | Lifecycle state. Initial value: `'pending'`. |
+| `resolvedUtc` | `number \| undefined` | optional | Unix ms when operator marked the record fulfilled or rejected. |
+
+Status lifecycle:
+- `pending` → `fulfilled`: operator assigns `soundFile`/`gifFile` in production-manager and promotes the record to `user-intros`. production-manager sets `resolvedUtc`.
+- `pending` → `rejected`: operator rejects the redeem (duplicate or ineligible). production-manager sets `resolvedUtc`.
+- No `fulfilled → pending` transition. If a promoted intro needs reworking, edit the `user-intros` record directly.
+
+---
+
+### 7. Migration policy
+
+**Rule (Q8 = A — error out on mismatch):** On boot, `info-service` loads each collection file and checks `file.schemaVersion` against the code's expected version constant. If they do not match, the service throws and refuses to start. No data is served.
+
+Implementation contract:
+- Each collection module exports a `SCHEMA_VERSION` constant (e.g., `export const SCHEMA_VERSION = 1`).
+- `Collection<T>.load()` reads the file, parses the envelope schema, then asserts `file.schemaVersion === SCHEMA_VERSION`.
+- On mismatch: log the collection name, on-disk version, and expected version, then `process.exit(1)`.
+- Resolution: operator runs a CLI migration command (to be added in a future chunk) or manually edits the file and bumps the version.
+
+Rationale: with a single collection and a single operator, a hard stop is the safest signal. Prevents silent schema drift that could cause missed intros or corrupted records.
+
+---
+
+### 8. Validation placement
+
+Three mandatory checkpoints:
+
+| Checkpoint | When | What validates | On failure |
+|---|---|---|---|
+| **On file load** | Service boot; any `Collection.reload()` call | Full envelope schema + record schema for every record in the file | Log error + `process.exit(1)` |
+| **On write** | Every POST/PUT request, before in-memory record is updated | Per-record schema (Fastify route handler via `@fastify/type-provider-zod`) | Return `400 Bad Request` with zod error details |
+| **On disk read after hand-edit** | `GET` request if file mtime changed (hot-reload path) or explicit reload endpoint | Full envelope + record schemas | Log warning + return `503` until operator resolves |
+
+Design notes:
+- Validate at the boundary, not mid-flow. Write validation fires before any in-memory mutation — if zod rejects, the file is never touched.
+- On-load checkpoint ensures the service never starts in a broken state even after manual JSON edits.
+- A future chunk may add a `POST /admin/reload` endpoint to re-run the on-load checkpoint without restarting the process.
+
+---
+
 ## Tech Stack
 
 | Component | Choice | Status |
 |---|---|---|
 | `info-service` runtime | Node.js | RESOLVED |
 | `info-service` language | TypeScript | RESOLVED |
-| `info-service` HTTP framework | Fastify vs Express vs plain `http` | **OPEN** |
-| `info-service` schema validator | zod (tentative) | OPEN — confirm in P1 |
-| `info-service` port | TBD | **OPEN** |
+| `info-service` HTTP framework | Fastify | RESOLVED — Q1 |
+| `info-service` schema validator | zod | RESOLVED — Q2 |
+| `info-service` port | 8766 | RESOLVED — Q5 |
 | `info-service` file write strategy | atomic temp-file rename | RESOLVED |
+| `info-service` data folder | `Apps/info-service/data/`, gitignored | RESOLVED — Q7 |
+| `info-service` schema mismatch policy | error out / refuse to start | RESOLVED — Q8 |
 | `production-manager` framework | React + Vite | RESOLVED |
-| `production-manager` component library | TBD | **OPEN** |
-| `production-manager` data-fetching library | TBD (fetch / react-query / swr) | **OPEN** |
-| `production-manager` dev server port | TBD | **OPEN** |
+| `production-manager` component library | shadcn/ui (Radix UI + Tailwind) | RESOLVED — Q4 |
+| `production-manager` data-fetching library | plain fetch | RESOLVED — Q3 |
+| `production-manager` dev server port | 5174 | RESOLVED — Q5 |
+| `production-manager` prod-preview port | 4174 | RESOLVED — Q5 |
+| `production-manager` auth | None in v1 | RESOLVED — Q11 |
 | `Assets/` location | repo-root, gitignored | RESOLVED |
+| `ASSETS_ROOT` constant | operator-set absolute path in `SHARED-CONSTANTS.md` | RESOLVED — Q6 |
 | Network binding | `127.0.0.1` only | RESOLVED |
 | Auth | None day 1 | RESOLVED |
+| Scaffolding role | extend `app-dev` | RESOLVED — Q12 |
+| Commit discipline | direct to `main`, operator commits manually | RESOLVED — Q13 |
 
 ---
 
@@ -230,11 +427,12 @@ These entries will be added to `Actions/SHARED-CONSTANTS.md` under a new **Info 
 
 | Constant | Value | Status |
 |---|---|---|
-| `ASSETS_ROOT` | Absolute path to repo-root `Assets/` folder on operator machine | **TBD — operator must set** |
-| `INFO_SERVICE_BASE_URL` | `http://127.0.0.1:{INFO_SERVICE_PORT}` | TBD (port OPEN) |
-| `INFO_SERVICE_PORT` | TBD | **OPEN** |
-| `PRODUCTION_MANAGER_PORT` | TBD | **OPEN** |
+| `ASSETS_ROOT` | Absolute path to repo-root `Assets/` folder on operator machine | **TBD — operator must set in `SHARED-CONSTANTS.md`** |
+| `INFO_SERVICE_BASE_URL` | `http://127.0.0.1:8766` | RESOLVED — Q5 |
+| `INFO_SERVICE_PORT` | `8766` | RESOLVED — Q5 |
+| `PRODUCTION_MANAGER_PORT` | `5174` | RESOLVED — Q5 |
 | `COLLECTION_USER_INTROS` | `"user-intros"` | RESOLVED |
+| `COLLECTION_PENDING_INTROS` | `"pending-intros"` | RESOLVED — Q10 |
 
 No broker topics or overlay events are introduced by this feature (audio plays via MixItUp, not overlay).
 

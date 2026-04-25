@@ -18,3 +18,21 @@ Apps/stream-overlay/packages/*/node_modules/
 Apps/stream-overlay/packages/*/dist/
 Apps/stream-overlay/packages/*/*.tsbuildinfo
 Apps/stream-overlay/.vite/
+
+# Assets/ — binary media files; machine-specific; operator places manually
+Assets/**/*.mp3
+Assets/**/*.wav
+Assets/**/*.gif
+Assets/**/*.png
+Assets/**/*.jpg
+Assets/**/*.jpeg
+Assets/**/*.webm
+
+# Apps/info-service
+Apps/info-service/dist/
+Apps/info-service/node_modules/
+Apps/info-service/data/
+
+# Apps/production-manager
+Apps/production-manager/dist/
+Apps/production-manager/node_modules/

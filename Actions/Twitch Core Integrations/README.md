@@ -24,11 +24,12 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 - Resets `duck_quack_count` (int) to `0`.
 - Resets `duck_caller` (string) to empty.
 - Resets `duck_unlocked` (bool) to false.
-- Resets `clone_unlocked` (bool) to false.
-- Resets `clone_game_active` (bool) to false.
-- Resets `clone_round` (int) to `0`.
-- Resets `clone_positions_open` (string) to empty.
-- Resets `clone_winners` (string) to empty.
+- Preserves `clone_unlocked` (bool persisted) so Clone remains unlocked across stream restarts.
+- Resets `empire_game_active` (bool) to false.
+- Resets `empire_join_active` (bool) to false.
+- Resets `empire_game_start_utc` (long) to `0`.
+- Resets `empire_players_json` (string) to `[]`.
+- Resets `empire_cells_json` (string) to `[]`.
 - Resets `pedro_game_enabled` (bool) to false.
 - Resets `pedro_mention_count` (int) to `0`.
 - Resets `pedro_unlocked` (bool) to false.
@@ -38,7 +39,7 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 ### Key Outputs / Side Effects
 - Reinitializes session state for stream start.
 - Disables timer `Duck - Call Window`.
-- Disables timer `Clone - Volley Timer`.
+- Disables timers `Clone - Join Window` and `Clone - Game Tick`.
 - Disables timer `Pedro - Call Window`.
 
 ### Mix It Up Actions

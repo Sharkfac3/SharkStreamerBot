@@ -27,8 +27,9 @@ import type {
   SquadDuckEndResult,
   SquadPedroUpdateState,
   SquadPedroEndResult,
-  SquadCloneUpdateState,
-  SquadCloneEndResult,
+  SquadCloneGridStartPayload,
+  SquadCloneGridUpdateState,
+  SquadCloneGridEndResult,
   SquadToothlessEndResult,
 } from '@stream-overlay/shared';
 
@@ -92,15 +93,15 @@ export class SquadRenderer {
 
   onCloneStart(payload: SquadGameStartPayload): void {
     console.log(`[SquadRenderer] squad.clone.start  triggeredBy=${payload.triggeredBy}`);
-    this.clone.onStart(payload.triggeredBy);
+    this.clone.onStart(payload as unknown as SquadCloneGridStartPayload);
   }
 
   onCloneUpdate(payload: SquadGameUpdatePayload): void {
-    this.clone.onUpdate(payload.state as unknown as SquadCloneUpdateState);
+    this.clone.onUpdate(payload.state as unknown as SquadCloneGridUpdateState);
   }
 
   onCloneEnd(payload: SquadGameEndPayload): void {
-    this.clone.onEnd(payload.result as unknown as SquadCloneEndResult);
+    this.clone.onEnd(payload.result as unknown as SquadCloneGridEndResult);
   }
 
   // ──────────────────────────────────────────────────────────────────────────

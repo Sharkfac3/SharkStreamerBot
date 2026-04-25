@@ -12,7 +12,6 @@
 
 | Agent | Task | Domain | Files Being Edited | Started |
 |-------|------|--------|--------------------|---------|
-*Empty table = no active agent work. If you see entries here, check the files listed before editing anything in that domain.*
 
 ---
 
@@ -28,16 +27,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-04-24 | claude | Seed INFO-SERVICE-PLAN.md | fa64c29 |
-| 2026-04-24 | claude | Seed info-service prompt series + coordination scaffolding | uncommitted |
-| 2026-04-24 | pi | Clone Grid integration cleanup + self-destruct | uncommitted |
-| 2026-04-24 | pi | Clone Grid overlay renderer rewrite | uncommitted |
-| 2026-04-24 | pi | Clone Empire movement + tick scripts | uncommitted |
-| 2026-04-24 | pi | Clone Grid join-phase Streamer.bot scripts | uncommitted |
-| 2026-04-24 | pi | Clone Grid Game protocol types + shared constants docs | uncommitted |
-| 2026-04-21 | pi | Backfill Mix It Up identifiers in remaining subscription scripts | uncommitted |
-| 2026-04-21 | pi | Update subscription renewed Mix It Up identifiers | uncommitted |
-| 2026-04-21 | pi | Update Water Wizard hydrate parsing and Mix It Up payload | uncommitted |
+| 2026-04-24 | claude | Drip-meta: drafted C11 prompt `19-docs-scaffolding-sweep.md`; COORDINATION C11 → prompt-ready | uncommitted |
+| 2026-04-24 | claude | C9 — MixItUp Custom Intro command spec (`.agents/_shared/mixitup-api.md`) | uncommitted |
+| 2026-04-24 | claude | C8 — SB first-chat intro script (`Actions/Intros/first-chat-intro.cs`) | uncommitted |
+| 2026-04-24 | claude | C10 — pending-intros collection + redeem-capture SB script | uncommitted |
+| 2026-04-24 | claude | Draft C10 prompt (drip-meta) — `18-redeem-capture.md`, O14 open question | uncommitted |
+| 2026-04-24 | claude | C7 — production-manager: user-intros page (table, modal form, CRUD, nav) | uncommitted |
+| 2026-04-24 | claude | C6 — production-manager skeleton (React+Vite+Tailwind, HealthPage) | uncommitted |
+| 2026-04-24 | claude | C5 — REST routes (read/write plugins, server registry, index wiring) | uncommitted |
+| 2026-04-24 | claude | C4 — user-intros collection (schema + instance + index wiring) | uncommitted |
+| 2026-04-24 | claude | C3 — Collection engine (Collection<T>, atomic write, buildServer opts) | uncommitted |
 
 ---
 

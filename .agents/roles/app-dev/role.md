@@ -30,6 +30,12 @@ Apps extend the stream's capabilities beyond what Streamer.bot scripts can do al
 
 Active. The stream overlay ecosystem (`Apps/stream-overlay/`) is built and operational. The `Apps/` domain is established. Add new skills as new apps are added.
 
+## Active Apps
+
+- `Apps/stream-overlay/` — Phaser-based stream overlay (broker + overlay packages)
+- `Apps/info-service/` — File-backed JSON REST service for per-viewer data (C2+); see `context/info-service.md`
+- `Apps/production-manager/` — React + Vite admin app for managing info-service collections (C6+)
+
 ## Out of Scope
 
 - Streamer.bot runtime scripts (those belong in `streamerbot-dev`)

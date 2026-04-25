@@ -1,266 +1,672 @@
-/**
- * clone-renderer.ts — Visual layer for the Clone mini-game.
- *
- * ## Game summary
- * Musical chairs with 5 numbered positions.  Viewers pick a position with
- * `!rebel N`.  Each volley (timer tick in Streamer.bot) eliminates one
- * position.  Players in the eliminated position are out.  Survivors who
- * held their position from round 1 without losing win.
- *
- * ## Visual layout (wider top-left panel)
- *
- *   ┌─────────────────────────────────────────────────────────────────────────┐
- *   │  CLONE GAME!   ROUND 2                                        0:30     │
- *   │  ─────────────────────────────────────────────────────────────────────  │
- *   │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐│
- *   │  │  POS  1  │  │  POS  2  │  │ ×POS  3× │  │  POS  4  │  │  POS  5  ││
- *   │  │  OPEN    │  │  OPEN    │  │ ELIMINATED│  │  OPEN    │  │  OPEN    ││
- *   │  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘│
- *   │  result text on end                                                    │
- *   └─────────────────────────────────────────────────────────────────────────┘
- *
- * ## Broker messages handled
- *   squad.clone.start  → show panel, init 5 open boxes
- *   squad.clone.update → mark eliminated box, increment round counter
- *   squad.clone.end    → show win/loss result, auto-hide
- */
-
 import Phaser from 'phaser';
-import type { SquadCloneUpdateState, SquadCloneEndResult } from '@stream-overlay/shared';
-import {
-  SQUAD_LAYOUT,
-  SQUAD_HEX,
-  SQUAD_ALPHA,
-  SQUAD_COLOR,
-  SQUAD_FONT,
-} from './squad-constants';
-import { GameBanner }    from './GameBanner';
-import { GameTimer }     from './GameTimer';
-import { ResultDisplay } from './ResultDisplay';
+import type {
+  CloneGridCell,
+  CloneGridPlayer,
+  SquadCloneGridEndResult,
+  SquadCloneGridStartPayload,
+  SquadCloneGridUpdateState,
+} from '@stream-overlay/shared';
+import { CLONE_GRID, SQUAD_COLOR, SQUAD_FONT } from './squad-constants';
 
-const POSITIONS = 5;
+type GamePhase = 'idle' | 'join' | 'game' | 'ended';
 
-const PX = SQUAD_LAYOUT.panelX;
-const PY = SQUAD_LAYOUT.panelY;
-const PW = SQUAD_LAYOUT.clonePanelW;
-const PH = SQUAD_LAYOUT.clonePanelH;
-const MX = SQUAD_LAYOUT.marginX;
-const MY = SQUAD_LAYOUT.marginY;
-const D_BASE    = SQUAD_LAYOUT.depthBase;
-const D_CONTENT = SQUAD_LAYOUT.depthContent;
+type PlayerVisual = {
+  rect: Phaser.GameObjects.Rectangle;
+  label: Phaser.GameObjects.Text;
+  indicator: Phaser.GameObjects.Text;
+};
 
-const BOX_W   = SQUAD_LAYOUT.cloneBoxW;
-const BOX_H   = SQUAD_LAYOUT.cloneBoxH;
-const BOX_GAP = SQUAD_LAYOUT.cloneBoxGap;
-const BOX_Y   = PY + SQUAD_LAYOUT.cloneBoxY;   // absolute y for boxes
+const DEPTH = {
+  bg: 30,
+  grid: 31,
+  cells: 32,
+  labels: 33,
+  hud: 34,
+  flash: 35,
+  join: 36,
+  result: 37,
+} as const;
 
-// Absolute x for each position box (1-indexed, index 0 unused)
-function boxX(position: number): number {
-  return PX + MX + (position - 1) * (BOX_W + BOX_GAP);
-}
+const CANVAS_W = 1920;
+const CANVAS_H = 1080;
+const GAME_DURATION_SECONDS = 5 * 60;
+const EMPIRE_FILL = 0x8b0000;
+const PLAYER_FILL = 0x003300;
+const GRID_LINE = 0x1a1a2e;
+const BG_NEAR_BLACK = 0x05070d;
+const JOIN_PANEL_BG = 0x000000;
+const RESULT_CARD_BG = 0x090d14;
 
 export class CloneRenderer {
-  private readonly bg:         Phaser.GameObjects.Rectangle;
-  private readonly banner:     GameBanner;
-  private readonly timer:      GameTimer;
-  private readonly roundLabel: Phaser.GameObjects.Text;
-  private readonly divider:    Phaser.GameObjects.Rectangle;
+  private players: CloneGridPlayer[] = [];
+  private empire: CloneGridCell[] = [];
+  private elapsedSeconds = 0;
+  private gamePhase: GamePhase = 'idle';
 
-  // One bg rect + label per position box (indices 1-5, index 0 is null)
-  private readonly boxBgs:    Array<Phaser.GameObjects.Rectangle | null>;
-  private readonly boxLabels: Array<Phaser.GameObjects.Text | null>;
-  private readonly boxStatus: Array<Phaser.GameObjects.Text | null>;
+  private readonly empireRects = new Map<string, Phaser.GameObjects.Rectangle>();
+  private readonly empireIndicators = new Map<string, Phaser.GameObjects.Text>();
+  private readonly playerVisuals = new Map<string, PlayerVisual>();
+  private readonly gridLines: Phaser.GameObjects.Rectangle[] = [];
 
-  private readonly result: ResultDisplay;
+  private readonly gameBackground: Phaser.GameObjects.Rectangle;
+  private readonly hudBackground: Phaser.GameObjects.Rectangle;
+  private readonly survivorText: Phaser.GameObjects.Text;
+  private readonly timerText: Phaser.GameObjects.Text;
+  private readonly empireText: Phaser.GameObjects.Text;
 
-  // Track which positions are currently eliminated
-  private readonly eliminated = new Set<number>();
+  private readonly joinOverlay: Phaser.GameObjects.Rectangle;
+  private readonly joinTitle: Phaser.GameObjects.Text;
+  private readonly joinSubtitle: Phaser.GameObjects.Text;
+  private readonly joinPlayersHeader: Phaser.GameObjects.Text;
+  private readonly joinPlayersText: Phaser.GameObjects.Text;
+  private readonly joinCountdownText: Phaser.GameObjects.Text;
+
+  private readonly resultOverlay: Phaser.GameObjects.Rectangle;
+  private readonly resultCard: Phaser.GameObjects.Rectangle;
+  private readonly resultTitle: Phaser.GameObjects.Text;
+  private readonly resultList: Phaser.GameObjects.Text;
+
+  private readonly flashText: Phaser.GameObjects.Text;
+
+  private joinCountdownSeconds = 0;
+  private joinScrollOffset = 0;
+  private hideResultCall: Phaser.Time.TimerEvent | undefined;
+  private joinCountdownEvent: Phaser.Time.TimerEvent | undefined;
+  private gameTimerEvent: Phaser.Time.TimerEvent | undefined;
 
   constructor(private readonly scene: Phaser.Scene) {
-    // Background panel
-    this.bg = scene.add
-      .rectangle(PX, PY, PW, PH, SQUAD_HEX.panelDark, SQUAD_ALPHA.panel)
+    this.gameBackground = scene.add
+      .rectangle(0, 0, CANVAS_W, CANVAS_H, BG_NEAR_BLACK, 0.92)
       .setOrigin(0, 0)
-      .setDepth(D_BASE)
+      .setDepth(DEPTH.bg)
       .setVisible(false);
 
-    // Banner
-    this.banner = new GameBanner(
-      scene,
-      PX + MX,
-      PY + MY,
-      D_CONTENT,
-    );
+    this.buildGridLines();
 
-    // Round label (right of banner)
-    this.roundLabel = scene.add
-      .text(PX + MX + 260, PY + MY + 4, '', {
+    this.hudBackground = scene.add
+      .rectangle(0, 0, CANVAS_W, CLONE_GRID.hudHeight, 0x000000, 0.85)
+      .setOrigin(0, 0)
+      .setDepth(DEPTH.hud)
+      .setVisible(false);
+
+    this.survivorText = scene.add
+      .text(24, 18, '', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: SQUAD_FONT.sizeLG,
+        color: SQUAD_COLOR.primary,
+      })
+      .setDepth(DEPTH.hud)
+      .setVisible(false);
+
+    this.timerText = scene.add
+      .text(CANVAS_W / 2, 18, '', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: SQUAD_FONT.sizeLG,
+        color: SQUAD_COLOR.clone,
+      })
+      .setOrigin(0.5, 0)
+      .setDepth(DEPTH.hud)
+      .setVisible(false);
+
+    this.empireText = scene.add
+      .text(CANVAS_W - 24, 18, '', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: SQUAD_FONT.sizeLG,
+        color: SQUAD_COLOR.danger,
+      })
+      .setOrigin(1, 0)
+      .setDepth(DEPTH.hud)
+      .setVisible(false);
+
+    this.joinOverlay = scene.add
+      .rectangle(0, 0, CANVAS_W, CANVAS_H, JOIN_PANEL_BG, 0.7)
+      .setOrigin(0, 0)
+      .setDepth(DEPTH.join)
+      .setVisible(false);
+
+    this.joinTitle = scene.add
+      .text(CANVAS_W / 2, 150, '⚔️ EMPIRE APPROACHES', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: '52px',
+        color: SQUAD_COLOR.clone,
+        align: 'center',
+      })
+      .setOrigin(0.5, 0)
+      .setDepth(DEPTH.join)
+      .setVisible(false);
+
+    this.joinSubtitle = scene.add
+      .text(CANVAS_W / 2, 230, 'Type !join to join the Rebel defense!', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: SQUAD_FONT.sizeLG,
+        color: SQUAD_COLOR.white,
+        align: 'center',
+      })
+      .setOrigin(0.5, 0)
+      .setDepth(DEPTH.join)
+      .setVisible(false);
+
+    this.joinPlayersHeader = scene.add
+      .text(CANVAS_W / 2, 320, 'Joined Rebels', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: SQUAD_FONT.sizeMD,
+        color: SQUAD_COLOR.primary,
+        align: 'center',
+      })
+      .setOrigin(0.5, 0)
+      .setDepth(DEPTH.join)
+      .setVisible(false);
+
+    this.joinPlayersText = scene.add
+      .text(CANVAS_W / 2, 370, '', {
         fontFamily: SQUAD_FONT.family,
         fontSize: SQUAD_FONT.sizeSM,
-        color: SQUAD_COLOR.dim,
+        color: SQUAD_COLOR.white,
+        align: 'center',
+        lineSpacing: 8,
+        wordWrap: { width: 1000, useAdvancedWrap: true },
       })
-      .setDepth(D_CONTENT)
+      .setOrigin(0.5, 0)
+      .setDepth(DEPTH.join)
       .setVisible(false);
 
-    // Timer — top-right corner
-    this.timer = new GameTimer(
-      scene,
-      PX + PW - MX - 80,
-      PY + MY,
-      D_CONTENT,
-      SQUAD_COLOR.clone,
-    );
+    this.joinCountdownText = scene.add
+      .text(CANVAS_W / 2, CANVAS_H - 140, '', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: SQUAD_FONT.sizeLG,
+        color: SQUAD_COLOR.clone,
+        align: 'center',
+      })
+      .setOrigin(0.5, 0)
+      .setDepth(DEPTH.join)
+      .setVisible(false);
 
-    // Divider
-    this.divider = scene.add
-      .rectangle(PX + MX, PY + 56, PW - MX * 2, 1, 0x444422, 0.6)
+    this.resultOverlay = scene.add
+      .rectangle(0, 0, CANVAS_W, CANVAS_H, 0x000000, 0.82)
       .setOrigin(0, 0)
-      .setDepth(D_CONTENT)
+      .setDepth(DEPTH.result)
       .setVisible(false);
 
-    // Position boxes — allocate 6 slots, index 1-5 used
-    this.boxBgs    = new Array(POSITIONS + 1).fill(null);
-    this.boxLabels = new Array(POSITIONS + 1).fill(null);
-    this.boxStatus = new Array(POSITIONS + 1).fill(null);
+    this.resultCard = scene.add
+      .rectangle(CANVAS_W / 2, CANVAS_H / 2, 1040, 420, RESULT_CARD_BG, 0.96)
+      .setStrokeStyle(2, 0x223344, 0.9)
+      .setDepth(DEPTH.result)
+      .setVisible(false);
 
-    for (let p = 1; p <= POSITIONS; p++) {
-      const bx = boxX(p);
+    this.resultTitle = scene.add
+      .text(CANVAS_W / 2, 390, '', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: '48px',
+        color: SQUAD_COLOR.clone,
+        align: 'center',
+        wordWrap: { width: 900, useAdvancedWrap: true },
+      })
+      .setOrigin(0.5, 0.5)
+      .setDepth(DEPTH.result)
+      .setVisible(false);
 
-      this.boxBgs[p] = scene.add
-        .rectangle(bx, BOX_Y, BOX_W, BOX_H, SQUAD_HEX.boxBg, 0.9)
-        .setOrigin(0, 0)
-        .setDepth(D_CONTENT)
-        .setStrokeStyle(1, SQUAD_HEX.boxBorder, 0.8)
-        .setVisible(false);
+    this.resultList = scene.add
+      .text(CANVAS_W / 2, 560, '', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: SQUAD_FONT.sizeMD,
+        color: SQUAD_COLOR.white,
+        align: 'center',
+        lineSpacing: 8,
+        wordWrap: { width: 820, useAdvancedWrap: true },
+      })
+      .setOrigin(0.5, 0.5)
+      .setDepth(DEPTH.result)
+      .setVisible(false);
 
-      this.boxLabels[p] = scene.add
-        .text(bx + BOX_W / 2, BOX_Y + 18, `POS ${p}`, {
-          fontFamily: SQUAD_FONT.family,
-          fontSize: SQUAD_FONT.sizeSM,
-          color: SQUAD_COLOR.clone,
-        })
-        .setOrigin(0.5, 0)
-        .setDepth(D_CONTENT + 0.1)
-        .setVisible(false);
+    this.flashText = scene.add
+      .text(CANVAS_W / 2, CANVAS_H / 2, '', {
+        fontFamily: SQUAD_FONT.family,
+        fontSize: '46px',
+        color: SQUAD_COLOR.danger,
+        align: 'center',
+        stroke: '#000000',
+        strokeThickness: 4,
+      })
+      .setOrigin(0.5, 0.5)
+      .setDepth(DEPTH.flash)
+      .setAlpha(0)
+      .setVisible(false);
+  }
 
-      this.boxStatus[p] = scene.add
-        .text(bx + BOX_W / 2, BOX_Y + 46, 'OPEN', {
-          fontFamily: SQUAD_FONT.family,
-          fontSize: SQUAD_FONT.sizeXS,
-          color: SQUAD_COLOR.primary,
-        })
-        .setOrigin(0.5, 0)
-        .setDepth(D_CONTENT + 0.1)
-        .setVisible(false);
+  onStart(payload: SquadCloneGridStartPayload): void {
+    this.clearResultTimer();
+    this.hideResultCard();
+    this.hideGameBoard();
+    this.clearEmpireVisuals();
+    this.clearPlayerVisuals();
+
+    this.players = [...payload.players];
+    this.empire = [];
+    this.elapsedSeconds = 0;
+    this.gamePhase = 'join';
+    this.joinCountdownSeconds = payload.joinWindowSeconds;
+    this.joinScrollOffset = 0;
+
+    this.updateJoinPlayerList();
+    this.updateJoinCountdownText();
+    this.showJoinPanel();
+    this.stopJoinCountdown();
+    this.stopGameTimer();
+
+    this.joinCountdownEvent = this.scene.time.addEvent({
+      delay: 1000,
+      loop: true,
+      callback: () => {
+        if (this.gamePhase !== 'join') return;
+        if (this.joinCountdownSeconds > 0) {
+          this.joinCountdownSeconds -= 1;
+        }
+        if (this.players.length > this.getJoinVisibleCount()) {
+          this.joinScrollOffset = (this.joinScrollOffset + this.getJoinVisibleCount()) % this.players.length;
+        }
+        this.updateJoinCountdownText();
+        this.updateJoinPlayerList();
+      },
+    });
+  }
+
+  onUpdate(state: SquadCloneGridUpdateState): void {
+    this.players = [...state.players];
+    this.empire = [...state.empire];
+    this.elapsedSeconds = state.elapsedSeconds;
+
+    if (state.event === 'game_start') {
+      this.enterGamePhase();
     }
 
-    // Result display below boxes
-    this.result = new ResultDisplay(
-      scene,
-      PX + MX,
-      BOX_Y + BOX_H + 14,
-      D_CONTENT,
-      PW - MX * 2,
-    );
+    if (this.gamePhase === 'join') {
+      this.updateJoinPlayerList();
+      return;
+    }
+
+    if (this.gamePhase !== 'game') {
+      return;
+    }
+
+    this.syncEmpire(state.empire);
+    this.syncPlayers(state.players);
+    this.updateHud(state.survivorCount, state.empireCount);
+    this.timerText.setText(`${this.formatDuration(this.elapsedSeconds)} / ${this.formatDuration(GAME_DURATION_SECONDS)}`);
+
+    switch (state.event) {
+      case 'player_died':
+      case 'player_inactivity':
+        this.showFlash(`💀 ${state.eventDetail ?? 'REBEL'} ELIMINATED`, SQUAD_COLOR.danger, 2000);
+        break;
+      case 'empire_spawned':
+        this.showFlash('⚡ Empire expands!', SQUAD_COLOR.clone, 1500);
+        break;
+      case 'empire_killed':
+        this.showFlash('✨ Empire cell destroyed!', SQUAD_COLOR.success, 1500);
+        break;
+      default:
+        break;
+    }
   }
 
-  // --------------------------------------------------------------------------
-  // Public API — called by SquadRenderer
-  // --------------------------------------------------------------------------
-
-  onStart(triggeredBy: string): void {
-    console.log(`[CloneRenderer] start  triggeredBy=${triggeredBy}`);
-    this.eliminated.clear();
-    this.resetBoxes();
-    this.roundLabel.setText('ROUND 1');
-    this.showAll();
-    this.banner.show('CLONE GAME!', SQUAD_COLOR.clone);
-    // Clone uses a volley timer in Streamer.bot; no fixed window sent on start.
-    // Show the timer display stopped (will update on first volley update).
-  }
-
-  onUpdate(state: SquadCloneUpdateState): void {
-    console.log(`[CloneRenderer] update  round=${state.round}  elim=${state.eliminatedPosition}`);
-
-    // Mark the newly eliminated position
-    this.markEliminated(state.eliminatedPosition);
-
-    // Update round label
-    this.roundLabel.setText(`ROUND ${state.round}`);
-  }
-
-  onEnd(result: SquadCloneEndResult): void {
-    console.log(`[CloneRenderer] end  outcome=${result.outcome}`);
-    this.timer.stop();
-    this.markEliminated(result.eliminatedPosition);
+  onEnd(result: SquadCloneGridEndResult): void {
+    this.gamePhase = 'ended';
+    this.players = [...result.survivors];
+    this.stopJoinCountdown();
+    this.stopGameTimer();
+    this.hideJoinPanel();
+    this.hideGameBoard();
+    this.clearEmpireVisuals();
+    this.clearPlayerVisuals();
 
     if (result.outcome === 'win') {
-      const names = result.winners ? result.winners.replace(/,/g, ', ') : 'the survivors';
-      this.result.show(`★ CLONES WIN! SURVIVORS: ${names} ★`, SQUAD_COLOR.clone);
+      this.resultTitle.setColor(SQUAD_COLOR.clone);
+      this.resultTitle.setText('🏆 REBELS HOLD THE LINE!');
+      this.resultList.setText(this.buildSurvivorText(result.survivors));
     } else {
-      this.result.show('✗ ALL POSITIONS ELIMINATED. NO SURVIVORS.', SQUAD_COLOR.danger);
+      this.resultTitle.setColor(SQUAD_COLOR.danger);
+      this.resultTitle.setText('☠️ THE EMPIRE PREVAILS');
+      this.resultList.setText('No survivors remained in the grid.');
     }
 
-    this.scene.time.delayedCall(8000, () => this.hideAll());
+    this.showResultCard();
+    this.clearResultTimer();
+    this.hideResultCall = this.scene.time.delayedCall(8000, () => {
+      this.hideResultCard();
+      this.gamePhase = 'idle';
+    });
   }
 
   destroy(): void {
-    this.bg.destroy();
-    this.banner.destroy();
-    this.timer.destroy();
-    this.roundLabel.destroy();
-    this.divider.destroy();
-    this.result.destroy();
-    for (let p = 1; p <= POSITIONS; p++) {
-      this.boxBgs[p]?.destroy();
-      this.boxLabels[p]?.destroy();
-      this.boxStatus[p]?.destroy();
+    this.clearResultTimer();
+    this.stopJoinCountdown();
+    this.stopGameTimer();
+
+    this.clearEmpireVisuals();
+    this.clearPlayerVisuals();
+    this.gridLines.forEach((line) => line.destroy());
+
+    this.gameBackground.destroy();
+    this.hudBackground.destroy();
+    this.survivorText.destroy();
+    this.timerText.destroy();
+    this.empireText.destroy();
+
+    this.joinOverlay.destroy();
+    this.joinTitle.destroy();
+    this.joinSubtitle.destroy();
+    this.joinPlayersHeader.destroy();
+    this.joinPlayersText.destroy();
+    this.joinCountdownText.destroy();
+
+    this.resultOverlay.destroy();
+    this.resultCard.destroy();
+    this.resultTitle.destroy();
+    this.resultList.destroy();
+    this.flashText.destroy();
+  }
+
+  private buildGridLines(): void {
+    const gridW = CLONE_GRID.cols * CLONE_GRID.cellSize;
+    const gridH = CLONE_GRID.rows * CLONE_GRID.cellSize;
+
+    for (let col = 0; col <= CLONE_GRID.cols; col += 1) {
+      const x = CLONE_GRID.originX + col * CLONE_GRID.cellSize;
+      const line = this.scene.add
+        .rectangle(x, CLONE_GRID.originY, 1, gridH, GRID_LINE, 0.6)
+        .setOrigin(0, 0)
+        .setDepth(DEPTH.grid)
+        .setVisible(false);
+      this.gridLines.push(line);
+    }
+
+    for (let row = 0; row <= CLONE_GRID.rows; row += 1) {
+      const y = CLONE_GRID.originY + row * CLONE_GRID.cellSize;
+      const line = this.scene.add
+        .rectangle(CLONE_GRID.originX, y, gridW, 1, GRID_LINE, 0.6)
+        .setOrigin(0, 0)
+        .setDepth(DEPTH.grid)
+        .setVisible(false);
+      this.gridLines.push(line);
     }
   }
 
-  // --------------------------------------------------------------------------
-  // Helpers
-  // --------------------------------------------------------------------------
+  private enterGamePhase(): void {
+    this.gamePhase = 'game';
+    this.hideJoinPanel();
+    this.showGameBoard();
+    this.syncEmpire(this.empire);
+    this.syncPlayers(this.players);
+    this.updateHud(this.players.length, this.empire.length);
+    this.timerText.setText(`${this.formatDuration(this.elapsedSeconds)} / ${this.formatDuration(GAME_DURATION_SECONDS)}`);
 
-  private resetBoxes(): void {
-    for (let p = 1; p <= POSITIONS; p++) {
-      this.boxBgs[p]?.setFillStyle(SQUAD_HEX.boxBg, 0.9).setStrokeStyle(1, SQUAD_HEX.boxBorder, 0.8);
-      this.boxLabels[p]?.setColor(SQUAD_COLOR.clone).setText(`POS ${p}`);
-      this.boxStatus[p]?.setColor(SQUAD_COLOR.primary).setText('OPEN');
+    this.stopGameTimer();
+    this.gameTimerEvent = this.scene.time.addEvent({
+      delay: 1000,
+      loop: true,
+      callback: () => {
+        if (this.gamePhase !== 'game') return;
+        this.elapsedSeconds += 1;
+        this.timerText.setText(`${this.formatDuration(this.elapsedSeconds)} / ${this.formatDuration(GAME_DURATION_SECONDS)}`);
+      },
+    });
+  }
+
+  private syncEmpire(nextEmpire: CloneGridCell[]): void {
+    const nextKeys = new Set(nextEmpire.map((cell) => this.cellKey(cell.col, cell.row)));
+
+    for (const [key, rect] of this.empireRects.entries()) {
+      if (nextKeys.has(key)) continue;
+      rect.destroy();
+      this.empireRects.delete(key);
+      this.empireIndicators.get(key)?.destroy();
+      this.empireIndicators.delete(key);
+    }
+
+    for (const cell of nextEmpire) {
+      const key = this.cellKey(cell.col, cell.row);
+      const center = this.getCellCenter(cell.col, cell.row);
+
+      if (!this.empireRects.has(key)) {
+        const rect = this.scene.add
+          .rectangle(center.x, center.y, CLONE_GRID.cellSize - 2, CLONE_GRID.cellSize - 2, EMPIRE_FILL, 0.9)
+          .setDepth(DEPTH.cells);
+        const indicator = this.scene.add
+          .text(center.x, center.y, '▲', {
+            fontFamily: SQUAD_FONT.family,
+            fontSize: SQUAD_FONT.sizeSM,
+            color: SQUAD_COLOR.danger,
+          })
+          .setOrigin(0.5, 0.5)
+          .setDepth(DEPTH.labels);
+
+        this.empireRects.set(key, rect);
+        this.empireIndicators.set(key, indicator);
+        continue;
+      }
+
+      this.empireRects.get(key)?.setPosition(center.x, center.y).setVisible(true);
+      this.empireIndicators.get(key)?.setPosition(center.x, center.y).setVisible(true);
     }
   }
 
-  private markEliminated(position: number): void {
-    if (position < 1 || position > POSITIONS) return;
-    this.eliminated.add(position);
+  private syncPlayers(nextPlayers: CloneGridPlayer[]): void {
+    const nextIds = new Set(nextPlayers.map((player) => player.userId));
 
-    this.boxBgs[position]?.setFillStyle(SQUAD_HEX.boxElim, 0.9).setStrokeStyle(1, SQUAD_HEX.boxElimBorder, 0.8);
-    this.boxLabels[position]?.setColor(SQUAD_COLOR.danger).setText(`× POS ${position} ×`);
-    this.boxStatus[position]?.setColor(SQUAD_COLOR.danger).setText('ELIMINATED');
-  }
+    for (const [userId, visual] of this.playerVisuals.entries()) {
+      if (nextIds.has(userId)) continue;
+      visual.rect.destroy();
+      visual.label.destroy();
+      visual.indicator.destroy();
+      this.playerVisuals.delete(userId);
+    }
 
-  private showAll(): void {
-    this.bg.setVisible(true);
-    this.divider.setVisible(true);
-    this.roundLabel.setVisible(true);
-    for (let p = 1; p <= POSITIONS; p++) {
-      this.boxBgs[p]?.setVisible(true);
-      this.boxLabels[p]?.setVisible(true);
-      this.boxStatus[p]?.setVisible(true);
+    for (const player of nextPlayers) {
+      const center = this.getCellCenter(player.col, player.row);
+      const labelText = this.truncateName(player.userName);
+      const labelY = center.y + 9;
+      const indicatorY = center.y - 10;
+
+      const existing = this.playerVisuals.get(player.userId);
+      if (existing) {
+        existing.rect.setPosition(center.x, center.y).setVisible(true);
+        existing.label.setPosition(center.x, labelY).setText(labelText).setVisible(true);
+        existing.indicator.setPosition(center.x, indicatorY).setVisible(true);
+        continue;
+      }
+
+      const rect = this.scene.add
+        .rectangle(center.x, center.y, CLONE_GRID.cellSize - 4, CLONE_GRID.cellSize - 4, PLAYER_FILL, 0.85)
+        .setDepth(DEPTH.cells);
+
+      const indicator = this.scene.add
+        .text(center.x, indicatorY, '◆', {
+          fontFamily: SQUAD_FONT.family,
+          fontSize: '12px',
+          color: SQUAD_COLOR.primary,
+        })
+        .setOrigin(0.5, 0.5)
+        .setDepth(DEPTH.labels);
+
+      const label = this.scene.add
+        .text(center.x, labelY, labelText, {
+          fontFamily: SQUAD_FONT.family,
+          fontSize: '10px',
+          color: SQUAD_COLOR.primary,
+          align: 'center',
+        })
+        .setOrigin(0.5, 0.5)
+        .setDepth(DEPTH.labels);
+
+      this.playerVisuals.set(player.userId, { rect, label, indicator });
     }
   }
 
-  private hideAll(): void {
-    this.bg.setVisible(false);
-    this.banner.hide();
-    this.timer.stop();
-    this.divider.setVisible(false);
-    this.roundLabel.setVisible(false);
-    this.result.hide();
-    for (let p = 1; p <= POSITIONS; p++) {
-      this.boxBgs[p]?.setVisible(false);
-      this.boxLabels[p]?.setVisible(false);
-      this.boxStatus[p]?.setVisible(false);
+  private updateHud(survivorCount: number, empireCount: number): void {
+    this.survivorText.setText(`REBELS: ${survivorCount}`);
+    this.empireText.setText(`EMPIRE: ${empireCount}`);
+  }
+
+  private updateJoinCountdownText(): void {
+    this.joinCountdownText.setText(`Join window closes in ${this.joinCountdownSeconds}s`);
+  }
+
+  private updateJoinPlayerList(): void {
+    if (this.players.length === 0) {
+      this.joinPlayersText.setText('No rebels yet...');
+      return;
     }
+
+    const visibleCount = this.getJoinVisibleCount();
+    const names = this.players.map((player) => player.userName);
+
+    let visibleNames = names;
+    if (names.length > visibleCount) {
+      visibleNames = [];
+      for (let i = 0; i < visibleCount; i += 1) {
+        visibleNames.push(names[(this.joinScrollOffset + i) % names.length] ?? '');
+      }
+      visibleNames.push('');
+      visibleNames.push(`(${names.length} total rebels — rotating roster)`);
+    }
+
+    this.joinPlayersText.setText(visibleNames.join('\n'));
+  }
+
+  private getJoinVisibleCount(): number {
+    return 14;
+  }
+
+  private showJoinPanel(): void {
+    this.joinOverlay.setVisible(true);
+    this.joinTitle.setVisible(true);
+    this.joinSubtitle.setVisible(true);
+    this.joinPlayersHeader.setVisible(true);
+    this.joinPlayersText.setVisible(true);
+    this.joinCountdownText.setVisible(true);
+  }
+
+  private hideJoinPanel(): void {
+    this.joinOverlay.setVisible(false);
+    this.joinTitle.setVisible(false);
+    this.joinSubtitle.setVisible(false);
+    this.joinPlayersHeader.setVisible(false);
+    this.joinPlayersText.setVisible(false);
+    this.joinCountdownText.setVisible(false);
+  }
+
+  private showGameBoard(): void {
+    this.gameBackground.setVisible(true);
+    this.hudBackground.setVisible(true);
+    this.survivorText.setVisible(true);
+    this.timerText.setVisible(true);
+    this.empireText.setVisible(true);
+    this.gridLines.forEach((line) => line.setVisible(true));
+  }
+
+  private hideGameBoard(): void {
+    this.gameBackground.setVisible(false);
+    this.hudBackground.setVisible(false);
+    this.survivorText.setVisible(false);
+    this.timerText.setVisible(false);
+    this.empireText.setVisible(false);
+    this.gridLines.forEach((line) => line.setVisible(false));
+  }
+
+  private showResultCard(): void {
+    this.resultOverlay.setVisible(true);
+    this.resultCard.setVisible(true);
+    this.resultTitle.setVisible(true);
+    this.resultList.setVisible(true);
+  }
+
+  private hideResultCard(): void {
+    this.resultOverlay.setVisible(false);
+    this.resultCard.setVisible(false);
+    this.resultTitle.setVisible(false);
+    this.resultList.setVisible(false);
+  }
+
+  private showFlash(text: string, color: string, durationMs: number): void {
+    this.flashText.setText(text);
+    this.flashText.setColor(color);
+    this.flashText.setAlpha(1);
+    this.flashText.setVisible(true);
+
+    this.scene.tweens.killTweensOf(this.flashText);
+    this.scene.tweens.add({
+      targets: this.flashText,
+      alpha: 0,
+      duration: durationMs,
+      ease: 'Sine.easeOut',
+      onComplete: () => {
+        this.flashText.setVisible(false);
+      },
+    });
+  }
+
+  private buildSurvivorText(survivors: CloneGridPlayer[]): string {
+    if (survivors.length === 0) {
+      return 'No survivors recorded.';
+    }
+
+    return ['Survivors:', ...survivors.map((player) => `• ${player.userName}`)].join('\n');
+  }
+
+  private clearEmpireVisuals(): void {
+    for (const rect of this.empireRects.values()) {
+      rect.destroy();
+    }
+    for (const indicator of this.empireIndicators.values()) {
+      indicator.destroy();
+    }
+    this.empireRects.clear();
+    this.empireIndicators.clear();
+  }
+
+  private clearPlayerVisuals(): void {
+    for (const visual of this.playerVisuals.values()) {
+      visual.rect.destroy();
+      visual.label.destroy();
+      visual.indicator.destroy();
+    }
+    this.playerVisuals.clear();
+  }
+
+  private clearResultTimer(): void {
+    this.hideResultCall?.remove(false);
+    this.hideResultCall = undefined;
+  }
+
+  private stopJoinCountdown(): void {
+    this.joinCountdownEvent?.remove(false);
+    this.joinCountdownEvent = undefined;
+  }
+
+  private stopGameTimer(): void {
+    this.gameTimerEvent?.remove(false);
+    this.gameTimerEvent = undefined;
+  }
+
+  private cellKey(col: number, row: number): string {
+    return `${col},${row}`;
+  }
+
+  private getCellCenter(col: number, row: number): { x: number; y: number } {
+    return {
+      x: CLONE_GRID.originX + (col - 1) * CLONE_GRID.cellSize + CLONE_GRID.cellSize / 2,
+      y: CLONE_GRID.originY + (row - 1) * CLONE_GRID.cellSize + CLONE_GRID.cellSize / 2,
+    };
+  }
+
+  private truncateName(userName: string): string {
+    return userName.length > 9 ? `${userName.slice(0, 9)}…` : userName;
+  }
+
+  private formatDuration(totalSeconds: number): string {
+    const safe = Math.max(0, totalSeconds);
+    const minutes = Math.floor(safe / 60);
+    const seconds = safe % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 }
