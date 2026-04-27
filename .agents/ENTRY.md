@@ -1,44 +1,58 @@
+---
+id: agent-entry
+type: shared
+description: Central .agents entrypoint with manifest-backed routing summary.
+status: active
+owner: ops
+generated: false
+---
+
 # SharkStreamerBot — Agent Entry Point
 
 ## What This Project Is
 
-The technical and creative infrastructure for SharkFac3's live stream — where an R&D company building off-road racing products operates in public. The stream is both the workspace and the marketing engine: products are developed live, knowledge is shared freely to establish authority, and a community is built that will eventually become the customer base.
-
-The project spans Streamer.bot runtime actions, interactive entertainment features (mini-games, commanders, Legends of the ASCII Temple), brand identity, art generation, content repurposing, and future product documentation. Entertainment layers keep viewers engaged during real R&D work, and clip-worthy moments feed a content pipeline that drives discovery and growth.
+SharkStreamerBot is the technical and creative infrastructure for SharkFac3's live stream: an R&D company building off-road racing products in public. The repo supports real product-development streams with Streamer.bot actions, standalone apps, local tooling, brand/canon references, art direction, LotAT stories, and content repurposing.
 
 ## How to Navigate
 
-1. Read `_shared/project.md` — project domains, priorities, scope rules.
-2. Identify your role from the table below.
-3. Read `roles/<role>/role.md` — confirms scope, trigger conditions, skill load order.
-4. Load `roles/<role>/skills/core.md` — always required for that role.
-5. Navigate into sub-skill folders only as the task demands.
-6. Before starting any task: check `WORKING.md` at repo root for active conflicts.
-7. After completing a task: add living notes to `roles/<role>/context/` if you discovered something future agents should know.
+1. Read [project.md](_shared/project.md) for repo-wide context and priorities.
+2. Check [WORKING.md](../WORKING.md) before editing anything.
+3. Choose a role from the manifest-backed table below.
+4. Read that role overview.
+5. Read the local `AGENTS.md` file for the folder you will edit, if one exists.
+6. Follow required workflows under [workflows/](workflows/).
+7. Add living context only when the discovery is not better stored in a local domain guide.
 
 ## Roles
 
+<!-- GENERATED:agents-roles:start -->
 | Role | Folder | When to Activate |
 |---|---|---|
-| `streamerbot-dev` | `roles/streamerbot-dev/` | Any `.cs` script work under `Actions/` |
-| `lotat-tech` | `roles/lotat-tech/` | LotAT story pipeline — C# engine, JSON schema, technical implementation |
-| `lotat-writer` | `roles/lotat-writer/` | LotAT narrative — adventure design, lore, worldbuilding, story content |
-| `art-director` | `roles/art-director/` | Diffusion model prompts, character art, stream visuals |
-| `brand-steward` | `roles/brand-steward/` | Any public-facing output — chat text, titles, marketing, canon review |
-| `content-repurposer` | `roles/content-repurposer/` | Short-form content repurposing — clip selection, captions, content calendars, platform formatting, and content-pipeline tooling |
-| `app-dev` | `roles/app-dev/` | Stream overlay ecosystem (broker, Phaser overlay, web apps) — TypeScript under `Apps/` |
-| `product-dev` | `roles/product-dev/` | Product documentation, technical knowledge articles, specifications, and future customer-facing content for stream-developed R&D products |
-| `ops` | `roles/ops/` | Validation, sync workflow, change summaries, tooling |
+| `streamerbot-dev` | `.agents/roles/streamerbot-dev/` | Streamer.bot C# runtime actions and Streamer.bot-side integrations under Actions/. |
+| `lotat-tech` | `.agents/roles/lotat-tech/` | LotAT technical pipeline, C# engine, JSON schema, and story runtime implementation. |
+| `lotat-writer` | `.agents/roles/lotat-writer/` | LotAT narrative design, adventure content, lore, worldbuilding, and reusable story elements. |
+| `art-director` | `.agents/roles/art-director/` | Diffusion prompts, character art, stream visuals, and art-pipeline guidance. |
+| `brand-steward` | `.agents/roles/brand-steward/` | Brand consistency for public-facing copy, titles, marketing, canon, voice, and community messaging. |
+| `content-repurposer` | `.agents/roles/content-repurposer/` | Short-form clips, captions, platform formatting, content calendars, and content-pipeline tooling. |
+| `app-dev` | `.agents/roles/app-dev/` | Standalone stream interaction apps, dashboards, overlays, brokers, and TypeScript app tooling. |
+| `product-dev` | `.agents/roles/product-dev/` | Product documentation, technical knowledge articles, specs, and future customer-facing product content. |
+| `ops` | `.agents/roles/ops/` | Validation, sync workflow, change summaries, local tooling, and operational repo maintenance. |
+<!-- GENERATED:agents-roles:end -->
 
 ## Shared Context
 
-`_shared/` contains cross-role knowledge all agents may need:
-- `project.md` — domains, priority order, scope rules
-- `conventions.md` — git, naming, file routing
-- `coordination.md` — WORKING.md protocol, conflict rules
-- `mixitup-api.md` — Mix It Up API payload spec
-- `info-service-protocol.md` — info-service REST routes, collection schemas, error conventions
+| File | Purpose |
+|---|---|
+| [project.md](_shared/project.md) | Repo-wide business context, domains, priorities, and scope rules. |
+| [conventions.md](_shared/conventions.md) | Repo-wide file routing and documentation conventions. |
+| [coordination.md](_shared/coordination.md) | Compatibility pointer to the canonical coordination workflow. |
+| [coordination](workflows/coordination.md) | Active WORKING protocol and conflict avoidance. |
+| [change-summary](workflows/change-summary.md) | Terminal handoff format after changed files. |
+| [sync](workflows/sync.md) | Streamer.bot paste/sync procedure. |
+| [validation](workflows/validation.md) | Validator and check-selection procedure. |
 
-## Adding a New Role
+Domain/protocol knowledge now lives beside the domain it describes, for example [Apps/info-service/AGENTS.md](../Apps/info-service/AGENTS.md), [Tools/MixItUp/AGENTS.md](../Tools/MixItUp/AGENTS.md), and [Docs/Architecture/AGENTS.md](../Docs/Architecture/AGENTS.md).
 
-Copy `roles/_template/` to `roles/<new-role>/`. Follow the template. Update this file's Roles table.
+## Manifest
+
+The target routing source is [manifest.json](manifest.json). Generated routing summaries should stay aligned with that manifest.

@@ -1,62 +1,50 @@
+---
+id: product-dev
+type: role
+description: Product documentation, technical knowledge articles, specs, and future customer-facing product content.
+status: active
+owner: product-dev
+workflows: change-summary
+---
+
 # Role: product-dev
 
-## What This Role Does
+## Purpose
 
-Owns documentation and technical content for the off-road racing products developed on stream. Scope includes product specifications, knowledge articles derived from build sessions, technical documentation, and eventually customer-facing content. This role bridges the gap between "we built something on stream" and "here is the professional documentation for what we built."
+Own product-facing documentation, technical knowledge content, specs, and future customer-facing materials for products developed on stream.
 
-## Why This Role Matters
+## Owns
 
-The entire business model leads here. Products developed live on stream need professional documentation before they can be sold. Knowledge articles establish authority in the off-road racing space. Technical specs prove the products are real and well-engineered. This role turns stream content into business assets.
+- Product docs, specs, knowledge articles, and customer-facing technical explanations.
+- Human-readable product/R&D content that may live under [Docs/](../../../Docs/) or future product documentation paths.
+- Product-facing handoffs from stream features such as XJ Drivethrough or R&D content sessions.
 
-## Status
+## When to Activate
 
-**This role is a placeholder.** The R&D company is in its early stages and no products are ready for documentation yet. This role exists so that:
-- Other roles know it is coming and can orient their work toward it
-- The content pipeline has a clear endpoint: products
-- When the first product is ready, the role infrastructure is already in place
+Activate for product documentation, technical articles, specifications, customer-facing product copy, or docs that turn stream R&D into durable product knowledge.
 
-## Activate When
+## Do Not Activate For
 
-- Writing technical documentation for an R&D product
-- Creating knowledge articles from build session content
-- Writing product specifications or data sheets
-- Producing customer-facing product descriptions
-- Documenting novel techniques or approaches developed on stream
+- Internal runtime code or tooling without customer-facing/product documentation output.
+- Brand voice alone; use `brand-steward`.
+- Repo architecture docs that are not product/customer-facing; use `ops` or the docs architecture route.
 
-## Do Not Activate When
+## Common Routes
 
-- Task is stream entertainment features → use `streamerbot-dev`
-- Task is brand voice or community messaging → use `brand-steward`
-- Task is short-form content for social media → use `content-repurposer`
-- Task is narrative or story content → use `lotat-writer`
+Use [Docs/Architecture/AGENTS.md](../../../Docs/Architecture/AGENTS.md) when product docs interact with repo architecture documentation. Chain from [Actions/XJ Drivethrough/AGENTS.md](../../../Actions/XJ%20Drivethrough/AGENTS.md) if that feature becomes product-facing.
 
-## Skill Load Order
+## Required Workflows
 
-1. `skills/core.md` — always load first
+- [coordination](../../workflows/coordination.md) before starting.
+- [change-summary](../../workflows/change-summary.md) after changed files.
+- [validation](../../workflows/validation.md) when docs are manifest-routed or tooling-adjacent.
 
-## Chains To
+## Chain To
 
-| Next Role | When |
-|---|---|
-| `brand-steward` | When product content needs brand voice review |
-| `content-repurposer` | When product milestones create content-worthy moments |
-| `ops` | After any documentation changes — load `.agents/roles/ops/skills/change-summary/_index.md` |
+- `brand-steward` for public voice, claims, naming, and market positioning.
+- `content-repurposer` when product content becomes short-form or platform-packaged content.
+- `ops` for repo architecture or validation routing.
 
-## Out of Scope
+## Living Context
 
-- Stream interaction features
-- Entertainment content (stories, mini-games, art)
-- Short-form social media content (that is `content-repurposer`)
-
-## Next Steps (Before This Role Becomes Active)
-
-These decisions must be made by the operator before this role can do real work:
-
-1. **What products?** — Define the first product(s) being developed. Until there is a specific product, there is nothing to document.
-2. **Documentation format** — Decide on format and tooling for product docs (markdown in repo? External docs site? PDF specs?)
-3. **Knowledge article pipeline** — Define how build session insights get captured and turned into articles. Is this a live process or post-session review?
-4. **Customer-facing platform** — Where will product content live? Website? Marketplace listing? This affects formatting and voice.
-5. **Integration with content-repurposer** — Define the handoff: when does a stream moment become a product story vs. a short-form clip vs. a knowledge article?
-6. **Docs/ domain expansion** — Product docs may need their own subdirectory under `Docs/` or a new top-level `Products/` domain.
-
-When these decisions are made, update `skills/core.md` and create sub-skill files as needed.
+No role-specific living context is required yet. Add notes only when a stable product documentation surface is created.

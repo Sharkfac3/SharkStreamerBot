@@ -79,8 +79,7 @@ The operator reviews the Merge Summary and confirms before the merge is executed
 - [ ] Creative/      (Brand, art, lore, worldbuilding)
 - [ ] Tools/         (Utilities, validators, sync helpers)
 - [ ] Docs/          (Architecture, workflow, onboarding)
-- [ ] .agents/       (Agent knowledge tree — roles, skills, context)
-- [ ] .pi/skills/    (Pi operational skill layer)
+- [ ] .agents/       (Agent knowledge tree — manifest, roles, workflows, context)
 
 ### Files Changed
 - `<path>` — <what changed>

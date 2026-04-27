@@ -70,10 +70,11 @@ Does not belong here:
 ### `.agents/`
 Belongs here:
 - Role definitions (`roles/<role>/role.md`)
-- Skill content for each role (`roles/<role>/skills/`)
-- Living context notes agents add over time (`roles/<role>/context/`)
-- Shared cross-role knowledge (`_shared/`)
-- Role template for adding new roles (`roles/_template/`)
+- Shared workflows (`workflows/`)
+- Repo-wide shared context (`_shared/`)
+- Manifest-backed entrypoints and routing metadata (`ENTRY.md`, `manifest.json`)
+
+Historical note: the former central per-role skill tree has been folded into role overviews, workflows, and local domain `AGENTS.md` files.
 
 Does not belong here:
 - Runtime C# code (that goes in `Actions/`)
@@ -89,7 +90,6 @@ Does not belong here:
 - Streamer.bot support tooling → `Tools/StreamerBot/`
 - Art agent scaffolding → `Creative/Art/`
 - LotAT/Starship Shamples worldbuilding → `Creative/WorldBuilding/`
-- Agent skill tree → `.agents/roles/`
-- Pi operational skill layer → `.pi/skills/`
+- Agent routing and role tree → `.agents/`
 
 `Actions/` should remain conceptually stable — runtime scripts only.

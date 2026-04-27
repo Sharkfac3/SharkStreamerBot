@@ -1,41 +1,52 @@
+---
+id: streamerbot-dev
+type: role
+description: Streamer.bot C# runtime actions and Streamer.bot-side integrations under Actions/.
+status: active
+owner: streamerbot-dev
+workflows: change-summary, sync, validation
+---
+
 # Role: streamerbot-dev
 
-## What This Role Does
+## Purpose
 
-Writes and maintains C# scripts for Streamer.bot actions under `Actions/`. Scripts are not auto-deployed — each changed file is manually copy/pasted into Streamer.bot after editing in the repo.
+Own Streamer.bot-side C# action work and keep live runtime behavior reliable, pasteable, and aligned with repo constants.
 
-## Why This Role Matters
+## Owns
 
-Interactive features are the entertainment layer that keeps viewers engaged during live R&D work. Every mini-game trigger, commander command, and channel point redemption is a moment of engagement — and potentially a clip-worthy moment that feeds the content pipeline. When this role builds reliable, entertaining features, it directly drives viewer retention and community growth, which is the engine of the entire business.
+- Runtime scripts under [Actions/](../../../Actions/).
+- Streamer.bot paste/sync expectations for edited C# files.
+- Runtime use of [Actions/SHARED-CONSTANTS.md](../../../Actions/SHARED-CONSTANTS.md) and [Actions/HELPER-SNIPPETS.md](../../../Actions/HELPER-SNIPPETS.md).
 
-## Activate When
+## When to Activate
 
-- Writing or editing any `.cs` file under `Actions/`
-- Updating feature READMEs under `Actions/`
-- Working on stream-start reset, global variable registration, or SHARED-CONSTANTS
+Activate for any Streamer.bot C# action or runtime integration under [Actions/](../../../Actions/), including Twitch integrations, commanders, Squad, overlay publishers, voice commands, focus/rest actions, intros, and Destroyer/XJ effects.
 
-## Do Not Activate When
+## Do Not Activate For
 
-- Task is LotAT story pipeline C# engine work → use `lotat-tech`
-- Task is narrative/story content → use `lotat-writer`
-- Task is Tools/ utilities or validators → use `ops`
-- Task is brand/voice output → use `brand-steward`
+- App implementation under [Apps/](../../../Apps/) unless a Streamer.bot bridge is being changed.
+- LotAT story schema/tooling without C# runtime changes; use `lotat-tech`.
+- Public copy, lore, or canon decisions without chaining to the appropriate creative role.
 
-## Skill Load Order
+## Common Routes
 
-1. `skills/core.md` — always load first for any `.cs` work
-2. `skills/<feature>/_index.md` — load the index for the feature area you're working in
-3. `skills/<feature>/<specific>.md` — load only if the task is specific to that game/commander/event
+Start with the local guide for the folder being edited, especially [Actions/Commanders/AGENTS.md](../../../Actions/Commanders/AGENTS.md), [Actions/Squad/AGENTS.md](../../../Actions/Squad/AGENTS.md), [Actions/LotAT/AGENTS.md](../../../Actions/LotAT/AGENTS.md), [Actions/Overlay/AGENTS.md](../../../Actions/Overlay/AGENTS.md), [Actions/Twitch Core Integrations/AGENTS.md](../../../Actions/Twitch%20Core%20Integrations/AGENTS.md), [Actions/Voice Commands/AGENTS.md](../../../Actions/Voice%20Commands/AGENTS.md), and adjacent folder guides under [Actions/](../../../Actions/).
 
-## Chains To
+## Required Workflows
 
-| Next Role | When |
-|---|---|
-| `ops` | After any code change — load `ops/skills/change-summary/_index.md` |
-| `brand-steward` | When the change produces or modifies public-facing chat text |
+- [coordination](../../workflows/coordination.md) before starting.
+- [sync](../../workflows/sync.md) for C# paste targets.
+- [validation](../../workflows/validation.md) for checks.
+- [change-summary](../../workflows/change-summary.md) after code changes.
 
-## Out of Scope
+## Chain To
 
-- LotAT C# engine (that is `lotat-tech`)
-- Mix It Up overlay scripting (use `ops`)
-- Creative scaffolding, brand output
+- `brand-steward` for chat-facing copy, reward text, or public tone.
+- `app-dev` for broker, overlay, info-service, or app protocol changes.
+- `lotat-tech` for LotAT runtime/story pipeline boundaries.
+- `ops` for validation or sync tooling.
+
+## Living Context
+
+Use the local `AGENTS.md` guide in the `Actions/` folder you will edit, then check [Actions/HELPER-SNIPPETS.md](../../../Actions/HELPER-SNIPPETS.md) for reusable Streamer.bot implementation patterns.

@@ -49,7 +49,7 @@ Core systems:
 ## Story Content
 
 **Authoritative story contract:** `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`
-**Implementation reference:** `.agents/roles/lotat-tech/skills/story-pipeline/json-schema.md`
+**Technical routing reference:** `Tools/LotAT/AGENTS.md`
 **Implemented by:** `Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md`
 **Story files live in:** `Creative/WorldBuilding/Storylines/`
 

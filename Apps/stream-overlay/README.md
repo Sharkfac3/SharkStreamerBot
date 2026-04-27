@@ -186,8 +186,11 @@ Create a new `overlay-publish.cs` reference template in the relevant `Actions/` 
 | Animation presets | `packages/overlay/src/systems/animation-system.ts` |
 | LotAT visual components | `packages/overlay/src/lotat/` |
 | Squad visual components | `packages/overlay/src/squad/` |
-| Agent docs (architecture) | `.agents/roles/app-dev/skills/stream-interactions/` |
-| Streamer.bot integration guide | `.agents/roles/streamerbot-dev/skills/overlay-integration.md` |
+| Agent route, ownership, and workflow | `Apps/stream-overlay/AGENTS.md` |
+| Protocol and topic rules | `Apps/stream-overlay/docs/protocol.md` |
+| Asset paths, lifecycle, and audio | `Apps/stream-overlay/docs/asset-system.md` |
+| Renderer notes and OBS gotchas | `Apps/stream-overlay/docs/rendering-notes.md` |
+| Streamer.bot integration guide | `Actions/Overlay/AGENTS.md` |
 
 ### Testing without Streamer.bot
 

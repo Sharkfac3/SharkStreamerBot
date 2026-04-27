@@ -10,7 +10,7 @@ If any other doc summarizes, references, or paraphrases the story JSON structure
 
 ### Contract hierarchy
 - **Authoritative contract:** this file (`Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md`)
-- **Implementation reference / synced summary:** lotat-tech pipeline docs such as `.agents/roles/lotat-tech/skills/story-pipeline/json-schema.md`
+- **Implementation reference / synced summary:** LotAT technical routing docs such as `Tools/LotAT/AGENTS.md` and `Actions/LotAT/AGENTS.md`
 - **Franchise summary / canon reference:** `Creative/WorldBuilding/Franchises/StarshipShamples.md`
 
 ### Ownership rules

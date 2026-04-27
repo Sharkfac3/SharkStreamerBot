@@ -1,0 +1,65 @@
+---
+id: actions-helper-chat-input
+type: reference
+description: Streamer.bot C# snippets for defensive chat text, duplicate message, and sender argument handling.
+owner: streamerbot-dev
+secondaryOwners:
+  - ops
+status: active
+---
+
+## 3) Chat Message Input Helper (message/rawInput)
+
+Use this when parsing user chat text so scripts work across different trigger payloads.
+
+```csharp
+private string GetMessageText()
+{
+    string text = "";
+    if (!CPH.TryGetArg("message", out text) || string.IsNullOrWhiteSpace(text))
+        CPH.TryGetArg("rawInput", out text);
+
+    return text ?? "";
+}
+```
+
+Optional duplicate guard using message ID:
+```csharp
+private const string VAR_LAST_MESSAGE_ID = "replace_last_message_id_var";
+
+private bool IsDuplicateMessage()
+{
+    string msgId = "";
+    if (!CPH.TryGetArg("msgId", out msgId) || string.IsNullOrWhiteSpace(msgId))
+        return false;
+
+    string lastId = CPH.GetGlobalVar<string>(VAR_LAST_MESSAGE_ID, false) ?? "";
+    if (string.Equals(lastId, msgId, StringComparison.OrdinalIgnoreCase))
+        return true;
+
+    CPH.SetGlobalVar(VAR_LAST_MESSAGE_ID, msgId, false);
+    return false;
+}
+```
+
+Optional sender helper:
+```csharp
+private (string User, string UserId) GetSender()
+{
+    string user = "";
+    string userId = "";
+
+    CPH.TryGetArg("user", out user);
+    CPH.TryGetArg("userId", out userId);
+
+    user = user ?? "";
+    userId = string.IsNullOrWhiteSpace(userId) ? user.ToLowerInvariant() : userId;
+
+    return (user, userId);
+}
+```
+
+## Related references
+
+- [Verified CPH API Method Signatures](cph-api-signatures.md)
+

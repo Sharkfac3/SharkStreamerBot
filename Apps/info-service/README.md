@@ -43,7 +43,7 @@ Response:
 | `user-intros` | Twitch `userId` | `data/user-intros.json` |
 | `pending-intros` | Twitch `redeemId` | `data/pending-intros.json` |
 
-See `.agents/_shared/info-service-protocol.md` for field reference and schema details.
+See [INFO-SERVICE-PLAN.md](INFO-SERVICE-PLAN.md) for architecture, field reference, schemas, and protocol details.
 
 ## Routes
 

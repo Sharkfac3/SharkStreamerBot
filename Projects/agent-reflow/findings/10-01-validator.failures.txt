@@ -1,0 +1,450 @@
+[folder-coverage] Tools/AgentTree/: first-level domain folder has no manifest domain route
+[folder-coverage] Actions/Commanders/AGENTS.md: skill `actions-commanders` location does not exist: `Actions/Commanders/AGENTS.md`
+[folder-coverage] Actions/Destroyer/AGENTS.md: skill `actions-destroyer` location does not exist: `Actions/Destroyer/AGENTS.md`
+[folder-coverage] Actions/Intros/AGENTS.md: skill `actions-intros` location does not exist: `Actions/Intros/AGENTS.md`
+[folder-coverage] Actions/LotAT/AGENTS.md: skill `actions-lotat` location does not exist: `Actions/LotAT/AGENTS.md`
+[folder-coverage] Actions/Overlay/AGENTS.md: skill `actions-overlay` location does not exist: `Actions/Overlay/AGENTS.md`
+[folder-coverage] Actions/Rest Focus Loop/AGENTS.md: skill `actions-rest-focus-loop` location does not exist: `Actions/Rest Focus Loop/AGENTS.md`
+[folder-coverage] Actions/Squad/AGENTS.md: skill `actions-squad` location does not exist: `Actions/Squad/AGENTS.md`
+[folder-coverage] Actions/Temporary/AGENTS.md: skill `actions-temporary` location does not exist: `Actions/Temporary/AGENTS.md`
+[folder-coverage] Actions/Twitch Bits Integrations/AGENTS.md: skill `actions-twitch-bits-integrations` location does not exist: `Actions/Twitch Bits Integrations/AGENTS.md`
+[folder-coverage] Actions/Twitch Channel Points/AGENTS.md: skill `actions-twitch-channel-points` location does not exist: `Actions/Twitch Channel Points/AGENTS.md`
+[folder-coverage] Actions/Twitch Core Integrations/AGENTS.md: skill `actions-twitch-core-integrations` location does not exist: `Actions/Twitch Core Integrations/AGENTS.md`
+[folder-coverage] Actions/Twitch Hype Train/AGENTS.md: skill `actions-twitch-hype-train` location does not exist: `Actions/Twitch Hype Train/AGENTS.md`
+[folder-coverage] Actions/Voice Commands/AGENTS.md: skill `actions-voice-commands` location does not exist: `Actions/Voice Commands/AGENTS.md`
+[folder-coverage] Actions/XJ Drivethrough/AGENTS.md: skill `actions-xj-drivethrough` location does not exist: `Actions/XJ Drivethrough/AGENTS.md`
+[folder-coverage] Apps/info-service/AGENTS.md: skill `apps-info-service` location does not exist: `Apps/info-service/AGENTS.md`
+[folder-coverage] Apps/production-manager/AGENTS.md: skill `apps-production-manager` location does not exist: `Apps/production-manager/AGENTS.md`
+[folder-coverage] Apps/stream-overlay/AGENTS.md: skill `apps-stream-overlay` location does not exist: `Apps/stream-overlay/AGENTS.md`
+[folder-coverage] Tools/ArtPipeline/AGENTS.md: skill `tools-art-pipeline` location does not exist: `Tools/ArtPipeline/AGENTS.md`
+[folder-coverage] Tools/ContentPipeline/AGENTS.md: skill `tools-content-pipeline` location does not exist: `Tools/ContentPipeline/AGENTS.md`
+[folder-coverage] Tools/LotAT/AGENTS.md: skill `tools-lotat` location does not exist: `Tools/LotAT/AGENTS.md`
+[folder-coverage] Tools/MixItUp/AGENTS.md: skill `tools-mix-it-up` location does not exist: `Tools/MixItUp/AGENTS.md`
+[folder-coverage] Tools/StreamerBot/AGENTS.md: skill `tools-streamer-bot` location does not exist: `Tools/StreamerBot/AGENTS.md`
+[folder-coverage] Creative/Art/AGENTS.md: skill `creative-art` location does not exist: `Creative/Art/AGENTS.md`
+[folder-coverage] Creative/Brand/AGENTS.md: skill `creative-brand` location does not exist: `Creative/Brand/AGENTS.md`
+[folder-coverage] Creative/Marketing/AGENTS.md: skill `creative-marketing` location does not exist: `Creative/Marketing/AGENTS.md`
+[folder-coverage] Creative/WorldBuilding/AGENTS.md: skill `creative-worldbuilding` location does not exist: `Creative/WorldBuilding/AGENTS.md`
+[folder-coverage] Docs/Architecture/AGENTS.md: skill `docs-architecture` location does not exist: `Docs/Architecture/AGENTS.md`
+[folder-coverage] Actions/Commanders/AGENTS.md: declared co-location `Actions/Commanders/AGENTS.md` does not exist
+[folder-coverage] Actions/Destroyer/AGENTS.md: declared co-location `Actions/Destroyer/AGENTS.md` does not exist
+[folder-coverage] Actions/Intros/AGENTS.md: declared co-location `Actions/Intros/AGENTS.md` does not exist
+[folder-coverage] Actions/LotAT/AGENTS.md: declared co-location `Actions/LotAT/AGENTS.md` does not exist
+[folder-coverage] Actions/Overlay/AGENTS.md: declared co-location `Actions/Overlay/AGENTS.md` does not exist
+[folder-coverage] Actions/Rest Focus Loop/AGENTS.md: declared co-location `Actions/Rest Focus Loop/AGENTS.md` does not exist
+[folder-coverage] Actions/Squad/AGENTS.md: declared co-location `Actions/Squad/AGENTS.md` does not exist
+[folder-coverage] Actions/Temporary/AGENTS.md: declared co-location `Actions/Temporary/AGENTS.md` does not exist
+[folder-coverage] Actions/Twitch Bits Integrations/AGENTS.md: declared co-location `Actions/Twitch Bits Integrations/AGENTS.md` does not exist
+[folder-coverage] Actions/Twitch Channel Points/AGENTS.md: declared co-location `Actions/Twitch Channel Points/AGENTS.md` does not exist
+[folder-coverage] Actions/Twitch Core Integrations/AGENTS.md: declared co-location `Actions/Twitch Core Integrations/AGENTS.md` does not exist
+[folder-coverage] Actions/Twitch Hype Train/AGENTS.md: declared co-location `Actions/Twitch Hype Train/AGENTS.md` does not exist
+[folder-coverage] Actions/Voice Commands/AGENTS.md: declared co-location `Actions/Voice Commands/AGENTS.md` does not exist
+[folder-coverage] Actions/XJ Drivethrough/AGENTS.md: declared co-location `Actions/XJ Drivethrough/AGENTS.md` does not exist
+[folder-coverage] Apps/info-service/AGENTS.md: declared co-location `Apps/info-service/AGENTS.md` does not exist
+[folder-coverage] Apps/production-manager/AGENTS.md: declared co-location `Apps/production-manager/AGENTS.md` does not exist
+[folder-coverage] Apps/stream-overlay/AGENTS.md: declared co-location `Apps/stream-overlay/AGENTS.md` does not exist
+[folder-coverage] Tools/ArtPipeline/AGENTS.md: declared co-location `Tools/ArtPipeline/AGENTS.md` does not exist
+[folder-coverage] Tools/ContentPipeline/AGENTS.md: declared co-location `Tools/ContentPipeline/AGENTS.md` does not exist
+[folder-coverage] Tools/LotAT/AGENTS.md: declared co-location `Tools/LotAT/AGENTS.md` does not exist
+[folder-coverage] Tools/MixItUp/AGENTS.md: declared co-location `Tools/MixItUp/AGENTS.md` does not exist
+[folder-coverage] Tools/StreamerBot/AGENTS.md: declared co-location `Tools/StreamerBot/AGENTS.md` does not exist
+[folder-coverage] Creative/Art/AGENTS.md: declared co-location `Creative/Art/AGENTS.md` does not exist
+[folder-coverage] Creative/Brand/AGENTS.md: declared co-location `Creative/Brand/AGENTS.md` does not exist
+[folder-coverage] Creative/Marketing/AGENTS.md: declared co-location `Creative/Marketing/AGENTS.md` does not exist
+[folder-coverage] Creative/WorldBuilding/AGENTS.md: declared co-location `Creative/WorldBuilding/AGENTS.md` does not exist
+[folder-coverage] Docs/Architecture/AGENTS.md: declared co-location `Docs/Architecture/AGENTS.md` does not exist
+[link-integrity] .agents/ENTRY.md:36: broken backtick path `project.md` -> `.agents/project.md`
+[link-integrity] .agents/ENTRY.md:37: broken backtick path `conventions.md` -> `.agents/conventions.md`
+[link-integrity] .agents/ENTRY.md:38: broken backtick path `coordination.md` -> `.agents/coordination.md`
+[link-integrity] .agents/ENTRY.md:39: broken backtick path `mixitup-api.md` -> `.agents/mixitup-api.md`
+[link-integrity] .agents/ENTRY.md:40: broken backtick path `info-service-protocol.md` -> `.agents/info-service-protocol.md`
+[link-integrity] .agents/_shared/conventions.md:15: broken backtick path `claude/squad-cooldown-fix` -> `.agents/_shared/claude/squad-cooldown-fix`
+[link-integrity] .agents/_shared/conventions.md:15: broken backtick path `pi/lotat-engine-v2` -> `.agents/_shared/pi/lotat-engine-v2`
+[link-integrity] .agents/_shared/conventions.md:29: broken backtick path `SCREAMING-KEBAB-CASE.md` -> `.agents/_shared/SCREAMING-KEBAB-CASE.md`
+[link-integrity] .agents/_shared/conventions.md:30: broken backtick path `character-name-art-agent.md` -> `.agents/_shared/character-name-art-agent.md`
+[link-integrity] .agents/_shared/conventions.md:30: broken backtick path `franchise-name-agent.md` -> `.agents/_shared/franchise-name-agent.md`
+[link-integrity] .agents/_shared/conventions.md:34: broken backtick path `_index.md` -> `.agents/_shared/_index.md`
+[link-integrity] .agents/_shared/conventions.md:46: broken backtick path `.claude/` -> `.agents/_shared/.claude`
+[link-integrity] .agents/_shared/coordination.md:35: broken backtick path `Actions/Squad/duck-main.cs` -> `Actions/Squad/duck-main.cs`
+[link-integrity] .agents/_shared/info-service-protocol.md:3: broken backtick path `Docs/INFO-SERVICE-PLAN.md §Schemas` -> `Docs/INFO-SERVICE-PLAN.md §Schemas`
+[link-integrity] .agents/_shared/info-service-protocol.md:25: broken backtick path `Apps/info-service/data/user-intros.json` -> `Apps/info-service/data/user-intros.json`
+[link-integrity] .agents/_shared/info-service-protocol.md:35: broken backtick path `Assets/user-intros/sound/` -> `.agents/_shared/Assets/user-intros/sound`
+[link-integrity] .agents/_shared/info-service-protocol.md:36: broken backtick path `Assets/user-intros/gif/` -> `.agents/_shared/Assets/user-intros/gif`
+[link-integrity] .agents/_shared/info-service-protocol.md:48: broken backtick path `Apps/info-service/data/pending-intros.json` -> `Apps/info-service/data/pending-intros.json`
+[link-integrity] .agents/_shared/info-service-protocol.md:70: broken backtick path `humans/info-service/COORDINATION.md` -> `.agents/_shared/humans/info-service/COORDINATION.md`
+[link-integrity] .agents/_shared/info-service-protocol.md:82: broken backtick path `Docs/INFO-SERVICE-PLAN.md §Schemas §1` -> `Docs/INFO-SERVICE-PLAN.md §Schemas §1`
+[link-integrity] .agents/_shared/mixitup-api.md:30: broken backtick path `Actions/**/README.md` -> `Actions/**/README.md`
+[link-integrity] .agents/_shared/mixitup-api.md:110: broken backtick path `first-chat-intro.cs` -> `.agents/_shared/first-chat-intro.cs`
+[link-integrity] .agents/_shared/project.md:33: broken backtick path `stream-overlay/` -> `.agents/_shared/stream-overlay`
+[link-integrity] .agents/_shared/project.md:33: broken backtick path `info-service/` -> `.agents/_shared/info-service`
+[link-integrity] .agents/_shared/project.md:33: broken backtick path `production-manager/` -> `.agents/_shared/production-manager`
+[link-integrity] .agents/roles/lotat-tech/role.md:41: broken backtick path `ops/skills/change-summary/_index.md` -> `.agents/roles/lotat-tech/ops/skills/change-summary/_index.md`
+[link-integrity] .agents/roles/product-dev/role.md:60: broken backtick path `Products/` -> `.agents/roles/product-dev/Products`
+[link-integrity] .agents/roles/streamerbot-dev/role.md:34: broken backtick path `ops/skills/change-summary/_index.md` -> `.agents/roles/streamerbot-dev/ops/skills/change-summary/_index.md`
+[link-integrity] .agents/roles/_template/role.md:28: broken backtick path `ops/skills/change-summary/_index.md` -> `.agents/roles/_template/ops/skills/change-summary/_index.md`
+[link-integrity] .agents/roles/app-dev/context/info-service.md:25: broken backtick path `Apps/info-service/data/` -> `Apps/info-service/data`
+[link-integrity] .agents/roles/app-dev/context/info-service.md:50: broken backtick path `write.ts` -> `.agents/roles/app-dev/context/write.ts`
+[link-integrity] .agents/roles/app-dev/context/info-service.md:62: broken backtick path `humans/info-service/COORDINATION.md` -> `.agents/roles/app-dev/context/humans/info-service/COORDINATION.md`
+[link-integrity] .agents/roles/app-dev/skills/core.md:75: broken backtick path `packages/overlay/dist/` -> `.agents/roles/app-dev/skills/packages/overlay/dist`
+[link-integrity] .agents/roles/app-dev/skills/core.md:75: broken backtick path `dist/index.html` -> `.agents/roles/app-dev/skills/dist/index.html`
+[link-integrity] .agents/roles/app-dev/skills/core.md:78: broken backtick path `vite.config.ts` -> `.agents/roles/app-dev/skills/vite.config.ts`
+[link-integrity] .agents/roles/app-dev/skills/core.md:78: broken backtick path `file://` -> `.agents/roles/app-dev/skills/file:`
+[link-integrity] .agents/roles/app-dev/skills/core.md:84: broken backtick path `tsconfig.base.json` -> `.agents/roles/app-dev/skills/tsconfig.base.json`
+[link-integrity] .agents/roles/app-dev/skills/core.md:85: broken backtick path `packages/shared/tsconfig.json` -> `.agents/roles/app-dev/skills/packages/shared/tsconfig.json`
+[link-integrity] .agents/roles/app-dev/skills/core.md:86: broken backtick path `packages/broker/tsconfig.json` -> `.agents/roles/app-dev/skills/packages/broker/tsconfig.json`
+[link-integrity] .agents/roles/app-dev/skills/core.md:87: broken backtick path `packages/overlay/tsconfig.json` -> `.agents/roles/app-dev/skills/packages/overlay/tsconfig.json`
+[link-integrity] .agents/roles/app-dev/skills/core.md:132: broken backtick path `Apps/info-service/data/` -> `Apps/info-service/data`
+[link-integrity] .agents/roles/app-dev/skills/core.md:133: broken backtick path `Assets/` -> `.agents/roles/app-dev/skills/Assets`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/asset-system.md:69: broken backtick path `packages/overlay/public/assets/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay/public/assets`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/asset-system.md:70: broken backtick path `public/` -> `.agents/roles/app-dev/skills/stream-interactions/public`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/asset-system.md:88: broken backtick path `"https://example.com/image.png"` -> `.agents/roles/app-dev/skills/stream-interactions/"https:/example.com/image.png"`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/asset-system.md:118: broken backtick path `@stream-overlay/shared/protocol.ts` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared/protocol.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/asset-system.md:308: broken backtick path `packages/broker/src/test-client.ts` -> `.agents/roles/app-dev/skills/stream-interactions/packages/broker/src/test-client.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/asset-system.md:326: broken backtick path `public/assets/alerts/test.jpg` -> `.agents/roles/app-dev/skills/stream-interactions/public/assets/alerts/test.jpg`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/asset-system.md:327: broken backtick path `public/assets/alerts/test.gif` -> `.agents/roles/app-dev/skills/stream-interactions/public/assets/alerts/test.gif`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/asset-system.md:328: broken backtick path `public/assets/audio/test.mp3` -> `.agents/roles/app-dev/skills/stream-interactions/public/assets/audio/test.mp3`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:5: broken backtick path `packages/broker/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/broker`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:39: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:40: broken backtick path `ws://localhost:8765` -> `.agents/roles/app-dev/skills/stream-interactions/ws:/localhost:8765`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:40: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:148: broken backtick path `server.ts` -> `.agents/roles/app-dev/skills/stream-interactions/server.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:148: broken backtick path `index.ts` -> `.agents/roles/app-dev/skills/stream-interactions/index.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:149: broken backtick path `client-registry.ts` -> `.agents/roles/app-dev/skills/stream-interactions/client-registry.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:150: broken backtick path `topic-matcher.ts` -> `.agents/roles/app-dev/skills/stream-interactions/topic-matcher.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:151: broken backtick path `logger.ts` -> `.agents/roles/app-dev/skills/stream-interactions/logger.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:164: absolute or invalid backtick path `/health`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:177: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:185: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:208: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:260: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:262: broken backtick path `broker-connect.cs` -> `.agents/roles/app-dev/skills/stream-interactions/broker-connect.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:262: broken backtick path `broker-disconnect.cs` -> `.agents/roles/app-dev/skills/stream-interactions/broker-disconnect.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:263: broken backtick path `ws://localhost:8765` -> `.agents/roles/app-dev/skills/stream-interactions/ws:/localhost:8765`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/broker.md:270: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:21: broken backtick path `lotat-constants.ts` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-constants.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:136: broken backtick path `lotat-constants.ts` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-constants.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:208: broken backtick path `lotat-start-main.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-start-main.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:209: broken backtick path `lotat-join.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-join.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:210: broken backtick path `lotat-join-timeout.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-join-timeout.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:211: broken backtick path `lotat-node-enter.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-node-enter.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:212: broken backtick path `lotat-commander-input.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-commander-input.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:213: broken backtick path `lotat-commander-timeout.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-commander-timeout.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:214: broken backtick path `lotat-dice-roll.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-dice-roll.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:215: broken backtick path `lotat-dice-timeout.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-dice-timeout.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:216: broken backtick path `lotat-decision-input.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-decision-input.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:217: broken backtick path `lotat-decision-resolve.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-decision-resolve.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:218: broken backtick path `lotat-decision-timeout.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-decision-timeout.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/lotat-rendering.md:219: broken backtick path `lotat-end-session.cs` -> `.agents/roles/app-dev/skills/stream-interactions/lotat-end-session.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:5: broken backtick path `packages/overlay/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:18: broken backtick path `dist/index.html` -> `.agents/roles/app-dev/skills/stream-interactions/dist/index.html`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:20: broken backtick path `vite.config.ts` -> `.agents/roles/app-dev/skills/stream-interactions/vite.config.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:27: broken backtick path `packages/overlay/dist/index.html` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay/dist/index.html`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:37: broken backtick path `main.ts` -> `.agents/roles/app-dev/skills/stream-interactions/main.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:51: broken backtick path `packages/overlay/public/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay/public`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:51: broken backtick path `dist/` -> `.agents/roles/app-dev/skills/stream-interactions/dist`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:72: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:77: broken backtick path `broker-client.ts` -> `.agents/roles/app-dev/skills/stream-interactions/broker-client.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:144: broken backtick path `Apps/stream-overlay/packages/overlay/dist/index.html` -> `Apps/stream-overlay/packages/overlay/dist/index.html`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:196: broken backtick path `main.ts` -> `.agents/roles/app-dev/skills/stream-interactions/main.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:237: broken backtick path `src/systems/` -> `.agents/roles/app-dev/skills/stream-interactions/src/systems`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/overlay.md:255: broken backtick path `public/assets/{alerts,lotat,squad,audio}/` -> `.agents/roles/app-dev/skills/stream-interactions/public/assets/{alerts,lotat,squad,audio}`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:346: broken markdown link `../../lotat-tech/skills/engine/session-lifecycle.md` -> `.agents/roles/app-dev/lotat-tech/skills/engine/session-lifecycle.md`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:347: broken markdown link `../../lotat-tech/skills/story-pipeline/json-schema.md` -> `.agents/roles/app-dev/lotat-tech/skills/story-pipeline/json-schema.md`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:5: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:36: broken backtick path `topics.ts` -> `.agents/roles/app-dev/skills/stream-interactions/topics.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:154: broken backtick path `protocol.ts` -> `.agents/roles/app-dev/skills/stream-interactions/protocol.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:222: broken backtick path `session-lifecycle.md` -> `.agents/roles/app-dev/skills/stream-interactions/session-lifecycle.md`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:259: broken backtick path `protocol.ts` -> `.agents/roles/app-dev/skills/stream-interactions/protocol.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:337: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:346: broken backtick path `../../lotat-tech/skills/engine/session-lifecycle.md` -> `.agents/roles/app-dev/lotat-tech/skills/engine/session-lifecycle.md`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/protocol.md:347: broken backtick path `../../lotat-tech/skills/story-pipeline/json-schema.md` -> `.agents/roles/app-dev/lotat-tech/skills/story-pipeline/json-schema.md`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/squad-rendering.md:140: broken backtick path `overlay-publish.cs` -> `.agents/roles/app-dev/skills/stream-interactions/overlay-publish.cs`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/squad-rendering.md:152: broken backtick path `public/assets/squad/duck.png` -> `.agents/roles/app-dev/skills/stream-interactions/public/assets/squad/duck.png`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/squad-rendering.md:153: broken backtick path `public/assets/squad/pedro.gif` -> `.agents/roles/app-dev/skills/stream-interactions/public/assets/squad/pedro.gif`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/squad-rendering.md:154: broken backtick path `public/assets/squad/toothless-{rarity}.png` -> `.agents/roles/app-dev/skills/stream-interactions/public/assets/squad/toothless-{rarity}.png`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/squad-rendering.md:155: broken backtick path `public/assets/audio/squad/duck-win.mp3` -> `.agents/roles/app-dev/skills/stream-interactions/public/assets/audio/squad/duck-win.mp3`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:48: broken backtick path `packages/shared` -> `.agents/roles/app-dev/skills/stream-interactions/packages/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:48: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:49: broken backtick path `packages/broker` -> `.agents/roles/app-dev/skills/stream-interactions/packages/broker`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:49: broken backtick path `@stream-overlay/broker` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/broker`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:50: broken backtick path `packages/overlay` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:50: broken backtick path `@stream-overlay/overlay` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/overlay`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:58: broken backtick path `packages/broker/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/broker`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:59: broken backtick path `packages/overlay/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:60: broken backtick path `packages/overlay/src/systems/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay/src/systems`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:62: broken backtick path `packages/overlay/src/components/lotat/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay/src/components/lotat`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:62: broken backtick path `src/systems/lotat-renderer.ts` -> `.agents/roles/app-dev/skills/stream-interactions/src/systems/lotat-renderer.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:63: broken backtick path `packages/overlay/src/components/squad/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay/src/components/squad`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:63: broken backtick path `src/systems/squad-renderer.ts` -> `.agents/roles/app-dev/skills/stream-interactions/src/systems/squad-renderer.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:75: broken backtick path `@stream-overlay/shared` -> `.agents/roles/app-dev/skills/stream-interactions/@stream-overlay/shared`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:75: broken backtick path `packages/shared/src/protocol.ts` -> `.agents/roles/app-dev/skills/stream-interactions/packages/shared/src/protocol.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:75: broken backtick path `topics.ts` -> `.agents/roles/app-dev/skills/stream-interactions/topics.ts`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:76: broken backtick path `packages/broker/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/broker`
+[link-integrity] .agents/roles/app-dev/skills/stream-interactions/_index.md:77: broken backtick path `packages/overlay/` -> `.agents/roles/app-dev/skills/stream-interactions/packages/overlay`
+[link-integrity] .agents/roles/art-director/skills/characters/captain-stretch.md:24: broken backtick path `captain-stretch-art-agent.md` -> `.agents/roles/art-director/skills/characters/captain-stretch-art-agent.md`
+[link-integrity] .agents/roles/art-director/skills/characters/the-director.md:24: broken backtick path `the-director-art-agent.md` -> `.agents/roles/art-director/skills/characters/the-director-art-agent.md`
+[link-integrity] .agents/roles/art-director/skills/characters/water-wizard.md:24: broken backtick path `water-wizard-art-agent.md` -> `.agents/roles/art-director/skills/characters/water-wizard-art-agent.md`
+[link-integrity] .agents/roles/art-director/skills/pipeline/_index.md:17: broken backtick path `asset_types.json` -> `.agents/roles/art-director/skills/pipeline/asset_types.json`
+[link-integrity] .agents/roles/art-director/skills/pipeline/_index.md:101: broken backtick path `lib/prompt_builder.py` -> `.agents/roles/art-director/skills/pipeline/lib/prompt_builder.py`
+[link-integrity] .agents/roles/art-director/skills/pipeline/_index.md:211: broken backtick path `lib/prompt_builder.py` -> `.agents/roles/art-director/skills/pipeline/lib/prompt_builder.py`
+[link-integrity] .agents/roles/art-director/skills/pipeline/_index.md:226: broken backtick path `lib/canon_parser.py` -> `.agents/roles/art-director/skills/pipeline/lib/canon_parser.py`
+[link-integrity] .agents/roles/art-director/skills/pipeline/_index.md:228: broken backtick path `specify.py` -> `.agents/roles/art-director/skills/pipeline/specify.py`
+[link-integrity] .agents/roles/art-director/skills/stream-style/_index.md:29: broken backtick path `art-director/skills/core.md` -> `.agents/roles/art-director/skills/stream-style/art-director/skills/core.md`
+[link-integrity] .agents/roles/content-repurposer/context/pipeline-dev-notes.md:5: absolute or invalid backtick path `/mnt/c/`
+[link-integrity] .agents/roles/content-repurposer/context/pipeline-dev-notes.md:6: broken backtick path `transcribe.py` -> `.agents/roles/content-repurposer/context/transcribe.py`
+[link-integrity] .agents/roles/content-repurposer/skills/clip-strategy/_index.md:26: broken backtick path `skills/platforms/_index.md` -> `.agents/roles/content-repurposer/skills/clip-strategy/skills/platforms/_index.md`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:7: broken backtick path `transcribe.py` -> `.agents/roles/content-repurposer/skills/pipeline/transcribe.py`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:15: broken backtick path `config.py` -> `.agents/roles/content-repurposer/skills/pipeline/config.py`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:17: broken backtick path `detect_highlights.py` -> `.agents/roles/content-repurposer/skills/pipeline/detect_highlights.py`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:27: broken backtick path `data/feedback/prompt_context.txt` -> `.agents/roles/content-repurposer/skills/pipeline/data/feedback/prompt_context.txt`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:29: broken backtick path `extract_clips.py` -> `.agents/roles/content-repurposer/skills/pipeline/extract_clips.py`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:40: broken backtick path `format_instagram.py` -> `.agents/roles/content-repurposer/skills/pipeline/format_instagram.py`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:50: broken backtick path `review_server.py` -> `.agents/roles/content-repurposer/skills/pipeline/review_server.py`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:53: broken backtick path `data/published/` -> `.agents/roles/content-repurposer/skills/pipeline/data/published`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:57: broken backtick path `data/published/` -> `.agents/roles/content-repurposer/skills/pipeline/data/published`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:61: broken backtick path `feedback.py` -> `.agents/roles/content-repurposer/skills/pipeline/feedback.py`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:64: broken backtick path `summary.json` -> `.agents/roles/content-repurposer/skills/pipeline/summary.json`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:64: broken backtick path `prompt_context.txt` -> `.agents/roles/content-repurposer/skills/pipeline/prompt_context.txt`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:66: broken backtick path `lib/feedback_store.py` -> `.agents/roles/content-repurposer/skills/pipeline/lib/feedback_store.py`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:73: broken backtick path `config.py` -> `.agents/roles/content-repurposer/skills/pipeline/config.py`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:75: broken backtick path `Tools/ContentPipeline/data/` -> `Tools/ContentPipeline/data`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/phase-map.md:85: broken backtick path `lib/` -> `.agents/roles/content-repurposer/skills/pipeline/lib`
+[link-integrity] .agents/roles/content-repurposer/skills/pipeline/_index.md:66: broken backtick path `data/` -> `.agents/roles/content-repurposer/skills/pipeline/data`
+[link-integrity] .agents/roles/lotat-tech/skills/core.md:25: broken backtick path `skills/engine/session-lifecycle.md` -> `.agents/roles/lotat-tech/skills/skills/engine/session-lifecycle.md`
+[link-integrity] .agents/roles/lotat-tech/skills/core.md:25: broken backtick path `skills/engine/state-and-voting.md` -> `.agents/roles/lotat-tech/skills/skills/engine/state-and-voting.md`
+[link-integrity] .agents/roles/lotat-tech/skills/core.md:95: broken backtick path `skills/engine/docs-map.md` -> `.agents/roles/lotat-tech/skills/skills/engine/docs-map.md`
+[link-integrity] .agents/roles/lotat-tech/skills/core.md:96: broken backtick path `skills/engine/session-lifecycle.md` -> `.agents/roles/lotat-tech/skills/skills/engine/session-lifecycle.md`
+[link-integrity] .agents/roles/lotat-tech/skills/core.md:97: broken backtick path `skills/engine/state-and-voting.md` -> `.agents/roles/lotat-tech/skills/skills/engine/state-and-voting.md`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/docs-map.md:131: broken backtick path `ready/` -> `.agents/roles/lotat-tech/skills/engine/ready`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/session-lifecycle.md:55: broken backtick path `ready/` -> `.agents/roles/lotat-tech/skills/engine/ready`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/session-lifecycle.md:542: broken backtick path `ready/` -> `.agents/roles/lotat-tech/skills/engine/ready`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:21: broken backtick path `ready/` -> `.agents/roles/lotat-tech/skills/engine/ready`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:38: broken backtick path `lotat-start-main.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-start-main.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:39: broken backtick path `lotat-join.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-join.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:40: broken backtick path `lotat-join-timeout.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-join-timeout.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:41: broken backtick path `lotat-node-enter.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-node-enter.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:42: broken backtick path `lotat-commander-input.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-commander-input.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:43: broken backtick path `lotat-commander-timeout.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-commander-timeout.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:44: broken backtick path `lotat-dice-roll.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-dice-roll.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:45: broken backtick path `lotat-dice-timeout.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-dice-timeout.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:46: broken backtick path `lotat-decision-input.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-decision-input.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:47: broken backtick path `lotat-decision-resolve.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-decision-resolve.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:48: broken backtick path `lotat-decision-timeout.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-decision-timeout.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:49: broken backtick path `lotat-end-session.cs` -> `.agents/roles/lotat-tech/skills/engine/lotat-end-session.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/engine/_index.md:50: broken backtick path `overlay-publish.cs` -> `.agents/roles/lotat-tech/skills/engine/overlay-publish.cs`
+[link-integrity] .agents/roles/lotat-tech/skills/story-pipeline/_index.md:96: broken backtick path `engine/commands.md` -> `.agents/roles/lotat-tech/skills/story-pipeline/engine/commands.md`
+[link-integrity] .agents/roles/lotat-tech/skills/story-pipeline/_index.md:104: broken backtick path `ready/` -> `.agents/roles/lotat-tech/skills/story-pipeline/ready`
+[link-integrity] .agents/roles/lotat-tech/skills/story-pipeline/_index.md:109: broken backtick path `ready/` -> `.agents/roles/lotat-tech/skills/story-pipeline/ready`
+[link-integrity] .agents/roles/lotat-writer/skills/core.md:31: broken backtick path `lotat-tech/skills/engine/commands.md` -> `.agents/roles/lotat-writer/skills/lotat-tech/skills/engine/commands.md`
+[link-integrity] .agents/roles/lotat-writer/skills/core.md:74: broken backtick path `drafts/` -> `.agents/roles/lotat-writer/skills/drafts`
+[link-integrity] .agents/roles/lotat-writer/skills/core.md:78: broken backtick path `./run-lotat-story-viewer.sh` -> `.agents/roles/lotat-writer/skills/run-lotat-story-viewer.sh`
+[link-integrity] .agents/roles/lotat-writer/skills/core.md:79: broken backtick path `ready/` -> `.agents/roles/lotat-writer/skills/ready`
+[link-integrity] .agents/roles/lotat-writer/skills/core.md:80: broken backtick path `ready/` -> `.agents/roles/lotat-writer/skills/ready`
+[link-integrity] .agents/roles/ops/skills/change-summary/_index.md:11: broken backtick path `N/A` -> `.agents/roles/ops/skills/change-summary/N/A`
+[link-integrity] .agents/roles/ops/skills/change-summary/_index.md:40: broken backtick path `ops/skills/sync/_index.md` -> `.agents/roles/ops/skills/change-summary/ops/skills/sync/_index.md`
+[link-integrity] .agents/roles/ops/skills/sync/_index.md:20: broken backtick path `N/A` -> `.agents/roles/ops/skills/sync/N/A`
+[link-integrity] .agents/roles/ops/skills/sync/_index.md:43: broken backtick path `N/A` -> `.agents/roles/ops/skills/sync/N/A`
+[link-integrity] .agents/roles/ops/skills/validation/_index.md:11: broken backtick path `stream-start.cs` -> `.agents/roles/ops/skills/validation/stream-start.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/core.md:29: broken backtick path `Actions/**/README.md` -> `Actions/**/README.md`
+[link-integrity] .agents/roles/streamerbot-dev/skills/core.md:58: broken backtick path `Actions/**/README.md` -> `Actions/**/README.md`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:10: broken backtick path `ws://localhost:8765` -> `.agents/roles/streamerbot-dev/skills/ws:/localhost:8765`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:18: broken backtick path `ws://localhost:8765` -> `.agents/roles/streamerbot-dev/skills/ws:/localhost:8765`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:19: broken backtick path `broker-connect.cs` -> `.agents/roles/streamerbot-dev/skills/broker-connect.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:21: broken backtick path `broker-disconnect.cs` -> `.agents/roles/streamerbot-dev/skills/broker-disconnect.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:56: broken backtick path `Actions/SHARED-CONSTANTS.md → Overlay / Broker` -> `Actions/SHARED-CONSTANTS.md → Overlay / Broker`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:56: broken backtick path `@stream-overlay/shared/topics.ts` -> `.agents/roles/streamerbot-dev/skills/@stream-overlay/shared/topics.ts`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:68: broken backtick path `protocol.md` -> `.agents/roles/streamerbot-dev/skills/protocol.md`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:100: broken backtick path `Actions/HELPER-SNIPPETS.md § 7` -> `Actions/HELPER-SNIPPETS.md § 7`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:120: broken backtick path `Actions/Squad/Clone/overlay-publish.cs` -> `Actions/Squad/Clone/overlay-publish.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:139: broken backtick path `broker-connect.cs` -> `.agents/roles/streamerbot-dev/skills/broker-connect.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/overlay-integration.md:152: broken backtick path `broker-connect.cs` -> `.agents/roles/streamerbot-dev/skills/broker-connect.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/captain-stretch.md:11: broken backtick path `captain-stretch-redeem.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-redeem.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/captain-stretch.md:12: broken backtick path `captain-stretch-stretch.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-stretch.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/captain-stretch.md:13: broken backtick path `captain-stretch-shrimp.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-shrimp.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/captain-stretch.md:14: broken backtick path `captain-stretch-thank.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-thank.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/captain-stretch.md:15: broken backtick path `captain-stretch-generalfocus.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-generalfocus.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/the-director.md:11: broken backtick path `the-director-redeem.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-redeem.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/the-director.md:12: broken backtick path `the-director-checkchat.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-checkchat.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/the-director.md:13: broken backtick path `the-director-toad.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-toad.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/the-director.md:14: broken backtick path `the-director-award.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-award.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/the-director.md:15: broken backtick path `the-director-primary.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-primary.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/the-director.md:16: broken backtick path `the-director-secondary.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-secondary.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/water-wizard.md:11: broken backtick path `water-wizard-redeem.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/water-wizard-redeem.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/water-wizard.md:12: broken backtick path `water-wizard-hail.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/water-wizard-hail.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/water-wizard.md:13: broken backtick path `wizard-hydrate.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/wizard-hydrate.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/water-wizard.md:14: broken backtick path `water-wizard-orb.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/water-wizard-orb.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/water-wizard.md:15: broken backtick path `water-wizard-castrest.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/water-wizard-castrest.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:14: broken backtick path `captain-stretch-redeem.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-redeem.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:14: broken backtick path `captain-stretch-stretch.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-stretch.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:14: broken backtick path `captain-stretch-shrimp.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-shrimp.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:14: broken backtick path `captain-stretch-thank.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-thank.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:14: broken backtick path `captain-stretch-generalfocus.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/captain-stretch-generalfocus.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:15: broken backtick path `the-director-redeem.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-redeem.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:15: broken backtick path `the-director-checkchat.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-checkchat.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:15: broken backtick path `the-director-toad.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-toad.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:15: broken backtick path `the-director-award.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-award.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:15: broken backtick path `the-director-primary.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-primary.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:15: broken backtick path `the-director-secondary.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/the-director-secondary.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:16: broken backtick path `water-wizard-redeem.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/water-wizard-redeem.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:16: broken backtick path `water-wizard-hail.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/water-wizard-hail.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:16: broken backtick path `wizard-hydrate.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/wizard-hydrate.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:16: broken backtick path `water-wizard-orb.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/water-wizard-orb.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/commanders/_index.md:16: broken backtick path `water-wizard-castrest.cs` -> `.agents/roles/streamerbot-dev/skills/commanders/water-wizard-castrest.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:13: broken backtick path `lotat-start-main.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-start-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:14: broken backtick path `lotat-join.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-join.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:15: broken backtick path `lotat-join-timeout.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-join-timeout.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:16: broken backtick path `lotat-node-enter.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-node-enter.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:17: broken backtick path `lotat-decision-input.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-decision-input.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:18: broken backtick path `lotat-decision-timeout.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-decision-timeout.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:19: broken backtick path `lotat-decision-resolve.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-decision-resolve.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:20: broken backtick path `lotat-dice-roll.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-dice-roll.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:21: broken backtick path `lotat-dice-timeout.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-dice-timeout.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:22: broken backtick path `lotat-commander-input.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-commander-input.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:23: broken backtick path `lotat-commander-timeout.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-commander-timeout.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:24: broken backtick path `lotat-end-session.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/lotat-end-session.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/lotat/_index.md:25: broken backtick path `overlay-publish.cs` -> `.agents/roles/streamerbot-dev/skills/lotat/overlay-publish.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/clone.md:7: broken backtick path `clone-empire-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/clone.md:8: broken backtick path `clone-empire-join.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-join.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/clone.md:9: broken backtick path `clone-empire-start.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-start.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/clone.md:10: broken backtick path `clone-empire-move.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-move.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/clone.md:11: broken backtick path `clone-empire-tick.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-tick.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/clone.md:30: broken backtick path `clone-empire-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/clone.md:30: broken backtick path `clone-empire-tick.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-tick.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/clone.md:31: broken backtick path `clone-empire-start.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-start.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/clone.md:31: broken backtick path `clone-empire-tick.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-tick.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/duck.md:7: broken backtick path `duck-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/duck-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/duck.md:8: broken backtick path `duck-call.cs` -> `.agents/roles/streamerbot-dev/skills/squad/duck-call.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/duck.md:9: broken backtick path `duck-resolve.cs` -> `.agents/roles/streamerbot-dev/skills/squad/duck-resolve.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/duck.md:27: broken backtick path `duck-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/duck-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/duck.md:27: broken backtick path `duck-resolve.cs` -> `.agents/roles/streamerbot-dev/skills/squad/duck-resolve.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/pedro.md:7: broken backtick path `pedro-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/pedro-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/pedro.md:8: broken backtick path `pedro-call.cs` -> `.agents/roles/streamerbot-dev/skills/squad/pedro-call.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/pedro.md:9: broken backtick path `pedro-resolve.cs` -> `.agents/roles/streamerbot-dev/skills/squad/pedro-resolve.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/toothless.md:7: broken backtick path `toothless-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/toothless-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:11: broken backtick path `clone-empire-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:11: broken backtick path `clone-empire-join.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-join.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:11: broken backtick path `clone-empire-start.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-start.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:11: broken backtick path `clone-empire-move.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-move.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:11: broken backtick path `clone-empire-tick.cs` -> `.agents/roles/streamerbot-dev/skills/squad/clone-empire-tick.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:12: broken backtick path `duck-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/duck-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:12: broken backtick path `duck-call.cs` -> `.agents/roles/streamerbot-dev/skills/squad/duck-call.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:12: broken backtick path `duck-resolve.cs` -> `.agents/roles/streamerbot-dev/skills/squad/duck-resolve.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:13: broken backtick path `pedro-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/pedro-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:14: broken backtick path `toothless-main.cs` -> `.agents/roles/streamerbot-dev/skills/squad/toothless-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:15: broken backtick path `offering.cs` -> `.agents/roles/streamerbot-dev/skills/squad/offering.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/squad/_index.md:42: broken backtick path `streamerbot-dev/skills/core.md` -> `.agents/roles/streamerbot-dev/skills/squad/streamerbot-dev/skills/core.md`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/bits.md:7: broken backtick path `bits-tier-1.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/bits-tier-1.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/bits.md:8: broken backtick path `bits-tier-2.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/bits-tier-2.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/bits.md:9: broken backtick path `bits-tier-3.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/bits-tier-3.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/bits.md:10: broken backtick path `bits-tier-4.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/bits-tier-4.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/bits.md:16: broken backtick path `gigantify-emote.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/gigantify-emote.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/bits.md:17: broken backtick path `message-effects.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/message-effects.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/bits.md:18: broken backtick path `on-screen-celebration.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/on-screen-celebration.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/channel-points.md:7: broken backtick path `disco-party.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/disco-party.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/channel-points.md:8: broken backtick path `explain-current-task.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/explain-current-task.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/hype-train.md:7: broken backtick path `hype-train-start.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/hype-train-start.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/hype-train.md:8: broken backtick path `hype-train-level-up.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/hype-train-level-up.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/hype-train.md:9: broken backtick path `hype-train-end.cs` -> `.agents/roles/streamerbot-dev/skills/twitch/hype-train-end.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/twitch/_index.md:21: broken backtick path `Actions/Twitch Bits Integrations/bits-tier-*.cs` -> `Actions/Twitch Bits Integrations/bits-tier-*.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/voice-commands/_index.md:7: broken backtick path `mode-garage.cs` -> `.agents/roles/streamerbot-dev/skills/voice-commands/mode-garage.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/voice-commands/_index.md:8: broken backtick path `mode-workspace.cs` -> `.agents/roles/streamerbot-dev/skills/voice-commands/mode-workspace.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/voice-commands/_index.md:9: broken backtick path `mode-gamer.cs` -> `.agents/roles/streamerbot-dev/skills/voice-commands/mode-gamer.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/voice-commands/_index.md:10: broken backtick path `scene-chat.cs` -> `.agents/roles/streamerbot-dev/skills/voice-commands/scene-chat.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/voice-commands/_index.md:11: broken backtick path `scene-main.cs` -> `.agents/roles/streamerbot-dev/skills/voice-commands/scene-main.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/voice-commands/_index.md:12: broken backtick path `scene-housekeeping.cs` -> `.agents/roles/streamerbot-dev/skills/voice-commands/scene-housekeeping.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/voice-commands/_index.md:13: broken backtick path `scene-dance.cs` -> `.agents/roles/streamerbot-dev/skills/voice-commands/scene-dance.cs`
+[link-integrity] .agents/roles/streamerbot-dev/skills/voice-commands/_index.md:49: broken backtick path `streamerbot-dev/skills/core.md` -> `.agents/roles/streamerbot-dev/skills/voice-commands/streamerbot-dev/skills/core.md`
+[link-integrity] retired Pi skill mirror/meta/SKILL.md:14: broken backtick path `meta-agents-navigate/SKILL.md` -> `retired Pi skill mirror/meta/meta-agents-navigate/SKILL.md`
+[link-integrity] retired Pi skill mirror/meta/SKILL.md:15: broken backtick path `meta-agents-update/SKILL.md` -> `retired Pi skill mirror/meta/meta-agents-update/SKILL.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:13: broken backtick path `_shared/` -> `retired Pi skill mirror/meta-agents-navigate/_shared`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:17: broken backtick path `ENTRY.md` -> `retired Pi skill mirror/meta-agents-navigate/ENTRY.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:21: broken backtick path `_index.md` -> `retired Pi skill mirror/meta-agents-navigate/_index.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:25: broken backtick path `_index.md` -> `retired Pi skill mirror/meta-agents-navigate/_index.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:27: broken backtick path `_index.md` -> `retired Pi skill mirror/meta-agents-navigate/_index.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:28: broken backtick path `_index.md` -> `retired Pi skill mirror/meta-agents-navigate/_index.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:34: broken backtick path `_shared/` -> `retired Pi skill mirror/meta-agents-navigate/_shared`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:35: broken backtick path `project.md` -> `retired Pi skill mirror/meta-agents-navigate/project.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:36: broken backtick path `conventions.md` -> `retired Pi skill mirror/meta-agents-navigate/conventions.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:37: broken backtick path `coordination.md` -> `retired Pi skill mirror/meta-agents-navigate/coordination.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:38: broken backtick path `mixitup-api.md` -> `retired Pi skill mirror/meta-agents-navigate/mixitup-api.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:39: broken backtick path `info-service-protocol.md` -> `retired Pi skill mirror/meta-agents-navigate/info-service-protocol.md`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:45: broken backtick path `roles/streamerbot-dev/` -> `retired Pi skill mirror/meta-agents-navigate/roles/streamerbot-dev`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:46: broken backtick path `roles/lotat-tech/` -> `retired Pi skill mirror/meta-agents-navigate/roles/lotat-tech`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:47: broken backtick path `roles/lotat-writer/` -> `retired Pi skill mirror/meta-agents-navigate/roles/lotat-writer`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:48: broken backtick path `roles/art-director/` -> `retired Pi skill mirror/meta-agents-navigate/roles/art-director`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:49: broken backtick path `roles/brand-steward/` -> `retired Pi skill mirror/meta-agents-navigate/roles/brand-steward`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:50: broken backtick path `roles/app-dev/` -> `retired Pi skill mirror/meta-agents-navigate/roles/app-dev`
+[link-integrity] retired Pi skill mirror/meta-agents-navigate/SKILL.md:51: broken backtick path `roles/ops/` -> `retired Pi skill mirror/meta-agents-navigate/roles/ops`
+[link-integrity] retired Pi skill mirror/meta-agents-update/SKILL.md:12: broken backtick path `roles/_template/` -> `retired Pi skill mirror/meta-agents-update/roles/_template`
+[link-integrity] retired Pi skill mirror/meta-agents-update/SKILL.md:16: broken backtick path `ENTRY.md` -> `retired Pi skill mirror/meta-agents-update/ENTRY.md`
+[link-integrity] retired Pi skill mirror/meta-agents-update/SKILL.md:20: broken backtick path `roles/_template/` -> `retired Pi skill mirror/meta-agents-update/roles/_template`
+[link-integrity] retired Pi skill mirror/meta-agents-update/SKILL.md:24: broken backtick path `ENTRY.md` -> `retired Pi skill mirror/meta-agents-update/ENTRY.md`
+[link-integrity] retired Pi skill mirror/meta-agents-update/SKILL.md:31: broken backtick path `_index.md` -> `retired Pi skill mirror/meta-agents-update/_index.md`
+[link-integrity] retired Pi skill mirror/meta-agents-update/SKILL.md:32: broken backtick path `_index.md` -> `retired Pi skill mirror/meta-agents-update/_index.md`
+[link-integrity] retired Pi skill mirror/meta-agents-update/SKILL.md:32: broken backtick path `role.md` -> `retired Pi skill mirror/meta-agents-update/role.md`
+[link-integrity] retired Pi skill mirror/meta-agents-update/SKILL.md:71: broken backtick path `role.md` -> `retired Pi skill mirror/meta-agents-update/role.md`
+[link-integrity] retired Pi skill mirror/meta-agents-update/SKILL.md:71: broken backtick path `ENTRY.md` -> `retired Pi skill mirror/meta-agents-update/ENTRY.md`
+[drift] AGENTS.md: GENERATED block `agents-quick-role-routing` is stale relative to .agents/manifest.json
+[drift] .agents/ENTRY.md: `## Roles` table is stale relative to .agents/manifest.json
+[drift] retired Pi skill mirror/README.md: `## Roles` table is stale relative to .agents/manifest.json
+[stub-presence] .agents/roles/streamerbot-dev/role.md:1: entry file for skill `streamerbot-dev` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/roles/lotat-tech/role.md:1: entry file for skill `lotat-tech` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/roles/lotat-writer/role.md:1: entry file for skill `lotat-writer` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/roles/art-director/role.md:1: entry file for skill `art-director` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/roles/brand-steward/role.md:1: entry file for skill `brand-steward` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/roles/content-repurposer/role.md:1: entry file for skill `content-repurposer` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/roles/app-dev/role.md:1: entry file for skill `app-dev` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/roles/product-dev/role.md:1: entry file for skill `product-dev` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/roles/ops/role.md:1: entry file for skill `ops` missing required frontmatter: description, id, status, type
+[stub-presence] Actions/Commanders/AGENTS.md: entry file for skill `actions-commanders` is missing
+[stub-presence] Actions/Destroyer/AGENTS.md: entry file for skill `actions-destroyer` is missing
+[stub-presence] Actions/Intros/AGENTS.md: entry file for skill `actions-intros` is missing
+[stub-presence] Actions/LotAT/AGENTS.md: entry file for skill `actions-lotat` is missing
+[stub-presence] Actions/Overlay/AGENTS.md: entry file for skill `actions-overlay` is missing
+[stub-presence] Actions/Rest Focus Loop/AGENTS.md: entry file for skill `actions-rest-focus-loop` is missing
+[stub-presence] Actions/Squad/AGENTS.md: entry file for skill `actions-squad` is missing
+[stub-presence] Actions/Temporary/AGENTS.md: entry file for skill `actions-temporary` is missing
+[stub-presence] Actions/Twitch Bits Integrations/AGENTS.md: entry file for skill `actions-twitch-bits-integrations` is missing
+[stub-presence] Actions/Twitch Channel Points/AGENTS.md: entry file for skill `actions-twitch-channel-points` is missing
+[stub-presence] Actions/Twitch Core Integrations/AGENTS.md: entry file for skill `actions-twitch-core-integrations` is missing
+[stub-presence] Actions/Twitch Hype Train/AGENTS.md: entry file for skill `actions-twitch-hype-train` is missing
+[stub-presence] Actions/Voice Commands/AGENTS.md: entry file for skill `actions-voice-commands` is missing
+[stub-presence] Actions/XJ Drivethrough/AGENTS.md: entry file for skill `actions-xj-drivethrough` is missing
+[stub-presence] Apps/info-service/AGENTS.md: entry file for skill `apps-info-service` is missing
+[stub-presence] Apps/production-manager/AGENTS.md: entry file for skill `apps-production-manager` is missing
+[stub-presence] Apps/stream-overlay/AGENTS.md: entry file for skill `apps-stream-overlay` is missing
+[stub-presence] Tools/ArtPipeline/AGENTS.md: entry file for skill `tools-art-pipeline` is missing
+[stub-presence] Tools/ContentPipeline/AGENTS.md: entry file for skill `tools-content-pipeline` is missing
+[stub-presence] Tools/LotAT/AGENTS.md: entry file for skill `tools-lotat` is missing
+[stub-presence] Tools/MixItUp/AGENTS.md: entry file for skill `tools-mix-it-up` is missing
+[stub-presence] Tools/StreamerBot/AGENTS.md: entry file for skill `tools-streamer-bot` is missing
+[stub-presence] Creative/Art/AGENTS.md: entry file for skill `creative-art` is missing
+[stub-presence] Creative/Brand/AGENTS.md: entry file for skill `creative-brand` is missing
+[stub-presence] Creative/Marketing/AGENTS.md: entry file for skill `creative-marketing` is missing
+[stub-presence] Creative/WorldBuilding/AGENTS.md: entry file for skill `creative-worldbuilding` is missing
+[stub-presence] Docs/Architecture/AGENTS.md: entry file for skill `docs-architecture` is missing
+[stub-presence] AGENTS.md:1: entry file for skill `root-agent-doc` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/ENTRY.md:1: entry file for skill `agent-entry` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/_shared/project.md:1: entry file for skill `shared-project` missing required frontmatter: description, id, status, type
+[stub-presence] .agents/_shared/conventions.md:1: entry file for skill `shared-conventions` missing required frontmatter: description, id, status, type
+[stub-presence] retired Pi skill mirror/meta/SKILL.md:1: entry file for skill `meta` missing required frontmatter: id, status, type
+[stub-presence] retired Pi skill mirror/meta-agents-navigate/SKILL.md:1: entry file for skill `meta-agents-navigate` missing required frontmatter: id, status, type
+[stub-presence] retired Pi skill mirror/meta-agents-update/SKILL.md:1: entry file for skill `meta-agents-update` missing required frontmatter: id, status, type
+[orphan] .agents/_shared/coordination.md: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/_template/context/.gitkeep: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/_template/role.md: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/app-dev/context/.gitkeep: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/art-director/context/.gitkeep: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/brand-steward/context/.gitkeep: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/content-repurposer/context/.gitkeep: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/content-repurposer/context/pipeline-dev-notes.md: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/lotat-tech/context/.gitkeep: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/lotat-writer/context/.gitkeep: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/lotat-writer/skills/franchises/_index.md: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/ops/context/.gitkeep: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/product-dev/context/.gitkeep: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/streamerbot-dev/context/patterns.md: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/streamerbot-dev/skills/commanders/_index.md: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/streamerbot-dev/skills/squad/_index.md: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/streamerbot-dev/skills/twitch/_index.md: file under .agents/ is not declared in manifest and has no inbound doc/path reference
+[orphan] .agents/roles/streamerbot-dev/skills/voice-commands/_index.md: file under .agents/ is not declared in manifest and has no inbound doc/path reference

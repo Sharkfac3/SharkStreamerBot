@@ -27,16 +27,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-04-24 | pi | Message Effects Mix It Up special identifiers | uncommitted |
-| 2026-04-24 | pi | Hype Train Start Mix It Up special identifiers | uncommitted |
-| 2026-04-25 | pi | New Follower Mix It Up special identifiers | uncommitted |
-| 2026-04-25 | pi | Explain Current Task Mix It Up special identifiers | uncommitted |
-| 2026-04-24 | pi | Bits Tier 3 Mix It Up special identifiers | uncommitted |
-| 2026-04-24 | pi | Hype Train End Mix It Up special identifiers | uncommitted |
-| 2026-04-24 | pi | Hype Train Level Up Mix It Up special identifiers | uncommitted |
-| 2026-04-25 | pi | Mix It Up SpecialIdentifiers scaffolding rule | uncommitted |
-| 2026-04-25 | pi | Bits Tier 4 Mix It Up special identifiers | uncommitted |
-| 2026-04-24 | pi | Subscription Counter Rollover Mix It Up special identifiers | uncommitted |
+| 2026-04-27 | pi | create-actions-agent-guide | uncommitted |
+| 2026-04-27 | pi | 104-apps-stream-overlay-doc-split | uncommitted |
+| 2026-04-27 | pi | 103-lotat-contract-index | uncommitted |
+| 2026-04-27 | pi | 102b-actions-helper-snippets-split-execute | uncommitted |
+| 2026-04-27 | pi | 102-helper-snippets-split-design | uncommitted |
+| 2026-04-27 | pi | post-cutover-stale-cleanup | uncommitted |
+| 2026-04-27 | pi | manifest-status-normalization | uncommitted |
+| 2026-04-27 | pi | cutover-pi-mirror | uncommitted |
+| 2026-04-27 | pi | retire-old-skill-tree-cleanup | uncommitted |
+| 2026-04-27 | pi | pi-meta-transition | uncommitted |
 
 ---
 
@@ -46,7 +46,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 Add a row to **Active Work** with:
 - Your agent name (`pi`, `claude`, `diffusion`, or a descriptive name)
 - Short task description (one line)
-- Primary domain (`Actions/`, `Apps/`, `Creative/`, `Docs/`, `Tools/`, `.agents/`, `.pi/skills/`)
+- Primary domain (`Actions/`, `Apps/`, `Creative/`, `Docs/`, `Tools/`, `.agents/`)
 - Files you expect to touch (comma-separated paths, or `TBD` if scouting)
 - Today's date (`YYYY-MM-DD`)
 

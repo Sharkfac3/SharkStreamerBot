@@ -1,0 +1,2584 @@
+{
+  "$schema": "./manifest.schema.json",
+  "schemaVersion": 2,
+  "metadata": {
+    "status": "draft",
+    "sourceOfTruth": true,
+    "generatedMarkersRequired": true,
+    "notes": [
+      "Manifest v2 is the active routing source; the legacy v1 routing manifest and Pi mirror were retired during cutover.",
+      "Domain agent docs and workflow files declared here may be planned paths until later migration prompts create content."
+    ]
+  },
+  "entrypoints": {
+    "rootAgentDoc": "AGENTS.md",
+    "agentEntry": ".agents/ENTRY.md",
+    "claudeCompatibility": "CLAUDE.md"
+  },
+  "skills": [
+    {
+      "id": "streamerbot-dev",
+      "name": "Streamer.bot Dev",
+      "description": "Streamer.bot C# runtime actions and Streamer.bot-side integrations under Actions/.",
+      "location": ".agents/roles/streamerbot-dev/role.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward",
+        "app-dev",
+        "lotat-tech"
+      ],
+      "source": "v1 roles"
+    },
+    {
+      "id": "lotat-tech",
+      "name": "LotAT Tech",
+      "description": "LotAT technical pipeline, C# engine, JSON schema, and story runtime implementation.",
+      "location": ".agents/roles/lotat-tech/role.md",
+      "owner": "lotat-tech",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "streamerbot-dev",
+        "lotat-writer",
+        "ops"
+      ],
+      "source": "v1 roles"
+    },
+    {
+      "id": "lotat-writer",
+      "name": "LotAT Writer",
+      "description": "LotAT narrative design, adventure content, lore, worldbuilding, and reusable story elements.",
+      "location": ".agents/roles/lotat-writer/role.md",
+      "owner": "lotat-writer",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "canon-guardian"
+      ],
+      "chains_to": [
+        "lotat-tech",
+        "brand-steward",
+        "art-director"
+      ],
+      "source": "v1 roles"
+    },
+    {
+      "id": "art-director",
+      "name": "Art Director",
+      "description": "Diffusion prompts, character art, stream visuals, and art-pipeline guidance.",
+      "location": ".agents/roles/art-director/role.md",
+      "owner": "art-director",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "canon-guardian"
+      ],
+      "chains_to": [
+        "brand-steward",
+        "lotat-writer",
+        "ops"
+      ],
+      "source": "v1 roles"
+    },
+    {
+      "id": "brand-steward",
+      "name": "Brand Steward",
+      "description": "Brand consistency for public-facing copy, titles, marketing, canon, voice, and community messaging.",
+      "location": ".agents/roles/brand-steward/role.md",
+      "owner": "brand-steward",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "canon-guardian"
+      ],
+      "chains_to": [
+        "content-repurposer",
+        "lotat-writer",
+        "art-director"
+      ],
+      "source": "v1 roles"
+    },
+    {
+      "id": "content-repurposer",
+      "name": "Content Repurposer",
+      "description": "Short-form clips, captions, platform formatting, content calendars, and content-pipeline tooling.",
+      "location": ".agents/roles/content-repurposer/role.md",
+      "owner": "content-repurposer",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward",
+        "ops"
+      ],
+      "source": "v1 roles"
+    },
+    {
+      "id": "app-dev",
+      "name": "App Dev",
+      "description": "Standalone stream interaction apps, dashboards, overlays, brokers, and TypeScript app tooling.",
+      "location": ".agents/roles/app-dev/role.md",
+      "owner": "app-dev",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "streamerbot-dev",
+        "brand-steward",
+        "ops"
+      ],
+      "source": "v1 roles"
+    },
+    {
+      "id": "product-dev",
+      "name": "Product Dev",
+      "description": "Product documentation, technical knowledge articles, specs, and future customer-facing product content.",
+      "location": ".agents/roles/product-dev/role.md",
+      "owner": "product-dev",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary"
+      ],
+      "chains_to": [
+        "brand-steward",
+        "content-repurposer"
+      ],
+      "source": "v1 roles"
+    },
+    {
+      "id": "ops",
+      "name": "Ops",
+      "description": "Validation, sync workflow, change summaries, local tooling, and operational repo maintenance.",
+      "location": ".agents/roles/ops/role.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "coordination",
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "streamerbot-dev",
+        "app-dev",
+        "lotat-tech"
+      ],
+      "source": "v1 roles"
+    },
+    {
+      "id": "canon-guardian",
+      "name": "Canon Guardian",
+      "description": "Shared canon review procedure for brand-level and LotAT-level continuity.",
+      "location": ".agents/workflows/canon-guardian.md",
+      "owner": "brand-steward",
+      "secondaryOwners": [],
+      "type": "workflow",
+      "status": "active",
+      "depends_on": [],
+      "chains_to": [],
+      "source": "v1 canonical subskills / target shape"
+    },
+    {
+      "id": "change-summary",
+      "name": "Change Summary",
+      "description": "Terminal handoff format for changed files, paste targets, setup steps, and validation output.",
+      "location": ".agents/workflows/change-summary.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "workflow",
+      "status": "active",
+      "depends_on": [],
+      "chains_to": [],
+      "source": "v1 canonical subskills / target shape"
+    },
+    {
+      "id": "sync",
+      "name": "Sync",
+      "description": "Repo-to-Streamer.bot paste and sync procedure for runtime scripts and generated docs.",
+      "location": ".agents/workflows/sync.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "workflow",
+      "status": "active",
+      "depends_on": [],
+      "chains_to": [],
+      "source": "v1 canonical subskills / target shape"
+    },
+    {
+      "id": "validation",
+      "name": "Validation",
+      "description": "Validator command selection, schema checks, and drift-check procedure.",
+      "location": ".agents/workflows/validation.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "workflow",
+      "status": "active",
+      "depends_on": [],
+      "chains_to": [],
+      "source": "v1 canonical subskills / target shape"
+    },
+    {
+      "id": "coordination",
+      "name": "Coordination",
+      "description": "WORKING.md coordination protocol and multi-agent conflict avoidance procedure.",
+      "location": ".agents/workflows/coordination.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "workflow",
+      "status": "active",
+      "depends_on": [],
+      "chains_to": [],
+      "source": "v1 canonical subskills / target shape"
+    },
+    {
+      "id": "actions-commanders",
+      "name": "actions-commanders",
+      "description": "Streamer.bot commander role system actions.",
+      "location": "Actions/Commanders/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-destroyer",
+      "name": "actions-destroyer",
+      "description": "Destroyer Streamer.bot actions.",
+      "location": "Actions/Destroyer/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-intros",
+      "name": "actions-intros",
+      "description": "Intro actions spanning Streamer.bot, info-service data, audio/API conventions, and public copy.",
+      "location": "Actions/Intros/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "app-dev",
+        "brand-steward",
+        "ops"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "app-dev",
+        "brand-steward",
+        "ops"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-lotat",
+      "name": "actions-lotat",
+      "description": "LotAT Streamer.bot engine and runtime action scripts.",
+      "location": "Actions/LotAT/AGENTS.md",
+      "owner": "lotat-tech",
+      "secondaryOwners": [
+        "streamerbot-dev",
+        "lotat-writer",
+        "app-dev"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "streamerbot-dev",
+        "lotat-writer",
+        "app-dev"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-overlay",
+      "name": "actions-overlay",
+      "description": "Streamer.bot publishers and bridge scripts for the overlay ecosystem.",
+      "location": "Actions/Overlay/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "app-dev"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "app-dev"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-rest-focus-loop",
+      "name": "actions-rest-focus-loop",
+      "description": "Rest/focus loop Streamer.bot feature actions.",
+      "location": "Actions/Rest Focus Loop/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-squad",
+      "name": "actions-squad",
+      "description": "Squad mini-game runtime actions and overlay handoffs.",
+      "location": "Actions/Squad/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "app-dev"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "app-dev"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-temporary",
+      "name": "actions-temporary",
+      "description": "Temporary action scripts; may later be covered by rest/focus route if retained.",
+      "location": "Actions/Temporary/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-twitch-bits-integrations",
+      "name": "actions-twitch-bits-integrations",
+      "description": "Twitch bits Streamer.bot event integrations.",
+      "location": "Actions/Twitch Bits Integrations/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-twitch-channel-points",
+      "name": "actions-twitch-channel-points",
+      "description": "Twitch channel point redemption actions.",
+      "location": "Actions/Twitch Channel Points/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-twitch-core-integrations",
+      "name": "actions-twitch-core-integrations",
+      "description": "Core Twitch event integrations for stream lifecycle and chat-facing events.",
+      "location": "Actions/Twitch Core Integrations/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-twitch-hype-train",
+      "name": "actions-twitch-hype-train",
+      "description": "Twitch hype train event actions.",
+      "location": "Actions/Twitch Hype Train/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-voice-commands",
+      "name": "actions-voice-commands",
+      "description": "Voice command mode and OBS scene-switching actions.",
+      "location": "Actions/Voice Commands/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "actions-xj-drivethrough",
+      "name": "actions-xj-drivethrough",
+      "description": "XJ Drivethrough runtime actions with possible product-facing handoffs.",
+      "location": "Actions/XJ Drivethrough/AGENTS.md",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "product-dev",
+        "brand-steward"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "product-dev",
+        "brand-steward"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "apps-info-service",
+      "name": "apps-info-service",
+      "description": "Info-service REST API app and data contract.",
+      "location": "Apps/info-service/AGENTS.md",
+      "owner": "app-dev",
+      "secondaryOwners": [
+        "streamerbot-dev",
+        "ops"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "streamerbot-dev",
+        "ops"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "apps-production-manager",
+      "name": "apps-production-manager",
+      "description": "Production manager React admin UI.",
+      "location": "Apps/production-manager/AGENTS.md",
+      "owner": "app-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "brand-steward"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "apps-stream-overlay",
+      "name": "apps-stream-overlay",
+      "description": "Phaser stream overlay, broker, rendering packages, and interaction protocol.",
+      "location": "Apps/stream-overlay/AGENTS.md",
+      "owner": "app-dev",
+      "secondaryOwners": [
+        "streamerbot-dev",
+        "lotat-tech"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "streamerbot-dev",
+        "lotat-tech"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "tools-art-pipeline",
+      "name": "tools-art-pipeline",
+      "description": "Art-pipeline local tooling and environment guidance.",
+      "location": "Tools/ArtPipeline/AGENTS.md",
+      "owner": "art-director",
+      "secondaryOwners": [
+        "ops"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "ops"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "tools-content-pipeline",
+      "name": "tools-content-pipeline",
+      "description": "Content-pipeline tooling for transcription, clip extraction, review, and feedback.",
+      "location": "Tools/ContentPipeline/AGENTS.md",
+      "owner": "content-repurposer",
+      "secondaryOwners": [
+        "ops"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "ops"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "tools-lotat",
+      "name": "tools-lotat",
+      "description": "LotAT story schema, validation, and local pipeline utilities.",
+      "location": "Tools/LotAT/AGENTS.md",
+      "owner": "lotat-tech",
+      "secondaryOwners": [
+        "ops"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "ops"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "tools-mix-it-up",
+      "name": "tools-mix-it-up",
+      "description": "Mix It Up API helpers, command tooling, overlays, and shared payload references.",
+      "location": "Tools/MixItUp/AGENTS.md",
+      "owner": "ops",
+      "secondaryOwners": [
+        "streamerbot-dev",
+        "app-dev"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "streamerbot-dev",
+        "app-dev"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "tools-streamer-bot",
+      "name": "tools-streamer-bot",
+      "description": "Streamer.bot sync, templates, and validation utilities.",
+      "location": "Tools/StreamerBot/AGENTS.md",
+      "owner": "ops",
+      "secondaryOwners": [
+        "streamerbot-dev"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "chains_to": [
+        "streamerbot-dev"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "creative-art",
+      "name": "creative-art",
+      "description": "Creative art assets, character references, prompts, and stream visual style.",
+      "location": "Creative/Art/AGENTS.md",
+      "owner": "art-director",
+      "secondaryOwners": [
+        "brand-steward",
+        "lotat-writer"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "canon-guardian"
+      ],
+      "chains_to": [
+        "brand-steward",
+        "lotat-writer"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "creative-brand",
+      "name": "creative-brand",
+      "description": "Brand identity, voice, values, and character codex source documents.",
+      "location": "Creative/Brand/AGENTS.md",
+      "owner": "brand-steward",
+      "secondaryOwners": [
+        "lotat-writer",
+        "art-director"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "canon-guardian"
+      ],
+      "chains_to": [
+        "lotat-writer",
+        "art-director"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "creative-marketing",
+      "name": "creative-marketing",
+      "description": "Marketing, community-growth, public copy, and short-form packaging handoff.",
+      "location": "Creative/Marketing/AGENTS.md",
+      "owner": "brand-steward",
+      "secondaryOwners": [
+        "content-repurposer"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "canon-guardian",
+        "change-summary"
+      ],
+      "chains_to": [
+        "content-repurposer"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "creative-worldbuilding",
+      "name": "creative-worldbuilding",
+      "description": "LotAT adventures, lore, franchises, settings, and storylines.",
+      "location": "Creative/WorldBuilding/AGENTS.md",
+      "owner": "lotat-writer",
+      "secondaryOwners": [
+        "lotat-tech",
+        "brand-steward",
+        "art-director"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "canon-guardian",
+        "validation"
+      ],
+      "chains_to": [
+        "lotat-tech",
+        "brand-steward",
+        "art-director"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "docs-architecture",
+      "name": "docs-architecture",
+      "description": "Repo architecture docs and future docs ownership routing.",
+      "location": "Docs/Architecture/AGENTS.md",
+      "owner": "ops",
+      "secondaryOwners": [
+        "product-dev"
+      ],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "product-dev"
+      ],
+      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
+    },
+    {
+      "id": "lotat-contract",
+      "name": "LotAT Contract",
+      "description": "Shared Legends of the ASCII Temple contract across runtime, tooling, story authoring, and stream overlay presentation.",
+      "location": "Docs/Architecture/lotat-contract.md",
+      "owner": "lotat-tech",
+      "secondaryOwners": [
+        "lotat-writer",
+        "app-dev",
+        "ops"
+      ],
+      "type": "shared",
+      "status": "active",
+      "depends_on": [
+        "validation"
+      ],
+      "chains_to": [
+        "streamerbot-dev",
+        "lotat-writer",
+        "app-dev",
+        "ops"
+      ],
+      "source": "prompt 103 lotat contract index"
+    },
+    {
+      "id": "root-agent-doc",
+      "name": "Root Agent Doc",
+      "description": "Root universal agent entry and generated quick routing surface.",
+      "location": "AGENTS.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "shared",
+      "status": "active",
+      "depends_on": [],
+      "chains_to": [],
+      "source": "v1 helpers / shared context"
+    },
+    {
+      "id": "agent-entry",
+      "name": "Agent Entry",
+      "description": "Central .agents entrypoint with manifest-backed routing summary.",
+      "location": ".agents/ENTRY.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "shared",
+      "status": "active",
+      "depends_on": [],
+      "chains_to": [],
+      "source": "v1 helpers / shared context"
+    },
+    {
+      "id": "shared-project",
+      "name": "Shared Project Context",
+      "description": "Repo-wide project identity, domains, priority order, and scope rules.",
+      "location": ".agents/_shared/project.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "shared",
+      "status": "active",
+      "depends_on": [],
+      "chains_to": [],
+      "source": "v1 helpers / shared context"
+    },
+    {
+      "id": "shared-conventions",
+      "name": "Shared Conventions",
+      "description": "Repo-wide conventions for agent and file routing.",
+      "location": ".agents/_shared/conventions.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "shared",
+      "status": "active",
+      "depends_on": [],
+      "chains_to": [],
+      "source": "v1 helpers / shared context"
+    },
+    {
+      "id": "tools-agent-tree",
+      "name": "tools-agent-tree",
+      "description": "Agent-tree manifest validation tooling for coverage, stubs, naming, drift, and links.",
+      "location": "Tools/AgentTree/AGENTS.md",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "type": "domain-knowledge",
+      "status": "active",
+      "depends_on": [
+        "change-summary",
+        "validation"
+      ],
+      "chains_to": [
+        "ops"
+      ],
+      "source": "prompt 10-08 tools-and-validator-coverage"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "canon-guardian",
+      "description": "Shared canon review procedure for brand-level and LotAT-level continuity.",
+      "path": ".agents/workflows/canon-guardian.md",
+      "owner": "brand-steward",
+      "appliesTo": [
+        "canon-review",
+        "lore-change",
+        "character-change"
+      ],
+      "skills": [
+        "brand-steward",
+        "lotat-writer"
+      ],
+      "terminal": false,
+      "status": "active"
+    },
+    {
+      "id": "change-summary",
+      "description": "Terminal handoff format for changed files, paste targets, setup steps, and validation output.",
+      "path": ".agents/workflows/change-summary.md",
+      "owner": "ops",
+      "appliesTo": [
+        "code-change",
+        "doc-change",
+        "tooling-change"
+      ],
+      "skills": [
+        "ops"
+      ],
+      "terminal": true,
+      "status": "active"
+    },
+    {
+      "id": "sync",
+      "description": "Repo-to-Streamer.bot paste and sync procedure for runtime scripts and generated docs.",
+      "path": ".agents/workflows/sync.md",
+      "owner": "ops",
+      "appliesTo": [
+        "streamerbot-script-change",
+        "manual-paste"
+      ],
+      "skills": [
+        "ops",
+        "streamerbot-dev"
+      ],
+      "terminal": false,
+      "status": "active"
+    },
+    {
+      "id": "validation",
+      "description": "Validator command selection, schema checks, and drift-check procedure.",
+      "path": ".agents/workflows/validation.md",
+      "owner": "ops",
+      "appliesTo": [
+        "validation",
+        "schema-check",
+        "drift-check"
+      ],
+      "skills": [
+        "ops"
+      ],
+      "terminal": false,
+      "status": "active"
+    },
+    {
+      "id": "coordination",
+      "description": "WORKING.md coordination protocol and multi-agent conflict avoidance procedure.",
+      "path": ".agents/workflows/coordination.md",
+      "owner": "ops",
+      "appliesTo": [
+        "task-start",
+        "task-finish",
+        "handoff"
+      ],
+      "skills": [
+        "ops"
+      ],
+      "terminal": false,
+      "status": "active"
+    }
+  ],
+  "domains": [
+    {
+      "id": "actions-commanders",
+      "path": "Actions/Commanders/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "agentDoc": "Actions/Commanders/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Streamer.bot commander role system actions."
+    },
+    {
+      "id": "actions-destroyer",
+      "path": "Actions/Destroyer/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "agentDoc": "Actions/Destroyer/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Destroyer Streamer.bot actions."
+    },
+    {
+      "id": "actions-intros",
+      "path": "Actions/Intros/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "app-dev",
+        "brand-steward",
+        "ops"
+      ],
+      "agentDoc": "Actions/Intros/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Intro actions spanning Streamer.bot, info-service data, audio/API conventions, and public copy."
+    },
+    {
+      "id": "actions-lotat",
+      "path": "Actions/LotAT/",
+      "owner": "lotat-tech",
+      "secondaryOwners": [
+        "streamerbot-dev",
+        "lotat-writer",
+        "app-dev"
+      ],
+      "agentDoc": "Actions/LotAT/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "LotAT Streamer.bot engine and runtime action scripts."
+    },
+    {
+      "id": "actions-overlay",
+      "path": "Actions/Overlay/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "app-dev"
+      ],
+      "agentDoc": "Actions/Overlay/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Streamer.bot publishers and bridge scripts for the overlay ecosystem."
+    },
+    {
+      "id": "actions-rest-focus-loop",
+      "path": "Actions/Rest Focus Loop/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "agentDoc": "Actions/Rest Focus Loop/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Rest/focus loop Streamer.bot feature actions."
+    },
+    {
+      "id": "actions-squad",
+      "path": "Actions/Squad/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "app-dev"
+      ],
+      "agentDoc": "Actions/Squad/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Squad mini-game runtime actions and overlay handoffs."
+    },
+    {
+      "id": "actions-temporary",
+      "path": "Actions/Temporary/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [],
+      "agentDoc": "Actions/Temporary/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Temporary action scripts; may later be covered by rest/focus route if retained."
+    },
+    {
+      "id": "actions-twitch-bits-integrations",
+      "path": "Actions/Twitch Bits Integrations/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "agentDoc": "Actions/Twitch Bits Integrations/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Twitch bits Streamer.bot event integrations."
+    },
+    {
+      "id": "actions-twitch-channel-points",
+      "path": "Actions/Twitch Channel Points/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "agentDoc": "Actions/Twitch Channel Points/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Twitch channel point redemption actions."
+    },
+    {
+      "id": "actions-twitch-core-integrations",
+      "path": "Actions/Twitch Core Integrations/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "agentDoc": "Actions/Twitch Core Integrations/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Core Twitch event integrations for stream lifecycle and chat-facing events."
+    },
+    {
+      "id": "actions-twitch-hype-train",
+      "path": "Actions/Twitch Hype Train/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "agentDoc": "Actions/Twitch Hype Train/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Twitch hype train event actions."
+    },
+    {
+      "id": "actions-voice-commands",
+      "path": "Actions/Voice Commands/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [],
+      "agentDoc": "Actions/Voice Commands/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Voice command mode and OBS scene-switching actions."
+    },
+    {
+      "id": "actions-xj-drivethrough",
+      "path": "Actions/XJ Drivethrough/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "product-dev",
+        "brand-steward"
+      ],
+      "agentDoc": "Actions/XJ Drivethrough/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "XJ Drivethrough runtime actions with possible product-facing handoffs."
+    },
+    {
+      "id": "actions-helpers",
+      "path": "Actions/Helpers/",
+      "owner": "streamerbot-dev",
+      "secondaryOwners": [
+        "ops"
+      ],
+      "agentDoc": "Actions/Helpers/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Reusable Streamer.bot C# helper snippet references."
+    },
+    {
+      "id": "apps-info-service",
+      "path": "Apps/info-service/",
+      "owner": "app-dev",
+      "secondaryOwners": [
+        "streamerbot-dev",
+        "ops"
+      ],
+      "agentDoc": "Apps/info-service/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "validation"
+      ],
+      "description": "Info-service REST API app and data contract."
+    },
+    {
+      "id": "apps-production-manager",
+      "path": "Apps/production-manager/",
+      "owner": "app-dev",
+      "secondaryOwners": [
+        "brand-steward"
+      ],
+      "agentDoc": "Apps/production-manager/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "validation"
+      ],
+      "description": "Production manager React admin UI."
+    },
+    {
+      "id": "apps-stream-overlay",
+      "path": "Apps/stream-overlay/",
+      "owner": "app-dev",
+      "secondaryOwners": [
+        "streamerbot-dev",
+        "lotat-tech"
+      ],
+      "agentDoc": "Apps/stream-overlay/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "validation"
+      ],
+      "description": "Phaser stream overlay, broker, rendering packages, and interaction protocol."
+    },
+    {
+      "id": "tools-art-pipeline",
+      "path": "Tools/ArtPipeline/",
+      "owner": "art-director",
+      "secondaryOwners": [
+        "ops"
+      ],
+      "agentDoc": "Tools/ArtPipeline/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "validation"
+      ],
+      "description": "Art-pipeline local tooling and environment guidance."
+    },
+    {
+      "id": "tools-content-pipeline",
+      "path": "Tools/ContentPipeline/",
+      "owner": "content-repurposer",
+      "secondaryOwners": [
+        "ops"
+      ],
+      "agentDoc": "Tools/ContentPipeline/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "validation"
+      ],
+      "description": "Content-pipeline tooling for transcription, clip extraction, review, and feedback."
+    },
+    {
+      "id": "tools-lotat",
+      "path": "Tools/LotAT/",
+      "owner": "lotat-tech",
+      "secondaryOwners": [
+        "ops"
+      ],
+      "agentDoc": "Tools/LotAT/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "validation"
+      ],
+      "description": "LotAT story schema, validation, and local pipeline utilities."
+    },
+    {
+      "id": "tools-mix-it-up",
+      "path": "Tools/MixItUp/",
+      "owner": "ops",
+      "secondaryOwners": [
+        "streamerbot-dev",
+        "app-dev"
+      ],
+      "agentDoc": "Tools/MixItUp/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "validation"
+      ],
+      "description": "Mix It Up API helpers, command tooling, overlays, and shared payload references."
+    },
+    {
+      "id": "tools-streamer-bot",
+      "path": "Tools/StreamerBot/",
+      "owner": "ops",
+      "secondaryOwners": [
+        "streamerbot-dev"
+      ],
+      "agentDoc": "Tools/StreamerBot/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "sync",
+        "validation"
+      ],
+      "description": "Streamer.bot sync, templates, and validation utilities."
+    },
+    {
+      "id": "creative-art",
+      "path": "Creative/Art/",
+      "owner": "art-director",
+      "secondaryOwners": [
+        "brand-steward",
+        "lotat-writer"
+      ],
+      "agentDoc": "Creative/Art/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "canon-guardian"
+      ],
+      "description": "Creative art assets, character references, prompts, and stream visual style."
+    },
+    {
+      "id": "creative-brand",
+      "path": "Creative/Brand/",
+      "owner": "brand-steward",
+      "secondaryOwners": [
+        "lotat-writer",
+        "art-director"
+      ],
+      "agentDoc": "Creative/Brand/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "canon-guardian"
+      ],
+      "description": "Brand identity, voice, values, and character codex source documents."
+    },
+    {
+      "id": "creative-marketing",
+      "path": "Creative/Marketing/",
+      "owner": "brand-steward",
+      "secondaryOwners": [
+        "content-repurposer"
+      ],
+      "agentDoc": "Creative/Marketing/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "canon-guardian",
+        "change-summary"
+      ],
+      "description": "Marketing, community-growth, public copy, and short-form packaging handoff."
+    },
+    {
+      "id": "creative-worldbuilding",
+      "path": "Creative/WorldBuilding/",
+      "owner": "lotat-writer",
+      "secondaryOwners": [
+        "lotat-tech",
+        "brand-steward",
+        "art-director"
+      ],
+      "agentDoc": "Creative/WorldBuilding/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "canon-guardian",
+        "validation"
+      ],
+      "description": "LotAT adventures, lore, franchises, settings, and storylines."
+    },
+    {
+      "id": "docs-architecture",
+      "path": "Docs/Architecture/",
+      "owner": "ops",
+      "secondaryOwners": [
+        "product-dev"
+      ],
+      "agentDoc": "Docs/Architecture/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "validation"
+      ],
+      "description": "Repo architecture docs and future docs ownership routing."
+    },
+    {
+      "id": "tools-agent-tree",
+      "path": "Tools/AgentTree/",
+      "owner": "ops",
+      "secondaryOwners": [],
+      "agentDoc": "Tools/AgentTree/AGENTS.md",
+      "status": "covered",
+      "workflows": [
+        "change-summary",
+        "validation"
+      ],
+      "description": "Agent-tree manifest validation tooling for coverage, stubs, naming, drift, and links."
+    }
+  ],
+  "co_locations": [
+    {
+      "path": "AGENTS.md",
+      "kind": "root-agent-doc",
+      "owner": "ops",
+      "route": "root-agent-doc",
+      "status": "active",
+      "notes": "Root universal entry; generated quick routing block remains manifest-backed."
+    },
+    {
+      "path": "CLAUDE.md",
+      "kind": "compatibility-pointer",
+      "owner": "ops",
+      "route": "root-agent-doc",
+      "status": "compatibility",
+      "notes": "Root Claude compatibility pointer only."
+    },
+    {
+      "path": ".agents/ENTRY.md",
+      "kind": "agent-entry",
+      "owner": "ops",
+      "route": "agent-entry",
+      "status": "active",
+      "notes": "Central agent entrypoint."
+    },
+    {
+      "path": ".agents/roles/streamerbot-dev/role.md",
+      "kind": "role-overview",
+      "owner": "streamerbot-dev",
+      "route": "streamerbot-dev",
+      "status": "active",
+      "notes": "Role overview; old core.md content has been collapsed into role overview, workflows, and local domain guides."
+    },
+    {
+      "path": ".agents/roles/lotat-tech/role.md",
+      "kind": "role-overview",
+      "owner": "lotat-tech",
+      "route": "lotat-tech",
+      "status": "active",
+      "notes": "Role overview; old core.md content has been collapsed into role overview, workflows, and local domain guides."
+    },
+    {
+      "path": ".agents/roles/lotat-writer/role.md",
+      "kind": "role-overview",
+      "owner": "lotat-writer",
+      "route": "lotat-writer",
+      "status": "active",
+      "notes": "Role overview; old core.md content has been collapsed into role overview, workflows, and local domain guides."
+    },
+    {
+      "path": ".agents/roles/art-director/role.md",
+      "kind": "role-overview",
+      "owner": "art-director",
+      "route": "art-director",
+      "status": "active",
+      "notes": "Role overview; old core.md content has been collapsed into role overview, workflows, and local domain guides."
+    },
+    {
+      "path": ".agents/roles/brand-steward/role.md",
+      "kind": "role-overview",
+      "owner": "brand-steward",
+      "route": "brand-steward",
+      "status": "active",
+      "notes": "Role overview; old core.md content has been collapsed into role overview, workflows, and local domain guides."
+    },
+    {
+      "path": ".agents/roles/content-repurposer/role.md",
+      "kind": "role-overview",
+      "owner": "content-repurposer",
+      "route": "content-repurposer",
+      "status": "active",
+      "notes": "Role overview; old core.md content has been collapsed into role overview, workflows, and local domain guides."
+    },
+    {
+      "path": ".agents/roles/app-dev/role.md",
+      "kind": "role-overview",
+      "owner": "app-dev",
+      "route": "app-dev",
+      "status": "active",
+      "notes": "Role overview; old core.md content has been collapsed into role overview, workflows, and local domain guides."
+    },
+    {
+      "path": ".agents/roles/product-dev/role.md",
+      "kind": "role-overview",
+      "owner": "product-dev",
+      "route": "product-dev",
+      "status": "active",
+      "notes": "Role overview; old core.md content has been collapsed into role overview, workflows, and local domain guides."
+    },
+    {
+      "path": ".agents/roles/ops/role.md",
+      "kind": "role-overview",
+      "owner": "ops",
+      "route": "ops",
+      "status": "active",
+      "notes": "Role overview; old core.md content has been collapsed into role overview, workflows, and local domain guides."
+    },
+    {
+      "path": ".agents/workflows/canon-guardian.md",
+      "kind": "workflow",
+      "owner": "brand-steward",
+      "route": "canon-guardian",
+      "status": "active",
+      "notes": "Workflow target path; content may be created in a later migration prompt."
+    },
+    {
+      "path": ".agents/workflows/change-summary.md",
+      "kind": "workflow",
+      "owner": "ops",
+      "route": "change-summary",
+      "status": "active",
+      "notes": "Workflow target path; content may be created in a later migration prompt."
+    },
+    {
+      "path": ".agents/workflows/sync.md",
+      "kind": "workflow",
+      "owner": "ops",
+      "route": "sync",
+      "status": "active",
+      "notes": "Workflow target path; content may be created in a later migration prompt."
+    },
+    {
+      "path": ".agents/workflows/validation.md",
+      "kind": "workflow",
+      "owner": "ops",
+      "route": "validation",
+      "status": "active",
+      "notes": "Workflow target path; content may be created in a later migration prompt."
+    },
+    {
+      "path": ".agents/workflows/coordination.md",
+      "kind": "workflow",
+      "owner": "ops",
+      "route": "coordination",
+      "status": "active",
+      "notes": "Workflow target path; content may be created in a later migration prompt."
+    },
+    {
+      "path": "Actions/Commanders/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-commanders",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Destroyer/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-destroyer",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Intros/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-intros",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/LotAT/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "lotat-tech",
+      "route": "actions-lotat",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Overlay/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-overlay",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Rest Focus Loop/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-rest-focus-loop",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Squad/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-squad",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Temporary/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-temporary",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Twitch Bits Integrations/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-twitch-bits-integrations",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Twitch Channel Points/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-twitch-channel-points",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Twitch Core Integrations/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-twitch-core-integrations",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Twitch Hype Train/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-twitch-hype-train",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Voice Commands/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-voice-commands",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/XJ Drivethrough/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "streamerbot-dev",
+      "route": "actions-xj-drivethrough",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Actions/Helpers/README.md",
+      "owner": "streamerbot-dev",
+      "status": "active",
+      "kind": "shared-reference",
+      "route": "streamerbot-dev"
+    },
+    {
+      "path": "Actions/Helpers/chat-input.md",
+      "owner": "streamerbot-dev",
+      "status": "active",
+      "kind": "shared-reference",
+      "route": "streamerbot-dev"
+    },
+    {
+      "path": "Actions/Helpers/cph-api-signatures.md",
+      "owner": "streamerbot-dev",
+      "status": "active",
+      "kind": "shared-reference",
+      "route": "streamerbot-dev"
+    },
+    {
+      "path": "Actions/Helpers/json-no-external-libraries.md",
+      "owner": "streamerbot-dev",
+      "status": "active",
+      "kind": "shared-reference",
+      "route": "streamerbot-dev"
+    },
+    {
+      "path": "Actions/Helpers/mini-game-contract.md",
+      "owner": "streamerbot-dev",
+      "status": "active",
+      "kind": "shared-reference",
+      "route": "streamerbot-dev"
+    },
+    {
+      "path": "Actions/Helpers/mini-game-lock.md",
+      "owner": "streamerbot-dev",
+      "status": "active",
+      "kind": "shared-reference",
+      "route": "streamerbot-dev"
+    },
+    {
+      "path": "Actions/Helpers/mixitup-command-api.md",
+      "owner": "streamerbot-dev",
+      "status": "active",
+      "kind": "shared-reference",
+      "route": "streamerbot-dev"
+    },
+    {
+      "path": "Actions/Helpers/obs-scenes.md",
+      "owner": "streamerbot-dev",
+      "status": "active",
+      "kind": "shared-reference",
+      "route": "streamerbot-dev"
+    },
+    {
+      "path": "Actions/Helpers/timers.md",
+      "owner": "streamerbot-dev",
+      "status": "active",
+      "kind": "shared-reference",
+      "route": "streamerbot-dev"
+    },
+    {
+      "path": "Apps/info-service/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "app-dev",
+      "route": "apps-info-service",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Apps/production-manager/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "app-dev",
+      "route": "apps-production-manager",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Apps/stream-overlay/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "app-dev",
+      "route": "apps-stream-overlay",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Apps/stream-overlay/docs/protocol.md",
+      "kind": "shared-reference",
+      "owner": "app-dev",
+      "route": "apps-stream-overlay",
+      "status": "active",
+      "notes": "Broker protocol, package roles, routing rules, and topic-change workflow."
+    },
+    {
+      "path": "Apps/stream-overlay/docs/asset-system.md",
+      "kind": "shared-reference",
+      "owner": "app-dev",
+      "route": "apps-stream-overlay",
+      "status": "active",
+      "notes": "Asset paths, lifecycle commands, audio behavior, and depth conventions."
+    },
+    {
+      "path": "Apps/stream-overlay/docs/rendering-notes.md",
+      "kind": "shared-reference",
+      "owner": "app-dev",
+      "route": "apps-stream-overlay",
+      "status": "active",
+      "notes": "Overlay renderer rules, feature renderer notes, OBS caveats, and gotchas."
+    },
+    {
+      "path": "Tools/ArtPipeline/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "art-director",
+      "route": "tools-art-pipeline",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Tools/ContentPipeline/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "content-repurposer",
+      "route": "tools-content-pipeline",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Tools/LotAT/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "lotat-tech",
+      "route": "tools-lotat",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Tools/MixItUp/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "ops",
+      "route": "tools-mix-it-up",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Tools/StreamerBot/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "ops",
+      "route": "tools-streamer-bot",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Creative/Art/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "art-director",
+      "route": "creative-art",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Creative/Brand/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "brand-steward",
+      "route": "creative-brand",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Creative/Marketing/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "brand-steward",
+      "route": "creative-marketing",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Creative/WorldBuilding/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "lotat-writer",
+      "route": "creative-worldbuilding",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Docs/Architecture/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "ops",
+      "route": "docs-architecture",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Tools/AgentTree/AGENTS.md",
+      "kind": "domain-agent-doc",
+      "owner": "ops",
+      "route": "tools-agent-tree",
+      "status": "active",
+      "notes": "Canonical co-located domain agent guide path."
+    },
+    {
+      "path": "Docs/Architecture/lotat-contract.md",
+      "kind": "shared-reference",
+      "owner": "lotat-tech",
+      "route": "lotat-contract",
+      "status": "active",
+      "notes": "Shared LotAT contract index for runtime, tooling, worldbuilding, and overlay presentation."
+    },
+    {
+      "path": "Actions/LotAT/runtime-contract.md",
+      "kind": "shared-reference",
+      "owner": "lotat-tech",
+      "route": "actions-lotat",
+      "status": "active",
+      "notes": "LotAT runtime globals, timers, commands, story file contract, and v1 boundaries split from README."
+    },
+    {
+      "path": "Actions/LotAT/operator-setup.md",
+      "kind": "shared-reference",
+      "owner": "lotat-tech",
+      "route": "actions-lotat",
+      "status": "active",
+      "notes": "Streamer.bot timer/trigger setup and live-test checklist split from README."
+    },
+    {
+      "path": "Actions/LotAT/implementation-map.md",
+      "kind": "shared-reference",
+      "owner": "lotat-tech",
+      "route": "actions-lotat",
+      "status": "active",
+      "notes": "LotAT action inventory, trigger/input expectations, and implementation wiring split from README."
+    }
+  ],
+  "aliases": [
+    {
+      "id": "change-summary",
+      "target": "change-summary",
+      "targetType": "workflow",
+      "status": "deprecated",
+      "reason": "v1 alias now points directly to workflow",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "sync-workflow",
+      "target": "sync",
+      "targetType": "workflow",
+      "status": "deprecated",
+      "reason": "v1 alias now points directly to workflow",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "brand-canon-guardian",
+      "target": "canon-guardian",
+      "targetType": "workflow",
+      "status": "deprecated",
+      "reason": "legacy Pi alias collapsed into shared canon workflow",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "content-strategy",
+      "target": "creative-marketing",
+      "targetType": "domain",
+      "status": "deprecated",
+      "reason": "legacy alias now routes to Creative/Marketing domain",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "feature-commanders",
+      "target": "actions-commanders",
+      "targetType": "domain",
+      "status": "deprecated",
+      "reason": "legacy feature alias now domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "feature-squad",
+      "target": "actions-squad",
+      "targetType": "domain",
+      "status": "deprecated",
+      "reason": "legacy feature alias now domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "feature-twitch-integration",
+      "target": "actions-twitch-core-integrations",
+      "targetType": "domain",
+      "status": "deprecated",
+      "reason": "broad Twitch alias defaults to core route; folder routes handle specific Twitch areas",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "feature-channel-points",
+      "target": "actions-twitch-channel-points",
+      "targetType": "domain",
+      "status": "deprecated",
+      "reason": "legacy feature alias now domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "feature-hype-train",
+      "target": "actions-twitch-hype-train",
+      "targetType": "domain",
+      "status": "deprecated",
+      "reason": "legacy feature alias now domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "feature-voice-commands",
+      "target": "actions-voice-commands",
+      "targetType": "domain",
+      "status": "deprecated",
+      "reason": "legacy feature alias now domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "streamerbot-scripting",
+      "target": "streamerbot-dev",
+      "targetType": "role",
+      "status": "deprecated",
+      "reason": "legacy scripting alias collapsed to role",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "buildtools",
+      "target": "ops",
+      "targetType": "role",
+      "status": "deprecated",
+      "reason": "legacy buildtools alias collapsed to ops role",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "creative-art",
+      "target": "creative-art",
+      "targetType": "domain",
+      "status": "deprecated",
+      "reason": "legacy alias now explicit Creative/Art route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "creative-worldbuilding",
+      "target": "creative-worldbuilding",
+      "targetType": "domain",
+      "status": "deprecated",
+      "reason": "legacy alias now explicit Creative/WorldBuilding route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "streamerbot-dev-commanders",
+      "target": "actions-commanders",
+      "targetType": "domain",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "streamerbot-dev-lotat",
+      "target": "actions-lotat",
+      "targetType": "domain",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "streamerbot-dev-squad",
+      "target": "actions-squad",
+      "targetType": "domain",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "streamerbot-dev-twitch",
+      "target": "actions-twitch-core-integrations",
+      "targetType": "domain",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill defaults to core Twitch route; specific folders have routes",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "streamerbot-dev-voice-commands",
+      "target": "actions-voice-commands",
+      "targetType": "domain",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "brand-steward-canon-guardian",
+      "target": "canon-guardian",
+      "targetType": "workflow",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to workflow",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "brand-steward-content-strategy",
+      "target": "creative-marketing",
+      "targetType": "domain",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "content-repurposer-pipeline",
+      "target": "tools-content-pipeline",
+      "targetType": "domain",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to domain route",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "lotat-writer-canon-guardian",
+      "target": "canon-guardian",
+      "targetType": "workflow",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to workflow",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "ops-change-summary",
+      "target": "change-summary",
+      "targetType": "workflow",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to workflow",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "ops-sync",
+      "target": "sync",
+      "targetType": "workflow",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to workflow",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    },
+    {
+      "id": "ops-validation",
+      "target": "validation",
+      "targetType": "workflow",
+      "status": "compatibility",
+      "reason": "v1 canonical subskill migrated to workflow",
+      "source": "legacy v1 manifest or findings/06-naming-convention.md"
+    }
+  ],
+  "quick_routing": [
+    {
+      "work": "Any `.cs` script under `Actions/`",
+      "role": "streamerbot-dev",
+      "route": "streamerbot-dev"
+    },
+    {
+      "work": "LotAT C# engine / story pipeline",
+      "role": "lotat-tech",
+      "route": "lotat-tech"
+    },
+    {
+      "work": "LotAT adventure content / lore",
+      "role": "lotat-writer",
+      "route": "lotat-writer"
+    },
+    {
+      "work": "Art generation / diffusion prompts",
+      "role": "art-director",
+      "route": "art-director"
+    },
+    {
+      "work": "Chat text, titles, canon, content strategy",
+      "role": "brand-steward",
+      "route": "brand-steward"
+    },
+    {
+      "work": "Short-form clips, captions, platform formatting, or content-pipeline tooling",
+      "role": "content-repurposer",
+      "route": "content-repurposer"
+    },
+    {
+      "work": "Stream interaction apps",
+      "role": "app-dev",
+      "route": "app-dev"
+    },
+    {
+      "work": "Product docs, specs, knowledge articles, and customer-facing product content",
+      "role": "product-dev",
+      "route": "product-dev"
+    },
+    {
+      "work": "Validation, sync, change summary, tooling",
+      "role": "ops",
+      "route": "ops"
+    }
+  ],
+  "migration": {
+    "sourceManifest": "legacy v1 manifest (retired)",
+    "v1_entries": [
+      {
+        "v1_type": "role",
+        "v1_id": "streamerbot-dev",
+        "v2_id": "streamerbot-dev",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Role preserved as v2 skill/role entry."
+      },
+      {
+        "v1_type": "role",
+        "v1_id": "lotat-tech",
+        "v2_id": "lotat-tech",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Role preserved as v2 skill/role entry."
+      },
+      {
+        "v1_type": "role",
+        "v1_id": "lotat-writer",
+        "v2_id": "lotat-writer",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Role preserved as v2 skill/role entry."
+      },
+      {
+        "v1_type": "role",
+        "v1_id": "art-director",
+        "v2_id": "art-director",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Role preserved as v2 skill/role entry."
+      },
+      {
+        "v1_type": "role",
+        "v1_id": "brand-steward",
+        "v2_id": "brand-steward",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Role preserved as v2 skill/role entry."
+      },
+      {
+        "v1_type": "role",
+        "v1_id": "content-repurposer",
+        "v2_id": "content-repurposer",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Role preserved as v2 skill/role entry."
+      },
+      {
+        "v1_type": "role",
+        "v1_id": "app-dev",
+        "v2_id": "app-dev",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Role preserved as v2 skill/role entry."
+      },
+      {
+        "v1_type": "role",
+        "v1_id": "product-dev",
+        "v2_id": "product-dev",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Role preserved as v2 skill/role entry."
+      },
+      {
+        "v1_type": "role",
+        "v1_id": "ops",
+        "v2_id": "ops",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Role preserved as v2 skill/role entry."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "brand-steward-canon-guardian",
+        "v2_id": "canon-guardian",
+        "v2_type": "workflow",
+        "status": "collapsed",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "brand-steward-content-strategy",
+        "v2_id": "creative-marketing",
+        "v2_type": "domain",
+        "status": "collapsed",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "content-repurposer-pipeline",
+        "v2_id": "tools-content-pipeline",
+        "v2_type": "domain",
+        "status": "migrated",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "lotat-writer-canon-guardian",
+        "v2_id": "canon-guardian",
+        "v2_type": "workflow",
+        "status": "collapsed",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "ops-change-summary",
+        "v2_id": "change-summary",
+        "v2_type": "workflow",
+        "status": "migrated",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "ops-sync",
+        "v2_id": "sync",
+        "v2_type": "workflow",
+        "status": "migrated",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "ops-validation",
+        "v2_id": "validation",
+        "v2_type": "workflow",
+        "status": "migrated",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "streamerbot-dev-commanders",
+        "v2_id": "actions-commanders",
+        "v2_type": "domain",
+        "status": "migrated",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "streamerbot-dev-lotat",
+        "v2_id": "actions-lotat",
+        "v2_type": "domain",
+        "status": "migrated",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "streamerbot-dev-squad",
+        "v2_id": "actions-squad",
+        "v2_type": "domain",
+        "status": "migrated",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "streamerbot-dev-twitch",
+        "v2_id": "actions-twitch-core-integrations",
+        "v2_type": "domain",
+        "status": "split",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "canonical_subskill",
+        "v1_id": "streamerbot-dev-voice-commands",
+        "v2_id": "actions-voice-commands",
+        "v2_type": "domain",
+        "status": "migrated",
+        "reason": "V1 canonical subskill converted to workflow or domain route."
+      },
+      {
+        "v1_type": "helper",
+        "v1_id": "meta",
+        "v2_id": "meta",
+        "v2_type": "meta",
+        "status": "compatibility",
+        "reason": "Transitional Pi helper retained until cutover."
+      },
+      {
+        "v1_type": "helper",
+        "v1_id": "meta-agents-navigate",
+        "v2_id": "meta-agents-navigate",
+        "v2_type": "meta",
+        "status": "compatibility",
+        "reason": "Transitional Pi helper retained until cutover."
+      },
+      {
+        "v1_type": "helper",
+        "v1_id": "meta-agents-update",
+        "v2_id": "meta-agents-update",
+        "v2_type": "meta",
+        "status": "compatibility",
+        "reason": "Transitional Pi helper retained until cutover."
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "change-summary",
+        "v2_id": "change-summary",
+        "v2_type": "workflow",
+        "status": "compatibility",
+        "reason": "v1 alias now points directly to workflow"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "sync-workflow",
+        "v2_id": "sync",
+        "v2_type": "workflow",
+        "status": "compatibility",
+        "reason": "v1 alias now points directly to workflow"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "brand-canon-guardian",
+        "v2_id": "canon-guardian",
+        "v2_type": "workflow",
+        "status": "compatibility",
+        "reason": "legacy Pi alias collapsed into shared canon workflow"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "content-strategy",
+        "v2_id": "creative-marketing",
+        "v2_type": "domain",
+        "status": "compatibility",
+        "reason": "legacy alias now routes to Creative/Marketing domain"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "feature-commanders",
+        "v2_id": "actions-commanders",
+        "v2_type": "domain",
+        "status": "compatibility",
+        "reason": "legacy feature alias now domain route"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "feature-squad",
+        "v2_id": "actions-squad",
+        "v2_type": "domain",
+        "status": "compatibility",
+        "reason": "legacy feature alias now domain route"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "feature-twitch-integration",
+        "v2_id": "actions-twitch-core-integrations",
+        "v2_type": "domain",
+        "status": "compatibility",
+        "reason": "broad Twitch alias defaults to core route; folder routes handle specific Twitch areas"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "feature-channel-points",
+        "v2_id": "actions-twitch-channel-points",
+        "v2_type": "domain",
+        "status": "compatibility",
+        "reason": "legacy feature alias now domain route"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "feature-hype-train",
+        "v2_id": "actions-twitch-hype-train",
+        "v2_type": "domain",
+        "status": "compatibility",
+        "reason": "legacy feature alias now domain route"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "feature-voice-commands",
+        "v2_id": "actions-voice-commands",
+        "v2_type": "domain",
+        "status": "compatibility",
+        "reason": "legacy feature alias now domain route"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "streamerbot-scripting",
+        "v2_id": "streamerbot-dev",
+        "v2_type": "role",
+        "status": "compatibility",
+        "reason": "legacy scripting alias collapsed to role"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "buildtools",
+        "v2_id": "ops",
+        "v2_type": "role",
+        "status": "compatibility",
+        "reason": "legacy buildtools alias collapsed to ops role"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "creative-art",
+        "v2_id": "creative-art",
+        "v2_type": "domain",
+        "status": "compatibility",
+        "reason": "legacy alias now explicit Creative/Art route"
+      },
+      {
+        "v1_type": "alias",
+        "v1_id": "creative-worldbuilding",
+        "v2_id": "creative-worldbuilding",
+        "v2_type": "domain",
+        "status": "compatibility",
+        "reason": "legacy alias now explicit Creative/WorldBuilding route"
+      },
+      {
+        "v1_type": "quick_routing",
+        "v1_id": "Any `.cs` script under `Actions/`",
+        "v2_id": "streamerbot-dev",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Quick routing row preserved as manifest quick_routing entry."
+      },
+      {
+        "v1_type": "quick_routing",
+        "v1_id": "LotAT C# engine / story pipeline",
+        "v2_id": "lotat-tech",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Quick routing row preserved as manifest quick_routing entry."
+      },
+      {
+        "v1_type": "quick_routing",
+        "v1_id": "LotAT adventure content / lore",
+        "v2_id": "lotat-writer",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Quick routing row preserved as manifest quick_routing entry."
+      },
+      {
+        "v1_type": "quick_routing",
+        "v1_id": "Art generation / diffusion prompts",
+        "v2_id": "art-director",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Quick routing row preserved as manifest quick_routing entry."
+      },
+      {
+        "v1_type": "quick_routing",
+        "v1_id": "Chat text, titles, canon, content strategy",
+        "v2_id": "brand-steward",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Quick routing row preserved as manifest quick_routing entry."
+      },
+      {
+        "v1_type": "quick_routing",
+        "v1_id": "Short-form clips, captions, platform formatting, or content-pipeline tooling",
+        "v2_id": "content-repurposer",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Quick routing row preserved as manifest quick_routing entry."
+      },
+      {
+        "v1_type": "quick_routing",
+        "v1_id": "Stream interaction apps",
+        "v2_id": "app-dev",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Quick routing row preserved as manifest quick_routing entry."
+      },
+      {
+        "v1_type": "quick_routing",
+        "v1_id": "Product docs, specs, knowledge articles, and customer-facing product content",
+        "v2_id": "product-dev",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Quick routing row preserved as manifest quick_routing entry."
+      },
+      {
+        "v1_type": "quick_routing",
+        "v1_id": "Validation, sync, change summary, tooling",
+        "v2_id": "ops",
+        "v2_type": "role",
+        "status": "migrated",
+        "reason": "Quick routing row preserved as manifest quick_routing entry."
+      }
+    ]
+  }
+}

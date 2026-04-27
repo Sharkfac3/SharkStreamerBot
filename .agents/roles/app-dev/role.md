@@ -1,42 +1,52 @@
+---
+id: app-dev
+type: role
+description: Standalone stream interaction apps, dashboards, overlays, brokers, and TypeScript app tooling.
+status: active
+owner: app-dev
+workflows: change-summary, validation
+---
+
 # Role: app-dev
 
-## What This Role Does
+## Purpose
 
-Builds and maintains standalone applications that support stream interactions — dashboards, overlays, chat integrations, and any other tooling that runs as an independent app rather than as a Streamer.bot script.
+Own standalone apps that run outside Streamer.bot, including overlays, brokers, REST services, and admin dashboards.
 
-## Why This Role Matters
+## Owns
 
-Apps extend the stream's capabilities beyond what Streamer.bot scripts can do alone. Overlays capture moments, dashboards track engagement, and future apps may serve the product side of the business — customer-facing tools, product configurators, or community platforms. This role builds the infrastructure that scales the content creator's capabilities into a full business operation.
+- TypeScript app work under [Apps/](../../../Apps/).
+- Stream-overlay route guidance in [Apps/stream-overlay/AGENTS.md](../../../Apps/stream-overlay/AGENTS.md), with broker protocol details in [Apps/stream-overlay/docs/protocol.md](../../../Apps/stream-overlay/docs/protocol.md) and renderer details in [Apps/stream-overlay/docs/rendering-notes.md](../../../Apps/stream-overlay/docs/rendering-notes.md).
+- Info-service and production-manager app contracts in their local app guides.
 
-## Activate When
+## When to Activate
 
-- Building a new stream interaction application
-- Maintaining or extending an existing app under `Apps/`
-- Integrating external APIs or services into a standalone app
-- Building UI for stream overlays that require their own runtime
+Activate for stream interaction apps, dashboards, overlays, brokers, TypeScript build/runtime behavior, REST service changes, or app-side protocol work.
 
-## Do Not Activate When
+## Do Not Activate For
 
-- Task is a Streamer.bot C# script → use `streamerbot-dev`
-- Task is a local Python utility or validator → use `ops`
-- Task is narrative or brand content → use appropriate creative role
+- Streamer.bot C# scripts unless app protocol/bridge behavior is involved; use `streamerbot-dev`.
+- Public copy without app UX implementation; use `brand-steward`.
+- Pure operational validation tooling; use `ops`.
 
-## Skill Load Order
+## Common Routes
 
-1. `skills/core.md` — always load first
-2. `skills/stream-interactions/_index.md` — when working on stream-facing features
+Use [Apps/stream-overlay/AGENTS.md](../../../Apps/stream-overlay/AGENTS.md), [Apps/info-service/AGENTS.md](../../../Apps/info-service/AGENTS.md), and [Apps/production-manager/AGENTS.md](../../../Apps/production-manager/AGENTS.md). Use [Actions/Overlay/AGENTS.md](../../../Actions/Overlay/AGENTS.md) when app work requires Streamer.bot bridge updates.
 
-## Status
+## Required Workflows
 
-Active. The stream overlay ecosystem (`Apps/stream-overlay/`) is built and operational. The `Apps/` domain is established. Add new skills as new apps are added.
+- [coordination](../../workflows/coordination.md) before starting.
+- [validation](../../workflows/validation.md) for build/typecheck/test selection.
+- [change-summary](../../workflows/change-summary.md) after changed files.
+- [sync](../../workflows/sync.md) only when companion C# scripts are edited.
 
-## Active Apps
+## Chain To
 
-- `Apps/stream-overlay/` — Phaser-based stream overlay (broker + overlay packages)
-- `Apps/info-service/` — File-backed JSON REST service for per-viewer data (C2+); see `context/info-service.md`
-- `Apps/production-manager/` — React + Vite admin app for managing info-service collections (C6+)
+- `streamerbot-dev` for C# publishers, event bridges, and paste targets.
+- `brand-steward` for UI/public copy and reward-facing text.
+- `lotat-tech` for LotAT protocol/runtime contract changes.
+- `ops` for tool/environment validation support.
 
-## Out of Scope
+## Living Context
 
-- Streamer.bot runtime scripts (those belong in `streamerbot-dev`)
-- Python utilities and validators (those belong in `ops`)
+Use local app guides first. Treat app-dev context notes as supplemental background when local guides do not answer the question.

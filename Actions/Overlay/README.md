@@ -182,10 +182,10 @@ CPH.SetGlobalVar("broker_connected", false, false);
 
 1. Copy the constants block and `PublishBrokerMessage` method from `broker-publish.cs`.
 2. Paste into your `CPHInline` class.
-3. Build your payload as a JSON string (string concatenation or the `SerializeJson` helper from `Actions/HELPER-SNIPPETS.md § 7`).
+3. Build your payload as a JSON string (string concatenation or the `SerializeJson` helper from `Actions/Helpers/json-no-external-libraries.md`).
 4. Call `PublishBrokerMessage("overlay.spawn", payloadJson)`.
 5. Topic strings: use the constants from `@stream-overlay/shared/topics.ts` — see `Actions/SHARED-CONSTANTS.md → Overlay / Broker` for the C# string equivalents.
 
 For the full list of topics and payload shapes, see:
-- `.agents/roles/app-dev/skills/stream-interactions/protocol.md`
+- `Apps/stream-overlay/docs/protocol.md`
 - `Apps/stream-overlay/packages/shared/src/protocol.ts`
