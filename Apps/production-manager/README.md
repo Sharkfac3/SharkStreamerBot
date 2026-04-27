@@ -27,6 +27,8 @@ Dev server: `http://127.0.0.1:5174` (127.0.0.1 only — no LAN exposure, no auth
 
 Requires `info-service` running at `http://127.0.0.1:8766` for the Health page to show live data. If info-service is not running the Health page will display an error — expected.
 
+See [PRODUCTION-MANAGER-GUIDE.md](PRODUCTION-MANAGER-GUIDE.md) for the app-local admin workflow guide and [Apps/info-service/INFO-SERVICE-PLAN.md](../info-service/INFO-SERVICE-PLAN.md) for backend schemas and REST protocol.
+
 ## Build + preview
 
 ```sh

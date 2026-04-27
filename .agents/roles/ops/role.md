@@ -1,67 +1,53 @@
+---
+id: ops
+type: role
+description: Validation, sync workflow, change summaries, local tooling, and operational repo maintenance.
+status: active
+owner: ops
+workflows: coordination, change-summary, sync, validation
+---
+
 # Role: ops
 
-## What This Role Does
+## Purpose
 
-Handles the operational layer: validation, sync workflow, change summaries, and local tooling. This role is also the **terminal role** — it produces the change summary output at the end of any task that modifies code.
+Own operational safety for the repo: coordination, validation, sync/paste guidance, generated routing surfaces, and local tooling upkeep.
 
-## Why This Role Matters
+## Owns
 
-Ops maintains the infrastructure that the entire content and business pipeline depends on. When validation catches a bug before it hits stream, that prevents a live failure. When change summaries make sync smooth, that keeps the stream running. When the agent tree stays organized, every other role can find what it needs. Ops is the reliability layer under everything — and reliability is what lets a solo creator run a business on stream.
+- Agent-tree validation and manifest routing through [Tools/AgentTree/AGENTS.md](../../../Tools/AgentTree/AGENTS.md).
+- Streamer.bot sync/validation tooling through [Tools/StreamerBot/AGENTS.md](../../../Tools/StreamerBot/AGENTS.md).
+- Shared workflows under [../../workflows/](../../workflows/).
+- Repo-wide agent entrypoints and shared context under [../../](../../).
 
-## Activate When
+## When to Activate
 
-- Preparing a change summary after completing code changes
-- Syncing repo scripts into Streamer.bot (copy/paste workflow)
-- Running validation passes against SHARED-CONSTANTS
-- Working on `Tools/` utilities (Mix It Up API helpers, Python scripts, validators)
-- Validating or summarizing changes under `Apps/` (stream-overlay, info-service, production-manager)
-- Maintaining `.pi/skills/` or `.agents/` structure (meta-operations on the agent tree)
-- Running a LotAT night readiness check against a handed-off story (`Creative/WorldBuilding/Storylines/ready/`) — verify art, engine, and marketing outputs exist, then write `<story_id>-READINESS.md` alongside the story with a checklist of missing items
+Activate for validation, sync workflow, change summaries, manifest/routing updates, local tool coverage, generated docs, or multi-agent coordination issues.
 
-## Do Not Activate When
+## Do Not Activate For
 
-- Task is C# feature scripting → use `streamerbot-dev`
-- Task is narrative content → use `lotat-writer` or `lotat-tech`
-- Task is brand output → use `brand-steward`
+- Domain implementation details when a more specific owner exists, except to support validation/tooling.
+- Public copy, lore, art, or product content decisions without chaining to the owning creative/product role.
+- Streamer.bot runtime behavior changes without `streamerbot-dev` involvement.
 
-## Skill Load Order
+## Common Routes
 
-1. `skills/core.md` — always load first
-2. `skills/change-summary/_index.md` — after **any** code change (terminal skill)
-3. `skills/sync/_index.md` — when preparing to paste into Streamer.bot
-4. `skills/validation/_index.md` — when running validation
+Use [Tools/AgentTree/AGENTS.md](../../../Tools/AgentTree/AGENTS.md), [Tools/StreamerBot/AGENTS.md](../../../Tools/StreamerBot/AGENTS.md), [Tools/MixItUp/AGENTS.md](../../../Tools/MixItUp/AGENTS.md), and [Docs/Architecture/AGENTS.md](../../../Docs/Architecture/AGENTS.md) for repo architecture routing.
 
-## The Terminal Rule
+## Required Workflows
 
-`ops-change-summary` is the **last step in every code task**. Load it after the work is done to format the output the operator needs to sync and validate.
+- [coordination](../../workflows/coordination.md) before starting.
+- [validation](../../workflows/validation.md) for checks and reports.
+- [sync](../../workflows/sync.md) when Streamer.bot paste/sync is involved.
+- [change-summary](../../workflows/change-summary.md) after changed files.
 
-## Readiness Check Output Format
+## Chain To
 
-When running a LotAT night readiness check, write `Creative/WorldBuilding/Storylines/ready/<story_id>-READINESS.md` with this structure:
+- `streamerbot-dev` for C# runtime behavior and paste targets.
+- `app-dev` for app build/runtime issues.
+- `lotat-tech` for story schema/engine validators.
+- `brand-steward`, `content-repurposer`, `art-director`, or `product-dev` for content ownership decisions.
 
-```markdown
-# LotAT Night Readiness — <story title>
+## Living Context
 
-## Story
-- [x] Story JSON present in ready/
-
-## Art (art-director)
-- [ ] Background art for: <list ship_sections_used>
-- [ ] Character art for: <list unique crew_focus values across all nodes>
-
-## Engine (lotat-tech)
-- [ ] C# engine updated for this story
-- [ ] SHARED-CONSTANTS.md updated for any new commands
-
-## Marketing (brand-steward)
-- [ ] Stream title copy prepared
-- [ ] Social teaser copy prepared
-
-## Risks
-- Any unchecked items above must be resolved before the LotAT night
-```
-
-## Out of Scope
-
-- Feature development
-- Narrative or brand content
+Use the workflow files and local Tools guides first. Add context notes only for operational discoveries that should survive beyond a single handoff.

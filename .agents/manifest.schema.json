@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sharkstreamerbot.local/.agents/manifest.schema.json",
+  "title": "SharkStreamerBot Agent Manifest v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "$schema",
+    "metadata",
+    "entrypoints",
+    "skills",
+    "workflows",
+    "domains",
+    "co_locations",
+    "aliases"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 2 },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "sourceOfTruth", "generatedMarkersRequired"],
+      "properties": {
+        "status": { "enum": ["draft", "active", "deprecated"] },
+        "sourceOfTruth": { "type": "boolean" },
+        "generatedMarkersRequired": { "type": "boolean" },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "entrypoints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rootAgentDoc", "agentEntry", "claudeCompatibility"],
+      "properties": {
+        "rootAgentDoc": { "$ref": "#/$defs/path" },
+        "agentEntry": { "$ref": "#/$defs/path" },
+        "claudeCompatibility": { "$ref": "#/$defs/path" }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/skill" },
+      "uniqueItems": true
+    },
+    "workflows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/workflow" },
+      "uniqueItems": true
+    },
+    "domains": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/domain" },
+      "uniqueItems": true
+    },
+    "co_locations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/coLocation" },
+      "uniqueItems": true
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/alias" },
+      "uniqueItems": true
+    },
+    "quick_routing": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/quickRoute" }
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourceManifest": { "$ref": "#/$defs/path" },
+        "v1_entries": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/migrationEntry" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "domainRouteId": {
+      "type": "string",
+      "pattern": "^(actions|apps|tools|creative|docs|root)-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "not": { "pattern": "^(?:/|[A-Za-z]:|\\\\)" }
+    },
+    "idArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/id" },
+      "uniqueItems": true
+    },
+    "skillType": {
+      "enum": ["domain-knowledge", "workflow", "shared", "meta"]
+    },
+    "targetType": {
+      "enum": ["skill", "workflow", "domain", "role", "meta", "removed"]
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "description", "location", "owner", "type", "depends_on", "chains_to"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/path" },
+        "owner": { "$ref": "#/$defs/id" },
+        "secondaryOwners": { "$ref": "#/$defs/idArray" },
+        "type": { "$ref": "#/$defs/skillType" },
+        "status": { "enum": ["active", "planned", "deprecated", "compatibility", "template"] },
+        "depends_on": { "$ref": "#/$defs/idArray" },
+        "chains_to": { "$ref": "#/$defs/idArray" },
+        "source": { "type": "string" }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "path", "owner", "appliesTo", "skills", "terminal"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "description": { "type": "string" },
+        "path": { "$ref": "#/$defs/path" },
+        "owner": { "$ref": "#/$defs/id" },
+        "appliesTo": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "skills": { "$ref": "#/$defs/idArray" },
+        "terminal": { "type": "boolean" },
+        "status": { "enum": ["active", "planned", "deprecated"] },
+        "roleNotes": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "domain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "owner", "agentDoc", "status", "workflows"],
+      "properties": {
+        "id": { "$ref": "#/$defs/domainRouteId" },
+        "path": { "$ref": "#/$defs/path" },
+        "owner": { "$ref": "#/$defs/id" },
+        "secondaryOwners": { "$ref": "#/$defs/idArray" },
+        "agentDoc": { "$ref": "#/$defs/path" },
+        "coveredBy": { "$ref": "#/$defs/domainRouteId" },
+        "status": { "enum": ["covered", "planned", "covered-by-route", "deprecated"] },
+        "workflows": { "$ref": "#/$defs/idArray" },
+        "description": { "type": "string" }
+      }
+    },
+    "coLocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind", "owner", "route"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "kind": { "enum": ["root-agent-doc", "compatibility-pointer", "agent-entry", "role-overview", "workflow", "domain-agent-doc", "shared-reference", "pi-wrapper"] },
+        "owner": { "$ref": "#/$defs/id" },
+        "route": { "$ref": "#/$defs/id" },
+        "status": { "enum": ["active", "planned", "compatibility", "deprecated"] },
+        "notes": { "type": "string" }
+      }
+    },
+    "alias": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "target", "targetType", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "target": { "$ref": "#/$defs/id" },
+        "targetType": { "$ref": "#/$defs/targetType" },
+        "status": { "enum": ["deprecated", "compatibility", "removed"] },
+        "reason": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+    "quickRoute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["work", "role", "route"],
+      "properties": {
+        "work": { "type": "string" },
+        "role": { "$ref": "#/$defs/id" },
+        "route": { "$ref": "#/$defs/id" }
+      }
+    },
+    "migrationEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["v1_type", "v1_id", "v2_id", "v2_type", "status"],
+      "properties": {
+        "v1_type": { "enum": ["role", "canonical_subskill", "helper", "quick_routing", "alias"] },
+        "v1_id": { "type": "string" },
+        "v2_id": { "type": "string" },
+        "v2_type": { "$ref": "#/$defs/targetType" },
+        "status": { "enum": ["migrated", "split", "collapsed", "compatibility", "removed"] },
+        "reason": { "type": "string" }
+      }
+    }
+  }
+}

@@ -76,7 +76,7 @@ public class CPHInline
     //                 Use the string constants from @stream-overlay/shared/topics.ts.
     //   payloadJson — the payload object already serialized to a JSON string.
     //                 Build this with string concatenation or the SerializeJson
-    //                 helper from Actions/HELPER-SNIPPETS.md § 7.
+    //                 helper from Actions/Helpers/json-no-external-libraries.md.
     //
     // Returns true if the message was sent, false if the connection is unavailable.
     //

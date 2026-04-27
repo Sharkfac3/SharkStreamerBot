@@ -1,47 +1,53 @@
+---
+id: lotat-tech
+type: role
+description: LotAT technical pipeline, C# engine, JSON schema, and story runtime implementation.
+status: active
+owner: lotat-tech
+workflows: change-summary, validation
+---
+
 # Role: lotat-tech
 
-## What This Role Does
+## Purpose
 
-Handles the technical pipeline for Legends of the ASCII Temple (LotAT) — the JSON story schema contract, story pipeline architecture, and the C# engine implementation that runs story nodes in Streamer.bot. This role bridges narrative content (from `lotat-writer`) into working runtime code.
+Own the technical contract that lets Legends of the ASCII Temple stories run safely in Streamer.bot and related tooling.
 
-## Why This Role Matters
+## Owns
 
-LotAT is the flagship entertainment feature — a full interactive story experience that fills the gaps between exciting R&D moments on stream. The engine's reliability directly affects the content pipeline: a broken story experience means lost engagement and lost clip opportunities. When this role builds a stable, extensible engine, it ensures the entertainment layer is always ready when the stream needs it.
+- LotAT runtime engine behavior under [Actions/LotAT/](../../../Actions/LotAT/).
+- LotAT story schema, validation, and viewer tooling under [Tools/LotAT/](../../../Tools/LotAT/).
+- Technical boundaries between authored story JSON, Streamer.bot state, and overlay rendering.
 
-## Activate When
+## When to Activate
 
-- Working on the LotAT story JSON schema (defining, validating, or extending fields)
-- Building or modifying the C# engine that executes story nodes
-- Implementing new supported commands in the engine
-- Debugging the story pipeline (content → engine → runtime)
-- Reviewing story JSON output for schema compliance before engine consumption
+Activate for LotAT C# engine changes, story schema or validation changes, story pipeline/tooling changes, or technical debugging across the LotAT runtime path.
 
-## Do Not Activate When
+## Do Not Activate For
 
-- Task is writing adventure narrative, lore, or story content → use `lotat-writer`
-- Task is general Streamer.bot scripting unrelated to LotAT → use `streamerbot-dev`
+- Writing adventure prose, lore, cast, or reusable story canon; use `lotat-writer`.
+- Generic Streamer.bot actions outside LotAT; use `streamerbot-dev`.
+- Overlay implementation outside the LotAT contract; use `app-dev`.
 
-## Skill Load Order
+## Common Routes
 
-1. `skills/core.md` — always load first; covers engine architecture, schema contract, and runtime/story boundaries
-2. `skills/story-pipeline/_index.md` — when working on the pipeline flow or schema
-3. `skills/story-pipeline/json-schema.md` — when working directly with story JSON fields
-4. `skills/engine/docs-map.md` — start here for engine work when you need the navigation map to the runtime contract docs
-5. `skills/engine/_index.md` — engine overview and sub-skill index
-6. `skills/engine/commands.md` — when adding or reviewing supported chat commands
-7. `skills/engine/session-lifecycle.md` — canonical runtime session flow spec: stages, join flow, teardown, and recovery
-8. `skills/engine/state-and-voting.md` — canonical runtime participation/voting spec: roster, vote handling, and early-close behavior
+Use [Actions/LotAT/AGENTS.md](../../../Actions/LotAT/AGENTS.md) for runtime scripts and [Tools/LotAT/AGENTS.md](../../../Tools/LotAT/AGENTS.md) for story pipeline, schema, validation, and viewer work. Chain into [Creative/WorldBuilding/AGENTS.md](../../../Creative/WorldBuilding/AGENTS.md) when technical changes affect authored story content.
 
-## Chains To
+## Required Workflows
 
-| Next Role | When |
-|---|---|
-| `streamerbot-dev` | When implementing engine changes as Streamer.bot C# scripts |
-| `lotat-writer` | When schema changes require story content updates |
-| `ops` | After any code change — load `ops/skills/change-summary/_index.md` |
+- [coordination](../../workflows/coordination.md) before starting.
+- [validation](../../workflows/validation.md) for schema/tool/runtime checks.
+- [sync](../../workflows/sync.md) when C# runtime scripts are edited.
+- [change-summary](../../workflows/change-summary.md) after code or tooling changes.
 
-## Out of Scope
+## Chain To
 
-- Writing adventure narratives or lore (that is `lotat-writer`)
-- Non-LotAT Streamer.bot scripts (that is `streamerbot-dev`)
-- Brand output or marketing content
+- `streamerbot-dev` for Streamer.bot paste/sync implementation details.
+- `lotat-writer` for authored content, lore, or adventure structure.
+- `app-dev` for overlay protocol or rendering behavior.
+- `brand-steward` for canon/public metaphor changes.
+- `ops` for validator/tooling maintenance.
+
+## Living Context
+
+No dedicated living context is required for normal starts. Use local LotAT route guides first; old central LotAT skill files are migration sources only until cleanup.

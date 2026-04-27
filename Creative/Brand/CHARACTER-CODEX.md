@@ -52,7 +52,7 @@ Commanders are special roles played by designated Twitch chat members. Up to thr
 - Magic appears as floating droplets, spiraling streams, flowing ribbons of glowing blue water
 - Color palette: deep teal, ocean blue, silver, dark leather brown; magic in glowing cyan and bright blue
 
-**In code:** Commander role via Streamer.bot. Has designated command actions. See `.pi/skills/feature-commanders`.
+**In code:** Commander role via Streamer.bot. Has designated command actions. See `.agents/roles/streamerbot-dev/skills/commanders/_index.md`.
 
 **Metaphor role:** The part of the ADHD brain that knows there's a simple, consistent practice that would make everything better — and is correct — but whose solution is applied to every problem whether it fits or not. The Water Wizard is the "if I just drank more water and went to bed on time" voice that shows up even when the ship is on fire.
 
@@ -87,7 +87,7 @@ Commanders are special roles played by designated Twitch chat members. Up to thr
 - Always appears authoritative and professional
 - Never depicted slouched, casual, or without crustacean features (antennae, exoskeleton are required)
 
-**In code:** Commander role via Streamer.bot. Has designated command actions. See `.pi/skills/feature-commanders`.
+**In code:** Commander role via Streamer.bot. Has designated command actions. See `.agents/roles/streamerbot-dev/skills/commanders/_index.md`.
 
 **Metaphor role:** Executive function. The part of the ADHD brain that is genuinely trying to run things like a competent captain — setting goals, maintaining authority, making decisions — while obviously operating from a much stranger place than it will admit. Captain Stretch is the internal voice that says "I have this under control" while the chaos escalates around it. He is not wrong that control is important. He is just very wrong about having it.
 
@@ -122,7 +122,7 @@ Commanders are special roles played by designated Twitch chat members. Up to thr
 - Never depicted with film props (clapperboard, megaphone, director's chair, film reel, movie slate)
 - Never appears military or in uniform
 
-**In code:** Commander role via Streamer.bot. Has designated command actions. See `.pi/skills/feature-commanders`.
+**In code:** Commander role via Streamer.bot. Has designated command actions. See `.agents/roles/streamerbot-dev/skills/commanders/_index.md`.
 
 **Metaphor role:** The committee of competing thoughts inside the ADHD mind that somehow, improbably, reached consensus and merged into a single functioning perspective. The Director represents the weird peace that comes from accepting all the different voices in your head and letting them work together instead of fighting. He is four people in one body and is somehow the most put-together person on the ship.
 
@@ -149,7 +149,7 @@ Squad members are recurring NPCs — not controlled by chat. They are story agen
 
 **Story behavior:** When Pedro appears in a story, expect escalation. He is not a solution; he is a complication that adds to the Chaos Meter. Any "Pedro fixed it" moment should be treated as deeply suspicious.
 
-**In code:** Squad mini-game. See `.pi/skills/feature-squad`.
+**In code:** Squad mini-game. See `.agents/roles/streamerbot-dev/skills/squad/_index.md`.
 
 **Metaphor role:** The ADHD impulse to fix something right now before thinking it through. That immediate, enthusiastic "I can fix this" energy that bypasses the step where you check if your fix will cause three new problems. Pedro is the 2am project reorganization that results in lost files. Pedro is the "quick fix" that takes three days. Pedro is recognizable to anyone who has ever made something worse while trying to help.
 
@@ -166,7 +166,7 @@ Squad members are recurring NPCs — not controlled by chat. They are story agen
 
 **Story behavior:** Called when situations turn dangerous. May succeed dramatically or fail dramatically — both outcomes are acceptable. The Security Deck commands (`!deploy`, `!contain`) route through Toothless.
 
-**In code:** Squad mini-game. See `.pi/skills/feature-squad`.
+**In code:** Squad mini-game. See `.agents/roles/streamerbot-dev/skills/squad/_index.md`.
 
 **Metaphor role:** The ADHD hyperfocus response to a perceived threat. When the brain identifies something as a problem, it commits completely — sometimes too completely. Toothless is the response system that is technically doing its job but may have misidentified the threat level or responded at 300% intensity to a 30% problem.
 
@@ -186,7 +186,7 @@ Squad members are recurring NPCs — not controlled by chat. They are story agen
 
 **Story behavior:** When the crew visits The Bar or uses `!drink`, expect Chaos Meter increase and some form of terrible but confident decision-making to follow.
 
-**In code:** Squad mini-game. See `.pi/skills/feature-squad`.
+**In code:** Squad mini-game. See `.agents/roles/streamerbot-dev/skills/squad/_index.md`.
 
 **Metaphor role:** The hyperfocus rabbit hole. Duck's drinks are the YouTube video at midnight that seems fine but leads to a four-hour spiral. They are the interesting tangent that seemed worth pursuing and now it is 3am and the original task is still not done. Duck doesn't force you to drink — you choose to go to the bar. That's the whole joke.
 
@@ -206,7 +206,7 @@ Squad members are recurring NPCs — not controlled by chat. They are story agen
 
 **Story behavior:** Wildcard — Clone's appearances are not predictable in outcome, only in the fact that they will be unexpected and will add a new wrinkle to the situation.
 
-**In code:** Squad mini-game. See `.pi/skills/feature-squad`.
+**In code:** Squad mini-game. See `.agents/roles/streamerbot-dev/skills/squad/_index.md`.
 
 **Metaphor role:** The completely random thought that appears in the middle of something important. You were focused on one thing, and now there is a Clone Trooper in your brain and you cannot explain how it got there or what it wants but it is definitely going to affect the next ten minutes. Clone is "wait, what if we also—" in the middle of a task that was almost done.
 

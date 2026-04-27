@@ -1,52 +1,45 @@
-# Conventions
+---
+id: shared-conventions
+type: shared
+description: Repo-wide conventions for agent and file routing.
+status: active
+owner: ops
+---
 
-## Git
+# Shared Conventions
 
-### Direct to Main
-Use for: small, focused, single-domain changes where scope is fully understood before starting.
-- Change touches ≤ 2 files
-- No risk of breaking live stream behavior
-- Scope fully known before first edit
-- Register in `WORKING.md` before starting
+## Task Coordination
 
-### Worktree Branch
-Use for: multi-file, experimental, or parallel-agent work.
-- Create from current `main`
-- Branch naming: `<agent>/<descriptor>` (e.g., `claude/squad-cooldown-fix`, `pi/lotat-engine-v2`)
-- Register branch in `WORKING.md` Active Work
-- Follow Merge Review process in `Docs/AGENT-WORKFLOW.md` before merging
+Read [WORKING.md](../../WORKING.md) before starting. Follow [coordination](../workflows/coordination.md) for active-work registration, conflict checks, and finish-state updates.
 
-**Default is direct-to-main.** If you can describe the change in one sentence and it touches one file, go direct. If you need a paragraph, use a branch.
+## File Routing
 
-## File Naming
+| Area | Rule |
+|---|---|
+| [Actions/](../../Actions/) | Streamer.bot C# runtime source and action-local docs. |
+| [Apps/](../../Apps/) | Standalone TypeScript app code and app-local docs. |
+| [Tools/](../../Tools/) | Local utilities, validators, sync helpers, and external integration scripts. |
+| [Creative/](../../Creative/) | Brand, art, marketing, worldbuilding, and creative source docs. |
+| [Docs/](../../Docs/) | Human-facing repo architecture, workflow, onboarding, and conventions. |
+| [../](../) | Agent roles, workflows, manifest routing, and shared agent context. |
+| Pi skill mirror | Retired 2026-04 at cutover; use local `AGENTS.md` guides and `.agents/` roles/workflows instead. |
 
-### Actions/
-- Scripts: `<action>-main.cs`, `<action>-resolve.cs`, `<action>-call.cs`, etc.
-- Folder depth: one level beneath feature group only — no deeper nesting
-- Do not move scripts between feature groups unless explicitly requested
+## Naming
 
-### Creative/
-- Markdown docs use `SCREAMING-KEBAB-CASE.md` for canonical references (BRAND-IDENTITY, CHARACTER-CODEX)
-- Agent files use lowercase kebab-case patterns like `character-name-art-agent.md` or `franchise-name-agent.md`
+- Manifest IDs use kebab-case.
+- Local domain agent guides are named `AGENTS.md`.
+- Role overviews live at `.agents/roles/<role>/role.md`.
+- Reusable procedures live at `.agents/workflows/<workflow-id>.md`.
+- Existing domain folder names are not renamed during agent-tree reflow unless a prompt explicitly says so.
 
-### .agents/
-- Role folders: `kebab-case`
-- Skill files: `_index.md` for folder overviews, `<topic>.md` for specifics
-- Context files: any name, agents create freely
+## Code and Docs Style
 
-## Routing Rules
+- Keep changes focused and preserve live-stream reliability.
+- For `Actions/` work, use constants from [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) and reusable patterns from [Actions/HELPER-SNIPPETS.md](../../Actions/HELPER-SNIPPETS.md).
+- Prefer local domain guides over old central role skill files.
+- Use Markdown links for files the next agent should follow.
+- Avoid adding new Pi wrapper skills; use manifest-backed local guides and role/workflow docs instead.
 
-- `Actions/` — Streamer.bot runtime source only
-- `Apps/` — TypeScript applications (stream-overlay, info-service, production-manager)
-- `Tools/` — Mix It Up scripts, validators, sync helpers, Python utilities
-- `Creative/` — art generation, worldbuilding, brand scaffolding
-- `Docs/` — architecture, workflow, onboarding
-- `.agents/` — agent skill/context tree (not runtime)
-- `.pi/skills/` — Pi operational skill layer
-- `.claude/` — Claude configuration
+## Git and Sync Notes
 
-## Commit Style
-
-- Imperative mood: "Add Pedro unlock wait", not "Added" or "Adding"
-- Scope prefix when helpful: `ops:`, `squad:`, `brand:`, `lotat:`
-- Include `synced-to-streamerbot: yes/no` in commit notes for `Actions/` changes
+Agents do not perform git operations unless explicitly asked. For Streamer.bot C# changes, document paste targets and sync status through [sync](../workflows/sync.md) and [change-summary](../workflows/change-summary.md).

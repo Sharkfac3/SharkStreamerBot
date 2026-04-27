@@ -68,7 +68,7 @@ Scripts in `Actions/` are **not auto-deployed**. Each changed script must be man
 
 ## Start Here — All Agents
 
-Read `.agents/ENTRY.md` first. It identifies your role, explains the navigation pattern, and points you to the right skill tree for your task.
+Read `.agents/ENTRY.md` first. It identifies your role, explains the manifest-backed navigation pattern, and points you to the right role overview, workflow, or local domain guide for your task.
 
 ---
 
@@ -77,7 +77,7 @@ Read `.agents/ENTRY.md` first. It identifies your role, explains the navigation 
 ### If you are working on LotAT stories or lore
 Role: `lotat-writer`
 1. `.agents/ENTRY.md` → `roles/lotat-writer/role.md`
-2. `.agents/roles/lotat-writer/skills/core.md`
+2. `Creative/WorldBuilding/AGENTS.md` — local story/lore route
 3. `Creative/Brand/BRAND-IDENTITY.md` — Brand foundation and the metaphor
 4. `Creative/Brand/CHARACTER-CODEX.md` — Canonical character reference
 5. `Creative/WorldBuilding/Agents/D&D-Agent.md` — Game mechanics
@@ -85,67 +85,69 @@ Role: `lotat-writer`
 ### If you are working on the LotAT technical pipeline
 Role: `lotat-tech`
 1. `.agents/ENTRY.md` → `roles/lotat-tech/role.md`
-2. `.agents/roles/lotat-tech/skills/core.md`
-3. `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` — JSON schema
-4. `Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md` — Engine guide
+2. `Tools/LotAT/AGENTS.md` — local schema/tooling route
+3. `Actions/LotAT/AGENTS.md` — Streamer.bot engine route when runtime scripts are involved
+4. `Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md` — authoritative JSON schema
+5. `Creative/WorldBuilding/Experiments/StarshipShamples-coding-agent.md` — engine guide
 
 ### If you are writing chat bot output or stream text
 Role: `brand-steward`
 1. `.agents/ENTRY.md` → `roles/brand-steward/role.md`
-2. `.agents/roles/brand-steward/skills/core.md`
+2. `Creative/Brand/AGENTS.md` — brand voice, identity, and canon route
 3. `Creative/Brand/BRAND-IDENTITY.md` — Brand values and voice
 4. `Creative/Brand/BRAND-VOICE.md` — Tone and language per context
 
 ### If you are working on C# Streamer.bot scripts
 Role: `streamerbot-dev`
 1. `.agents/ENTRY.md` → `roles/streamerbot-dev/role.md`
-2. `.agents/roles/streamerbot-dev/skills/core.md`
+2. The local `AGENTS.md` file in the `Actions/` folder you will edit
 3. `Actions/SHARED-CONSTANTS.md` — Canonical variable and OBS names
 4. `Actions/HELPER-SNIPPETS.md` — Reusable copy/paste patterns
 
 ### If you are working on art generation
 Role: `art-director`
 1. `.agents/ENTRY.md` → `roles/art-director/role.md`
-2. `.agents/roles/art-director/skills/core.md`
+2. `Creative/Art/AGENTS.md` — art route and visual-canon handoffs
 3. `Creative/Art/Agents/stream-style-art-agent.md` — Visual style (always load first)
 4. Relevant character agent file
 
 ### If you are planning content around a build
-Role: `brand-steward` (content-strategy sub-skill)
-1. `.agents/roles/brand-steward/skills/content-strategy/_index.md`
+Role: `brand-steward` with content strategy handoff
+1. `Creative/Marketing/AGENTS.md` — build/story/content strategy route
 2. `Creative/Brand/BRAND-IDENTITY.md` — The build/game relationship
 3. `Creative/Brand/BRAND-VOICE.md` — Stream title and description guidance
 
 ### If you are adding a new feature or character
 Roles: `brand-steward` (canon review) + relevant dev role
-1. `.agents/roles/brand-steward/skills/canon-guardian/_index.md` — review before committing
-2. `Creative/Brand/BRAND-IDENTITY.md` — Brand values; does this fit?
-3. `Creative/Brand/CHARACTER-CODEX.md` — Does this conflict with existing cast?
+1. `.agents/workflows/canon-guardian.md` — review before committing canon-impacting changes
+2. `Creative/Brand/AGENTS.md` — brand/canon route
+3. `Creative/Brand/BRAND-IDENTITY.md` — Brand values; does this fit?
+4. `Creative/Brand/CHARACTER-CODEX.md` — Does this conflict with existing cast?
 
 ### If you are repurposing stream content for short-form
 Role: `content-repurposer`
 1. `.agents/ENTRY.md` → `roles/content-repurposer/role.md`
-2. `.agents/roles/content-repurposer/skills/core.md`
+2. `Creative/Marketing/AGENTS.md` — clip strategy and platform packaging handoff
 3. `Creative/Brand/BRAND-IDENTITY.md` — Brand voice and business context
 4. `Creative/Brand/BRAND-VOICE.md` — Tone for captions and descriptions
 
 ### If you are working on content-pipeline tooling
-Role: `content-repurposer` (`content-repurposer-pipeline` sub-skill)
+Role: `content-repurposer`
 1. `.agents/ENTRY.md` → `roles/content-repurposer/role.md`
-2. `.agents/roles/content-repurposer/skills/core.md`
-3. `.agents/roles/content-repurposer/skills/pipeline/_index.md`
-4. `Tools/ContentPipeline/` — actual pipeline scripts and config
+2. `Tools/ContentPipeline/AGENTS.md` — local pipeline route
+3. `Tools/ContentPipeline/` — actual pipeline scripts and config
 
 ### If you are working on product documentation
 Role: `product-dev`
 1. `.agents/ENTRY.md` → `roles/product-dev/role.md`
-2. `.agents/roles/product-dev/skills/core.md` — Note: this role is a placeholder; check Next Steps in `role.md`
+2. `Docs/Architecture/AGENTS.md` when architecture/product docs overlap repo structure
 3. `Creative/Brand/BRAND-IDENTITY.md` — Brand alignment for product content
 
 ### If you are doing ops work (sync, validation, change summary)
 Role: `ops`
 1. `.agents/ENTRY.md` → `roles/ops/role.md`
-2. `.agents/roles/ops/skills/core.md`
+2. `.agents/workflows/change-summary.md`, `.agents/workflows/sync.md`, or `.agents/workflows/validation.md` as appropriate
+3. `Tools/AgentTree/AGENTS.md` for agent-tree validator work
 
 ---
 

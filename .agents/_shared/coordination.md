@@ -1,48 +1,16 @@
-# Agent Coordination
+---
+id: shared-coordination
+type: shared
+description: Compatibility pointer to the canonical coordination workflow.
+status: active
+owner: ops
+sourceOfTruth: .agents/workflows/coordination.md
+---
 
-## WORKING.md — Check First
+# Shared Coordination Pointer
 
-`WORKING.md` at repo root is the shared signal board. **Read it before starting any task.**
+The canonical agent coordination procedure now lives in [Workflow: coordination](../workflows/coordination.md).
 
-It contains:
-- **Active Work** — agents currently editing files (conflict check)
-- **Task Queue** — operator-managed priority list
-- **Recently Completed** — last 10 completed tasks with commit hashes
+Use that workflow and [WORKING.md](../../WORKING.md) for active-work registration, conflict checks, task finish updates, and multi-agent handoffs.
 
-## When You Start a Task
-
-Add a row to **Active Work** in `WORKING.md`:
-- Agent name (`pi`, `claude`, or descriptive name)
-- Short task description (one line)
-- Domain (`Actions/`, `Apps/`, `Creative/`, `Docs/`, `Tools/`, `.agents/`, `.pi/skills/`)
-- Files you expect to touch (or `TBD` if scouting)
-- Today's date (`YYYY-MM-DD`)
-
-## When You Finish a Task
-
-1. Remove your row from **Active Work**
-2. Add a row to **Recently Completed** with the commit hash
-3. Keep **Recently Completed** to the last 10 entries
-
-## File Conflict Rule
-
-If the file you need to edit appears in **Active Work** under another agent: **stop**. Flag to operator before making changes.
-
-## Parallel Work
-
-Multiple agents can work simultaneously in **different domains** with **non-overlapping file lists**.
-
-Safe: pi editing `Actions/Squad/duck-main.cs` while claude edits `Creative/Brand/BRAND-VOICE.md`
-Not safe: two agents both touching `Actions/SHARED-CONSTANTS.md`
-
-## Conflict Resolution (Branch Work)
-
-When two branches have modified the same file:
-1. The **later branch** resolves conflicts
-2. `Actions/` conflicts → operator makes the final call
-3. `Creative/` brand/lore conflicts → `brand-steward` canon-guardian review required
-4. `Actions/SHARED-CONSTANTS.md` conflicts → stop and flag to operator; do not auto-resolve
-
-## Task Queue
-
-Agents do not add tasks to the queue unilaterally. Flag identified work in your change summary and let the operator decide.
+This file remains only as a compatibility pointer for older links into the shared agent context.

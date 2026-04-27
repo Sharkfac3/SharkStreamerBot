@@ -16,8 +16,8 @@ Duck, Pedro, and Toothless each have an `overlay-publish.cs` reference template 
 - Cross-script key/timer/OBS sync reference: `Actions/SHARED-CONSTANTS.md`
 
 ## Helper Snippets
-- Reusable copy/paste patterns: `Actions/HELPER-SNIPPETS.md`
-- Required mini-game contract: see root `README.md` > "Mini-game Contribution Contract (All Features)"
+- Reusable copy/paste patterns: `Actions/HELPER-SNIPPETS.md` (compatibility index) and `Actions/Helpers/README.md` (concept-specific helper index)
+- Required mini-game contract: `Actions/Helpers/mini-game-contract.md`
 
 ---
 

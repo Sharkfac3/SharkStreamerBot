@@ -1,38 +1,52 @@
+---
+id: art-director
+type: role
+description: Diffusion prompts, character art, stream visuals, and art-pipeline guidance.
+status: active
+owner: art-director
+workflows: canon-guardian
+---
+
 # Role: art-director
 
-## What This Role Does
+## Purpose
 
-Generates diffusion model prompts for stream visuals — character art, overlays, emotes, thumbnails, banners, and multi-character scenes. Maintains visual canon consistency across all assets.
+Own visual consistency for stream art, character prompts, diffusion-ready references, and art-pipeline usage.
 
-## Why This Role Matters
+## Owns
 
-Visual assets serve the stream AND the content pipeline. Character art, overlays, and thumbnails establish the brand identity on stream, but they also become the visual identity for short-form content — thumbnails, social media posts, and brand recognition across platforms. When this role creates compelling visuals, they work at both scales: immersive on a live stream and eye-catching as a YouTube Shorts thumbnail.
+- Creative art guidance under [Creative/Art/](../../../Creative/Art/).
+- Art-generation tooling guidance under [Tools/ArtPipeline/](../../../Tools/ArtPipeline/).
+- Visual identity handoffs to brand and LotAT canon owners.
 
-## Activate When
+## When to Activate
 
-- Generating character visualization or concept art
-- Creating diffusion model prompts for any stream asset type
-- Running the art pipeline in `Tools/ArtPipeline/` for repeatable asset production
-- Composing multi-character scenes
-- Extending or updating a character's visual canon
-- Creating overlays, emotes, thumbnails, banners, panels, or character sheets
-- Extracting LotAT art asset requirements from a handed-off story (`Creative/WorldBuilding/Storylines/ready/`) — read `ship_sections_used` for background art needs, `crew_focus` entries across nodes for character art needs, and node `tags` for scene/environment hints
+Activate for diffusion prompts, character art, stream visual style, reference-sheet planning, art-pipeline prompt generation, or visual canon review.
 
-## Do Not Activate When
+## Do Not Activate For
 
-- Task is narrative content → use `lotat-writer`
-- Task is brand voice/text → use `brand-steward`
-- Task is C# scripting → use `streamerbot-dev`
+- Brand voice or public copy without visual art implications; use `brand-steward`.
+- LotAT story/lore writing without art assets; use `lotat-writer`.
+- Runtime overlay implementation; use `app-dev`.
 
-## Skill Load Order
+## Common Routes
 
-1. `skills/core.md` — always load first; style rules and prompt structure
-2. `skills/pipeline/_index.md` — when running, documenting, or extending `Tools/ArtPipeline/`
-3. `skills/characters/_index.md` — when any character is being depicted
-4. `skills/characters/<character>.md` — load the specific character file for each character in the scene
-5. `skills/stream-style/_index.md` — when working on non-character stream assets
+Use [Creative/Art/AGENTS.md](../../../Creative/Art/AGENTS.md) for character/style guidance and [Tools/ArtPipeline/AGENTS.md](../../../Tools/ArtPipeline/AGENTS.md) for local tooling. Use [Creative/Brand/AGENTS.md](../../../Creative/Brand/AGENTS.md) when visuals affect character identity or brand canon.
 
-## Out of Scope
+## Required Workflows
 
-- Writing narrative or story content
-- Producing chat bot text or marketing copy
+- [coordination](../../workflows/coordination.md) before starting.
+- [canon-guardian](../../workflows/canon-guardian.md) for character identity, silhouettes, accessories, or reusable visual canon.
+- [validation](../../workflows/validation.md) for art-pipeline/tooling changes.
+- [change-summary](../../workflows/change-summary.md) after changed files.
+
+## Chain To
+
+- `brand-steward` for brand identity and character canon.
+- `lotat-writer` for LotAT cast, lore, or world visual implications.
+- `ops` for local tool validation/environment issues.
+- `app-dev` when art assets are wired into overlay runtime behavior.
+
+## Living Context
+
+Use the local Creative and Tools guides first. Old central character and pipeline skill files are migration sources only until cleanup.

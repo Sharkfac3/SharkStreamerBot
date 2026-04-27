@@ -1,58 +1,65 @@
-# AGENTS.md
+---
+id: root-agent-doc
+type: shared
+description: Root universal agent entry and generated quick routing surface.
+status: active
+owner: ops
+generated: false
+---
+
+# SharkStreamerBot — Agent Entry
 
 ## Start Here
 
-Read `.agents/ENTRY.md` — it is the universal entry point for all agents (Claude, Pi, or any future agent).
+Read [.agents/ENTRY.md](.agents/ENTRY.md) first. It is the manifest-backed universal entry point for Claude, Pi, and future agents.
 
-`.agents/ENTRY.md` contains:
-- Project description
-- Full roles table
-- Navigation guide to shared context and role skill trees
+Then:
+
+1. Check [WORKING.md](WORKING.md) for active work and file conflicts.
+2. Pick the correct role or local domain route from the routing summary below.
+3. Read the role overview and any local `AGENTS.md` guide for the folder you will edit.
+4. After changed files, follow [change-summary](.agents/workflows/change-summary.md) and relevant validation/sync workflows.
 
 ## Quick Role Routing
 
 <!-- GENERATED:agents-quick-role-routing:start -->
 | You're working on | Role | Agent Tree |
 |---|---|---|
-| Any `.cs` script under `Actions/` | `streamerbot-dev` | `.agents/roles/streamerbot-dev/` |
-| LotAT C# engine / story pipeline | `lotat-tech` | `.agents/roles/lotat-tech/` |
-| LotAT adventure content / lore | `lotat-writer` | `.agents/roles/lotat-writer/` |
-| Art generation / diffusion prompts | `art-director` | `.agents/roles/art-director/` |
-| Chat text, titles, canon, content strategy | `brand-steward` | `.agents/roles/brand-steward/` |
-| Short-form clips, captions, platform formatting, or content-pipeline tooling | `content-repurposer` | `.agents/roles/content-repurposer/` |
-| Stream interaction apps | `app-dev` | `.agents/roles/app-dev/` |
-| Product docs, specs, knowledge articles, and customer-facing product content | `product-dev` | `.agents/roles/product-dev/` |
-| Validation, sync, change summary, tooling | `ops` | `.agents/roles/ops/` |
+| Any `.cs` script under `Actions/` | `streamerbot-dev` | `.agents/roles/streamerbot-dev/role.md` |
+| LotAT C# engine / story pipeline | `lotat-tech` | `.agents/roles/lotat-tech/role.md` |
+| LotAT adventure content / lore | `lotat-writer` | `.agents/roles/lotat-writer/role.md` |
+| Art generation / diffusion prompts | `art-director` | `.agents/roles/art-director/role.md` |
+| Chat text, titles, canon, content strategy | `brand-steward` | `.agents/roles/brand-steward/role.md` |
+| Short-form clips, captions, platform formatting, or content-pipeline tooling | `content-repurposer` | `.agents/roles/content-repurposer/role.md` |
+| Stream interaction apps | `app-dev` | `.agents/roles/app-dev/role.md` |
+| Product docs, specs, knowledge articles, and customer-facing product content | `product-dev` | `.agents/roles/product-dev/role.md` |
+| Validation, sync, change summary, tooling | `ops` | `.agents/roles/ops/role.md` |
 <!-- GENERATED:agents-quick-role-routing:end -->
-
-## Coordination
-
-Before starting any task: **check `WORKING.md`** for active agent work and file conflicts.
-
-After completing any code task: load `ops-change-summary` to produce the paste targets and validation checklist the operator needs.
-
-## Pi Routing
-
-Pi's skill tree is at `.pi/skills/`. Pi uses `.pi/skills/README.md` for its routing table. Pi meta-skills are exposed through the flat wrappers `meta`, `meta-agents-navigate`, and `meta-agents-update`.
 
 ## Project Domains
 
-| Domain | Path | Contains |
+| Domain | Path | Local routing |
 |---|---|---|
-| Actions | `Actions/` | Streamer.bot C# runtime scripts |
-| Tools | `Tools/` | Local utilities, validators, API helpers |
-| Creative | `Creative/` | Brand docs, character art, worldbuilding, lore |
-| Docs | `Docs/` | Architecture, workflow, onboarding |
-| Agent Tree | `.agents/` | Shared role/skill knowledge tree |
+| Actions | [Actions/](Actions/) | Streamer.bot C# runtime scripts and folder-local action guides. |
+| Apps | [Apps/](Apps/) | Standalone TypeScript apps and app-local guides. |
+| Tools | [Tools/](Tools/) | Local utilities, validators, Mix It Up helpers, and sync tooling. |
+| Creative | [Creative/](Creative/) | Brand, art, marketing, worldbuilding, and creative guides. |
+| Docs | [Docs/](Docs/) | Human-facing architecture, workflow, onboarding, and conventions. |
+| Agent Tree | [.agents/](.agents/) | Manifest, role overviews, workflows, and shared agent context. |
+
+## Coordination
+
+Before starting: read [WORKING.md](WORKING.md) and follow [coordination](.agents/workflows/coordination.md).
+
+After code changes: include paste targets, setup steps, and validation output via [change-summary](.agents/workflows/change-summary.md).
 
 ## Key References
 
 | File | Purpose |
 |---|---|
-| `WORKING.md` | Active work, task queue, conflict registry — check first |
-| `Actions/SHARED-CONSTANTS.md` | Canonical global variable, OBS source, timer names |
-| `Actions/HELPER-SNIPPETS.md` | Reusable C# patterns — copy verbatim |
-| `Creative/Brand/BRAND-IDENTITY.md` | Brand vision, mission, values, neurodivergent metaphor |
-| `Creative/Brand/CHARACTER-CODEX.md` | Canonical character identities |
-| `Docs/AGENT-WORKFLOW.md` | When to commit direct vs. use a branch; merge review template |
-| `Docs/ONBOARDING.md` | Start here if new to the project |
+| [Actions/SHARED-CONSTANTS.md](Actions/SHARED-CONSTANTS.md) | Canonical globals, OBS sources, timer names. |
+| [Actions/HELPER-SNIPPETS.md](Actions/HELPER-SNIPPETS.md) | Reusable C# patterns. |
+| [Creative/Brand/BRAND-IDENTITY.md](Creative/Brand/BRAND-IDENTITY.md) | Brand vision, mission, values, and metaphor. |
+| [Creative/Brand/CHARACTER-CODEX.md](Creative/Brand/CHARACTER-CODEX.md) | Canonical character identities. |
+| [Docs/Architecture/repo-structure.md](Docs/Architecture/repo-structure.md) | Human repo-structure reference. |
+| [Tools/AgentTree/AGENTS.md](Tools/AgentTree/AGENTS.md) | Manifest/validator route for agent-tree tooling. |
