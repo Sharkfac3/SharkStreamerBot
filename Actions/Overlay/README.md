@@ -10,7 +10,7 @@ Scripts that connect Streamer.bot to the stream overlay broker and publish overl
 
 **Purpose:** Connects Streamer.bot to the overlay broker WebSocket and sends the ClientHello handshake.
 
-**Expected trigger:** Sub-action inside the stream-start action (Twitch stream online event). Can also be called manually to reconnect mid-stream.
+**Expected trigger:** Optional manual reconnect action. The normal stream-start path now has equivalent connect/register logic inline in `Actions/Twitch Core Integrations/stream-start.cs`.
 
 **Input:** None.
 
@@ -31,6 +31,7 @@ Scripts that connect Streamer.bot to the stream overlay broker and publish overl
 - The broker must be running before this fires. Start order: broker → OBS → Streamer.bot.
 - If connection fails, stream-start continues; only overlay commands are affected.
 - To retry mid-stream: trigger this action from a mod command or hotkey.
+- Normal stream-start no longer needs this as a separate sub-action if the updated `stream-start.cs` is pasted.
 
 ---
 
@@ -147,9 +148,11 @@ In Streamer.bot UI: **Servers/Clients → WebSocket Clients → right-click → 
 
 This entry must be **first in the list** (index 0). If you add other clients, adjust `BROKER_WS_INDEX` in the scripts.
 
-### 2. Add `broker-connect.cs` to stream-start
+### 2. Use updated `stream-start.cs` for normal startup connection
 
-In stream-start action: add **Execute C# Code** sub-action → paste `broker-connect.cs` content.
+Paste the updated `Actions/Twitch Core Integrations/stream-start.cs` into the Streamer.bot stream-start action. It now connects/registers with the overlay broker automatically if needed.
+
+Keep `broker-connect.cs` available only as an optional manual reconnect action or hotkey for mid-stream broker restarts.
 
 ### 3. Add `broker-disconnect.cs` to stream-end
 
@@ -169,12 +172,9 @@ Drop any PNG/JPG at:
 Apps/stream-overlay/packages/overlay/public/images/test-overlay-ping.png
 ```
 
-### 6. Reset `broker_connected` in stream-start
+### 6. Broker connection state
 
-Add to `Actions/Twitch Core Integrations/stream-start.cs` (before broker-connect runs):
-```csharp
-CPH.SetGlobalVar("broker_connected", false, false);
-```
+No separate reset snippet is needed after pasting the updated `Actions/Twitch Core Integrations/stream-start.cs`. The stream-start script clears stale `broker_connected` state before a connect/register attempt and sets it to `true` after sending ClientHello.
 
 ---
 
@@ -189,3 +189,4 @@ CPH.SetGlobalVar("broker_connected", false, false);
 For the full list of topics and payload shapes, see:
 - `Apps/stream-overlay/docs/protocol.md`
 - `Apps/stream-overlay/packages/shared/src/protocol.ts`
+- `Actions/Helpers/overlay-broker.md` for the reusable connect/register helper if `broker-connect.cs` is retired later.

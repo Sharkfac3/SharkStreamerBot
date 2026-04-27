@@ -29,6 +29,7 @@ Folder index for reusable Streamer.bot C# helper snippets. These files contain c
 | [mini-game-lock.md](mini-game-lock.md) | Global mini-game lock constants and acquire/release snippets. |
 | [mixitup-command-api.md](mixitup-command-api.md) | Streamer.bot C# helper for Mix It Up command API calls and unlock pacing. |
 | [obs-scenes.md](obs-scenes.md) | OBS scene switching helper and direct-call guidance. |
+| [overlay-broker.md](overlay-broker.md) | Stream-overlay broker WebSocket connect/register helper and ClientHello pattern. |
 | [timers.md](timers.md) | Timer enable/disable/reset/interval-update patterns. |
 
 ## Compatibility note

@@ -6,7 +6,7 @@ This folder contains the core Twitch event and stream-state scripts that map to 
 ## Script: `stream-start.cs`
 
 ### Purpose
-Runs stream-start reset logic for Squad, LotAT, and related Twitch integration state.
+Runs stream-start reset logic for Squad, LotAT, and related Twitch integration state. Also ensures Streamer.bot is connected and registered with the stream-overlay broker.
 
 ### Expected Trigger / Input
 - Stream start action trigger.
@@ -36,12 +36,15 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 - Resets `pedro_unlocked` (bool) to false.
 - Resets `pedro_last_message_id` (string) to empty.
 - Sets `stream_mode` (string) to `workspace`.
+- Sets `broker_connected` (bool, non-persisted) to `true` if the stream-overlay broker connection and ClientHello handshake succeed; sets/keeps it `false` if the broker is unavailable.
 
 ### Key Outputs / Side Effects
 - Reinitializes session state for stream start.
 - Disables timer `Duck - Call Window`.
 - Disables timers `Clone - Join Window` and `Clone - Game Tick`.
 - Disables timer `Pedro - Call Window`.
+- Connects Streamer.bot WebSocket client index `0` to the stream-overlay broker if needed.
+- Sends ClientHello: `{ type: "client.hello", name: "streamerbot", subscriptions: [] }`.
 
 ### Mix It Up Actions
 - None.
@@ -53,14 +56,16 @@ Runs stream-start reset logic for Squad, LotAT, and related Twitch integration s
 - Hides `Pedro - Dancing` on `Disco Party: Workspace`.
 
 ### Wait Behavior
-- None.
+- Waits up to 600ms after starting a broker WebSocket connection attempt before checking connection state.
 
 ### Chat / Log Output
-- None.
+- No chat output.
+- Logs `[StreamStartBroker]` broker connection/registration status or errors.
 
 ### Operator Notes
 - Keep this action early in stream startup order so downstream scripts see clean state.
 - Keep shared key/timer/OBS names aligned with `Actions/SHARED-CONSTANTS.md`.
+- Streamer.bot must have the overlay broker WebSocket client configured as index `0` (`ws://localhost:8765/`) before stream start for automatic broker connection.
 - The offering-related resets here exist because older experimental offering work shares some globals with LotAT naming.
 - For current LotAT v1 planning, do **not** treat these offering resets as proof that offering is part of the active LotAT runtime contract.
 

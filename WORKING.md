@@ -27,6 +27,8 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-27 | pi | add overlay broker helper snippet | uncommitted |
+| 2026-04-27 | pi | integrate overlay broker connect into stream-start | uncommitted |
 | 2026-04-27 | pi | create-actions-agent-guide | uncommitted |
 | 2026-04-27 | pi | 104-apps-stream-overlay-doc-split | uncommitted |
 | 2026-04-27 | pi | 103-lotat-contract-index | uncommitted |
@@ -35,8 +37,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-04-27 | pi | post-cutover-stale-cleanup | uncommitted |
 | 2026-04-27 | pi | manifest-status-normalization | uncommitted |
 | 2026-04-27 | pi | cutover-pi-mirror | uncommitted |
-| 2026-04-27 | pi | retire-old-skill-tree-cleanup | uncommitted |
-| 2026-04-27 | pi | pi-meta-transition | uncommitted |
 
 ---
 

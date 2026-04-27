@@ -401,13 +401,12 @@ Used in:
 - `Actions/Squad/Duck/overlay-publish.cs`
 - `Actions/Squad/Pedro/overlay-publish.cs`
 - `Actions/Squad/Toothless/overlay-publish.cs`
-- `Actions/Twitch Core Integrations/stream-start.cs` *(must reset broker_connected = false at startup)*
+- `Actions/Twitch Core Integrations/stream-start.cs` *(ensures broker connection/ClientHello at startup)*
 
 Operator notes:
-- `broker_connected` is non-persisted. It is set to `false` when Streamer.bot starts and to `true`
-  when `broker-connect.cs` successfully completes the handshake.
-- Add `CPH.SetGlobalVar("broker_connected", false, false);` to `stream-start.cs` before the
-  broker-connect sub-action runs, to clear any stale state from a previous session.
+- `broker_connected` is non-persisted. It is set to `false` before a Streamer.bot-side connect/register attempt and to `true`
+  when the broker ClientHello handshake is sent successfully.
+- `stream-start.cs` now includes the broker connect/register logic directly, so a separate broker-connect sub-action is optional for manual reconnects rather than required for normal stream start.
 - `BROKER_WS_INDEX` must match the position of the "Overlay Broker" entry in the Streamer.bot
   WebSocket Clients list (Servers/Clients → WebSocket Clients). Default is 0 (first entry).
 

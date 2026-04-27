@@ -25,6 +25,7 @@ Use [Actions/Helpers/README.md](Helpers/README.md) as the authoritative helper i
 | `## 5) Verified CPH API Method Signatures` | [Actions/Helpers/cph-api-signatures.md](Helpers/cph-api-signatures.md) |
 | `## 6) Timer Management` | [Actions/Helpers/timers.md](Helpers/timers.md) |
 | `## 7) JSON Parse / Serialize Helper (No External Libraries)` | [Actions/Helpers/json-no-external-libraries.md](Helpers/json-no-external-libraries.md) |
+| Overlay broker WebSocket connect/register helper | [Actions/Helpers/overlay-broker.md](Helpers/overlay-broker.md) |
 | `## Required mini-game contract checklist` | [Actions/Helpers/mini-game-contract.md](Helpers/mini-game-contract.md) |
 
 ## Notes for agents

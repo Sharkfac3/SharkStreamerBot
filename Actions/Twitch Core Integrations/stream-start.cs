@@ -100,6 +100,14 @@ public class CPHInline
     // XJ Drivethrough
     private const string VAR_XJ_ACTIVE = "xj_drivethrough_active";
 
+    // Overlay broker
+    // BROKER_WS_INDEX is the zero-based position of the broker entry in
+    // Streamer.bot → Servers/Clients → WebSocket Clients (top = 0).
+    private const int    BROKER_WS_INDEX      = 0;
+    private const string VAR_BROKER_CONNECTED = "broker_connected";
+    private const string BROKER_CLIENT_NAME   = "streamerbot";
+    private const int    WAIT_BROKER_CONNECT_MS = 600;
+
     /*
      * Purpose:
      * - Runs at stream start to reset shared state for Squad, LotAT, and Twitch integrations.
@@ -122,6 +130,7 @@ public class CPHInline
      * - Disables the temporary Temp Focus Timer to prevent stale timer fires.
      * - Sets stream mode to workspace as the default start-of-stream mode.
      * - Resets disco_party_active and disco_party_prev_scene so a stale mid-sequence lock cannot carry over.
+     * - Ensures Streamer.bot is connected and registered with the stream-overlay broker.
      * - Hides Duck/Clone/Pedro/Toothless dance sources in OBS.
      * - Disables Duck, Clone Empire, Pedro, LotAT, rest/focus, and temporary timers to prevent stale timer fires.
      *
@@ -131,6 +140,10 @@ public class CPHInline
      */
     public bool Execute()
     {
+        // Connect Streamer.bot to the stream-overlay broker early in stream start.
+        // Failure is logged but non-fatal so the rest of the startup reset still runs.
+        EnsureOverlayBrokerConnected();
+
         // Clear shared lock so no stale mini-game blocks the new stream.
         CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
@@ -294,6 +307,56 @@ public class CPHInline
         // the previous stream ended (e.g., stream ended during the 10-second drive).
         CPH.SetGlobalVar(VAR_XJ_ACTIVE, false, false);
 
+        return true;
+    }
+
+    private bool EnsureOverlayBrokerConnected()
+    {
+        const string LOG_PREFIX = "[StreamStartBroker]";
+
+        // WebsocketIsConnected() checks TCP state only — not whether ClientHello
+        // was sent. Only skip when both the socket is open and our non-persisted
+        // registration flag says the broker hello already succeeded.
+        bool alreadyConnected = CPH.WebsocketIsConnected(BROKER_WS_INDEX);
+        bool helloSent = (CPH.GetGlobalVar<bool?>(VAR_BROKER_CONNECTED, false) ?? false);
+        if (alreadyConnected && helloSent)
+        {
+            CPH.LogWarn($"{LOG_PREFIX} Overlay broker already connected and registered.");
+            return true;
+        }
+
+        // Clear stale state before trying to connect/register.
+        CPH.SetGlobalVar(VAR_BROKER_CONNECTED, false, false);
+
+        if (!alreadyConnected)
+        {
+            CPH.LogWarn($"{LOG_PREFIX} Connecting to overlay broker (WS client index {BROKER_WS_INDEX})...");
+            CPH.WebsocketConnect(BROKER_WS_INDEX);
+            CPH.Wait(WAIT_BROKER_CONNECT_MS);
+        }
+        else
+        {
+            CPH.LogWarn($"{LOG_PREFIX} TCP socket already open. Sending ClientHello to register with broker...");
+        }
+
+        if (!CPH.WebsocketIsConnected(BROKER_WS_INDEX))
+        {
+            CPH.LogError(
+                $"{LOG_PREFIX} Connection failed after {WAIT_BROKER_CONNECT_MS}ms. " +
+                "Is the stream-overlay broker running at ws://localhost:8765? " +
+                "Stream start will continue, but overlay broker publishes may fail until reconnected."
+            );
+            return false;
+        }
+
+        string hello =
+            "{\"type\":\"client.hello\"," +
+            "\"name\":\"" + BROKER_CLIENT_NAME + "\"," +
+            "\"subscriptions\":[]}";
+
+        CPH.WebsocketSend(hello, BROKER_WS_INDEX);
+        CPH.SetGlobalVar(VAR_BROKER_CONNECTED, true, false);
+        CPH.LogWarn($"{LOG_PREFIX} Overlay broker connected and ClientHello sent.");
         return true;
     }
 }
