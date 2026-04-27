@@ -808,30 +808,10 @@
       "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
     },
     {
-      "id": "docs-architecture",
-      "name": "docs-architecture",
-      "description": "Repo architecture docs and future docs ownership routing.",
-      "location": "Docs/Architecture/AGENTS.md",
-      "owner": "ops",
-      "secondaryOwners": [
-        "product-dev"
-      ],
-      "type": "domain-knowledge",
-      "status": "active",
-      "depends_on": [
-        "change-summary",
-        "validation"
-      ],
-      "chains_to": [
-        "product-dev"
-      ],
-      "source": "findings/02-domain-coverage.md + findings/06-naming-convention.md"
-    },
-    {
       "id": "lotat-contract",
       "name": "LotAT Contract",
       "description": "Shared Legends of the ASCII Temple contract across runtime, tooling, story authoring, and stream overlay presentation.",
-      "location": "Docs/Architecture/lotat-contract.md",
+      "location": ".agents/_shared/lotat-contract.md",
       "owner": "lotat-tech",
       "secondaryOwners": [
         "lotat-writer",
@@ -1434,21 +1414,6 @@
       "description": "LotAT adventures, lore, franchises, settings, and storylines."
     },
     {
-      "id": "docs-architecture",
-      "path": "Docs/Architecture/",
-      "owner": "ops",
-      "secondaryOwners": [
-        "product-dev"
-      ],
-      "agentDoc": "Docs/Architecture/AGENTS.md",
-      "status": "covered",
-      "workflows": [
-        "change-summary",
-        "validation"
-      ],
-      "description": "Repo architecture docs and future docs ownership routing."
-    },
-    {
       "id": "tools-agent-tree",
       "path": "Tools/AgentTree/",
       "owner": "ops",
@@ -1895,14 +1860,6 @@
       "notes": "Canonical co-located domain agent guide path."
     },
     {
-      "path": "Docs/Architecture/AGENTS.md",
-      "kind": "domain-agent-doc",
-      "owner": "ops",
-      "route": "docs-architecture",
-      "status": "active",
-      "notes": "Canonical co-located domain agent guide path."
-    },
-    {
       "path": "Tools/AgentTree/AGENTS.md",
       "kind": "domain-agent-doc",
       "owner": "ops",
@@ -1911,7 +1868,7 @@
       "notes": "Canonical co-located domain agent guide path."
     },
     {
-      "path": "Docs/Architecture/lotat-contract.md",
+      "path": ".agents/_shared/lotat-contract.md",
       "kind": "shared-reference",
       "owner": "lotat-tech",
       "route": "lotat-contract",

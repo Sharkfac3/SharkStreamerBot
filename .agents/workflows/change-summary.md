@@ -93,7 +93,7 @@ None, or numbered steps.
 ### Notes / follow-ups
 Optional. Include only material items.
 
-For worktree branch merges, extend this with the merge-summary template in [Docs/AGENT-WORKFLOW.md](../../Docs/AGENT-WORKFLOW.md).
+For worktree branch merges, extend this with a one-paragraph branch purpose statement and a merge-readiness checklist before requesting operator review.
 
 ## Related Routes
 

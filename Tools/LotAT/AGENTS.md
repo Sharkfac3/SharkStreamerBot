@@ -56,7 +56,7 @@ Read these first for story pipeline/tooling work:
 
 1. [Tools/LotAT/README.md](./README.md) — viewer install/run instructions and stage actions.
 2. [Tools/LotAT/story_viewer.py](./story_viewer.py) — current FastAPI implementation.
-3. [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md) — shared LotAT contract across tooling, runtime, story, and overlay domains.
+3. [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) — shared LotAT contract across tooling, runtime, story, and overlay domains.
 4. [Actions/LotAT/AGENTS.md](../../Actions/LotAT/AGENTS.md) — runtime engine handoff expectations.
 5. [Actions/LotAT/README.md](../../Actions/LotAT/README.md) — runtime documentation map.
 6. [Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md](../../Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md) — authoritative authored story JSON contract.
@@ -72,7 +72,7 @@ Read these first for story pipeline/tooling work:
    - [Creative/WorldBuilding/Storylines/ready/](../../Creative/WorldBuilding/Storylines/ready/)
    - [Creative/WorldBuilding/Storylines/loaded/](../../Creative/WorldBuilding/Storylines/loaded/)
    - [Creative/WorldBuilding/Storylines/finished/](../../Creative/WorldBuilding/Storylines/finished/)
-3. Use [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md) for shared runtime/tooling/story facts; do not restate or redefine them here.
+3. Use [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) for shared runtime/tooling/story facts; do not restate or redefine them here.
 4. Treat [Creative/WorldBuilding/Storylines/loaded/current-story.json](../../Creative/WorldBuilding/Storylines/loaded/current-story.json) as the single runtime handoff copy for the engine.
 5. Keep the viewer load action as a copy into the loaded runtime file, not a move out of ready.
 6. If a ready or finished action invalidates the currently loaded story, clear the loaded runtime copy so Streamer.bot does not consume stale content.
@@ -154,7 +154,7 @@ After changes, report:
 
 Authoritative story schema: [Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md](../../Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md).
 
-Shared cross-domain summaries live in [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md). Derived or implementation-facing summaries must not compete with the authoritative story contract. If they conflict, update the summary to match the authoritative contract.
+Shared cross-domain summaries live in [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md). Derived or implementation-facing summaries must not compete with the authoritative story contract. If they conflict, update the summary to match the authoritative contract.
 
 ## Known Gotchas
 
@@ -162,5 +162,5 @@ Shared cross-domain summaries live in [Docs/Architecture/lotat-contract.md](../.
 - Story viewer module path is `Tools.LotAT.story_viewer`, not a filesystem path passed directly to Uvicorn.
 - The load action copies from ready to loaded; it should not consume the ready source file.
 - Comprehensive validation belongs before runtime handoff; do not push full schema validation into session start unless v1 contract changes.
-- Stage/ending node shape, command boundaries, dice/commander limitations, and offering boundaries are summarized in [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md).
+- Stage/ending node shape, command boundaries, dice/commander limitations, and offering boundaries are summarized in [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md).
 - Runtime concepts such as join windows, roster freeze, vote maps, and early-close are not authored schema fields.

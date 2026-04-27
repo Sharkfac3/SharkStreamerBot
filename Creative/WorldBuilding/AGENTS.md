@@ -64,7 +64,7 @@ Read these first for worldbuilding work:
 4. [Creative/Brand/CHARACTER-CODEX.md](../Brand/CHARACTER-CODEX.md) — authoritative cast identities and metaphor roles.
 5. [Creative/WorldBuilding/Franchises/StarshipShamples.md](Franchises/StarshipShamples.md) — franchise summary and canon baseline.
 6. [Creative/WorldBuilding/Agents/D&D-Agent.md](Agents/D&D-Agent.md) — game design, mechanics, tone, ship sections, and commands.
-7. [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md) — shared LotAT contract across story, runtime, tooling, and overlay domains.
+7. [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) — shared LotAT contract across story, runtime, tooling, and overlay domains.
 8. [Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md](Experiments/StarshipShamples-story-agent.md) — authoritative authored story contract.
 9. [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md) when story validation or tooling is needed.
 10. [Actions/LotAT/AGENTS.md](../../Actions/LotAT/AGENTS.md) when runtime engine behavior matters.
@@ -72,7 +72,7 @@ Read these first for worldbuilding work:
 ## Local Workflow
 
 1. Classify the work as adventure, franchise, universe/cast/rules, setting, story arc, or experiment.
-2. For adventures, use the authoritative story contract before finalizing structure and [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md) for shared runtime/tooling/presentation boundaries. Do not restate or redefine shared contract facts here.
+2. For adventures, use the authoritative story contract before finalizing structure and [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) for shared runtime/tooling/presentation boundaries. Do not restate or redefine shared contract facts here.
 3. Treat adventures as live-stream content:
    - read-aloud narration should be one to four sentences
    - most nodes should be two or three sentences
@@ -100,7 +100,7 @@ For worldbuilding-doc or local agent-guide changes, run:
 python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-09-validator.failures.txt
 ```
 
-For story content, validate before handoff using the authoritative story contract and the shared [LotAT contract](../../Docs/Architecture/lotat-contract.md). At minimum, confirm graph integrity, supported commands, valid stage/ending shapes, supported dice/commander structures, top-level cast usage, and canon classification.
+For story content, validate before handoff using the authoritative story contract and the shared [LotAT contract](../../.agents/_shared/lotat-contract.md). At minimum, confirm graph integrity, supported commands, valid stage/ending shapes, supported dice/commander structures, top-level cast usage, and canon classification.
 
 Use [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md) for tool commands and schema validation mechanics.
 

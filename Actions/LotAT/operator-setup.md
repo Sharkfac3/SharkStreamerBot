@@ -1,6 +1,6 @@
 # Actions/LotAT Operator Setup
 
-This file covers Streamer.bot timer/trigger setup and live-test checks for the checked-in LotAT v1 runtime. For cross-domain contract facts, see [LotAT contract](../../Docs/Architecture/lotat-contract.md).
+This file covers Streamer.bot timer/trigger setup and live-test checks for the checked-in LotAT v1 runtime. For cross-domain contract facts, see [LotAT contract](../../.agents/_shared/lotat-contract.md).
 
 ## Timers
 

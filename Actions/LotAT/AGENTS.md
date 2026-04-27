@@ -66,7 +66,7 @@ Primary owner: `lotat-tech`.
 
 Read these first for runtime work:
 
-1. [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md) — shared LotAT contract across runtime, tooling, story, and overlay domains.
+1. [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) — shared LotAT contract across runtime, tooling, story, and overlay domains.
 2. [Actions/LotAT/README.md](./README.md) — overview and map to split runtime docs.
 3. [Actions/LotAT/runtime-contract.md](./runtime-contract.md) — runtime globals, timers, commands, story-file contract, flow, and v1 boundaries.
 4. [Actions/LotAT/operator-setup.md](./operator-setup.md) — Streamer.bot timer/trigger setup and live-test checklist.
@@ -79,7 +79,7 @@ Read these first for runtime work:
 ## Local Workflow
 
 1. Confirm the task is runtime implementation, not story authoring.
-2. Read [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md) for shared contract facts; do not restate or redefine them here.
+2. Read [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) for shared contract facts; do not restate or redefine them here.
 3. Read the relevant split runtime doc: [runtime contract](./runtime-contract.md), [operator setup](./operator-setup.md), or [implementation map](./implementation-map.md).
 4. Preserve the runtime/story boundary: runtime session state belongs in C# actions and Streamer.bot globals; authored story data belongs in JSON and the creative/story pipeline.
 5. Keep start-time runtime checks minimal-safe. Full schema/graph validation belongs upstream in the story pipeline and reviewer tooling.
@@ -116,7 +116,7 @@ Do not use this folder to:
 - write adventures, lore, or story content; route that to `lotat-writer` in [Creative/WorldBuilding/](../../Creative/WorldBuilding/)
 - modify the story viewer or local pipeline tooling; route that to [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md)
 - add visual overlay rendering logic; route that to `app-dev` under [Apps/stream-overlay/](../../Apps/stream-overlay/)
-- integrate `!offering` into LotAT v1 without a new explicit contract decision recorded in [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md)
+- integrate `!offering` into LotAT v1 without a new explicit contract decision recorded in [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md)
 - add operator force-close, manual advance, late join, leave-session, or rich recovery tooling as hidden v1 behavior
 - move story content into C# scripts
 
@@ -134,7 +134,7 @@ After changes, report:
 
 ## Runtime Notes
 
-See [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md) for shared LotAT facts such as commands, timers, participation rules, offering boundary, and overlay event contract.
+See [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) for shared LotAT facts such as commands, timers, participation rules, offering boundary, and overlay event contract.
 
 Use the local split docs for runtime-specific details:
 

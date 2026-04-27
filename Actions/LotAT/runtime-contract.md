@@ -1,6 +1,6 @@
 # Actions/LotAT Runtime Contract
 
-This file documents the checked-in Streamer.bot runtime contract for LotAT v1. For cross-domain facts shared by runtime, tooling, worldbuilding, and overlay presentation, see [LotAT contract](../../Docs/Architecture/lotat-contract.md).
+This file documents the checked-in Streamer.bot runtime contract for LotAT v1. For cross-domain facts shared by runtime, tooling, worldbuilding, and overlay presentation, see [LotAT contract](../../.agents/_shared/lotat-contract.md).
 
 ## Runtime file contract
 

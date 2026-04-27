@@ -1,6 +1,6 @@
 # Actions/LotAT Implementation Map
 
-This file maps the checked-in LotAT v1 Streamer.bot action scripts and their internal wiring responsibilities. For shared runtime/tooling/story/presentation facts, see [LotAT contract](../../Docs/Architecture/lotat-contract.md). For exact Streamer.bot setup, see [operator setup](operator-setup.md).
+This file maps the checked-in LotAT v1 Streamer.bot action scripts and their internal wiring responsibilities. For shared runtime/tooling/story/presentation facts, see [LotAT contract](../../.agents/_shared/lotat-contract.md). For exact Streamer.bot setup, see [operator setup](operator-setup.md).
 
 ## Action inventory
 

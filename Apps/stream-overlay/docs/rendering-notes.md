@@ -22,7 +22,7 @@ Read [../packages/overlay/src/scenes/OverlayScene.ts](../packages/overlay/src/sc
 
 LotAT visuals are text/graphics-driven and live under [../packages/overlay/src/components/lotat/](../packages/overlay/src/components/lotat/) with orchestration in [../packages/overlay/src/systems/lotat-renderer.ts](../packages/overlay/src/systems/lotat-renderer.ts).
 
-Keep renderer behavior aligned with the shared [LotAT contract](../../../Docs/Architecture/lotat-contract.md) and the authoritative TypeScript protocol files. This app owns visual layout and rendering implementation, not LotAT business rules.
+Keep renderer behavior aligned with the shared [LotAT contract](../../../.agents/_shared/lotat-contract.md) and the authoritative TypeScript protocol files. This app owns visual layout and rendering implementation, not LotAT business rules.
 
 LotAT C# publish templates live at [../../../Actions/LotAT/overlay-publish.cs](../../../Actions/LotAT/overlay-publish.cs). Runtime semantics are documented in [../../../Actions/LotAT/AGENTS.md](../../../Actions/LotAT/AGENTS.md).
 

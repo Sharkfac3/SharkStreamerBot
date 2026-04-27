@@ -99,4 +99,4 @@ If a change affects shared names, update `Actions/SHARED-CONSTANTS.md` and all l
 - Mix It Up export/import tooling belongs in `Tools/MixItUp/`, not `Actions/`.
 - Streamer.bot support tooling belongs in `Tools/StreamerBot/`, not `Actions/`.
 - Brand/canon/story/art content belongs in `Creative/` unless it is embedded runtime copy for an action.
-- Repo-wide workflow and architecture docs belong in `.agents/` or `Docs/`.
+- Repo-wide workflow and architecture docs belong in `.agents/`.

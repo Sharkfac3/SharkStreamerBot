@@ -62,7 +62,7 @@ Before making changes, read:
 - [docs/protocol.md](docs/protocol.md) for broker protocol, package roles, routing rules, and topic-change workflow.
 - [docs/asset-system.md](docs/asset-system.md) for public asset paths, asset IDs, lifecycle commands, audio behavior, and depth conventions.
 - [docs/rendering-notes.md](docs/rendering-notes.md) for overlay renderer rules, LotAT/Squad renderer notes, OBS caveats, and gotchas.
-- [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md) before changing LotAT presentation topics, payload expectations, or renderer behavior.
+- [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) before changing LotAT presentation topics, payload expectations, or renderer behavior.
 
 ## Local Workflow / Build and Test
 

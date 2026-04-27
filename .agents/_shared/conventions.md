@@ -20,7 +20,6 @@ Read [WORKING.md](../../WORKING.md) before starting. Follow [coordination](../wo
 | [Apps/](../../Apps/) | Standalone TypeScript app code and app-local docs. |
 | [Tools/](../../Tools/) | Local utilities, validators, sync helpers, and external integration scripts. |
 | [Creative/](../../Creative/) | Brand, art, marketing, worldbuilding, and creative source docs. |
-| [Docs/](../../Docs/) | Human-facing repo architecture, workflow, onboarding, and conventions. |
 | [../](../) | Agent roles, workflows, manifest routing, and shared agent context. |
 | Pi skill mirror | Retired 2026-04 at cutover; use local `AGENTS.md` guides and `.agents/` roles/workflows instead. |
 

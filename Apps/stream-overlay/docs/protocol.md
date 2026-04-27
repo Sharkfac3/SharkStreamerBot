@@ -12,7 +12,7 @@ owner: app-dev
 
 The authoritative protocol lives in [../packages/shared/src/protocol.ts](../packages/shared/src/protocol.ts) and [../packages/shared/src/topics.ts](../packages/shared/src/topics.ts). If this reference conflicts with those files, update this reference; do not change types to match stale docs.
 
-For shared LotAT presentation facts such as `lotat.*` topics, broker envelope expectations, and payload handoff boundaries, see [Docs/Architecture/lotat-contract.md](../../../Docs/Architecture/lotat-contract.md). Keep this app reference focused on overlay implementation responsibilities.
+For shared LotAT presentation facts such as `lotat.*` topics, broker envelope expectations, and payload handoff boundaries, see [.agents/_shared/lotat-contract.md](../../../.agents/_shared/lotat-contract.md). Keep this app reference focused on overlay implementation responsibilities.
 
 Protocol evolution remains coordinated: removing fields/topics or changing field types is breaking and requires updates across shared types, overlay renderer, broker tests, and C# publishers.
 

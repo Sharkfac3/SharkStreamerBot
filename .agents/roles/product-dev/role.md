@@ -16,7 +16,7 @@ Own product-facing documentation, technical knowledge content, specs, and future
 ## Owns
 
 - Product docs, specs, knowledge articles, and customer-facing technical explanations.
-- Human-readable product/R&D content that may live under [Docs/](../../../Docs/) or future product documentation paths.
+- Human-readable product/R&D content that may live under future product documentation paths.
 - Product-facing handoffs from stream features such as XJ Drivethrough or R&D content sessions.
 
 ## When to Activate
@@ -27,11 +27,11 @@ Activate for product documentation, technical articles, specifications, customer
 
 - Internal runtime code or tooling without customer-facing/product documentation output.
 - Brand voice alone; use `brand-steward`.
-- Repo architecture docs that are not product/customer-facing; use `ops` or the docs architecture route.
+- Repo architecture docs that are not product/customer-facing; use `ops`.
 
 ## Common Routes
 
-Use [Docs/Architecture/AGENTS.md](../../../Docs/Architecture/AGENTS.md) when product docs interact with repo architecture documentation. Chain from [Actions/XJ Drivethrough/AGENTS.md](../../../Actions/XJ%20Drivethrough/AGENTS.md) if that feature becomes product-facing.
+Chain from [Actions/XJ Drivethrough/AGENTS.md](../../../Actions/XJ%20Drivethrough/AGENTS.md) if that feature becomes product-facing.
 
 ## Required Workflows
 

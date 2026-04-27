@@ -31,7 +31,7 @@ BACKTICK_RE = re.compile(r"`([^`\n]+)`")
 GENERATED_BLOCK_RE = re.compile(r"<!-- GENERATED:([^:]+):start -->\n(.*?)<!-- GENERATED:\1:end -->", re.S)
 FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 PATH_ROOTS = (
-    ".agents/", "Actions/", "Apps/", "Tools/", "Creative/", "Docs/",
+    ".agents/", "Actions/", "Apps/", "Tools/", "Creative/",
     "Projects/", "AGENTS.md", "CLAUDE.md", "WORKING.md", "README.md",
 )
 DOMAIN_ROOTS = ("Actions", "Apps", "Tools", "Creative")
@@ -148,7 +148,7 @@ def split_target(target: str) -> str:
 def looks_like_path(text: str) -> bool:
     if not text or "<" in text or ">" in text:
         return False
-    if " " in text and not any(text.startswith(root) for root in ("Actions/", "Apps/", "Tools/", "Creative/", "Docs/", "Projects/")):
+    if " " in text and not any(text.startswith(root) for root in ("Actions/", "Apps/", "Tools/", "Creative/", "Projects/")):
         return False
     if re.fullmatch(r"\.[A-Za-z0-9]+", text):
         return False

@@ -244,4 +244,4 @@ No `409 Conflict` response is implemented in the current service.
 
 ## Migration Notes
 
-This file replaces the detailed plan formerly kept at [Docs/INFO-SERVICE-PLAN.md](../../Docs/INFO-SERVICE-PLAN.md) and the old agent-tree shared protocol pointer. New protocol details belong here.
+This file replaces the detailed plan formerly kept at the top-level Docs folder and the old agent-tree shared protocol pointer. New protocol details belong here.

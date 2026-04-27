@@ -44,7 +44,6 @@ Then:
 | Apps | [Apps/](Apps/) | Standalone TypeScript apps and app-local guides. |
 | Tools | [Tools/](Tools/) | Local utilities, validators, Mix It Up helpers, and sync tooling. |
 | Creative | [Creative/](Creative/) | Brand, art, marketing, worldbuilding, and creative guides. |
-| Docs | [Docs/](Docs/) | Human-facing architecture, workflow, onboarding, and conventions. |
 | Agent Tree | [.agents/](.agents/) | Manifest, role overviews, workflows, and shared agent context. |
 
 ## Coordination
@@ -61,5 +60,4 @@ After code changes: include paste targets, setup steps, and validation output vi
 | [Actions/HELPER-SNIPPETS.md](Actions/HELPER-SNIPPETS.md) | Reusable C# patterns. |
 | [Creative/Brand/BRAND-IDENTITY.md](Creative/Brand/BRAND-IDENTITY.md) | Brand vision, mission, values, and metaphor. |
 | [Creative/Brand/CHARACTER-CODEX.md](Creative/Brand/CHARACTER-CODEX.md) | Canonical character identities. |
-| [Docs/Architecture/repo-structure.md](Docs/Architecture/repo-structure.md) | Human repo-structure reference. |
 | [Tools/AgentTree/AGENTS.md](Tools/AgentTree/AGENTS.md) | Manifest/validator route for agent-tree tooling. |

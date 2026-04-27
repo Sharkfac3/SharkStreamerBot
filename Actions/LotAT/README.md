@@ -14,7 +14,7 @@ This folder owns live session execution only:
 - collect and resolve authored decision-command votes
 - end and clean up the session safely
 
-For shared facts used across runtime, tooling, story authoring, and overlay presentation, see [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md).
+For shared facts used across runtime, tooling, story authoring, and overlay presentation, see [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md).
 
 ## Documentation map
 
@@ -24,7 +24,7 @@ For shared facts used across runtime, tooling, story authoring, and overlay pres
 | [operator-setup.md](operator-setup.md) | Streamer.bot timer/trigger wiring, prerequisites, and live-test checklist. |
 | [implementation-map.md](implementation-map.md) | Script inventory, trigger/input expectations, paste/sync notes, and implementation gotchas. |
 | [AGENTS.md](AGENTS.md) | Agent routing, local workflow, validation, boundaries, and handoff expectations for this folder. |
-| [Docs/Architecture/lotat-contract.md](../../Docs/Architecture/lotat-contract.md) | Cross-domain LotAT contract index. |
+| [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) | Cross-domain LotAT contract index. |
 
 ## Current runtime boundary
 

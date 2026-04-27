@@ -18,7 +18,7 @@ sourceOfTruth: true
 
 ## Purpose
 
-Use this workflow to prevent file conflicts between agents and to keep the operator informed about active work. It consolidates the shared coordination procedure and the human contribution rules from [Docs/AGENT-WORKFLOW.md](../../Docs/AGENT-WORKFLOW.md).
+Use this workflow to prevent file conflicts between agents and to keep the operator informed about active work. It consolidates the shared coordination procedure and the contribution rules for direct-vs-branch work in this repo.
 
 ## When to Run
 
@@ -33,7 +33,6 @@ Required references:
 | Reference | Use |
 |---|---|
 | [WORKING.md](../../WORKING.md) | Active work table, task queue, conflict registry, and recently completed log. |
-| [Docs/AGENT-WORKFLOW.md](../../Docs/AGENT-WORKFLOW.md) | Human contribution modes, branch naming, merge review template, and WORKING integration. |
 | [AGENTS.md](../../AGENTS.md) | Root agent routing and project coordination pointers. |
 | [.agents/ENTRY.md](../ENTRY.md) | Agent-tree entrypoint and shared context index. |
 
@@ -75,7 +74,7 @@ At minimum, the final handoff or change summary should note:
 - Whether the Active Work row was cleared.
 - Any unresolved coordination or operator-review items.
 
-For branch work, use the merge summary template in [Docs/AGENT-WORKFLOW.md](../../Docs/AGENT-WORKFLOW.md) before merge review.
+For branch work, use the standard [change-summary workflow](change-summary.md) plus a one-paragraph branch purpose statement before merge review.
 
 ## Related Routes
 

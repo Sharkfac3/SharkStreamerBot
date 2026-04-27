@@ -4,7 +4,7 @@
 >
 > This is the shared signal board for all contributors — human, pi, claude, diffusion, or otherwise. It prevents two agents from editing the same files at the same time and gives the operator a live snapshot of project state.
 >
-> For contribution rules (when to commit direct vs. use a branch, merge review template): see `Docs/AGENT-WORKFLOW.md`.
+> For contribution rules (when to commit direct vs. use a branch): see `.agents/workflows/coordination.md`.
 
 ---
 
@@ -46,7 +46,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 Add a row to **Active Work** with:
 - Your agent name (`pi`, `claude`, `diffusion`, or a descriptive name)
 - Short task description (one line)
-- Primary domain (`Actions/`, `Apps/`, `Creative/`, `Docs/`, `Tools/`, `.agents/`)
+- Primary domain (`Actions/`, `Apps/`, `Creative/`, `Tools/`, `.agents/`)
 - Files you expect to touch (comma-separated paths, or `TBD` if scouting)
 - Today's date (`YYYY-MM-DD`)
 

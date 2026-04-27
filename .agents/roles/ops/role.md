@@ -32,7 +32,7 @@ Activate for validation, sync workflow, change summaries, manifest/routing updat
 
 ## Common Routes
 
-Use [Tools/AgentTree/AGENTS.md](../../../Tools/AgentTree/AGENTS.md), [Tools/StreamerBot/AGENTS.md](../../../Tools/StreamerBot/AGENTS.md), [Tools/MixItUp/AGENTS.md](../../../Tools/MixItUp/AGENTS.md), and [Docs/Architecture/AGENTS.md](../../../Docs/Architecture/AGENTS.md) for repo architecture routing.
+Use [Tools/AgentTree/AGENTS.md](../../../Tools/AgentTree/AGENTS.md), [Tools/StreamerBot/AGENTS.md](../../../Tools/StreamerBot/AGENTS.md), and [Tools/MixItUp/AGENTS.md](../../../Tools/MixItUp/AGENTS.md) for repo architecture routing.
 
 ## Required Workflows
 

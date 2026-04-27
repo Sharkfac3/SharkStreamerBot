@@ -51,7 +51,7 @@ SharkStreamerBot is the technical and creative infrastructure for SharkFac3's li
 | [sync](workflows/sync.md) | Streamer.bot paste/sync procedure. |
 | [validation](workflows/validation.md) | Validator and check-selection procedure. |
 
-Domain/protocol knowledge now lives beside the domain it describes, for example [Apps/info-service/AGENTS.md](../Apps/info-service/AGENTS.md), [Tools/MixItUp/AGENTS.md](../Tools/MixItUp/AGENTS.md), and [Docs/Architecture/AGENTS.md](../Docs/Architecture/AGENTS.md).
+Domain/protocol knowledge now lives beside the domain it describes, for example [Apps/info-service/AGENTS.md](../Apps/info-service/AGENTS.md) and [Tools/MixItUp/AGENTS.md](../Tools/MixItUp/AGENTS.md).
 
 ## Manifest
 

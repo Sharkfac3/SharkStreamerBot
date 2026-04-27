@@ -27,7 +27,6 @@ SharkFac3 is building an R&D company focused on off-road racing products in publ
 | Apps | [Apps/](../../Apps/) | Standalone TypeScript apps: stream overlay, info-service, and production manager. |
 | Tools | [Tools/](../../Tools/) | Local utilities, validators, Mix It Up helpers, and sync tooling. |
 | Creative | [Creative/](../../Creative/) | Brand docs, character art, marketing, worldbuilding, lore, and creative scaffolding. |
-| Docs | [Docs/](../../Docs/) | Human-facing onboarding, architecture, workflow, and convention docs. |
 | Agent Tree | [../](../) | Agent roles, workflows, manifest routing, and repo-wide shared context. |
 
 ## Key References
@@ -40,7 +39,6 @@ SharkFac3 is building an R&D company focused on off-road racing products in publ
 | [Creative/Brand/BRAND-IDENTITY.md](../../Creative/Brand/BRAND-IDENTITY.md) | Brand vision, mission, values, and neurodivergent metaphor. |
 | [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) | Tone and language conventions by output context. |
 | [Creative/Brand/CHARACTER-CODEX.md](../../Creative/Brand/CHARACTER-CODEX.md) | Canonical character identities. |
-| [Docs/ONBOARDING.md](../../Docs/ONBOARDING.md) | Human onboarding overview. |
 
 ## Priority Order
 
