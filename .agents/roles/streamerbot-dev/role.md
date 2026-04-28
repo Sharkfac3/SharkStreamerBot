@@ -49,4 +49,10 @@ Start with the local guide for the folder being edited, especially [Actions/Comm
 
 ## Living Context
 
-Use the local `AGENTS.md` guide in the `Actions/` folder you will edit, then check [Actions/HELPER-SNIPPETS.md](../../../Actions/HELPER-SNIPPETS.md) for reusable Streamer.bot implementation patterns.
+Lookup order when wiring or editing a Streamer.bot script:
+
+1. **Catalog** — [Actions/Helpers/triggers/](../../../Actions/Helpers/triggers/README.md). Canonical upstream args per trigger.
+2. **Script docs** — local `AGENTS.md` and the feature README's `## Args Consumed` table for the relevant `.cs` file.
+3. **Upstream** — https://docs.streamer.bot/api/triggers (last resort; if the catalog is wrong, fix the catalog first).
+
+Then check [Actions/HELPER-SNIPPETS.md](../../../Actions/HELPER-SNIPPETS.md) and the concept-specific files under [Actions/Helpers/](../../../Actions/Helpers/) for reusable C# patterns.

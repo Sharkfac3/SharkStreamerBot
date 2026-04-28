@@ -25,6 +25,12 @@ When working anywhere under `Actions/`:
 5. Read the local folder `AGENTS.md` for the action group you will edit.
 6. After changing C# scripts, include Streamer.bot paste targets and validation/smoke-test notes in your handoff.
 
+**Trigger arg lookup order** (when wiring or editing any script):
+
+1. **Catalog** — `Actions/Helpers/triggers/<platform>/<subcategory>.md#<trigger>`. Canonical upstream args.
+2. **Script docs** — local `AGENTS.md` and the feature README's `## Args Consumed` table for the `.cs` file.
+3. **Upstream** — https://docs.streamer.bot/api/triggers (last resort; if the catalog is wrong, fix the catalog first).
+
 ## Domain Rules
 
 - Keep `Actions/` focused on Streamer.bot runtime scripts and action-group docs.
