@@ -73,9 +73,10 @@ public class CPHInline
     // Re-entry guard variable name.
     private const string VAR_XJ_ACTIVE = "xj_drivethrough_active";
 
-    // Small delay after spawn before sending the move, so the overlay has time
-    // to register the asset before we try to tween it.
-    private const int WAIT_SPAWN_SETTLE_MS = 100;
+    // Delay after spawn before sending the move, so the overlay has time to load
+    // and register the image before we try to tween it. The overlay also queues
+    // early move commands, but this keeps the normal path simple and reliable.
+    private const int WAIT_SPAWN_SETTLE_MS = 750;
 
     // Buffer after the drive tween before sending remove, to let the tween fully finish.
     private const int WAIT_POST_DRIVE_MS = 500;
