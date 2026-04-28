@@ -45,4 +45,5 @@ Squad C# publish templates live under [../../../Actions/Squad/](../../../Actions
 - Streamer.bot must have its WebSocket client configured to the broker before C# publish scripts can send messages.
 - Topic names must remain synchronized between [../packages/shared/src/topics.ts](../packages/shared/src/topics.ts) and [../../../Actions/SHARED-CONSTANTS.md](../../../Actions/SHARED-CONSTANTS.md).
 - The broker health endpoint is the fastest way to see whether overlay and Streamer.bot are actually connected.
+- Spawned image/GIF assets load asynchronously. For spawn-and-immediately-move effects, add a short publisher-side settle delay and preserve the same `assetId`; the renderer also queues early moves as a safety net.
 - Keep stream/game business logic in Streamer.bot scripts under [../../../Actions/](../../../Actions/), not in renderer code.

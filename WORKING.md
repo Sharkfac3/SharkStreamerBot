@@ -12,6 +12,7 @@
 
 | Agent | Task | Domain | Files Being Edited | Started |
 |-------|------|--------|--------------------|---------|
+| pi | document immediate overlay move gotcha | Apps/stream-overlay, Actions/ | Apps/stream-overlay/docs/asset-system.md, Apps/stream-overlay/docs/rendering-notes.md, Actions/XJ Drivethrough/AGENTS.md | 2026-04-27 |
 
 ---
 

@@ -110,6 +110,8 @@ Expected asset locations in the overlay app:
 
 The repo may not contain those binary assets yet. If missing, the C# action can publish successfully while the overlay cannot display or play the intended media.
 
+Movement timing note: XJ is a spawn-then-immediate-move effect. Keep a publisher-side settle delay before `overlay.move` so first-time asset loading does not leave the Jeep off-screen. The overlay renderer has a pending-move safety net, but future moving-asset effects should still follow the same pattern documented in `Apps/stream-overlay/docs/asset-system.md`.
+
 Core runtime variable:
 
 | Variable | Meaning |
