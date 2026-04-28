@@ -27,6 +27,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-27 | claude | phase-0 trigger catalog manifest | uncommitted |
 | 2026-04-27 | pi | add overlay broker helper snippet | uncommitted |
 | 2026-04-27 | pi | integrate overlay broker connect into stream-start | uncommitted |
 | 2026-04-27 | pi | create-actions-agent-guide | uncommitted |
