@@ -15,31 +15,8 @@ public class CPHInline
     private const int    EMPIRE_GRID_COLS        = 32;
     private const int    EMPIRE_GRID_ROWS        = 18;
 
-    /*
-     * Purpose:
-     * - Handles !join during the Clone Empire join window.
-     * - Adds a new rebel to the center spawn, updates stored JSON state,
-     *   publishes an overlay update, and confirms the join in chat.
-     *
-     * Expected trigger/input:
-     * - Streamer.bot chat command trigger for !join.
-     * - Required args: user, userId.
-     *
-     * Required runtime variables:
-     * - Reads empire_join_active as the command guard.
-     * - Reads/writes empire_players_json.
-     * - Reads empire_cells_json for broker state payload.
-     *
-     * Key outputs/side effects:
-     * - Silently returns when Clone Empire is not accepting joins.
-     * - Prevents duplicate joins by userId.
-     * - Publishes broker topic squad.clone.update with event player_joined.
-     * - Sends chat confirmation for duplicate and success paths.
-     *
-     * Operator notes:
-     * - Add this action as an additional !join handler in Streamer.bot.
-     * - LotAT and Clone Empire can share !join because both scripts guard themselves.
-     */
+    // Runtime source of truth: Actions/Squad/Clone/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     public bool Execute()
     {
         bool joinActive = CPH.GetGlobalVar<bool?>(VAR_EMPIRE_JOIN_ACTIVE, false) ?? false;
@@ -191,10 +168,8 @@ public class CPHInline
         [DataMember(Name = "row")] public int Row { get; set; }
     }
 
+    // JSON helper reference: Actions/Helpers/json-no-external-libraries.md
     // ── Deserialize ──────────────────────────────────────────────────────
-    // Parses a JSON string and converts it to the requested type T.
-    // Supports: primitives, strings, List<T>, Dictionary<string,T>, and
-    // [DataContract]/[DataMember] classes.
     private T DeserializeJson<T>(string json)
     {
         object parsed = ParseJsonRoot(json);
@@ -206,8 +181,6 @@ public class CPHInline
     }
 
     // ── Serialize ────────────────────────────────────────────────────────
-    // Converts an object to a JSON string. Supports primitives, strings,
-    // dictionaries, lists/enumerables, and [DataContract]/[DataMember] classes.
     private string SerializeJson<T>(T value)
     {
         return SerializeJsonValue(value);
@@ -466,8 +439,6 @@ public class CPHInline
     }
 
     // ── Type converter ───────────────────────────────────────────────────
-    // Maps parsed Dictionary<string,object> / List<object> / primitives
-    // into strongly-typed C# objects using [DataContract] attributes.
     private object ConvertParsedValueToType(object value, Type targetType)
     {
         if (targetType == null)

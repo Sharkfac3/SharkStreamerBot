@@ -23,35 +23,9 @@ public class CPHInline
     private const string MIXITUP_CLONE_UNLOCK_COMMAND_ID = "REPLACE_WITH_CLONE_UNLOCK_COMMAND_ID";
     private const int    WAIT_MIXITUP_UNLOCK_STARTUP_MS  = 3000;
 
-    /*
-     * Purpose:
-     * - Handles Clone Empire movement commands during the live movement phase.
-     * - Applies movement cooldown, grid boundaries, death-by-empire, empire growth,
-     *   and local Rule 3 empire collapse checks.
-     *
-     * Expected trigger/input:
-     * - Streamer.bot command triggers for !up, !down, !left, and !right.
-     * - This script uses one shared action for all four commands.
-     * - Direction is read from the rawInput arg (example: !up).
-     * - Required args: user, userId, rawInput.
-     *
-     * Required runtime variables:
-     * - Reads shared mini-game lock globals: minigame_active, minigame_name.
-     * - Reads/writes empire_game_active, empire_join_active, empire_players_json,
-     *   empire_cells_json, empire_game_start_utc.
-     *
-     * Key outputs/side effects:
-     * - Moves a living player one cell when valid.
-     * - Silently ignores invalid directions, cooldown hits, and off-grid moves.
-     * - Removes players who enter empire territory.
-     * - Grows empire territory from the player's departure cell when Rule 2 is met.
-     * - Publishes squad.clone.update and squad.clone.end broker events.
-     *
-     * Operator notes:
-     * - Add this action as an additional action on the existing !up / !down / !left / !right triggers.
-     * - Do not remove the existing Destroyer movement action.
-     * - No extra Streamer.bot direction arg is needed because this script reads rawInput directly.
-     */
+    // Runtime source of truth: Actions/Squad/Clone/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
+    // Paste with the shared !up/!down/!left/!right triggers; direction comes from rawInput.
     public bool Execute()
     {
         string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
@@ -106,7 +80,6 @@ public class CPHInline
 
         List<EmpireCell> empire = LoadEmpire();
 
-        // Rule 1: entering empire territory is instant death.
         if (ContainsEmpireCell(empire, newCol, newRow))
         {
             players.RemoveAt(playerIndex);
@@ -218,8 +191,7 @@ public class CPHInline
         return false;
     }
 
-    // Checks newly added empire cells for encirclement. Modifies empireList in-place.
-    // Returns list of cells removed.
+    // Localized Rule 3 cascade from newly changed cells.
     private List<EmpireCell> Rule3Check(
         List<EmpireCell> empire,
         List<EmpirePlayer> players,
@@ -459,10 +431,7 @@ public class CPHInline
         [DataMember(Name = "row")] public int Row { get; set; }
     }
 
-    // ── Deserialize ──────────────────────────────────────────────────────
-    // Parses a JSON string and converts it to the requested type T.
-    // Supports: primitives, strings, List<T>, Dictionary<string,T>, and
-    // [DataContract]/[DataMember] classes.
+    // JSON helpers: paste-local copy; see Actions/Helpers/json-no-external-libraries.md.
     private T DeserializeJson<T>(string json)
     {
         object parsed = ParseJsonRoot(json);
@@ -473,15 +442,11 @@ public class CPHInline
         return (T)converted;
     }
 
-    // ── Serialize ────────────────────────────────────────────────────────
-    // Converts an object to a JSON string. Supports primitives, strings,
-    // dictionaries, lists/enumerables, and [DataContract]/[DataMember] classes.
     private string SerializeJson<T>(T value)
     {
         return SerializeJsonValue(value);
     }
 
-    // ── Root parser ──────────────────────────────────────────────────────
     private object ParseJsonRoot(string json)
     {
         int index = 0;
@@ -490,7 +455,6 @@ public class CPHInline
         return value;
     }
 
-    // ── Value dispatcher ─────────────────────────────────────────────────
     private object ParseJsonValue(string source, ref int index)
     {
         SkipJsonWhitespace(source, ref index);
@@ -519,7 +483,6 @@ public class CPHInline
         return ParseJsonNumber(source, ref index);
     }
 
-    // ── Object ───────────────────────────────────────────────────────────
     private Dictionary<string, object> ParseJsonObject(string source, ref int index)
     {
         var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -564,7 +527,6 @@ public class CPHInline
         return result;
     }
 
-    // ── Array ────────────────────────────────────────────────────────────
     private List<object> ParseJsonArray(string source, ref int index)
     {
         var result = new List<object>();
@@ -601,7 +563,6 @@ public class CPHInline
         return result;
     }
 
-    // ── String ───────────────────────────────────────────────────────────
     private string ParseJsonString(string source, ref int index)
     {
         if (index >= source.Length || source[index] != '"')
@@ -653,7 +614,6 @@ public class CPHInline
         throw new InvalidOperationException("Invalid JSON string: missing closing quote.");
     }
 
-    // ── Boolean ──────────────────────────────────────────────────────────
     private bool ParseJsonBoolean(string source, ref int index)
     {
         if (source.Length >= index + 4 && string.Compare(source, index, "true", 0, 4, StringComparison.Ordinal) == 0)
@@ -671,7 +631,6 @@ public class CPHInline
         throw new InvalidOperationException("Invalid JSON boolean value.");
     }
 
-    // ── Null ─────────────────────────────────────────────────────────────
     private void ParseJsonNull(string source, ref int index)
     {
         if (source.Length >= index + 4 && string.Compare(source, index, "null", 0, 4, StringComparison.Ordinal) == 0)
@@ -683,7 +642,6 @@ public class CPHInline
         throw new InvalidOperationException("Invalid JSON null value.");
     }
 
-    // ── Number ───────────────────────────────────────────────────────────
     private object ParseJsonNumber(string source, ref int index)
     {
         int start = index;
@@ -717,7 +675,6 @@ public class CPHInline
         return 0;
     }
 
-    // ── Whitespace ───────────────────────────────────────────────────────
     private void SkipJsonWhitespace(string source, ref int index)
     {
         while (index < source.Length)
@@ -733,9 +690,6 @@ public class CPHInline
         }
     }
 
-    // ── Type converter ───────────────────────────────────────────────────
-    // Maps parsed Dictionary<string,object> / List<object> / primitives
-    // into strongly-typed C# objects using [DataContract] attributes.
     private object ConvertParsedValueToType(object value, Type targetType)
     {
         if (targetType == null)
@@ -832,7 +786,6 @@ public class CPHInline
         return instance;
     }
 
-    // ── Serializer ───────────────────────────────────────────────────────
     private string SerializeJsonValue(object value)
     {
         if (value == null)
@@ -897,7 +850,6 @@ public class CPHInline
         return "{" + string.Join(",", objectParts.ToArray()) + "}";
     }
 
-    // ── String escaping ──────────────────────────────────────────────────
     private string EscapeJsonString(string value)
     {
         string source = value ?? "";

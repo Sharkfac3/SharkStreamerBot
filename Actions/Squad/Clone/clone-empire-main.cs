@@ -22,33 +22,8 @@ public class CPHInline
     private const int    EMPIRE_GRID_COLS       = 32;
     private const int    EMPIRE_GRID_ROWS       = 18;
 
-    /*
-     * Purpose:
-     * - Starts the Clone Empire grid game join phase when chat uses !clone.
-     * - Claims the shared mini-game lock, opens the 60-second join window,
-     *   adds the command user as the first rebel, and publishes overlay state.
-     *
-     * Expected trigger/input:
-     * - Streamer.bot chat command trigger for !clone.
-     * - Required args: user, userId.
-     *
-     * Required runtime variables:
-     * - Reads/writes shared mini-game lock: minigame_active, minigame_name.
-     * - Writes empire_game_active, empire_join_active, empire_game_start_utc,
-     *   empire_players_json, empire_cells_json.
-     * - Enables timer: Clone - Join Window.
-     *
-     * Key outputs/side effects:
-     * - Opens Clone Empire join phase.
-     * - Stores the initial player roster at the center spawn.
-     * - Publishes broker topic squad.clone.start.
-     * - Sends chat feedback for blocked, already-active, and start paths.
-     *
-     * Operator notes:
-     * - Wire this script to the !clone chat command.
-     * - The timer named Clone - Join Window must exist and fire clone-empire-start.cs.
-     * - This script only opens the join phase. Empire spawn happens in clone-empire-start.cs.
-     */
+    // Runtime source of truth: Actions/Squad/Clone/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     public bool Execute()
     {
         string user = "";
@@ -118,11 +93,9 @@ public class CPHInline
         bool lockActive = (CPH.GetGlobalVar<bool?>(VAR_MINIGAME_ACTIVE, false) ?? false);
         string lockName = CPH.GetGlobalVar<string>(VAR_MINIGAME_NAME, false) ?? "";
 
-        // Block when another game owns the lock.
         if (lockActive && !string.Equals(lockName, MINIGAME_NAME, StringComparison.OrdinalIgnoreCase))
             return false;
 
-        // Claim lock for this mini-game.
         CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, true, false);
         CPH.SetGlobalVar(VAR_MINIGAME_NAME, MINIGAME_NAME, false);
         return true;
@@ -198,10 +171,7 @@ public class CPHInline
         [DataMember(Name = "row")] public int Row { get; set; }
     }
 
-    // ── Deserialize ──────────────────────────────────────────────────────
-    // Parses a JSON string and converts it to the requested type T.
-    // Supports: primitives, strings, List<T>, Dictionary<string,T>, and
-    // [DataContract]/[DataMember] classes.
+    // JSON helpers: self-contained for Streamer.bot paste compatibility.
     private T DeserializeJson<T>(string json)
     {
         object parsed = ParseJsonRoot(json);
@@ -212,15 +182,11 @@ public class CPHInline
         return (T)converted;
     }
 
-    // ── Serialize ────────────────────────────────────────────────────────
-    // Converts an object to a JSON string. Supports primitives, strings,
-    // dictionaries, lists/enumerables, and [DataContract]/[DataMember] classes.
     private string SerializeJson<T>(T value)
     {
         return SerializeJsonValue(value);
     }
 
-    // ── Root parser ──────────────────────────────────────────────────────
     private object ParseJsonRoot(string json)
     {
         int index = 0;
@@ -229,7 +195,6 @@ public class CPHInline
         return value;
     }
 
-    // ── Value dispatcher ─────────────────────────────────────────────────
     private object ParseJsonValue(string source, ref int index)
     {
         SkipJsonWhitespace(source, ref index);
@@ -258,7 +223,6 @@ public class CPHInline
         return ParseJsonNumber(source, ref index);
     }
 
-    // ── Object ───────────────────────────────────────────────────────────
     private Dictionary<string, object> ParseJsonObject(string source, ref int index)
     {
         var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -303,7 +267,6 @@ public class CPHInline
         return result;
     }
 
-    // ── Array ────────────────────────────────────────────────────────────
     private List<object> ParseJsonArray(string source, ref int index)
     {
         var result = new List<object>();
@@ -340,7 +303,6 @@ public class CPHInline
         return result;
     }
 
-    // ── String ───────────────────────────────────────────────────────────
     private string ParseJsonString(string source, ref int index)
     {
         if (index >= source.Length || source[index] != '"')
@@ -392,7 +354,6 @@ public class CPHInline
         throw new InvalidOperationException("Invalid JSON string: missing closing quote.");
     }
 
-    // ── Boolean ──────────────────────────────────────────────────────────
     private bool ParseJsonBoolean(string source, ref int index)
     {
         if (source.Length >= index + 4 && string.Compare(source, index, "true", 0, 4, StringComparison.Ordinal) == 0)
@@ -410,7 +371,6 @@ public class CPHInline
         throw new InvalidOperationException("Invalid JSON boolean value.");
     }
 
-    // ── Null ─────────────────────────────────────────────────────────────
     private void ParseJsonNull(string source, ref int index)
     {
         if (source.Length >= index + 4 && string.Compare(source, index, "null", 0, 4, StringComparison.Ordinal) == 0)
@@ -422,7 +382,6 @@ public class CPHInline
         throw new InvalidOperationException("Invalid JSON null value.");
     }
 
-    // ── Number ───────────────────────────────────────────────────────────
     private object ParseJsonNumber(string source, ref int index)
     {
         int start = index;
@@ -456,7 +415,6 @@ public class CPHInline
         return 0;
     }
 
-    // ── Whitespace ───────────────────────────────────────────────────────
     private void SkipJsonWhitespace(string source, ref int index)
     {
         while (index < source.Length)
@@ -472,9 +430,6 @@ public class CPHInline
         }
     }
 
-    // ── Type converter ───────────────────────────────────────────────────
-    // Maps parsed Dictionary<string,object> / List<object> / primitives
-    // into strongly-typed C# objects using [DataContract] attributes.
     private object ConvertParsedValueToType(object value, Type targetType)
     {
         if (targetType == null)
@@ -507,7 +462,6 @@ public class CPHInline
         if (targetType == typeof(double))
             return Convert.ToDouble(value, System.Globalization.CultureInfo.InvariantCulture);
 
-        // List<T>
         if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(List<>))
         {
             Type itemType = targetType.GetGenericArguments()[0];
@@ -523,7 +477,6 @@ public class CPHInline
             return listInstance;
         }
 
-        // Dictionary<string, T>
         if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
         {
             Type[] args = targetType.GetGenericArguments();
@@ -542,7 +495,6 @@ public class CPHInline
             }
         }
 
-        // [DataContract] object mapping
         var objectMap = value as Dictionary<string, object>;
         if (objectMap == null)
             return Activator.CreateInstance(targetType);
@@ -574,7 +526,6 @@ public class CPHInline
         return instance;
     }
 
-    // ── Serializer ───────────────────────────────────────────────────────
     private string SerializeJsonValue(object value)
     {
         if (value == null)
@@ -615,7 +566,6 @@ public class CPHInline
             }
         }
 
-        // Fall back to [DataContract] object serialization.
         var objectParts = new List<string>();
         System.Reflection.PropertyInfo[] properties = value.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
         for (int i = 0; i < properties.Length; i++)
@@ -640,7 +590,6 @@ public class CPHInline
         return "{" + string.Join(",", objectParts.ToArray()) + "}";
     }
 
-    // ── String escaping ──────────────────────────────────────────────────
     private string EscapeJsonString(string value)
     {
         string source = value ?? "";

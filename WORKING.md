@@ -14,7 +14,6 @@
 |-------|------|--------|--------------------|---------|
 
 
-
 ---
 
 ## Task Queue
@@ -29,17 +28,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-04-27 | claude | phase-3 twitch content fill (19 subcategory files) | uncommitted |
-| 2026-04-27 | claude | phase-2 trigger catalog wiring | uncommitted |
-| 2026-04-27 | claude | phase-1 trigger catalog skeleton | uncommitted |
-| 2026-04-27 | claude | phase-0 trigger catalog manifest | uncommitted |
-| 2026-04-27 | pi | add overlay broker helper snippet | uncommitted |
-| 2026-04-27 | pi | integrate overlay broker connect into stream-start | uncommitted |
-| 2026-04-27 | pi | create-actions-agent-guide | uncommitted |
-| 2026-04-27 | pi | 104-apps-stream-overlay-doc-split | uncommitted |
-| 2026-04-27 | pi | 103-lotat-contract-index | uncommitted |
-| 2026-04-27 | pi | 102b-actions-helper-snippets-split-execute | uncommitted |
-| 2026-04-27 | pi | 102-helper-snippets-split-design | uncommitted |
+| 2026-04-29 | pi | thin stream-start comments | uncommitted |
+| 2026-04-29 | pi | thin follower-new comments | uncommitted |
+| 2026-04-29 | pi | document clone movement cooldown | uncommitted |
+| 2026-04-29 | pi | thin clone empire move comments | uncommitted |
+| 2026-04-29 | pi | thin clone empire main comments | uncommitted |
+| 2026-04-29 | pi | thin clone empire join comments | uncommitted |
+| 2026-04-29 | pi | thin Water Wizard hydrate comments | uncommitted |
+| 2026-04-29 | pi | thin Water Wizard redeem comments | uncommitted |
+| 2026-04-29 | pi | thin Water Wizard orb comments | uncommitted |
+| 2026-04-29 | pi | thin Water Wizard hail comments | uncommitted |
 
 ---
 

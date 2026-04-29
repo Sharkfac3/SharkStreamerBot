@@ -5,10 +5,8 @@ using System.Text.Json;
 
 public class CPHInline
 {
-    // SYNC CONSTANTS (Water Wizard)
-    // Keep these names aligned with:
-    // - Actions/Commanders/Water Wizard/water-wizard-redeem.cs
-    // - Actions/Commanders/Water Wizard/wizard-hydrate.cs
+    // Runtime source of truth: Actions/Commanders/Water Wizard/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     private const string ARG_USER = "user";
     private const string ARG_INPUT0 = "input0";
     private const string ARG_MESSAGE = "message";
@@ -38,30 +36,7 @@ public class CPHInline
         public string PayloadType { get; set; }
     }
 
-    /*
-     * Purpose:
-     * - Handles the Water Wizard-only !hydrate command.
-     * - Accepts either:
-     *   1) a whole number from 1 to 10, or
-     *   2) a short custom message up to 5 words.
-     * - Applies a 5-minute cooldown for the active Water Wizard.
-     * - For valid wizard usage, forwards the payload to Mix It Up as Arguments,
-     *   plus hydratemessage / hydratetype special identifiers.
-     *
-     * Expected trigger/input:
-     * - Chat command/action for !hydrate.
-     * - Reads: user, input0 (fallback parse from rawInput/message).
-     *
-     * Required runtime variables:
-     * - Reads current_water_wizard
-     * - Reads/Writes water_wizard_hydrate_next_allowed_utc (Unix seconds, UTC)
-     *
-     * Key outputs/side effects:
-     * - Non-wizard caller: sends encouragement chat instruction to use !hail.
-     * - Wizard caller on cooldown: sends remaining cooldown message.
-     * - Wizard caller with valid input: triggers Mix It Up command with both
-     *   the raw payload text and an explicit payload type.
-     */
+    // See Water Wizard README for trigger, input, cooldown, and Mix It Up behavior.
     public bool Execute()
     {
         string caller = GetArg(ARG_USER);
@@ -70,15 +45,14 @@ public class CPHInline
 
         string currentWizard = CPH.GetGlobalVar<string>(VAR_CURRENT_WATER_WIZARD, false) ?? string.Empty;
 
-        // Only the currently assigned Water Wizard can use !hydrate.
+        // Authorization guard.
         if (!IsSameUser(caller, currentWizard))
         {
             SendHailPrompt(caller, currentWizard);
             return true;
         }
 
-        // Parse hydrate input. We support either a numeric intensity (1..10)
-        // or a short custom message (up to 5 words).
+        // Validate command payload before cooldown or external calls.
         HydrateRequest hydrateRequest = ParseHydrateRequest();
         if (hydrateRequest == null)
         {
@@ -89,7 +63,7 @@ public class CPHInline
         long nowUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         long nextAllowedUtc = (CPH.GetGlobalVar<long?>(VAR_WIZARD_HYDRATE_NEXT_ALLOWED_UTC, false) ?? 0L);
 
-        // Cooldown guard for active wizard.
+        // Cooldown guard.
         if (nowUtc < nextAllowedUtc)
         {
             long remainingSeconds = Math.Max(1L, nextAllowedUtc - nowUtc);
@@ -98,16 +72,15 @@ public class CPHInline
             return true;
         }
 
-        // Trigger Mix It Up with both the payload text and an explicit type marker
-        // so Mix It Up can branch safely without guessing.
+        // Forward explicit payload text/type to Mix It Up.
         bool mixitupOk = TriggerMixItUp(hydrateRequest);
         if (!mixitupOk)
         {
-            // Do not start cooldown on failed external call.
+            // Do not charge cooldown on failed external calls.
             return true;
         }
 
-        // Start new cooldown only after successful trigger.
+        // Start cooldown only after successful trigger.
         long newNextAllowedUtc = DateTimeOffset.UtcNow.AddMinutes(HYDRATE_COOLDOWN_MINUTES).ToUnixTimeSeconds();
         CPH.SetGlobalVar(VAR_WIZARD_HYDRATE_NEXT_ALLOWED_UTC, newNextAllowedUtc, false);
 
@@ -142,8 +115,7 @@ public class CPHInline
 
     private HydrateRequest ParseHydrateRequest()
     {
-        // Preferred path: first command argument (input0). This is the cleanest way
-        // to capture a one-word number like !hydrate 7.
+        // Prefer input0 when Streamer.bot provides command args.
         string input0 = GetArg(ARG_INPUT0);
         if (int.TryParse(input0, out int parsedAmount)
             && parsedAmount >= HYDRATE_MIN_VALUE
@@ -156,8 +128,7 @@ public class CPHInline
             };
         }
 
-        // Fallback path: parse the text after the command from rawInput/message.
-        // This keeps the script working across different Streamer.bot trigger setups.
+        // Fallback for alternate Streamer.bot trigger setups.
         string commandText = ParseCommandText("!hydrate");
         if (string.IsNullOrWhiteSpace(commandText))
             return null;
@@ -177,7 +148,7 @@ public class CPHInline
         if (wordCount < 1 || wordCount > HYDRATE_MAX_MESSAGE_WORDS)
             return null;
 
-        // Also reject messages that exceed the character limit.
+        // Character cap is separate from the word cap.
         if (commandText.Length > HYDRATE_MAX_MESSAGE_CHARS)
             return null;
 

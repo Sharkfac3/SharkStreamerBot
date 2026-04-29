@@ -88,7 +88,7 @@ Handles Captain Stretch-only `!stretch` command usage.
 
 ### Expected Trigger / Input
 - Chat command/action trigger for `!stretch`.
-- Allows optional text after the command, up to `5` words max (reads `rawInput`, then fallback `message`).
+- Allows optional text after the command, up to `10` words and `40` characters max (reads `rawInput`, then fallback `message`).
 
 ### Required Runtime Variables
 - Reads `current_captain_stretch` (active Captain Stretch username).
@@ -96,7 +96,7 @@ Handles Captain Stretch-only `!stretch` command usage.
 
 ### Key Outputs / Side Effects
 - If caller **is** current Captain Stretch and phrase is valid and off cooldown:
-  - Triggers Mix It Up command and forwards the stretch phrase (0 to 5 words) as payload `Arguments`.
+  - Triggers Mix It Up command and forwards the stretch phrase (0 to 10 words, max 40 characters) as payload `Arguments`.
   - Starts/refreshes 5-minute cooldown.
 - If caller **is not** current Captain Stretch:
   - If a Captain Stretch is active, sends Twitch chat instruction to type `!thank`.
@@ -107,7 +107,7 @@ Handles Captain Stretch-only `!stretch` command usage.
 ### Mix It Up Actions
 - Endpoint: `POST http://localhost:8911/api/v2/commands/{commandId}`
 - Command ID in script: `60b43da9-accb-4dbe-968a-d57846a7dc4c`
-- Payload `Arguments`: the validated stretch phrase (0 to 5 words)
+- Payload `Arguments`: the validated stretch phrase (0 to 10 words, max 40 characters)
 
 ### OBS Interactions
 - None.
@@ -120,7 +120,6 @@ Handles Captain Stretch-only `!stretch` command usage.
 - Logs warning/error if Mix It Up call fails.
 
 ### Operator Notes
-- Replace `MIXITUP_COMMAND_ID` placeholder before production use.
 - Wire this script to the `!stretch` command trigger action.
 
 ---
@@ -190,12 +189,12 @@ Handles Captain Stretch-only `!shrimp` command usage.
 
 ### Required Runtime Variables
 - Reads `current_captain_stretch` (active Captain Stretch username).
-- Reads/writes `captain_stretch_shrimp_next_allowed_utc` (Unix timestamp, UTC, used for 5-minute cooldown).
+- Reads/writes `captain_stretch_shrimp_next_allowed_utc` (Unix timestamp, UTC, used for 1-minute cooldown).
 
 ### Key Outputs / Side Effects
 - If caller **is** current Captain Stretch and phrase is valid and off cooldown:
   - Triggers Mix It Up command and forwards the shrimp phrase (up to 30 words) as payload `Arguments`.
-  - Starts/refreshes 5-minute cooldown.
+  - Starts/refreshes 1-minute cooldown.
 - If caller **is not** current Captain Stretch:
   - If a Captain Stretch is active, sends Twitch chat instruction to type `!thank`.
   - If no Captain Stretch is active, encourages caller to redeem and become Captain Stretch.
@@ -218,5 +217,4 @@ Handles Captain Stretch-only `!shrimp` command usage.
 - Logs warning/error if Mix It Up call fails.
 
 ### Operator Notes
-- Replace `MIXITUP_COMMAND_ID` placeholder before production use.
 - Wire this script to the `!shrimp` command trigger action.

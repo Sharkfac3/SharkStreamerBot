@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class CPHInline
 {
-    // SYNC CONSTANTS (shared across features)
-    // Keep these names identical across related feature scripts.
+    // Runtime source of truth: Actions/Twitch Core Integrations/AGENTS.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     private const string OBS_SCENE_DISCO_WORKSPACE = "Disco Party: Workspace";
 
     // Duck
@@ -101,67 +101,29 @@ public class CPHInline
     private const string VAR_XJ_ACTIVE = "xj_drivethrough_active";
 
     // Overlay broker
-    // BROKER_WS_INDEX is the zero-based position of the broker entry in
-    // Streamer.bot → Servers/Clients → WebSocket Clients (top = 0).
     private const int    BROKER_WS_INDEX      = 0;
     private const string VAR_BROKER_CONNECTED = "broker_connected";
     private const string BROKER_CLIENT_NAME   = "streamerbot";
     private const int    WAIT_BROKER_CONNECT_MS = 600;
 
-    /*
-     * Purpose:
-     * - Runs at stream start to reset shared state for Squad, LotAT, and Twitch integrations.
-     *
-     * Expected trigger/input:
-     * - Streamer.bot stream-start action (manual or event wired).
-     * - No chat input required.
-     *
-     * Required runtime variables:
-     * - Reads none.
-     * - Writes/reset many global vars used by Squad mini-games, LotAT runtime state, and legacy LotAT offering scaffolding.
-     *
-     * Key outputs/side effects:
-     * - Clears global mini-game lock state.
-     * - Resets Toothless rarity unlock flags + last roll tracking.
-     * - Resets LotAT session globals to safe idle defaults and clears legacy offering settings.
-     * - Disables all four LotAT timers to prevent stale session-window fires.
-     * - Resets Duck, Clone Empire, and Pedro runtime state.
-     * - Resets the rest/focus loop active flag, phase, and timers.
-     * - Disables the temporary Temp Focus Timer to prevent stale timer fires.
-     * - Sets stream mode to workspace as the default start-of-stream mode.
-     * - Resets disco_party_active and disco_party_prev_scene so a stale mid-sequence lock cannot carry over.
-     * - Ensures Streamer.bot is connected and registered with the stream-overlay broker.
-     * - Hides Duck/Clone/Pedro/Toothless dance sources in OBS.
-     * - Disables Duck, Clone Empire, Pedro, LotAT, rest/focus, and temporary timers to prevent stale timer fires.
-     *
-     * Operator notes:
-     * - Keep scene/source names in sync with OBS.
-     * - This script is safe to run repeatedly (idempotent reset behavior).
-     */
+    // Stream-start reset. Behavior contract lives in the local AGENTS.md.
     public bool Execute()
     {
-        // Connect Streamer.bot to the stream-overlay broker early in stream start.
-        // Failure is logged but non-fatal so the rest of the startup reset still runs.
+        // Broker failure is non-fatal; continue startup reset.
         EnsureOverlayBrokerConnected();
 
-        // Clear shared lock so no stale mini-game blocks the new stream.
+        // Shared mini-game lock.
         CPH.SetGlobalVar(VAR_MINIGAME_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_MINIGAME_NAME, "", false);
 
-        // -------------------------------------------------
-        // Disco Party reset
-        // -------------------------------------------------
-        // Clear the re-entry guard and scene memory in case the previous stream
-        // ended while a disco party was mid-sequence (e.g. streamer ended stream
-        // during the 60-second hold).
+        // Disco Party reset.
         CPH.SetGlobalVar(VAR_DISCO_PARTY_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_DISCO_PARTY_PREV_SCENE, "", false);
 
-        // Default stream mode at stream start.
-        // This gives downstream actions/commands a known baseline mode.
+        // Default stream mode.
         CPH.SetGlobalVar(VAR_STREAM_MODE, MODE_WORKSPACE, false);
 
-        // Toothless rarity list used for both source names and unlock flag keys.
+        // Toothless rarity list maps to source names and unlock flag keys.
         var toothlessRarities = new List<string>
         {
             "regular",
@@ -171,23 +133,21 @@ public class CPHInline
             "party"
         };
 
-        // -------------------------------------------------
-        // Toothless reset
-        // -------------------------------------------------
+        // Toothless reset.
         foreach (string rarity in toothlessRarities)
         {
             string dancingSource = $"Toothless - Dancing - {rarity}";
 
-            // Hide -> show -> hide sequence helps clear any stale visibility cache.
+            // Hide/show/hide clears stale OBS visibility cache.
             CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, dancingSource);
             CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, dancingSource);
             CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, dancingSource);
 
-            // Clear unlock flags so each stream starts fresh.
+            // Per-stream unlock flags.
             CPH.SetGlobalVar($"{PREFIX_RARITY}{rarity}", false, false);
         }
 
-        // Reset latest-roll breadcrumbs used by overlays/debug.
+        // Latest-roll breadcrumbs.
         CPH.SetGlobalVar(VAR_LAST_ROLL, 0, false);
         CPH.SetGlobalVar(VAR_LAST_RARITY, "", false);
         CPH.SetGlobalVar(VAR_LAST_USER, "", false);
@@ -195,18 +155,13 @@ public class CPHInline
         // Note: per-user boosts are stored as boost_<member>_<userId>.
         // We intentionally do not iterate/clear unknown user IDs here.
 
-        // -------------------------------------------------
-        // LotAT + offerings reset
-        // -------------------------------------------------
-        // Clear every active LotAT timer first so stale timeout actions cannot fire
-        // after the stream has already been returned to a clean idle baseline.
+        // LotAT + offerings reset; disable timers before state reset.
         CPH.DisableTimer(TIMER_LOTAT_JOIN_WINDOW);
         CPH.DisableTimer(TIMER_LOTAT_DECISION_WINDOW);
         CPH.DisableTimer(TIMER_LOTAT_COMMANDER_WINDOW);
         CPH.DisableTimer(TIMER_LOTAT_DICE_WINDOW);
 
-        // LotAT v1 runtime foundation defaults.
-        // These globals are the canonical cross-action contract for future engine work.
+        // LotAT v1 runtime defaults.
         CPH.SetGlobalVar(VAR_LOTAT_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_LOTAT_SESSION_ID, "", false);
         CPH.SetGlobalVar(VAR_LOTAT_SESSION_STAGE, PHASE_IDLE, false);
@@ -228,15 +183,12 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_LOTAT_SESSION_LAST_CHOICE_ID, "", false);
         CPH.SetGlobalVar(VAR_LOTAT_SESSION_LAST_END_STATE, "", false);
 
-        // Keep the older offering-related variables intact as separate legacy state.
-        // They are intentionally not redefined here as active LotAT engine state.
+        // Legacy offering state; not active LotAT engine state.
         CPH.SetGlobalVar(VAR_LOTAT_ANNOUNCEMENT_SENT, false, false);
         CPH.SetGlobalVar(VAR_LOTAT_OFFERING_STEAL_CHANCE, 0, false);
         CPH.SetGlobalVar(VAR_LOTAT_STEAL_MULTIPLIER, 1, false);
 
-        // -------------------------------------------------
-        // Duck reset
-        // -------------------------------------------------
+        // Duck reset.
         CPH.SetGlobalVar(VAR_DUCK_EVENT_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_DUCK_QUACK_COUNT, 0, false);
         CPH.SetGlobalVar(VAR_DUCK_CALLER, "", false);
@@ -250,29 +202,23 @@ public class CPHInline
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_DUCK_DANCING);
         CPH.DisableTimer(TIMER_DUCK_CALL_WINDOW);
 
-        // -------------------------------------------------
-        // Clone reset
-        // -------------------------------------------------
+        // Clone reset.
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
         CPH.ObsShowSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_CLONE_DANCING);
 
-        // Clone Grid Game — reset all non-persisted state at stream start.
-        // Keep clone_unlocked untouched because it is persisted and should
-        // survive stream restarts for Disco Party eligibility.
+        // Clone Grid Game non-persisted state; leave persisted clone_unlocked untouched.
         CPH.SetGlobalVar(VAR_EMPIRE_GAME_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_EMPIRE_JOIN_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_EMPIRE_GAME_START_UTC, 0L, false);
         CPH.SetGlobalVar(VAR_EMPIRE_PLAYERS_JSON, "[]", false);
         CPH.SetGlobalVar(VAR_EMPIRE_CELLS_JSON, "[]", false);
 
-        // Disable Clone timers in case the previous stream crashed mid-game.
+        // Clone timers.
         CPH.DisableTimer(TIMER_CLONE_JOIN_WINDOW);
         CPH.DisableTimer(TIMER_CLONE_GAME_TICK);
 
-        // -------------------------------------------------
-        // Pedro reset
-        // -------------------------------------------------
+        // Pedro reset.
         CPH.SetGlobalVar(VAR_PEDRO_GAME_ENABLED, false, false);
         CPH.SetGlobalVar(VAR_PEDRO_MENTION_COUNT, 0, false);
         CPH.SetGlobalVar(VAR_PEDRO_UNLOCKED, false, false);
@@ -285,9 +231,7 @@ public class CPHInline
         CPH.ObsHideSource(OBS_SCENE_DISCO_WORKSPACE, OBS_SOURCE_PEDRO_DANCING);
         CPH.DisableTimer(TIMER_PEDRO_CALL_WINDOW);
 
-        // -------------------------------------------------
-        // Rest / Focus loop reset
-        // -------------------------------------------------
+        // Rest / Focus loop reset.
         CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_REST_FOCUS_LOOP_PHASE, PHASE_IDLE, false);
         CPH.DisableTimer(TIMER_REST_FOCUS_PRE_REST);
@@ -295,16 +239,10 @@ public class CPHInline
         CPH.DisableTimer(TIMER_REST_FOCUS_PRE_FOCUS);
         CPH.DisableTimer(TIMER_REST_FOCUS_FOCUS);
 
-        // -------------------------------------------------
-        // Temporary timer reset
-        // -------------------------------------------------
+        // Temporary timer reset.
         CPH.DisableTimer(TIMER_TEMP_FOCUS);
 
-        // -------------------------------------------------
-        // XJ Drivethrough reset
-        // -------------------------------------------------
-        // Clear the re-entry guard in case a drivethrough was mid-sequence when
-        // the previous stream ended (e.g., stream ended during the 10-second drive).
+        // XJ Drivethrough reset.
         CPH.SetGlobalVar(VAR_XJ_ACTIVE, false, false);
 
         return true;
@@ -325,7 +263,7 @@ public class CPHInline
             return true;
         }
 
-        // Clear stale state before trying to connect/register.
+        // Clear stale registration state before connect/register.
         CPH.SetGlobalVar(VAR_BROKER_CONNECTED, false, false);
 
         if (!alreadyConnected)

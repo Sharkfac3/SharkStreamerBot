@@ -2,29 +2,12 @@ using System;
 
 public class CPHInline
 {
-    // SYNC CONSTANTS (Captain Stretch support command)
+    // Runtime source of truth: Actions/Commanders/Captain Stretch/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     private const string ARG_USER = "user";
     private const string VAR_CURRENT_CAPTAIN_STRETCH = "current_captain_stretch";
     private const string VAR_CAPTAIN_STRETCH_THANK_COUNT = "captain_stretch_thank_count";
 
-    /*
-     * Purpose:
-     * - Handles public !thank support for the currently active Captain Stretch.
-     * - Increments the current tenure thank counter by 1 for each valid use.
-     *
-     * Expected trigger/input:
-     * - Chat command/action trigger for !thank.
-     * - Reads: user
-     *
-     * Required runtime variables:
-     * - Reads current_captain_stretch
-     * - Reads/Writes captain_stretch_thank_count
-     *
-     * Key outputs/side effects:
-     * - Blocks self-support (current captain cannot !thank themselves).
-     * - Sends chat feedback for success/failure paths.
-     * - Future hook: Mix It Up support call can be added in success path.
-     */
     public bool Execute()
     {
         string caller = GetArg(ARG_USER);

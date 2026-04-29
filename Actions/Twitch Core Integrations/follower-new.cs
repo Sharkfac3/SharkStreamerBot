@@ -5,26 +5,8 @@ using System.Text.Json;
 
 public class CPHInline
 {
-    /*
-     * Purpose:
-     * - Base Twitch integration bridge for a new follower event.
-     *
-     * Expected trigger/input:
-     * - Wire this script to the Streamer.bot Twitch event for a new follow.
-     * - Reads the new follower's display name and Twitch user ID from trigger args.
-     *
-     * Required runtime variables:
-     * - None.
-     *
-     * Key outputs/side effects:
-     * - Calls the Mix It Up Run Command API when a real command ID is configured.
-     * - Sends populated follower SpecialIdentifiers for Mix It Up branching.
-     * - Does not interact with OBS.
-     *
-     * Operator notes:
-     * - Replace MIXITUP_COMMAND_ID before production use.
-     * - In Mix It Up, reference: $followuser, $followuserid, $followtype.
-     */
+    // Runtime source of truth: Actions/Twitch Core Integrations/AGENTS.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
 
     private const string SCRIPT_NAME = "Core - Follower New";
     private const string MIXITUP_BASE_URL = "http://localhost:8911";
