@@ -12,7 +12,7 @@ status: active
 
 Reusable Streamer.bot C# snippets have been reorganized by concept under [Actions/Helpers/](Helpers/). This file is retained as a thin compatibility index for legacy references, prompts, and bookmarks.
 
-Use [Actions/Helpers/README.md](Helpers/README.md) as the authoritative helper index for new work.
+Use [Actions/Helpers/AGENTS.md](Helpers/AGENTS.md) as the authoritative helper index for new work.
 
 ## Section mapping
 

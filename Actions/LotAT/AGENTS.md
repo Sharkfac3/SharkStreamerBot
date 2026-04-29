@@ -71,7 +71,7 @@ Read these first for runtime work:
 3. [Actions/LotAT/operator-setup.md](./operator-setup.md) — Streamer.bot timer/trigger setup and live-test checklist.
 4. [Actions/LotAT/implementation-map.md](./implementation-map.md) — script inventory, trigger/input expectations, and paste/sync notes.
 5. [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) — canonical global variable and timer names.
-6. [Actions/Helpers/README.md](../Helpers/AGENTS.md) — reusable Streamer.bot C# helper index.
+6. [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md) — reusable Streamer.bot C# helper index.
 7. [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md) — story pipeline/tooling responsibilities.
 8. [Apps/stream-overlay/packages/shared/src/protocol.ts](../../Apps/stream-overlay/packages/shared/src/protocol.ts) and [Apps/stream-overlay/packages/shared/src/topics.ts](../../Apps/stream-overlay/packages/shared/src/topics.ts) before changing overlay payloads or topic names.
 

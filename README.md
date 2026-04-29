@@ -42,7 +42,7 @@ All script docs use the same template sections:
 - `Apps/stream-overlay/README.md`
 
 ### Squad
-- `Actions/Squad/README.md`
+- `Actions/Squad/AGENTS.md`
 - `Actions/Squad/Clone/README.md`
 - `Actions/Squad/Duck/README.md`
 - `Actions/Squad/Pedro/README.md`
@@ -66,25 +66,25 @@ All script docs use the same template sections:
 - `Actions/HELPER-SNIPPETS.md`
 
 ### Commanders
-- `Actions/Commanders/README.md`
+- `Actions/Commanders/AGENTS.md`
 - `Actions/Commanders/Captain Stretch/README.md`
 - `Actions/Commanders/The Director/README.md`
 - `Actions/Commanders/Water Wizard/README.md`
 
 ### Twitch Core Integrations
-- `Actions/Twitch Core Integrations/README.md`
+- `Actions/Twitch Core Integrations/AGENTS.md`
 
 ### Voice Commands
-- `Actions/Voice Commands/README.md`
+- `Actions/Voice Commands/AGENTS.md`
 
 ### Twitch Channel Points
-- `Actions/Twitch Channel Points/README.md`
+- `Actions/Twitch Channel Points/AGENTS.md`
 
 ### Twitch Hype Train
-- `Actions/Twitch Hype Train/README.md`
+- `Actions/Twitch Hype Train/AGENTS.md`
 
 ### Twitch Bits Integrations
-- `Actions/Twitch Bits Integrations/README.md`
+- `Actions/Twitch Bits Integrations/AGENTS.md`
 
 ## Mini-game Contribution Contract (All Features)
 Any new mini-game (inside or outside `Actions/Squad/`) must follow this contract:

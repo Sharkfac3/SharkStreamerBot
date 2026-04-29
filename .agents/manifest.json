@@ -1677,7 +1677,7 @@
       "notes": "Canonical co-located domain agent guide path."
     },
     {
-      "path": "Actions/Helpers/README.md",
+      "path": "Actions/Helpers/AGENTS.md",
       "owner": "streamerbot-dev",
       "status": "active",
       "kind": "shared-reference",

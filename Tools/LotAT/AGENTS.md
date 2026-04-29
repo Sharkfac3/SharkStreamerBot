@@ -58,7 +58,7 @@ Read these first for story pipeline/tooling work:
 2. [Tools/LotAT/story_viewer.py](./story_viewer.py) — current FastAPI implementation.
 3. [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) — shared LotAT contract across tooling, runtime, story, and overlay domains.
 4. [Actions/LotAT/AGENTS.md](../../Actions/LotAT/AGENTS.md) — runtime engine handoff expectations.
-5. [Actions/LotAT/README.md](../../Actions/LotAT/README.md) — runtime documentation map.
+5. [Actions/LotAT/AGENTS.md](../../Actions/LotAT/AGENTS.md) — runtime documentation map.
 6. [Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md](../../Creative/WorldBuilding/Experiments/StarshipShamples-story-agent.md) — authoritative authored story JSON contract.
 7. [Creative/WorldBuilding/Franchises/StarshipShamples.md](../../Creative/WorldBuilding/Franchises/StarshipShamples.md) — franchise/canon reference, not schema authority.
 8. [Creative/WorldBuilding/README.md](../../Creative/WorldBuilding/README.md) — worldbuilding folder overview.

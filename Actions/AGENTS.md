@@ -21,7 +21,7 @@ When working anywhere under `Actions/`:
 1. Check `WORKING.md` for active edits and file conflicts.
 2. Read this file.
 3. Read `Actions/SHARED-CONSTANTS.md` for canonical global var, timer, OBS source, and broker topic names.
-4. Read `Actions/HELPER-SNIPPETS.md` and/or `Actions/Helpers/README.md` for reusable Streamer.bot C# patterns.
+4. Read `Actions/HELPER-SNIPPETS.md` and/or `Actions/Helpers/AGENTS.md` for reusable Streamer.bot C# patterns.
 5. Read the local folder `AGENTS.md` for the action group you will edit.
 6. After changing C# scripts, include Streamer.bot paste targets and validation/smoke-test notes in your handoff.
 
@@ -84,7 +84,7 @@ Streamer.bot is used here as the live orchestration layer:
 |---|---|
 | `Actions/SHARED-CONSTANTS.md` | Canonical names for globals, timers, OBS scenes/sources, overlay topics, service URLs, and operator sync notes. |
 | `Actions/HELPER-SNIPPETS.md` | Compatibility index for reusable Streamer.bot implementation snippets. |
-| `Actions/Helpers/README.md` | Topic-based helper index for chat input, JSON, timers, OBS, Mix It Up, and mini-game contracts. |
+| `Actions/Helpers/AGENTS.md` | Topic-based helper index for chat input, JSON, timers, OBS, Mix It Up, and mini-game contracts. |
 | `Actions/Helpers/cph-api-signatures.md` | Streamer.bot `CPH` method signatures and usage notes. |
 | `Actions/Helpers/mini-game-contract.md` | Required contract for Squad-style mini-games and shared lock behavior. |
 | `Actions/Helpers/mixitup-command-api.md` | Mix It Up command API payload and call patterns. |

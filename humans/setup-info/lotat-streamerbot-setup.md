@@ -10,7 +10,7 @@ It tells you:
 - what to test before using LotAT live
 
 If you need implementation details, use the internal docs instead:
-- `Actions/LotAT/README.md`
+- `Actions/LotAT/AGENTS.md`
 - `Actions/SHARED-CONSTANTS.md`
 
 ---
