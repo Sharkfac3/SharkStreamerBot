@@ -31,6 +31,17 @@ No build step is needed when adding files under the overlay public directory; Vi
 4. `overlay.remove` destroys one asset after an optional exit animation.
 5. `overlay.clear` destroys all assets or all assets whose IDs share a prefix.
 
+### Immediate movement after spawn
+
+Images and GIFs load asynchronously. If a publisher sends `overlay.spawn` and `overlay.move` back-to-back, the move can arrive before the asset is registered. The overlay now queues a short-lived pending move for that asset ID and applies it once spawn finishes, but publishers should still include a small settle delay when they need deterministic first-frame motion.
+
+Recommended pattern for Streamer.bot actions that spawn off-screen and immediately drive/tween on-screen:
+
+1. Publish `overlay.spawn` with a stable `assetId`.
+2. Wait roughly `500–750ms` before publishing `overlay.move`.
+3. Keep the same `assetId` in both payloads.
+4. Use a matching `overlay.remove` cleanup after the tween/lifetime completes.
+
 ## Asset IDs
 
 - Use UUIDs for ephemeral one-shot alerts.

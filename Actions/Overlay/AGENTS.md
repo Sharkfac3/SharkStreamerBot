@@ -80,7 +80,7 @@ Before editing, read:
 For documentation-only changes, run the agent-tree validator from the repository root:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-04-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 For Streamer.bot script changes:

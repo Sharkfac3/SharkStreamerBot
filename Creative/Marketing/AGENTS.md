@@ -86,7 +86,7 @@ Read these first for marketing work:
 For marketing-doc or local agent-guide changes, run:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-09-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 For public marketing output, validate by checklist:

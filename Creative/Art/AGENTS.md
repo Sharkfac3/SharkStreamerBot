@@ -81,7 +81,7 @@ Read these first for art work:
 For art-agent or prompt-guide changes:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-09-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 For pipeline-backed production runs, follow [Tools/ArtPipeline/AGENTS.md](../../Tools/ArtPipeline/AGENTS.md) and use its dry-run smoke tests before any real generation or publish step.
