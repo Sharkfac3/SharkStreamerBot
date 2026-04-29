@@ -31,7 +31,8 @@ Folder index for reusable Streamer.bot C# helper snippets. These files contain c
 | [obs-scenes.md](obs-scenes.md) | OBS scene switching helper and direct-call guidance. |
 | [overlay-broker.md](overlay-broker.md) | Stream-overlay broker WebSocket connect/register helper and ClientHello pattern. |
 | [timers.md](timers.md) | Timer enable/disable/reset/interval-update patterns. |
+| [triggers/](triggers/README.md) | Canonical Streamer.bot trigger catalog — args, version, caveats — mirrored from upstream nav 1:1. |
 
 ## Compatibility note
 
-[Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md) is retained as a thin compatibility index for legacy references. New work should use the concept-specific files above.
+[Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md) is retained as a thin compatibility index for legacy references. New work should use the concept-specific files above. Per-feature `Trigger Variables` blocks are being migrated to per-script `Args Consumed` tables; canonical args live in `triggers/`.

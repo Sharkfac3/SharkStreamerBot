@@ -56,7 +56,7 @@ bool CPH.TryGetArg<T>(string varName, out T value);
 ```
 
 Common keys: `user`, `userId`, `message`, `rawInput`, `msgId`, `input0`, `bits`, `rewardName`, `rewardId`.
-See each feature README's "Trigger Variables" section for the full list per event type.
+For the canonical args list per trigger, see the catalog at [triggers/](triggers/README.md). Feature READMEs and `.cs` headers describe `## Args Consumed` — the subset each script reads and how — not the full upstream args set.
 
 ### Misc
 
