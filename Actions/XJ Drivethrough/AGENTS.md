@@ -17,9 +17,11 @@ status: active
 
 ## Purpose
 
-This folder owns the XJ Drivethrough Streamer.bot action. The action rolls a 1-100 chance gate and, on rolls above 85, drives a Jeep Cherokee XJ image across the overlay while playing a rev-limiter audio clip through the overlay audio system.
+This folder owns the XJ Drivethrough Streamer.bot action. For non-commanders, the action rolls a 1-100 chance gate and, on rolls above 85, drives a Jeep Cherokee XJ image across the overlay while playing a rev-limiter audio clip through the overlay audio system.
 
-The feature is a Streamer.bot runtime bridge into the stream overlay. Successful chance rolls publish generic overlay spawn, move, audio-play, audio-stop, and remove messages through the broker. Failed chance rolls log and exit without touching the re-entry guard or broker.
+The feature is a Streamer.bot runtime bridge into the stream overlay. Successful non-commander chance rolls publish generic overlay spawn, move, audio-play, audio-stop, and remove messages through the broker. Failed non-commander chance rolls log and exit without touching the re-entry guard or broker.
+
+When the active Water Wizard, Captain Stretch, or The Director types `!xj`, the action bypasses the non-commander chance gate and displays that commander's matching one-third XJ overlay piece for 10 seconds. The first commander `!xj` in an idle window starts a 5-second triforce window; if all three active commanders type `!xj` once before the window closes, the action increments the current-stream triforce count, updates the persisted triforce high score only when the current stream count beats it, and plays the XJ rev-limiter audio.
 
 ## When to Activate
 
@@ -55,13 +57,14 @@ Before changing scripts, read:
 ## Local Workflow
 
 1. Preserve the single-action sequence unless the operator explicitly asks for a multi-action workflow.
-2. Preserve the chance gate unless the operator explicitly asks to change trigger frequency. Current behavior rolls 1-100 inclusive and only runs on rolls greater than 85 (86-100).
-3. Keep the re-entry guard reliable. `xj_drivethrough_active` must be cleared on every terminal path after the active slot is claimed; failed chance rolls should exit before claiming it.
-4. Keep broker constants and topic strings aligned with [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) and the overlay app contract.
-5. Maintain cleanup behavior: audio stop and overlay remove should run after the drive finishes.
-6. If changing asset ID, source path, dimensions, duration, audio ID, or chance constants, update [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) when in scope.
-7. Keep scripts self-contained and paste-ready for Streamer.bot inline C#.
-8. If the effect becomes product/content messaging instead of a pure gag/overlay effect, chain to `product-dev` and `brand-steward` before finalizing wording or documentation.
+2. Preserve the non-commander chance gate unless the operator explicitly asks to change trigger frequency. Current non-commander behavior rolls 1-100 inclusive and only runs on rolls greater than 85 (86-100).
+3. Keep the non-commander re-entry guard reliable. `xj_drivethrough_active` must be cleared on every terminal path after the active slot is claimed; failed chance rolls should exit before claiming it.
+4. Commander `!xj` handling must identify active commanders from the shared commander slot globals in [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md), not hard-coded usernames.
+5. Keep broker constants and topic strings aligned with [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) and the overlay app contract.
+6. Maintain cleanup behavior: audio stop and overlay remove should run after the drive finishes.
+7. If changing asset ID, source path, dimensions, duration, audio ID, or chance constants, update [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) when in scope.
+8. Keep scripts self-contained and paste-ready for Streamer.bot inline C#.
+9. If the effect becomes product/content messaging instead of a pure gag/overlay effect, chain to `product-dev` and `brand-steward` before finalizing wording or documentation.
 
 ## Validation
 
@@ -113,15 +116,26 @@ The following contract is the source of truth for the script behavior. Update th
     {
       "script": "xj-drivethrough-main.cs",
       "action": "XJ Drivethrough / Main",
-      "purpose": "Roll a 1-100 chance gate and, on rolls above 85, drive the Jeep Cherokee XJ image across the stream overlay while playing the rev-limiter audio clip.",
+      "purpose": "Handle the !xj command: non-commanders roll a 1-100 chance gate for the existing drivethrough effect, while active commanders display their assigned one-third XJ overlay piece and can complete a 5-second triforce combo.",
       "triggers": [
-        "Any Streamer.bot trigger: chat command, channel point redemption, manual button, or operator-wired trigger"
+        "Twitch -> Chat Command -> !xj",
+        "Optional operator-wired manual trigger for testing"
       ],
       "globals": [
         "xj_drivethrough_active",
-        "broker_connected"
+        "broker_connected",
+        "current_water_wizard",
+        "current_captain_stretch",
+        "current_the_director",
+        "xj_commander_triforce_active",
+        "xj_commander_triforce_seen_json",
+        "xj_commander_triforce_deadline_utc",
+        "xj_commander_triforce_count",
+        "xj_commander_triforce_high_score"
       ],
-      "timers": [],
+      "timers": [
+        "XJ - Commander Triforce Window"
+      ],
       "obsSources": [],
       "obsScenes": [],
       "mixItUpCommandIds": [],
@@ -137,28 +151,48 @@ The following contract is the source of truth for the script behavior. Update th
         "streamerbot",
         "xj-drivethrough",
         "images/xj-drivethrough.png",
+        "images/xj-left.png",
+        "images/xj-middle.png",
+        "images/xj-right.png",
+        "xj-left",
+        "xj-center",
+        "xj-right",
         "xj-rev-limiter",
         "audio/xj-rev-limiter.mp3",
         "XJ_CHANCE_MIN",
         "XJ_CHANCE_MAX_EXCLUSIVE",
         "XJ_TRIGGER_THRESHOLD",
         "WAIT_SPAWN_SETTLE_MS",
-        "WAIT_POST_DRIVE_MS"
+        "WAIT_POST_DRIVE_MS",
+        "XJ_COMMANDER_DISPLAY_MS",
+        "XJ_COMMANDER_TRIFORCE_WINDOW_MS"
       ],
       "runtimeBehavior": [
-        "Roll 1-100 inclusive before claiming the re-entry guard.",
-        "Exit with no broker messages when the roll is 85 or lower.",
-        "Claim non-persisted xj_drivethrough_active only after the chance gate passes.",
-        "Drop duplicate requests while xj_drivethrough_active is true.",
-        "Spawn the XJ asset off-screen left with no enter animation.",
-        "Wait briefly after spawn before publishing overlay.move so first-time asset loading can settle.",
-        "Move the XJ asset fully across the 1920x1080 canvas over 10000ms.",
-        "Start the rev-limiter audio immediately after the move command.",
-        "After the drive duration plus buffer, stop the audio and remove the XJ asset with no exit animation.",
-        "Always release xj_drivethrough_active in a finally block after the active slot is claimed."
+        "Read the triggering Twitch user from Streamer.bot command args and compare it case-insensitively against current_water_wizard, current_captain_stretch, and current_the_director.",
+        "For non-commanders, roll 1-100 inclusive before claiming the re-entry guard.",
+        "For non-commanders, exit with no broker messages when the roll is 85 or lower.",
+        "For non-commanders, claim non-persisted xj_drivethrough_active only after the chance gate passes.",
+        "For non-commanders, drop duplicate requests while xj_drivethrough_active is true.",
+        "For non-commanders, spawn the XJ asset off-screen left with no enter animation.",
+        "For non-commanders, wait briefly after spawn before publishing overlay.move so first-time asset loading can settle.",
+        "For non-commanders, move the XJ asset fully across the 1920x1080 canvas over 10000ms.",
+        "For non-commanders, start the rev-limiter audio immediately after the move command.",
+        "For non-commanders, after the drive duration plus buffer, stop the audio and remove the XJ asset with no exit animation.",
+        "For non-commanders, always release xj_drivethrough_active in a finally block after the active slot is claimed.",
+        "For the active Water Wizard, spawn xj-left using images/xj-left.png in the left third of the overlay, then remove it after 10000ms.",
+        "For the active Captain Stretch, spawn xj-center using images/xj-middle.png in the center third of the overlay, then remove it after 10000ms.",
+        "For the active The Director, spawn xj-right using images/xj-right.png in the right third of the overlay, then remove it after 10000ms.",
+        "Commander overlay pieces should use stable per-piece asset IDs so repeated commander commands refresh their own piece without moving the non-commander drivethrough asset.",
+        "Only commander !xj calls participate in triforce state; non-commander calls must not increment or otherwise affect xj_commander_triforce_count or xj_commander_triforce_high_score.",
+        "Treat xj_commander_triforce_count as the non-persisted current-stream count and xj_commander_triforce_high_score as the persisted all-time high score.",
+        "When the first unique commander !xj arrives and no triforce window is active, set non-persisted xj_commander_triforce_active true, store a seen map containing that commander in xj_commander_triforce_seen_json, set xj_commander_triforce_deadline_utc to now plus 5000ms, and start the XJ - Commander Triforce Window timer.",
+        "While the triforce window is active, count only the first !xj from each commander role and ignore duplicate !xj calls from a commander already in xj_commander_triforce_seen_json.",
+        "If all three commander roles are seen before the 5-second window closes, increment non-persisted xj_commander_triforce_count by one for the current stream, update persisted xj_commander_triforce_high_score only if the new current-stream count is higher than the stored high score, play xj-rev-limiter via overlay.audio.play, and clear xj_commander_triforce_active, xj_commander_triforce_seen_json, and xj_commander_triforce_deadline_utc.",
+        "When the XJ - Commander Triforce Window timer fires without all three commanders seen, clear xj_commander_triforce_active, xj_commander_triforce_seen_json, and xj_commander_triforce_deadline_utc without changing xj_commander_triforce_count, xj_commander_triforce_high_score, or playing audio."
       ],
       "failureBehavior": [
-        "If broker publish fails during spawn, log the error, return true, and rely on the finally block to release the guard.",
+        "If broker publish fails during non-commander spawn, log the error, return true, and rely on the finally block to release the guard.",
+        "If broker publish fails during commander piece spawn or remove, log the error, keep triforce state consistent, and return true for the handled live-stream failure.",
         "If the WebSocket is disconnected, attempt one reconnect, resend client.hello, and mark broker_connected false if reconnect fails.",
         "Return true for handled no-op or failure paths so Streamer.bot does not treat expected live-stream conditions as script crashes."
       ],
@@ -175,10 +209,13 @@ Expected asset locations in the overlay app:
 
 | Asset | Expected overlay public path |
 |---|---|
-| XJ image | images/xj-drivethrough.png |
+| Non-commander XJ image | images/xj-drivethrough.png |
+| Water Wizard XJ piece | images/xj-left.png |
+| Captain Stretch XJ piece | images/xj-middle.png |
+| The Director XJ piece | images/xj-right.png |
 | Rev-limiter audio | audio/xj-rev-limiter.mp3 |
 
-The repo may not contain those binary assets yet. If missing, the C# action can publish successfully while the overlay cannot display or play the intended media.
+The repo may not contain all binary assets yet. If missing, the C# action can publish successfully while the overlay cannot display or play the intended media.
 
 Movement timing note: XJ is a spawn-then-immediate-move effect. Keep a publisher-side settle delay before `overlay.move` so first-time asset loading does not leave the Jeep off-screen. The overlay renderer has a pending-move safety net, but future moving-asset effects should still follow the same pattern documented in `Apps/stream-overlay/docs/asset-system.md`.
 
@@ -189,4 +226,12 @@ Core runtime values:
 | `xj_drivethrough_active` | Non-persisted guard that prevents overlapping drivethrough sequences. |
 | `XJ_CHANCE_MIN = 1` | Inclusive lower bound for chance rolls. |
 | `XJ_CHANCE_MAX_EXCLUSIVE = 101` | Exclusive upper bound for chance rolls, producing 1-100. |
-| `XJ_TRIGGER_THRESHOLD = 85` | Rolls must be greater than this value; 86-100 trigger the sequence. |
+| `XJ_TRIGGER_THRESHOLD = 85` | Non-commander rolls must be greater than this value; 86-100 trigger the sequence. |
+| `current_water_wizard` | Active Water Wizard username; commander `!xj` maps to the left XJ piece. |
+| `current_captain_stretch` | Active Captain Stretch username; commander `!xj` maps to the middle XJ piece. |
+| `current_the_director` | Active The Director username; commander `!xj` maps to the right XJ piece. |
+| `xj_commander_triforce_active` | Non-persisted bool; true while the 5-second commander combo window is open. |
+| `xj_commander_triforce_seen_json` | Non-persisted JSON state of commander roles already counted in the active window. |
+| `xj_commander_triforce_deadline_utc` | Non-persisted Unix ms deadline for the active 5-second window. |
+| `xj_commander_triforce_count` | Non-persisted current-stream triforce count incremented when all three commanders type `!xj` within the window. |
+| `xj_commander_triforce_high_score` | Persisted all-time triforce high score; update only when `xj_commander_triforce_count` exceeds the stored value. |
