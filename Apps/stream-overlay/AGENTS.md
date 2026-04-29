@@ -89,7 +89,7 @@ npx tsx src/squad-test-session.ts
 For agent-doc changes, run the validator from the repository root:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/104-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 ## Boundaries / Out of Scope

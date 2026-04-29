@@ -24,7 +24,7 @@ Use this terminal workflow after any code, tooling, app, agent-doc, or domain-do
 
 Run at the end of a task when any tracked project file changed. It is especially required after:
 
-- Streamer.bot action script edits.
+- Streamer.bot action script edits, including updates to the matching source-of-truth action contract in the nearest `AGENTS.md`.
 - App or tool changes.
 - Agent-tree migration edits.
 - Docs that affect setup, runtime behavior, workflow, routing, canon, or validation.
@@ -40,6 +40,7 @@ Collect these before writing the final response:
 - Paste targets for Streamer.bot action scripts, if any.
 - Manual setup steps such as variables, triggers, action ordering, ports, or local services.
 - Validation commands and results.
+- Source-of-truth action contract status for Streamer.bot script changes: contract updated or reviewed unchanged, stamp refreshed, and validator result.
 - Sync status when Streamer.bot actions changed; see the [sync workflow](sync.md).
 - Coordination status for the shared task board; see the [coordination workflow](coordination.md).
 
@@ -107,6 +108,8 @@ For worktree branch merges, extend this with a one-paragraph branch purpose stat
 ### Streamer.bot actions
 
 Include a paste mapping for each changed action script and note whether Streamer.bot has actually been updated. If the operator must copy manually, say so clearly.
+
+Also state the matching local action contract status for every changed script: which `AGENTS.md` contract is the source of truth, whether it changed, whether the script stamp was refreshed, and the result of `python3 Tools/StreamerBot/Validation/action_contracts.py --changed` or the targeted equivalent.
 
 ### Tools changes
 

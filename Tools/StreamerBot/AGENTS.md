@@ -77,7 +77,17 @@ python3 -m py_compile Tools/StreamerBot/Validation/*.py
 
 For agent-doc changes, follow [.agents/workflows/validation.md](../../.agents/workflows/validation.md) and run the agent-tree validator with the task-requested report path.
 
-For action-script changes outside this folder, use the local [Actions/](../../Actions/) guide and the relevant Streamer.bot validation checklist rather than only this tools guide.
+For action-script changes outside this folder, use the local [Actions/](../../Actions/) guide and the relevant Streamer.bot validation checklist rather than only this tools guide. The source-of-truth contract validator is:
+
+```bash
+python3 Tools/StreamerBot/Validation/action_contracts.py --changed
+```
+
+After intentionally changing a local action contract in an Actions `AGENTS.md`, refresh the affected script stamp with:
+
+```bash
+python3 Tools/StreamerBot/Validation/action_contracts.py --script "Actions/<folder>/<script>.cs" --stamp
+```
 
 ## Boundaries / Out of Scope
 

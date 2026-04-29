@@ -115,6 +115,9 @@ export class AssetManager {
   private readonly scene: Phaser.Scene;
   private readonly animationSystem: AnimationSystem;
   private readonly registry = new Map<string, AssetRecord>();
+  /** Move commands can arrive before an image finishes loading; queue briefly so spawn→move sequences are reliable. */
+  private readonly pendingMoves = new Map<string, OverlayMovePayload>();
+  private readonly pendingMoveTimers = new Map<string, ReturnType<typeof setTimeout>>();
   /** Tracks hidden <img> elements and canvas textures for animated GIFs */
   private readonly gifRegistry = new Map<string, GifEntry>();
 
@@ -176,7 +179,8 @@ export class AssetManager {
     const record = this.registry.get(assetId);
 
     if (!record) {
-      console.warn(`[AssetManager] overlay.move — unknown assetId "${assetId}"`);
+      console.warn(`[AssetManager] overlay.move — assetId "${assetId}" not registered yet; queueing briefly`);
+      this.queuePendingMove(payload);
       return;
     }
 
@@ -258,6 +262,12 @@ export class AssetManager {
    * Called by OverlayScene on shutdown.
    */
   destroyAll(): void {
+    for (const timer of this.pendingMoveTimers.values()) {
+      clearTimeout(timer);
+    }
+    this.pendingMoveTimers.clear();
+    this.pendingMoves.clear();
+
     for (const assetId of [...this.registry.keys()]) {
       this.destroyRecord(assetId);
     }
@@ -403,6 +413,44 @@ export class AssetManager {
       ttlExitAnimation: exitAnimation,
       ttlExitDuration: exitDuration,
     });
+
+    this.applyPendingMove(assetId);
+  }
+
+  /**
+   * Store a move that arrived before the matching spawn finished async loading.
+   * This fixes spawn→immediate move sequences where the first-time image load can
+   * otherwise cause the move to be dropped while the image remains off-screen.
+   */
+  private queuePendingMove(payload: OverlayMovePayload): void {
+    const { assetId } = payload;
+
+    const existingTimer = this.pendingMoveTimers.get(assetId);
+    if (existingTimer !== undefined) clearTimeout(existingTimer);
+
+    this.pendingMoves.set(assetId, payload);
+    this.pendingMoveTimers.set(assetId, setTimeout(() => {
+      this.pendingMoves.delete(assetId);
+      this.pendingMoveTimers.delete(assetId);
+      console.warn(`[AssetManager] Dropped stale pending move for assetId "${assetId}"`);
+    }, 5000));
+  }
+
+  private applyPendingMove(assetId: string): void {
+    const pendingMove = this.pendingMoves.get(assetId);
+    if (pendingMove === undefined) return;
+
+    this.pendingMoves.delete(assetId);
+    const timer = this.pendingMoveTimers.get(assetId);
+    if (timer !== undefined) clearTimeout(timer);
+    this.pendingMoveTimers.delete(assetId);
+
+    const record = this.registry.get(assetId);
+    if (!record) return;
+
+    const { position, duration = 300 } = pendingMove;
+    this.animationSystem.moveTo(record.gameObject, position.x, position.y, duration);
+    console.log(`[AssetManager] Applied queued move for assetId "${assetId}"`);
   }
 
   /**
