@@ -29,6 +29,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-28 | pi | add !commanders active roster command | uncommitted |
 | 2026-04-28 | pi | make XJ commander path non-blocking | uncommitted |
 | 2026-04-28 | pi | align XJ drivethrough script to updated contract | uncommitted |
 | 2026-04-28 | pi | split XJ triforce stream count and high score contract | uncommitted |
@@ -38,7 +39,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-04-28 | pi | thin XJ drivethrough script comments | uncommitted |
 | 2026-04-28 | pi | add action contract source-of-truth validation | uncommitted |
 | 2026-04-28 | pi | remove ephemeral validator report references | uncommitted |
-| 2026-04-28 | pi | align XJ drivethrough agent docs with chance gate | uncommitted |
 
 ---
 

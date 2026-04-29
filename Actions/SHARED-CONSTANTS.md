@@ -242,6 +242,8 @@ Operator note:
 - `VAR_WATER_WIZARD_HAIL_HIGH_SCORE_USER` = `water_wizard_hail_high_score_user` *(persisted)*
 
 Used in:
+- `Actions/Commanders/commander-help.cs`
+- `Actions/Commanders/commanders.cs`
 - `Actions/Commanders/Captain Stretch/captain-stretch-redeem.cs`
 - `Actions/Commanders/Captain Stretch/captain-stretch-thank.cs`
 - `Actions/Commanders/Captain Stretch/captain-stretch-stretch.cs`
