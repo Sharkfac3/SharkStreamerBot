@@ -29,7 +29,7 @@ Use this guide when editing or reviewing files under [Actions/Commanders/](./), 
 - [Actions/Commanders/Captain Stretch/](Captain%20Stretch/) scripts
 - [Actions/Commanders/The Director/](The%20Director/) scripts
 - [Actions/Commanders/Water Wizard/](Water%20Wizard/) scripts
-- README or operator documentation in this folder
+- Script Reference or operator documentation in this folder
 
 Activate the `brand-steward` role before changing public commander copy, character voice, command names presented to chat, or lore/character positioning.
 
@@ -44,9 +44,8 @@ Activate the `brand-steward` role before changing public commander copy, charact
 
 ## Required Reading
 
-Read the local README first, then the relevant commander README before editing scripts:
+Read the relevant commander README before editing scripts:
 
-- [Actions/Commanders/README.md](README.md)
 - [Actions/Commanders/Captain Stretch/README.md](Captain%20Stretch/README.md)
 - [Actions/Commanders/The Director/README.md](The%20Director/README.md)
 - [Actions/Commanders/Water Wizard/README.md](Water%20Wizard/README.md)
@@ -62,7 +61,7 @@ Read the local README first, then the relevant commander README before editing s
 3. Preserve chat-facing command names unless the operator explicitly requests a rename.
 4. Read current state through `CPH.TryGetArg` or Streamer.bot globals defensively; protect against missing or malformed inputs.
 5. Keep scripts self-contained and paste-ready. Do not assume shared runtime files can be imported by Streamer.bot actions.
-6. Update local README documentation when trigger variables, command behavior, state variables, or operator wiring changes.
+6. Update the Script Reference section in this file when trigger variables, command behavior, state variables, or operator wiring changes.
 7. If a new global variable, OBS source, timer, or command contract is introduced, update [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) when in scope or flag it in the handoff when out of scope.
 
 Commander script map:
@@ -162,3 +161,146 @@ After changes, follow these workflows:
 Paste targets are the edited `.cs` files under [Actions/Commanders/](./). Operator must manually paste changed script contents into the matching Streamer.bot actions and verify trigger wiring for channel-point redeems or chat commands.
 
 Brand handoff triggers: public chat copy, reward wording, command help text, commander identity, or character/lore changes. Include exactly which strings changed and whether `brand-steward` reviewed them.
+
+---
+
+## Script Reference
+
+### Model Rules
+- Three commander slots exist:
+  - Captain Stretch
+  - The Director
+  - Water Wizard
+- All three commander slots can be active simultaneously.
+- Redeem behavior should remain backward-compatible unless intentionally changed.
+
+### Support Command Rules
+- Chat can support active commanders with:
+  - `!hail` (Water Wizard)
+  - `!thank` (Captain Stretch)
+  - `!award` (The Director)
+- Active commander cannot support themselves with their own support command.
+- Each support command increments a per-tenure counter.
+- On commander redeem, outgoing tenure counter is compared to persistent high score for that role.
+
+### Commander-Only Command Rules
+- Water Wizard can run `!hydrate`, `!orb`, and `!castrest` when the relevant feature window is active.
+- Captain Stretch can run `!stretch`, `!shrimp`, and `!generalfocus` when the relevant feature window is active.
+- The Director can run `!checkchat`, `!toad`, `!primary`, and `!secondary`.
+- Unauthorized callers should get short guidance that points them back to the active commander support command.
+- New loop-control commands must preserve the existing commander assignment model.
+
+### Commander Docs
+- `Captain Stretch/README.md`
+- `The Director/README.md`
+- `Water Wizard/README.md`
+
+### Shared Constants
+- Cross-script key sync reference: `Actions/SHARED-CONSTANTS.md`
+
+---
+
+### Script: `commander-help.cs`
+
+#### Purpose
+Gives the caller a short, commander-specific help message in chat.
+
+#### Expected Trigger / Input
+- Chat command or action trigger for a commander help command (operator chooses the exact command name, such as `!commanderhelp`).
+- Reads `user`.
+
+#### Required Runtime Variables
+- Reads `current_captain_stretch`.
+- Reads `current_the_director`.
+- Reads `current_water_wizard`.
+
+#### Key Outputs / Side Effects
+- If caller is the active Captain Stretch, explains `!stretch` and `!shrimp`.
+- If caller is the active The Director, explains `!checkchat`, `!toad`, `!primary`, and `!secondary`.
+- If caller is the active Water Wizard, explains `!hydrate` and `!orb`.
+- If caller holds multiple commander roles, sends one short help message for each matching role.
+- If caller is not an active commander, sends a short guidance message telling them to redeem first.
+
+#### Mix It Up Actions
+- None.
+
+#### OBS Interactions
+- None directly.
+
+#### Wait Behavior
+- None.
+
+#### Chat / Log Output
+- Sends short role-specific command summaries in chat.
+- Sends a short fallback guidance message for non-commanders.
+
+#### Operator Notes
+- Wire this script to the chat command name you want to use.
+- This script is read-only: it does not create or change any global variables.
+
+---
+
+### Script: `commanders.cs`
+
+#### Purpose
+Tells chat who currently holds each commander slot.
+
+#### Expected Trigger / Input
+- Chat command trigger: `!commanders`.
+- Does not require caller input.
+
+#### Required Runtime Variables
+- Reads `current_captain_stretch`.
+- Reads `current_the_director`.
+- Reads `current_water_wizard`.
+
+#### Key Outputs / Side Effects
+- If any commander slots are active, sends one chat message listing active slot holders.
+- If no commander slots are active, sends a short open-deck fallback message.
+- Does not create or change any global variables.
+
+#### Mix It Up Actions
+- None.
+
+#### OBS Interactions
+- None directly.
+
+#### Wait Behavior
+- None.
+
+#### Chat / Log Output
+- Sends one short active-roster or fallback message in chat.
+
+#### Operator Notes
+- Wire this script to the `!commanders` chat command.
+- This script is read-only: it does not create or change any global variables.
+
+---
+
+## Trigger Variables
+
+Access in C# via `CPH.TryGetArg("variableName", out T value)`.
+
+### Channel Reward Redemption (commander role redeems)
+
+Commander role assignment is triggered via Twitch → Channel Reward → Reward Redemption.
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the redeeming user — becomes the new commander |
+| `userId` | string | Twitch user ID |
+| `rewardName` | string | Name of the channel point reward |
+| `rewardId` | string | Unique reward identifier |
+| `rawInput` | string | Optional user text input (if the reward prompts for it) |
+
+### Chat Message (support commands: !thank, !award, !hail)
+
+Support commands are triggered via Twitch → Chat → Message or a Command trigger.
+
+| Variable | Type | Notes |
+|---|---|---|
+| `user` | string | Display name of the user running the command |
+| `userId` | string | Twitch user ID |
+| `message` | string | Full chat message |
+| `rawInput` | string | Fallback if `message` is empty |
+| `msgId` | string | Unique message ID — use for duplicate detection |

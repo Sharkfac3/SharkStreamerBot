@@ -30,7 +30,7 @@ Use this guide when editing or reviewing files under [Actions/Voice Commands/](.
 - [Actions/Voice Commands/scene-main.cs](scene-main.cs)
 - [Actions/Voice Commands/scene-housekeeping.cs](scene-housekeeping.cs)
 - [Actions/Voice Commands/scene-dance.cs](scene-dance.cs)
-- README or operator documentation in this folder
+- Script Reference or operator documentation in this folder
 
 Chain to another role only when the requested change crosses this folder's runtime boundary. Examples: `brand-steward` for public copy added to a voice command, `app-dev` for future app-driven scene control, or `ops` for validation/paste workflow.
 
@@ -50,9 +50,8 @@ Conditional handoffs:
 
 ## Required Reading
 
-Read the local README and shared constants before editing scripts:
+Read the following before editing scripts:
 
-- [Actions/Voice Commands/README.md](README.md)
 - [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md)
 - [Actions/Helpers/obs-scenes.md](../Helpers/obs-scenes.md)
 - [Actions/Twitch Core Integrations/stream-start.cs](../Twitch%20Core%20Integrations/stream-start.cs) when changing the default stream mode
@@ -65,7 +64,7 @@ Read the local README and shared constants before editing scripts:
 3. Preserve fallback behavior: scripts that read `stream_mode` should use `workspace` when the value is missing, empty, or unrecognized.
 4. Use Streamer.bot's OBS scene setter directly. The known-good call pattern is `CPH.ObsSetScene(targetScene)`; see [Actions/Helpers/obs-scenes.md](../Helpers/obs-scenes.md).
 5. Keep scripts self-contained and paste-ready. Do not assume shared runtime files can be imported by Streamer.bot actions.
-6. Update [Actions/Voice Commands/README.md](README.md) when supported modes, scene names, trigger expectations, or operator notes change.
+6. Update the Script Reference section in this file when supported modes, scene names, trigger expectations, or operator notes change.
 7. Update [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) when global variables or OBS scene/source contracts change, if in scope; otherwise flag the follow-up in the handoff.
 
 Script map:
@@ -93,7 +92,7 @@ Scene naming contract:
 For script changes, perform the narrowest safe validation available:
 
 - Review edited C# for Streamer.bot paste readiness: one `Execute()` entry point per action, no external runtime imports, and no dependency on repo-only helper files.
-- Verify `stream_mode` reads/writes and OBS scene names against [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) and [Actions/Voice Commands/README.md](README.md).
+- Verify `stream_mode` reads/writes and OBS scene names against [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) and the Script Reference section in this file.
 - Confirm every scene script has a safe `workspace` fallback for missing or unknown mode values.
 - Confirm OBS scene switching uses the direct Streamer.bot call pattern rather than reflection-based method discovery.
 - Run shared-constants validation when constants or documented references change:
@@ -123,3 +122,249 @@ After changes, follow these workflows:
 Paste targets are the edited `.cs` files under [Actions/Voice Commands/](./). Operator must manually paste changed script contents into the matching Streamer.bot actions and verify voice command, button, hotkey, or chained-action wiring.
 
 Operator should test at least one mode script and one scene script after paste, then verify the OBS target scene changes as expected for the current `stream_mode`.
+
+---
+
+## Script Reference
+
+Shared constants reference: `Actions/SHARED-CONSTANTS.md`
+
+### Script: `mode-garage.cs`
+
+#### Purpose
+Sets the global stream mode to `garage`.
+
+#### Expected Trigger / Input
+- Voice command, button, hotkey, or chained action.
+
+#### Required Runtime Variables
+- Writes `stream_mode`.
+
+#### Key Outputs / Side Effects
+- `stream_mode = "garage"`
+
+#### Mix It Up Actions
+- None.
+
+#### OBS Interactions
+- None.
+
+#### Wait Behavior
+- None.
+
+#### Chat / Log Output
+- None.
+
+#### Operator Notes
+- Use this action whenever you switch to garage stream context.
+
+---
+
+### Script: `mode-workspace.cs`
+
+#### Purpose
+Sets the global stream mode to `workspace`.
+
+#### Expected Trigger / Input
+- Voice command, button, hotkey, or chained action.
+
+#### Required Runtime Variables
+- Writes `stream_mode`.
+
+#### Key Outputs / Side Effects
+- `stream_mode = "workspace"`
+
+#### Mix It Up Actions
+- None.
+
+#### OBS Interactions
+- None.
+
+#### Wait Behavior
+- None.
+
+#### Chat / Log Output
+- None.
+
+#### Operator Notes
+- `stream-start.cs` also sets this as the default mode at stream start.
+
+---
+
+### Script: `mode-gamer.cs`
+
+#### Purpose
+Sets the global stream mode to `gamer`.
+
+#### Expected Trigger / Input
+- Voice command, button, hotkey, or chained action.
+
+#### Required Runtime Variables
+- Writes `stream_mode`.
+
+#### Key Outputs / Side Effects
+- `stream_mode = "gamer"`
+
+#### Mix It Up Actions
+- None.
+
+#### OBS Interactions
+- None.
+
+#### Wait Behavior
+- None.
+
+#### Chat / Log Output
+- None.
+
+#### Operator Notes
+- Use this action whenever you switch to gamer stream context.
+
+---
+
+### Script: `scene-chat.cs`
+
+#### Purpose
+Switches OBS to the `Chat` scene that matches the current `stream_mode`.
+
+#### Expected Trigger / Input
+- Voice command, button, hotkey, or chained action.
+
+#### Required Runtime Variables
+- Reads `stream_mode`.
+
+#### Key Outputs / Side Effects
+- `stream_mode = "garage"` -> OBS scene `Garage: Chat`
+- `stream_mode = "workspace"` -> OBS scene `Workspace: Chat`
+- `stream_mode = "gamer"` -> OBS scene `Gamer: Chat`
+- Unknown/empty mode falls back to `Workspace: Chat`
+
+#### Mix It Up Actions
+- None.
+
+#### OBS Interactions
+- Switches the current OBS scene using common Streamer.bot OBS scene setter methods.
+
+#### Wait Behavior
+- None.
+
+#### Chat / Log Output
+- No chat output.
+- Logs a warning if the mode is unknown or OBS scene switching fails.
+
+#### Operator Notes
+- Assumes the matching OBS scenes already exist with exact names.
+
+---
+
+### Script: `scene-main.cs`
+
+#### Purpose
+Switches OBS to the `Main` scene that matches the current `stream_mode`.
+
+#### Expected Trigger / Input
+- Voice command, button, hotkey, or chained action.
+
+#### Required Runtime Variables
+- Reads `stream_mode`.
+
+#### Key Outputs / Side Effects
+- `stream_mode = "garage"` -> OBS scene `Garage: Main`
+- `stream_mode = "workspace"` -> OBS scene `Workspace: Main`
+- `stream_mode = "gamer"` -> OBS scene `Gamer: Main`
+- Unknown/empty mode falls back to `Workspace: Main`
+
+#### Mix It Up Actions
+- None.
+
+#### OBS Interactions
+- Switches the current OBS scene using common Streamer.bot OBS scene setter methods.
+
+#### Wait Behavior
+- None.
+
+#### Chat / Log Output
+- No chat output.
+- Logs a warning if the mode is unknown or OBS scene switching fails.
+
+#### Operator Notes
+- Assumes the matching OBS scenes already exist with exact names.
+
+---
+
+### Script: `scene-housekeeping.cs`
+
+#### Purpose
+Switches OBS to the `Housekeeping` scene that matches the current `stream_mode`.
+
+#### Expected Trigger / Input
+- Voice command, button, hotkey, or chained action.
+
+#### Required Runtime Variables
+- Reads `stream_mode`.
+
+#### Key Outputs / Side Effects
+- `stream_mode = "garage"` -> OBS scene `Garage: Housekeeping`
+- `stream_mode = "workspace"` -> OBS scene `Workspace: Housekeeping`
+- `stream_mode = "gamer"` -> OBS scene `Gamer: Housekeeping`
+- Unknown/empty mode falls back to `Workspace: Housekeeping`
+
+#### Mix It Up Actions
+- None.
+
+#### OBS Interactions
+- Switches the current OBS scene using common Streamer.bot OBS scene setter methods.
+
+#### Wait Behavior
+- None.
+
+#### Chat / Log Output
+- No chat output.
+- Logs a warning if the mode is unknown or OBS scene switching fails.
+
+#### Operator Notes
+- Assumes the matching OBS scenes already exist with exact names.
+
+---
+
+### Script: `scene-dance.cs`
+
+#### Purpose
+Switches OBS to the disco-party scene that matches the current `stream_mode`.
+
+#### Expected Trigger / Input
+- Voice command, button, hotkey, or chained action.
+
+#### Required Runtime Variables
+- Reads `stream_mode`.
+
+#### Key Outputs / Side Effects
+- `stream_mode = "garage"` -> OBS scene `Disco Party: Garage`
+- `stream_mode = "workspace"` -> OBS scene `Disco Party: Workspace`
+- `stream_mode = "gamer"` -> OBS scene `Disco Party: Gamer`
+- Unknown/empty mode falls back to `Disco Party: Workspace`
+
+#### Mix It Up Actions
+- None.
+
+#### OBS Interactions
+- Switches the current OBS scene using common Streamer.bot OBS scene setter methods.
+
+#### Wait Behavior
+- None.
+
+#### Chat / Log Output
+- No chat output.
+- Logs a warning if the mode is unknown or OBS scene switching fails.
+
+#### Operator Notes
+- Assumes the matching OBS scenes already exist with exact names.
+- This action uses the custom `Disco Party: <Mode>` scene naming instead of the normal `<Mode>: <Section>` pattern.
+
+---
+
+## General Operator Notes
+- The mode scripts in this folder are the backbone for voice-command flows that depend on the current stream context.
+- Keep `stream_mode` usage aligned with `Actions/Twitch Core Integrations/stream-start.cs`, `Actions/Twitch Channel Points/disco-party.cs`, and any future voice-command actions.
+- Shared scene scripts in this folder usually assume OBS scene names follow the exact `<Mode>: <Section>` convention, such as `Garage: Chat`, `Workspace: Main`, and `Gamer: Housekeeping`.
+- `scene-dance.cs` is the exception and uses `Disco Party: Garage`, `Disco Party: Workspace`, and `Disco Party: Gamer`.

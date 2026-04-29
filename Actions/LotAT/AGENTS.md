@@ -67,14 +67,13 @@ Primary owner: `lotat-tech`.
 Read these first for runtime work:
 
 1. [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) — shared LotAT contract across runtime, tooling, story, and overlay domains.
-2. [Actions/LotAT/README.md](./README.md) — overview and map to split runtime docs.
-3. [Actions/LotAT/runtime-contract.md](./runtime-contract.md) — runtime globals, timers, commands, story-file contract, flow, and v1 boundaries.
-4. [Actions/LotAT/operator-setup.md](./operator-setup.md) — Streamer.bot timer/trigger setup and live-test checklist.
-5. [Actions/LotAT/implementation-map.md](./implementation-map.md) — script inventory, trigger/input expectations, and paste/sync notes.
-6. [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) — canonical global variable and timer names.
-7. [Actions/Helpers/README.md](../Helpers/README.md) — reusable Streamer.bot C# helper index.
-8. [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md) — story pipeline/tooling responsibilities.
-9. [Apps/stream-overlay/packages/shared/src/protocol.ts](../../Apps/stream-overlay/packages/shared/src/protocol.ts) and [Apps/stream-overlay/packages/shared/src/topics.ts](../../Apps/stream-overlay/packages/shared/src/topics.ts) before changing overlay payloads or topic names.
+2. [Actions/LotAT/runtime-contract.md](./runtime-contract.md) — runtime globals, timers, commands, story-file contract, flow, and v1 boundaries.
+3. [Actions/LotAT/operator-setup.md](./operator-setup.md) — Streamer.bot timer/trigger setup and live-test checklist.
+4. [Actions/LotAT/implementation-map.md](./implementation-map.md) — script inventory, trigger/input expectations, and paste/sync notes.
+5. [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) — canonical global variable and timer names.
+6. [Actions/Helpers/README.md](../Helpers/AGENTS.md) — reusable Streamer.bot C# helper index.
+7. [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md) — story pipeline/tooling responsibilities.
+8. [Apps/stream-overlay/packages/shared/src/protocol.ts](../../Apps/stream-overlay/packages/shared/src/protocol.ts) and [Apps/stream-overlay/packages/shared/src/topics.ts](../../Apps/stream-overlay/packages/shared/src/topics.ts) before changing overlay payloads or topic names.
 
 ## Local Workflow
 
@@ -165,3 +164,51 @@ Also flag operator setup changes for:
 - Tie-breaks resolve to the earliest matching choice in the authored `choices` order.
 - Commander and dice outcomes are narrative-only in v1; they do not change chaos, branching, vote eligibility, or vote resolution.
 - `Actions/Squad/offering.cs` and offering globals are legacy/provisional experimentation, not LotAT v1 mechanics.
+
+---
+
+## Folder Overview
+
+`Actions/LotAT/` contains the current Streamer.bot runtime engine for **Legends of the ASCII Temple (LotAT) v1**.
+
+This folder owns live session execution only:
+
+- start a LotAT run
+- open and close the `!join` window
+- freeze the participant roster
+- enter story nodes from the loaded runtime JSON
+- optionally run commander or dice pre-vote windows
+- collect and resolve authored decision-command votes
+- end and clean up the session safely
+
+For shared facts used across runtime, tooling, story authoring, and overlay presentation, see [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md).
+
+### Documentation map
+
+| File | Use |
+|---|---|
+| [runtime-contract.md](runtime-contract.md) | Runtime globals, timers, commands, story-file contract, session flow, and v1 boundaries. |
+| [operator-setup.md](operator-setup.md) | Streamer.bot timer/trigger wiring, prerequisites, and live-test checklist. |
+| [implementation-map.md](implementation-map.md) | Script inventory, trigger/input expectations, paste/sync notes, and implementation gotchas. |
+| [AGENTS.md](AGENTS.md) | Agent routing, local workflow, validation, boundaries, and handoff expectations for this folder. |
+| [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) | Cross-domain LotAT contract index. |
+
+### Current runtime boundary
+
+The checked-in runtime consumes the single loaded story copy at:
+
+- [Creative/WorldBuilding/Storylines/loaded/current-story.json](../../Creative/WorldBuilding/Storylines/loaded/current-story.json)
+
+Story content stays in [Creative/WorldBuilding/](../../Creative/WorldBuilding/). Story review/loading tooling stays in [Tools/LotAT/](../../Tools/LotAT/). Overlay rendering stays in [Apps/stream-overlay/](../../Apps/stream-overlay/).
+
+### Implementation status
+
+The runtime is functional-first and documents current script behavior, not a promise of future mechanics. V1 intentionally excludes offering integration, boost-state integration, late join/leave flow, operator force-close/manual-advance tools, and full runtime schema validation.
+
+See [runtime-contract.md](runtime-contract.md) for the exact current behavior and [operator-setup.md](operator-setup.md) before live testing.
+
+### Streamer.bot paste targets
+
+Any edited C# file under this folder is a Streamer.bot paste target. Include the specific script names and target action/group names in the final change summary.
+
+Documentation-only changes, including this file and the linked split docs, have no Streamer.bot paste target.
