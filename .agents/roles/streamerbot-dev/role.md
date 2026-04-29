@@ -58,4 +58,3 @@ Lookup order when wiring or editing a Streamer.bot script:
 3. **Upstream** — https://docs.streamer.bot/api/triggers (last resort; if the catalog is wrong, fix the catalog first).
 
 Then check [Actions/HELPER-SNIPPETS.md](../../../Actions/HELPER-SNIPPETS.md) and the concept-specific files under [Actions/Helpers/](../../../Actions/Helpers/) for reusable C# patterns.
-Use the local `AGENTS.md` guide in the `Actions/` folder you will edit as the source of truth for script behavior, then check [Actions/HELPER-SNIPPETS.md](../../../Actions/HELPER-SNIPPETS.md) for reusable Streamer.bot implementation patterns. When behavior changes, update the local action contract first, stamp the script, and validate the contract before handoff.
