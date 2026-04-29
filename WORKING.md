@@ -29,6 +29,9 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-28 | pi | fix action prompt local docs mapping | uncommitted |
+| 2026-04-28 | pi | create action comment-thinning prompts | uncommitted |
+| 2026-04-28 | pi | thin XJ drivethrough script comments | uncommitted |
 | 2026-04-28 | pi | add action contract source-of-truth validation | uncommitted |
 | 2026-04-28 | pi | remove ephemeral validator report references | uncommitted |
 | 2026-04-28 | pi | align XJ drivethrough agent docs with chance gate | uncommitted |
@@ -36,9 +39,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-04-27 | pi | fix XJ drivethrough overlay move race | uncommitted |
 | 2026-04-27 | pi | add human setup docs for Node apps | uncommitted |
 | 2026-04-27 | pi | add overlay broker helper snippet | uncommitted |
-| 2026-04-27 | pi | integrate overlay broker connect into stream-start | uncommitted |
-| 2026-04-27 | pi | create-actions-agent-guide | uncommitted |
-| 2026-04-27 | pi | 104-apps-stream-overlay-doc-split | uncommitted |
 
 ---
 
