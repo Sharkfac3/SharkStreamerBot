@@ -29,16 +29,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-28 | pi | add !commanders active roster command | uncommitted |
+| 2026-04-28 | pi | make XJ commander path non-blocking | uncommitted |
+| 2026-04-28 | pi | align XJ drivethrough script to updated contract | uncommitted |
+| 2026-04-28 | pi | split XJ triforce stream count and high score contract | uncommitted |
+| 2026-04-28 | pi | update XJ commander triforce contract | uncommitted |
 | 2026-04-28 | pi | fix action prompt local docs mapping | uncommitted |
 | 2026-04-28 | pi | create action comment-thinning prompts | uncommitted |
 | 2026-04-28 | pi | thin XJ drivethrough script comments | uncommitted |
 | 2026-04-28 | pi | add action contract source-of-truth validation | uncommitted |
 | 2026-04-28 | pi | remove ephemeral validator report references | uncommitted |
-| 2026-04-28 | pi | align XJ drivethrough agent docs with chance gate | uncommitted |
-| 2026-04-27 | pi | document immediate overlay move gotcha | uncommitted |
-| 2026-04-27 | pi | fix XJ drivethrough overlay move race | uncommitted |
-| 2026-04-27 | pi | add human setup docs for Node apps | uncommitted |
-| 2026-04-27 | pi | add overlay broker helper snippet | uncommitted |
 
 ---
 

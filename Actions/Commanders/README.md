@@ -34,6 +34,7 @@ This folder contains commander slot assignment scripts, commander support comman
 
 ## Shared Commander Helper Scripts
 - `commander-help.cs` — chat-facing helper that tells the active caller which commander-only actions they can use for their current role(s).
+- `commanders.cs` — chat-facing `!commanders` helper that lists the active commander slot holders.
 
 ## Shared Constants
 - Cross-script key sync reference: `Actions/SHARED-CONSTANTS.md`
@@ -76,6 +77,43 @@ Gives the caller a short, commander-specific help message in chat.
 
 ### Operator Notes
 - Wire this script to the chat command name you want to use.
+- This script is read-only: it does not create or change any global variables.
+
+---
+
+## Script: `commanders.cs`
+
+### Purpose
+Tells chat who currently holds each commander slot.
+
+### Expected Trigger / Input
+- Chat command trigger: `!commanders`.
+- Does not require caller input.
+
+### Required Runtime Variables
+- Reads `current_captain_stretch`.
+- Reads `current_the_director`.
+- Reads `current_water_wizard`.
+
+### Key Outputs / Side Effects
+- If any commander slots are active, sends one chat message listing active slot holders.
+- If no commander slots are active, sends a short open-deck fallback message.
+- Does not create or change any global variables.
+
+### Mix It Up Actions
+- None.
+
+### OBS Interactions
+- None directly.
+
+### Wait Behavior
+- None.
+
+### Chat / Log Output
+- Sends one short active-roster or fallback message in chat.
+
+### Operator Notes
+- Wire this script to the `!commanders` chat command.
 - This script is read-only: it does not create or change any global variables.
 
 ---
