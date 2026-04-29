@@ -12,7 +12,8 @@
 
 | Agent | Task | Domain | Files Being Edited | Started |
 |-------|------|--------|--------------------|---------|
-| pi | document immediate overlay move gotcha | Apps/stream-overlay, Actions/ | Apps/stream-overlay/docs/asset-system.md, Apps/stream-overlay/docs/rendering-notes.md, Actions/XJ Drivethrough/AGENTS.md | 2026-04-27 |
+
+
 
 ---
 
@@ -28,16 +29,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-28 | pi | add action contract source-of-truth validation | uncommitted |
+| 2026-04-28 | pi | remove ephemeral validator report references | uncommitted |
+| 2026-04-28 | pi | align XJ drivethrough agent docs with chance gate | uncommitted |
+| 2026-04-27 | pi | document immediate overlay move gotcha | uncommitted |
 | 2026-04-27 | pi | fix XJ drivethrough overlay move race | uncommitted |
 | 2026-04-27 | pi | add human setup docs for Node apps | uncommitted |
 | 2026-04-27 | pi | add overlay broker helper snippet | uncommitted |
 | 2026-04-27 | pi | integrate overlay broker connect into stream-start | uncommitted |
 | 2026-04-27 | pi | create-actions-agent-guide | uncommitted |
 | 2026-04-27 | pi | 104-apps-stream-overlay-doc-split | uncommitted |
-| 2026-04-27 | pi | 103-lotat-contract-index | uncommitted |
-| 2026-04-27 | pi | 102b-actions-helper-snippets-split-execute | uncommitted |
-| 2026-04-27 | pi | 102-helper-snippets-split-design | uncommitted |
-| 2026-04-27 | pi | post-cutover-stale-cleanup | uncommitted |
 
 ---
 

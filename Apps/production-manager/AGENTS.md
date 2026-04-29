@@ -81,7 +81,7 @@ Runtime smoke checks:
 Agent-tree validation for doc/routing changes:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-07-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 ## Boundaries / Out of Scope

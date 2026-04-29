@@ -82,7 +82,7 @@ GET http://127.0.0.1:8766/health
 Agent-tree validation for doc/routing changes:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-07-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 ## Boundaries / Out of Scope
@@ -110,7 +110,7 @@ Important constants and policies:
 | Item | Current value / policy |
 |---|---|
 | Base URL | `http://127.0.0.1:8766` |
-| Data folder | `Apps/info-service/data/`, gitignored |
+| Data folder | Apps/info-service/data/ (runtime-created, gitignored) |
 | Write model | Single-writer by policy; production-manager is the preferred write client, with documented Streamer.bot capture exceptions. |
 | Collections | `user-intros`, `pending-intros` |
 | Schema source | zod files under [src/store/schemas/](src/store/schemas/) |

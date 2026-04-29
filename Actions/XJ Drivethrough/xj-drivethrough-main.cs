@@ -1,11 +1,15 @@
+// ACTION-CONTRACT: Actions/XJ Drivethrough/AGENTS.md#xj-drivethrough-main.cs
+// ACTION-CONTRACT-SHA256: 7772c80676456d7f0732f0862695d9f9974bed90af108ffbd585f8605424de75
+
 using System;
 
 // =============================================================================
 // xj-drivethrough-main.cs
 //
 // Purpose:
-//   Drives a Jeep Cherokee XJ image across the overlay from left to right over
-//   10 seconds, simultaneously playing a rev limiter sound effect.
+//   Rolls a 1-100 chance gate. On rolls above 85, drives a Jeep Cherokee XJ image
+//   across the overlay from left to right over 10 seconds, simultaneously playing
+//   a rev limiter sound effect.
 //
 // Expected trigger/input:
 //   - Any trigger is fine: chat command, channel point, manual button, etc.
@@ -73,6 +77,12 @@ public class CPHInline
     // Re-entry guard variable name.
     private const string VAR_XJ_ACTIVE = "xj_drivethrough_active";
 
+    // Chance gate: only rolls 86-100 trigger the overlay/audio sequence.
+    private const int XJ_CHANCE_MIN = 1;
+    private const int XJ_CHANCE_MAX_EXCLUSIVE = 101;
+    private const int XJ_TRIGGER_THRESHOLD = 85;
+    private static readonly Random ChanceRandom = new Random();
+
     // Delay after spawn before sending the move, so the overlay has time to load
     // and register the image before we try to tween it. The overlay also queues
     // early move commands, but this keeps the normal path simple and reliable.
@@ -84,6 +94,22 @@ public class CPHInline
     public bool Execute()
     {
         const string LOG_PREFIX = "[XJDrivethrough]";
+
+        // ── Chance gate ───────────────────────────────────────────────────────
+        // Roll 1-100 inclusive. Only rolls above 85 continue into the overlay/audio sequence.
+        int chanceRoll;
+        lock (ChanceRandom)
+        {
+            chanceRoll = ChanceRandom.Next(XJ_CHANCE_MIN, XJ_CHANCE_MAX_EXCLUSIVE);
+        }
+
+        if (chanceRoll <= XJ_TRIGGER_THRESHOLD)
+        {
+            CPH.LogWarn($"{LOG_PREFIX} Chance roll {chanceRoll}/100 did not beat {XJ_TRIGGER_THRESHOLD}. No drivethrough queued.");
+            return true;
+        }
+
+        CPH.LogWarn($"{LOG_PREFIX} Chance roll {chanceRoll}/100 beat {XJ_TRIGGER_THRESHOLD}. Queuing drivethrough.");
 
         // ── Re-entry guard ────────────────────────────────────────────────────
         // If a drivethrough is already running, silently drop this request.

@@ -93,7 +93,7 @@ Read these first for runtime work:
 For documentation/agent-tree changes in this folder, run:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-03-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 For Streamer.bot runtime changes, also check the relevant workflow docs:

@@ -82,7 +82,7 @@ Read these source documents before brand work:
 For brand-doc or local agent-guide changes, run:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-09-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 For public copy, validate by checklist:

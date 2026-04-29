@@ -86,7 +86,7 @@ Read these first for story pipeline/tooling work:
 For agent-tree/docs validation in this migration prompt, run:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-03-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 For story viewer tooling sanity, use the commands documented in [Tools/LotAT/README.md](./README.md):

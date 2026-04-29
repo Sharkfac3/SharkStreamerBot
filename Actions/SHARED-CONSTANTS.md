@@ -425,6 +425,9 @@ Operator notes:
 - `XJ_END_X`              = `2120` *(image center exits off-screen right; left edge at x=1920)*
 - `XJ_DRIVE_DURATION_MS`  = `10000` *(10 seconds left-to-right tween)*
 - `VAR_XJ_ACTIVE`         = `xj_drivethrough_active` *(non-persisted bool; true while sequence is running)*
+- `XJ_CHANCE_MIN`         = `1` *(inclusive lower bound for random chance rolls)*
+- `XJ_CHANCE_MAX_EXCLUSIVE` = `101` *(exclusive upper bound; produces rolls 1-100)*
+- `XJ_TRIGGER_THRESHOLD`  = `85` *(roll must be greater than this; 86-100 trigger the drivethrough)*
 
 Used in:
 - `Actions/XJ Drivethrough/xj-drivethrough-main.cs`

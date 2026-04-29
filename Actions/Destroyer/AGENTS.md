@@ -64,7 +64,7 @@ Before changing scripts, read:
 For documentation-only changes, run the agent-tree validator:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-06-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 For script changes:

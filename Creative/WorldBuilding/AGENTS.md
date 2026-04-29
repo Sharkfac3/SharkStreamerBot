@@ -97,7 +97,7 @@ Read these first for worldbuilding work:
 For worldbuilding-doc or local agent-guide changes, run:
 
 ```bash
-python3 Tools/AgentTree/validate.py --report Projects/agent-reflow/findings/10-09-validator.failures.txt
+python3 Tools/AgentTree/validate.py
 ```
 
 For story content, validate before handoff using the authoritative story contract and the shared [LotAT contract](../../.agents/_shared/lotat-contract.md). At minimum, confirm graph integrity, supported commands, valid stage/ending shapes, supported dice/commander structures, top-level cast usage, and canon classification.
