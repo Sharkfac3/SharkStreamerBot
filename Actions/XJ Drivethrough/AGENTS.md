@@ -179,10 +179,11 @@ The following contract is the source of truth for the script behavior. Update th
         "For non-commanders, start the rev-limiter audio immediately after the move command.",
         "For non-commanders, after the drive duration plus buffer, stop the audio and remove the XJ asset with no exit animation.",
         "For non-commanders, always release xj_drivethrough_active in a finally block after the active slot is claimed.",
-        "For the active Water Wizard, spawn xj-left using images/xj-left.png in the left third of the overlay, then remove it after 10000ms.",
-        "For the active Captain Stretch, spawn xj-center using images/xj-middle.png in the center third of the overlay, then remove it after 10000ms.",
-        "For the active The Director, spawn xj-right using images/xj-right.png in the right third of the overlay, then remove it after 10000ms.",
+        "For the active Water Wizard, spawn xj-left using images/xj-left.png in the left third of the overlay with lifetime 10000ms, then return without waiting.",
+        "For the active Captain Stretch, spawn xj-center using images/xj-middle.png in the center third of the overlay with lifetime 10000ms, then return without waiting.",
+        "For the active The Director, spawn xj-right using images/xj-right.png in the right third of the overlay with lifetime 10000ms, then return without waiting.",
         "Commander overlay pieces should use stable per-piece asset IDs so repeated commander commands refresh their own piece without moving the non-commander drivethrough asset.",
+        "Commander overlay pieces must rely on the overlay.spawn lifetime field for cleanup rather than CPH.Wait or a delayed overlay.remove publish, so other commanders can issue !xj during the triforce window.",
         "Only commander !xj calls participate in triforce state; non-commander calls must not increment or otherwise affect xj_commander_triforce_count or xj_commander_triforce_high_score.",
         "Treat xj_commander_triforce_count as the non-persisted current-stream count and xj_commander_triforce_high_score as the persisted all-time high score.",
         "When the first unique commander !xj arrives and no triforce window is active, set non-persisted xj_commander_triforce_active true, store a seen map containing that commander in xj_commander_triforce_seen_json, set xj_commander_triforce_deadline_utc to now plus 5000ms, and start the XJ - Commander Triforce Window timer.",
@@ -192,7 +193,7 @@ The following contract is the source of truth for the script behavior. Update th
       ],
       "failureBehavior": [
         "If broker publish fails during non-commander spawn, log the error, return true, and rely on the finally block to release the guard.",
-        "If broker publish fails during commander piece spawn or remove, log the error, keep triforce state consistent, and return true for the handled live-stream failure.",
+        "If broker publish fails during commander piece spawn, log the error, keep triforce state consistent, and return true for the handled live-stream failure.",
         "If the WebSocket is disconnected, attempt one reconnect, resend client.hello, and mark broker_connected false if reconnect fails.",
         "Return true for handled no-op or failure paths so Streamer.bot does not treat expected live-stream conditions as script crashes."
       ],
