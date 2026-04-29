@@ -14,7 +14,6 @@
 |-------|------|--------|--------------------|---------|
 
 
-
 ---
 
 ## Task Queue
@@ -29,16 +28,16 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
-| 2026-04-28 | pi | add !commanders active roster command | uncommitted |
-| 2026-04-28 | pi | make XJ commander path non-blocking | uncommitted |
-| 2026-04-28 | pi | align XJ drivethrough script to updated contract | uncommitted |
-| 2026-04-28 | pi | split XJ triforce stream count and high score contract | uncommitted |
-| 2026-04-28 | pi | update XJ commander triforce contract | uncommitted |
-| 2026-04-28 | pi | fix action prompt local docs mapping | uncommitted |
-| 2026-04-28 | pi | create action comment-thinning prompts | uncommitted |
-| 2026-04-28 | pi | thin XJ drivethrough script comments | uncommitted |
-| 2026-04-28 | pi | add action contract source-of-truth validation | uncommitted |
-| 2026-04-28 | pi | remove ephemeral validator report references | uncommitted |
+| 2026-04-29 | pi | thin stream-start comments | uncommitted |
+| 2026-04-29 | pi | thin follower-new comments | uncommitted |
+| 2026-04-29 | pi | document clone movement cooldown | uncommitted |
+| 2026-04-29 | pi | thin clone empire move comments | uncommitted |
+| 2026-04-29 | pi | thin clone empire main comments | uncommitted |
+| 2026-04-29 | pi | thin clone empire join comments | uncommitted |
+| 2026-04-29 | pi | thin Water Wizard hydrate comments | uncommitted |
+| 2026-04-29 | pi | thin Water Wizard redeem comments | uncommitted |
+| 2026-04-29 | pi | thin Water Wizard orb comments | uncommitted |
+| 2026-04-29 | pi | thin Water Wizard hail comments | uncommitted |
 
 ---
 

@@ -201,7 +201,7 @@ Handles Water Wizard-only `!orb` command usage.
 
 ### Required Runtime Variables
 - Reads `current_water_wizard` (active Water Wizard username).
-- Reads/writes `water_wizard_orb_next_allowed_utc` (Unix timestamp, UTC, used for 5-minute cooldown).
+- Reads/writes `water_wizard_orb_next_allowed_utc` (Unix timestamp, UTC, used for 1-minute cooldown).
 
 ### Key Outputs / Side Effects
 - If caller **is** current Water Wizard and phrase is valid and off cooldown:
@@ -210,7 +210,7 @@ Handles Water Wizard-only `!orb` command usage.
   - Uses `orbtype = "none"` when no orb text was provided.
   - Uses `orbtype = "message"` for normal custom text.
   - Uses `orbtype = "special"` when the user message is exactly `bowtome` (case-insensitive).
-  - Starts/refreshes 5-minute cooldown.
+  - Starts/refreshes 1-minute cooldown.
 - If caller **is not** current Water Wizard:
   - If a Water Wizard is active, sends Twitch chat instruction to type `!hail` for encouragement.
   - If no Water Wizard is active, encourages caller to redeem and become the Water Wizard.

@@ -5,10 +5,8 @@ using System.Text.Json;
 
 public class CPHInline
 {
-    // SYNC CONSTANTS (Captain Stretch)
-    // Keep these names aligned with:
-    // - Actions/Commanders/Captain Stretch/captain-stretch-redeem.cs
-    // - Actions/Commanders/Captain Stretch/captain-stretch-stretch.cs
+    // Runtime source of truth: Actions/Commanders/Captain Stretch/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     private const string ARG_USER = "user";
     private const string ARG_MESSAGE = "message";
     private const string ARG_RAW_INPUT = "rawInput";
@@ -27,27 +25,6 @@ public class CPHInline
     // Reuse one HttpClient instance for reliability/performance.
     private static readonly HttpClient Http = new HttpClient();
 
-    /*
-     * Purpose:
-     * - Handles the Captain Stretch-only !stretch command.
-     * - Allows up to 5 words after !stretch (0 to 5 words is valid).
-     * - Applies a 5-minute cooldown for the active Captain Stretch.
-     * - For valid Captain usage, forwards up to 5 words (or blank text) to Mix It Up API as Arguments.
-     *
-     * Expected trigger/input:
-     * - Chat command/action for !stretch.
-     * - Reads: user, rawInput (fallback message).
-     *
-     * Required runtime variables:
-     * - Reads current_captain_stretch
-     * - Reads/Writes captain_stretch_stretch_next_allowed_utc (Unix seconds, UTC)
-     *
-     * Key outputs/side effects:
-     * - Non-captain caller with active captain: sends instruction to type !thank.
-     * - Non-captain caller with no active captain: encourages redeem to become Captain Stretch.
-     * - Captain caller on cooldown: sends remaining cooldown message.
-     * - Captain caller with valid text (0 to 5 words): triggers Mix It Up command.
-     */
     public bool Execute()
     {
         string caller = GetArg(ARG_USER);
@@ -56,14 +33,14 @@ public class CPHInline
 
         string currentCaptain = CPH.GetGlobalVar<string>(VAR_CURRENT_CAPTAIN_STRETCH, false) ?? string.Empty;
 
-        // Only the currently assigned Captain Stretch can use !stretch.
+        // Commander-only gate.
         if (!IsSameUser(caller, currentCaptain))
         {
             SendThankPrompt(caller, currentCaptain);
             return true;
         }
 
-        // Parse optional stretch phrase (0 to 5 words allowed).
+        // Validate optional command text before cooldown or external call.
         if (!TryParseStretchText(out string stretchText))
         {
             CPH.SendMessage($"@{caller} keep !stretch to {STRETCH_MAX_WORD_COUNT} words and {STRETCH_MAX_CHAR_COUNT} characters max (or no extra words at all). Example: !stretch shoulders up breathe 💪");
@@ -73,7 +50,7 @@ public class CPHInline
         long nowUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         long nextAllowedUtc = (CPH.GetGlobalVar<long?>(VAR_CAPTAIN_STRETCH_NEXT_ALLOWED_UTC, false) ?? 0L);
 
-        // Cooldown guard for active captain.
+        // Cooldown guard.
         if (nowUtc < nextAllowedUtc)
         {
             long remainingSeconds = Math.Max(1L, nextAllowedUtc - nowUtc);
@@ -82,7 +59,7 @@ public class CPHInline
             return true;
         }
 
-        // Trigger Mix It Up with validated optional text (0 to 5 words).
+        // Trigger Mix It Up with validated optional text.
         bool mixitupOk = TriggerMixItUp(stretchText);
         if (!mixitupOk)
         {
@@ -90,7 +67,7 @@ public class CPHInline
             return true;
         }
 
-        // Start new cooldown only after successful trigger.
+        // Start cooldown only after successful trigger.
         long newNextAllowedUtc = DateTimeOffset.UtcNow.AddMinutes(STRETCH_COOLDOWN_MINUTES).ToUnixTimeSeconds();
         CPH.SetGlobalVar(VAR_CAPTAIN_STRETCH_NEXT_ALLOWED_UTC, newNextAllowedUtc, false);
 
@@ -127,12 +104,12 @@ public class CPHInline
     {
         stretchText = string.Empty;
 
-        // Prefer rawInput from command trigger, then fallback to message.
+        // Prefer command input, but tolerate full chat message input.
         string input = GetArg(ARG_RAW_INPUT);
         if (string.IsNullOrWhiteSpace(input))
             input = GetArg(ARG_MESSAGE);
 
-        // No input text is valid: Captain can use plain !stretch.
+        // Plain !stretch is valid.
         if (string.IsNullOrWhiteSpace(input))
             return true;
 
@@ -140,7 +117,7 @@ public class CPHInline
         if (parts.Length == 0)
             return true;
 
-        // If trigger passed full chat message, drop command token.
+        // If trigger passed the full chat message, drop command token.
         int startIndex = 0;
         if (parts[0].StartsWith("!stretch", StringComparison.OrdinalIgnoreCase))
             startIndex = 1;
@@ -154,7 +131,7 @@ public class CPHInline
 
         stretchText = string.Join(" ", parts, startIndex, wordCount);
 
-        // Also reject if the combined text exceeds the character limit.
+        // Keep Mix It Up/TTS payload bounded.
         if (stretchText.Length > STRETCH_MAX_CHAR_COUNT)
             return false;
 

@@ -24,6 +24,10 @@ Star Wars-themed grid survival mini-game. Viewers pilot Rebel ships across a 32�
 
 ## Grid Rules
 
+### Movement
+- Joined players move one cell per valid command.
+- Each player has a 1-second movement cooldown; cooldown hits are ignored.
+
 ### Death
 - Move into an empire cell → instant death.
 - No movement for 30 seconds → auto-death; empire spawns on that cell.

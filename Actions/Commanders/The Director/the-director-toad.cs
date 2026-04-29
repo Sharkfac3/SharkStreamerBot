@@ -5,10 +5,8 @@ using System.Text.Json;
 
 public class CPHInline
 {
-    // SYNC CONSTANTS (The Director)
-    // Keep these names aligned with:
-    // - Actions/Commanders/The Director/the-director-redeem.cs
-    // - Actions/Commanders/The Director/the-director-toad.cs
+    // Runtime source of truth: Actions/Commanders/The Director/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     private const string ARG_USER = "user";
     private const string ARG_MESSAGE = "message";
     private const string ARG_RAW_INPUT = "rawInput";
@@ -29,13 +27,6 @@ public class CPHInline
     private static readonly HttpClient Http = new HttpClient();
     private static readonly Random Rng = new Random();
 
-    /*
-     * Purpose:
-     * - Handles The Director-only !toad command.
-     * - Accepts up to 30 words after !toad (message text is optional).
-     * - Applies a 5-minute cooldown for the active Director.
-     * - For valid director usage, forwards the optional text to Mix It Up as Arguments.
-     */
     public bool Execute()
     {
         string caller = GetArg(ARG_USER);
@@ -111,7 +102,7 @@ public class CPHInline
         if (string.IsNullOrWhiteSpace(input))
             input = GetArg(ARG_MESSAGE);
 
-        // If no input is available from args, allow empty optional text.
+        // Empty !toad text is valid.
         if (string.IsNullOrWhiteSpace(input))
             return true;
 
@@ -136,9 +127,7 @@ public class CPHInline
 
     private string GetToadTypeSpecialIdentifier()
     {
-        // Most toads should be the standard behavior.
-        // We occasionally send a "hypno" type for special handling in Mix It Up.
-        // Next(10) returns 0..9, so 0 gives us an exact 1-in-10 chance.
+        // Random variant for Mix It Up; Next(10) == 0 is exactly 1-in-10.
         bool isHypno = Rng.Next(HYPNO_CHANCE_DENOMINATOR) == 0;
         return isHypno ? MIXITUP_SPECIAL_TYPE_HYPNO : MIXITUP_SPECIAL_TYPE_NORMAL;
     }

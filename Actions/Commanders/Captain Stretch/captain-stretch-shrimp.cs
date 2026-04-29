@@ -5,10 +5,8 @@ using System.Text.Json;
 
 public class CPHInline
 {
-    // SYNC CONSTANTS (Captain Stretch)
-    // Keep these names aligned with:
-    // - Actions/Commanders/Captain Stretch/captain-stretch-redeem.cs
-    // - Actions/Commanders/Captain Stretch/captain-stretch-shrimp.cs
+    // Runtime source of truth: Actions/Commanders/Captain Stretch/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     private const string ARG_USER = "user";
     private const string ARG_MESSAGE = "message";
     private const string ARG_RAW_INPUT = "rawInput";
@@ -25,13 +23,6 @@ public class CPHInline
 
     private static readonly HttpClient Http = new HttpClient();
 
-    /*
-     * Purpose:
-     * - Handles Captain Stretch-only !shrimp command.
-     * - Allows optional shrimp text after !shrimp (30 words max).
-     * - Applies a 5-minute cooldown for the active Captain Stretch.
-     * - For valid captain usage, forwards the shrimp text (up to 30 words) to Mix It Up as Arguments.
-     */
     public bool Execute()
     {
         string caller = GetArg(ARG_USER);
@@ -106,8 +97,7 @@ public class CPHInline
         if (string.IsNullOrWhiteSpace(input))
             input = GetArg(ARG_MESSAGE);
 
-        // If Streamer.bot did not provide raw/message input, treat it as no shrimp text.
-        // No text is allowed, so this is valid and returns an empty payload string.
+        // Missing raw/message input is valid: !shrimp may send an empty payload.
         if (string.IsNullOrWhiteSpace(input))
             return string.Empty;
 

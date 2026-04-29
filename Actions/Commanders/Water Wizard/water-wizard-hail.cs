@@ -2,29 +2,12 @@ using System;
 
 public class CPHInline
 {
-    // SYNC CONSTANTS (Water Wizard support command)
+    // Runtime source of truth: Actions/Commanders/Water Wizard/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     private const string ARG_USER = "user";
     private const string VAR_CURRENT_WATER_WIZARD = "current_water_wizard";
     private const string VAR_WATER_WIZARD_HAIL_COUNT = "water_wizard_hail_count";
 
-    /*
-     * Purpose:
-     * - Handles public !hail support for the currently active Water Wizard.
-     * - Increments the current tenure hail counter by 1 for each valid use.
-     *
-     * Expected trigger/input:
-     * - Chat command/action trigger for !hail.
-     * - Reads: user
-     *
-     * Required runtime variables:
-     * - Reads current_water_wizard
-     * - Reads/Writes water_wizard_hail_count
-     *
-     * Key outputs/side effects:
-     * - Blocks self-support (current wizard cannot !hail themselves).
-     * - Sends chat feedback for success/failure paths.
-     * - Future hook: Mix It Up support call can be added in success path.
-     */
     public bool Execute()
     {
         string caller = GetArg(ARG_USER);

@@ -5,10 +5,8 @@ using System.Text.Json;
 
 public class CPHInline
 {
-    // SYNC CONSTANTS (Water Wizard)
-    // Keep these names aligned with:
-    // - Actions/Commanders/Water Wizard/water-wizard-redeem.cs
-    // - Actions/Commanders/Water Wizard/water-wizard-orb.cs
+    // Runtime source of truth: Actions/Commanders/Water Wizard/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     private const string ARG_USER = "user";
     private const string ARG_MESSAGE = "message";
     private const string ARG_RAW_INPUT = "rawInput";
@@ -35,15 +33,6 @@ public class CPHInline
         public string PayloadType { get; set; }
     }
 
-    /*
-     * Purpose:
-     * - Handles Water Wizard-only !orb command.
-     * - Accepts up to 30 words after !orb (message text is optional).
-     * - Applies a 5-minute cooldown for the active Water Wizard.
-     * - For valid wizard usage, forwards optional orb text (0-30 words) to Mix It Up as Arguments.
-     * - Also sends orbmessage / orbtype special identifiers so Mix It Up can branch safely.
-     * - Uses orbtype = "special" when the user message is exactly "bowtome".
-     */
     public bool Execute()
     {
         string caller = GetArg(ARG_USER);
@@ -132,8 +121,7 @@ public class CPHInline
         if (string.IsNullOrWhiteSpace(input))
             input = GetArg(ARG_MESSAGE);
 
-        // If Streamer.bot did not provide raw/message input, treat it as no orb text.
-        // No text is allowed, so this is valid and returns an empty payload string.
+        // Missing Streamer.bot input is valid: !orb can send an empty payload.
         if (string.IsNullOrWhiteSpace(input))
             return string.Empty;
 

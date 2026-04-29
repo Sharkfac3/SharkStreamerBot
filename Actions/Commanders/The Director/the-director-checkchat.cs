@@ -5,10 +5,8 @@ using System.Text.Json;
 
 public class CPHInline
 {
-    // SYNC CONSTANTS (The Director)
-    // Keep these names aligned with:
-    // - Actions/Commanders/The Director/the-director-redeem.cs
-    // - Actions/Commanders/The Director/the-director-checkchat.cs
+    // Runtime source of truth: Actions/Commanders/The Director/README.md
+    // Shared names/constants reference: Actions/SHARED-CONSTANTS.md
     private const string ARG_USER = "user";
     private const string ARG_MESSAGE = "message";
     private const string ARG_RAW_INPUT = "rawInput";
@@ -27,27 +25,6 @@ public class CPHInline
     // Reuse one HttpClient instance for reliability/performance.
     private static readonly HttpClient Http = new HttpClient();
 
-    /*
-     * Purpose:
-     * - Handles The Director-only !checkchat command.
-     * - Allows optional text after !checkchat (0 to 10 words max).
-     * - Applies a 5-minute cooldown for the active Director.
-     * - For valid Director usage, forwards the optional text to Mix It Up API as Arguments.
-     *
-     * Expected trigger/input:
-     * - Chat command/action for !checkchat.
-     * - Reads: user, rawInput (fallback message).
-     *
-     * Required runtime variables:
-     * - Reads current_the_director
-     * - Reads/Writes the_director_checkchat_next_allowed_utc (Unix seconds, UTC)
-     *
-     * Key outputs/side effects:
-     * - Non-director caller with active director: sends instruction to type !award.
-     * - Non-director caller with no active director: encourages redeem to become The Director.
-     * - Director caller on cooldown: sends remaining cooldown message.
-     * - Director caller with valid optional text (up to 10 words): triggers Mix It Up command.
-     */
     public bool Execute()
     {
         string caller = GetArg(ARG_USER);
@@ -56,14 +33,12 @@ public class CPHInline
 
         string currentDirector = CPH.GetGlobalVar<string>(VAR_CURRENT_THE_DIRECTOR, false) ?? string.Empty;
 
-        // Only the currently assigned The Director can use !checkchat.
         if (!IsSameUser(caller, currentDirector))
         {
             SendAwardPrompt(caller, currentDirector);
             return true;
         }
 
-        // Parse optional checkchat text (allowed: 0 through CHECKCHAT_MAX_WORD_COUNT words).
         bool tooManyWords;
         string checkchatText;
         TryParseCheckchatText(out checkchatText, out tooManyWords);
@@ -77,7 +52,6 @@ public class CPHInline
         long nowUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         long nextAllowedUtc = (CPH.GetGlobalVar<long?>(VAR_DIRECTOR_CHECKCHAT_NEXT_ALLOWED_UTC, false) ?? 0L);
 
-        // Cooldown guard for active director.
         if (nowUtc < nextAllowedUtc)
         {
             long remainingSeconds = Math.Max(1L, nextAllowedUtc - nowUtc);
@@ -86,15 +60,13 @@ public class CPHInline
             return true;
         }
 
-        // Trigger Mix It Up with the validated optional text (can be blank).
         bool mixitupOk = TriggerMixItUp(checkchatText);
         if (!mixitupOk)
         {
-            // Do not start cooldown on failed external call.
+            // Preserve retry behavior when the external call fails.
             return true;
         }
 
-        // Start new cooldown only after successful trigger.
         long newNextAllowedUtc = DateTimeOffset.UtcNow.AddMinutes(CHECKCHAT_COOLDOWN_MINUTES).ToUnixTimeSeconds();
         CPH.SetGlobalVar(VAR_DIRECTOR_CHECKCHAT_NEXT_ALLOWED_UTC, newNextAllowedUtc, false);
 
@@ -132,12 +104,10 @@ public class CPHInline
         text = string.Empty;
         tooManyWords = false;
 
-        // Prefer rawInput from command trigger, then fallback to message.
         string input = GetArg(ARG_RAW_INPUT);
         if (string.IsNullOrWhiteSpace(input))
             input = GetArg(ARG_MESSAGE);
 
-        // No message text is valid for !checkchat.
         if (string.IsNullOrWhiteSpace(input))
             return;
 
@@ -145,7 +115,7 @@ public class CPHInline
         if (parts.Length == 0)
             return;
 
-        // If trigger passed full chat message, drop command token.
+        // Some triggers pass the full chat message instead of only command args.
         int startIndex = 0;
         if (parts[0].StartsWith("!checkchat", StringComparison.OrdinalIgnoreCase))
             startIndex = 1;
@@ -162,7 +132,6 @@ public class CPHInline
 
         text = string.Join(" ", parts, startIndex, wordCount);
 
-        // Also reject if the combined text exceeds the character limit.
         if (text.Length > CHECKCHAT_MAX_CHAR_COUNT)
         {
             tooManyWords = true;
