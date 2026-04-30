@@ -1,5 +1,5 @@
 // ACTION-CONTRACT: Actions/XJ Drivethrough/AGENTS.md#xj-drivethrough-main.cs
-// ACTION-CONTRACT-SHA256: 7a37c176f5f453bef3311e571f49bdf57bcec58ddd7a78db1320d4bb3940a8cb
+// ACTION-CONTRACT-SHA256: 538dcd3db05658751f07e41153a3203d333781e2a9c78f46cf41553ceea48f4a
 
 using System;
 using System.Collections.Generic;
@@ -61,7 +61,7 @@ public class CPHInline
     private const string XJ_CENTER_SRC         = "images/xj-middle.png";
     private const string XJ_RIGHT_SRC          = "images/xj-right.png";
     private const int XJ_COMMANDER_WIDTH       = 640;
-    private const int XJ_COMMANDER_HEIGHT      = 250;
+    private const int XJ_COMMANDER_HEIGHT      = 640;
     private const int XJ_COMMANDER_LEFT_X      = 320;
     private const int XJ_COMMANDER_CENTER_X    = 960;
     private const int XJ_COMMANDER_RIGHT_X     = 1600;
@@ -74,7 +74,7 @@ public class CPHInline
     private const string VAR_TRIFORCE_DEADLINE_UTC = "xj_commander_triforce_deadline_utc";
     private const string VAR_TRIFORCE_COUNT        = "xj_commander_triforce_count";
     private const string VAR_TRIFORCE_HIGH_SCORE   = "xj_commander_triforce_high_score";
-    private const int XJ_COMMANDER_TRIFORCE_WINDOW_MS = 5000;
+    private const int XJ_COMMANDER_TRIFORCE_WINDOW_MS = 10000;
 
     public bool Execute()
     {
@@ -87,11 +87,11 @@ public class CPHInline
             return true;
         }
 
-        CommanderPiece piece = GetCommanderPieceForUser(user);
-        if (piece != null)
+        List<CommanderPiece> pieces = GetCommanderPiecesForUser(user);
+        if (pieces.Count > 0)
         {
-            CPH.LogWarn($"{LOG_PREFIX} Active commander {user} triggered {piece.AssetId}.");
-            return RunCommanderPiece(piece, LOG_PREFIX);
+            CPH.LogWarn($"{LOG_PREFIX} Active commander {user} triggered {pieces.Count} XJ piece(s).");
+            return RunCommanderPieces(pieces, LOG_PREFIX);
         }
 
         return RunNonCommanderDrivethrough(user, LOG_PREFIX);
@@ -179,33 +179,36 @@ public class CPHInline
         return true;
     }
 
-    private bool RunCommanderPiece(CommanderPiece piece, string logPrefix)
+    private bool RunCommanderPieces(List<CommanderPiece> pieces, string logPrefix)
     {
         try
         {
-            HandleCommanderTriforce(piece.Role, logPrefix);
+            HandleCommanderTriforce(pieces, logPrefix);
 
-            string spawnPayload =
-                "{" +
-                "\"assetId\":\"" + piece.AssetId + "\"," +
-                "\"src\":\"" + piece.Source + "\"," +
-                "\"position\":{\"x\":" + piece.X + ",\"y\":" + XJ_Y + "}," +
-                "\"width\":" + XJ_COMMANDER_WIDTH + "," +
-                "\"height\":" + XJ_COMMANDER_HEIGHT + "," +
-                "\"depth\":" + XJ_DEPTH + "," +
-                "\"enterAnimation\":\"none\"," +
-                "\"enterDuration\":0," +
-                "\"lifetime\":" + XJ_COMMANDER_DISPLAY_MS + "," +
-                "\"exitAnimation\":\"none\"," +
-                "\"exitDuration\":0" +
-                "}";
-            if (!PublishBrokerMessage(TOPIC_OVERLAY_SPAWN, spawnPayload))
+            foreach (CommanderPiece piece in pieces)
             {
-                CPH.LogError($"{logPrefix} Failed to spawn commander XJ piece {piece.AssetId}.");
-                return true;
-            }
+                string spawnPayload =
+                    "{" +
+                    "\"assetId\":\"" + piece.AssetId + "\"," +
+                    "\"src\":\"" + piece.Source + "\"," +
+                    "\"position\":{\"x\":" + piece.X + ",\"y\":" + XJ_Y + "}," +
+                    "\"width\":" + XJ_COMMANDER_WIDTH + "," +
+                    "\"height\":" + XJ_COMMANDER_HEIGHT + "," +
+                    "\"depth\":" + XJ_DEPTH + "," +
+                    "\"enterAnimation\":\"none\"," +
+                    "\"enterDuration\":0," +
+                    "\"lifetime\":" + XJ_COMMANDER_DISPLAY_MS + "," +
+                    "\"exitAnimation\":\"none\"," +
+                    "\"exitDuration\":0" +
+                    "}";
+                if (!PublishBrokerMessage(TOPIC_OVERLAY_SPAWN, spawnPayload))
+                {
+                    CPH.LogError($"{logPrefix} Failed to spawn commander XJ piece {piece.AssetId}.");
+                    continue;
+                }
 
-            CPH.LogWarn($"{logPrefix} Commander XJ piece {piece.AssetId} spawned with overlay lifetime {XJ_COMMANDER_DISPLAY_MS}ms.");
+                CPH.LogWarn($"{logPrefix} Commander XJ piece {piece.AssetId} spawned with overlay lifetime {XJ_COMMANDER_DISPLAY_MS}ms.");
+            }
         }
         catch (Exception ex)
         {
@@ -215,7 +218,7 @@ public class CPHInline
         return true;
     }
 
-    private void HandleCommanderTriforce(string role, string logPrefix)
+    private void HandleCommanderTriforce(List<CommanderPiece> pieces, string logPrefix)
     {
         bool active = (CPH.GetGlobalVar<bool?>(VAR_TRIFORCE_ACTIVE, false) ?? false);
         long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -229,13 +232,21 @@ public class CPHInline
         }
 
         Dictionary<string, bool> seen = active ? ReadSeenMap() : new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
-        if (seen.ContainsKey(role))
+        bool addedAnyRole = false;
+        foreach (CommanderPiece piece in pieces)
         {
-            CPH.LogWarn($"{logPrefix} Duplicate commander role {role} ignored for active triforce window.");
-            return;
+            if (seen.ContainsKey(piece.Role))
+            {
+                CPH.LogWarn($"{logPrefix} Duplicate commander role {piece.Role} ignored for active triforce window.");
+                continue;
+            }
+
+            seen[piece.Role] = true;
+            addedAnyRole = true;
         }
 
-        seen[role] = true;
+        if (!addedAnyRole)
+            return;
 
         if (!active)
         {
@@ -253,13 +264,16 @@ public class CPHInline
             int count = (CPH.GetGlobalVar<int?>(VAR_TRIFORCE_COUNT, false) ?? 0) + 1;
             int highScore = CPH.GetGlobalVar<int?>(VAR_TRIFORCE_HIGH_SCORE, true) ?? 0;
             CPH.SetGlobalVar(VAR_TRIFORCE_COUNT, count, false);
-            if (count > highScore)
+            bool newHighScore = count > highScore;
+            int displayedHighScore = newHighScore ? count : highScore;
+            if (newHighScore)
                 CPH.SetGlobalVar(VAR_TRIFORCE_HIGH_SCORE, count, true);
 
+            SendTriforceAchievementMessage(count, displayedHighScore, newHighScore);
             PlayRevLimiter();
             ClearTriforceState();
             CPH.DisableTimer(TIMER_XJ_COMMANDER_TRIFORCE_WINDOW);
-            CPH.LogWarn($"{logPrefix} Commander triforce complete. Current stream count={count}, high score={Math.Max(count, highScore)}.");
+            CPH.LogWarn($"{logPrefix} Commander triforce complete. Current stream count={count}, high score={displayedHighScore}, new high score={newHighScore}.");
         }
     }
 
@@ -276,18 +290,20 @@ public class CPHInline
         CPH.LogWarn($"{logPrefix} Commander triforce timer fired without all three commanders. State cleared.");
     }
 
-    private CommanderPiece GetCommanderPieceForUser(string user)
+    private List<CommanderPiece> GetCommanderPiecesForUser(string user)
     {
+        var pieces = new List<CommanderPiece>();
+
         if (MatchesGlobalUser(user, VAR_CURRENT_WATER_WIZARD))
-            return new CommanderPiece(ROLE_WATER_WIZARD, XJ_LEFT_ASSET_ID, XJ_LEFT_SRC, XJ_COMMANDER_LEFT_X);
+            pieces.Add(new CommanderPiece(ROLE_WATER_WIZARD, XJ_LEFT_ASSET_ID, XJ_LEFT_SRC, XJ_COMMANDER_LEFT_X));
 
         if (MatchesGlobalUser(user, VAR_CURRENT_CAPTAIN_STRETCH))
-            return new CommanderPiece(ROLE_CAPTAIN_STRETCH, XJ_CENTER_ASSET_ID, XJ_CENTER_SRC, XJ_COMMANDER_CENTER_X);
+            pieces.Add(new CommanderPiece(ROLE_CAPTAIN_STRETCH, XJ_CENTER_ASSET_ID, XJ_CENTER_SRC, XJ_COMMANDER_CENTER_X));
 
         if (MatchesGlobalUser(user, VAR_CURRENT_THE_DIRECTOR))
-            return new CommanderPiece(ROLE_THE_DIRECTOR, XJ_RIGHT_ASSET_ID, XJ_RIGHT_SRC, XJ_COMMANDER_RIGHT_X);
+            pieces.Add(new CommanderPiece(ROLE_THE_DIRECTOR, XJ_RIGHT_ASSET_ID, XJ_RIGHT_SRC, XJ_COMMANDER_RIGHT_X));
 
-        return null;
+        return pieces;
     }
 
     private bool MatchesGlobalUser(string user, string globalVar)
@@ -333,6 +349,17 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_TRIFORCE_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_TRIFORCE_SEEN_JSON, "{}", false);
         CPH.SetGlobalVar(VAR_TRIFORCE_DEADLINE_UTC, 0L, false);
+    }
+
+    private void SendTriforceAchievementMessage(int count, int highScore, bool newHighScore)
+    {
+        if (newHighScore)
+        {
+            CPH.SendMessage($"TRIFORCE COMPLETE! The Commanders assembled the XJ. Current stream: {count}. NEW HIGH SCORE: {highScore}!");
+            return;
+        }
+
+        CPH.SendMessage($"TRIFORCE COMPLETE! The Commanders assembled the XJ. Current stream: {count}. High score: {highScore}.");
     }
 
     private void PlayRevLimiter()

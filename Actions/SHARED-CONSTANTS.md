@@ -429,6 +429,8 @@ Operator notes:
 - `VAR_XJ_ACTIVE`         = `xj_drivethrough_active` *(non-persisted bool; true while sequence is running)*
 - `XJ_CHANCE_MIN`         = `1` *(inclusive lower bound for random chance rolls)*
 - `XJ_CHANCE_MAX_EXCLUSIVE` = `101` *(exclusive upper bound; produces rolls 1-100)*
+- `XJ_COMMANDER_WIDTH`    = `640` *(commander piece display width in pixels; matches 640×640 source assets)*
+- `XJ_COMMANDER_HEIGHT`   = `640` *(commander piece display height in pixels; matches 640×640 source assets)*
 - `XJ_TRIGGER_THRESHOLD`  = `75` *(roll must be greater than this; 76-100 trigger the drivethrough)*
 
 Used in:
@@ -438,6 +440,7 @@ Used in:
 Operator notes:
 - Image must exist at: `Apps/stream-overlay/packages/overlay/public/images/xj-drivethrough.png`
   Use a side-facing XJ image (facing right). 400×250 px recommended.
+- Commander piece images must exist at `Apps/stream-overlay/packages/overlay/public/images/xj-left.png`, `xj-middle.png`, and `xj-right.png`. Source and display size should be 640×640 px to avoid distortion.
 - Audio must exist at: `Apps/stream-overlay/packages/overlay/public/audio/xj-rev-limiter.mp3`
 - OBS browser source must have audio enabled for the rev limiter sound to hit stream output.
 

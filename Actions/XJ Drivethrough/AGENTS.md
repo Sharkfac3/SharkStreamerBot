@@ -21,7 +21,7 @@ This folder owns the XJ Drivethrough Streamer.bot action. For non-commanders, th
 
 The feature is a Streamer.bot runtime bridge into the stream overlay. Successful non-commander chance rolls publish generic overlay spawn, move, audio-play, audio-stop, and remove messages through the broker. Failed non-commander chance rolls log and exit without touching the re-entry guard or broker.
 
-When the active Water Wizard, Captain Stretch, or The Director types `!xj`, the action bypasses the non-commander chance gate and displays that commander's matching one-third XJ overlay piece for 10 seconds. The first commander `!xj` in an idle window starts a 5-second triforce window; if all three active commanders type `!xj` once before the window closes, the action increments the current-stream triforce count, updates the persisted triforce high score only when the current stream count beats it, and plays the XJ rev-limiter audio.
+When the active Water Wizard, Captain Stretch, or The Director types `!xj`, the action bypasses the non-commander chance gate and displays each matching commander role's one-third XJ overlay piece for 10 seconds. If one Twitch user currently holds multiple commander roles, their single `!xj` counts for and displays all of those roles. The first commander `!xj` in an idle window starts a 10-second triforce window; if all three active commander roles are seen before the window closes, the action increments the current-stream triforce count, updates the persisted triforce high score only when the current stream count beats it, and plays the XJ rev-limiter audio.
 
 ## When to Activate
 
@@ -116,7 +116,7 @@ The following contract is the source of truth for the script behavior. Update th
     {
       "script": "xj-drivethrough-main.cs",
       "action": "XJ Drivethrough / Main",
-      "purpose": "Handle the !xj command: non-commanders roll a 1-100 chance gate for the existing drivethrough effect, while active commanders display their assigned one-third XJ overlay piece and can complete a 5-second triforce combo.",
+      "purpose": "Handle the !xj command: non-commanders roll a 1-100 chance gate for the existing drivethrough effect, while active commanders display their assigned one-third XJ overlay piece and can complete a 10-second triforce combo.",
       "triggers": [
         "Twitch -> Chat Command -> !xj",
         "Optional operator-wired manual trigger for testing"
@@ -168,7 +168,8 @@ The following contract is the source of truth for the script behavior. Update th
         "XJ_COMMANDER_TRIFORCE_WINDOW_MS"
       ],
       "runtimeBehavior": [
-        "Read the triggering Twitch user from Streamer.bot command args and compare it case-insensitively against current_water_wizard, current_captain_stretch, and current_the_director.",
+        "Read the triggering Twitch user from Streamer.bot command args and compare it case-insensitively against current_water_wizard, current_captain_stretch, and current_the_director; collect every commander role that matches the same user.",
+        "If a user matches one or more active commander roles, handle all matching commander roles from that single !xj and bypass the non-commander chance gate.",
         "For non-commanders, roll 1-100 inclusive before claiming the re-entry guard and send chat a short message showing the user's roll and threshold.",
         "For non-commanders, exit with no broker messages when the roll is 75 or lower.",
         "For non-commanders, claim non-persisted xj_drivethrough_active only after the chance gate passes.",
@@ -179,16 +180,17 @@ The following contract is the source of truth for the script behavior. Update th
         "For non-commanders, start the rev-limiter audio immediately after the move command.",
         "For non-commanders, after the drive duration plus buffer, stop the audio and remove the XJ asset with no exit animation.",
         "For non-commanders, always release xj_drivethrough_active in a finally block after the active slot is claimed.",
-        "For the active Water Wizard, spawn xj-left using images/xj-left.png in the left third of the overlay with lifetime 10000ms, then return without waiting.",
-        "For the active Captain Stretch, spawn xj-center using images/xj-middle.png in the center third of the overlay with lifetime 10000ms, then return without waiting.",
-        "For the active The Director, spawn xj-right using images/xj-right.png in the right third of the overlay with lifetime 10000ms, then return without waiting.",
+        "For the active Water Wizard, spawn xj-left using images/xj-left.png in the left third of the overlay with lifetime 10000ms.",
+        "For the active Captain Stretch, spawn xj-center using images/xj-middle.png in the center third of the overlay with lifetime 10000ms.",
+        "For the active The Director, spawn xj-right using images/xj-right.png in the right third of the overlay with lifetime 10000ms.",
+        "When the triggering user holds multiple active commander roles, spawn every matching commander piece from that one !xj, then return without waiting.",
         "Commander overlay pieces should use stable per-piece asset IDs so repeated commander commands refresh their own piece without moving the non-commander drivethrough asset.",
         "Commander overlay pieces must rely on the overlay.spawn lifetime field for cleanup rather than CPH.Wait or a delayed overlay.remove publish, so other commanders can issue !xj during the triforce window.",
         "Only commander !xj calls participate in triforce state; non-commander calls must not increment or otherwise affect xj_commander_triforce_count or xj_commander_triforce_high_score.",
         "Treat xj_commander_triforce_count as the non-persisted current-stream count and xj_commander_triforce_high_score as the persisted all-time high score.",
-        "When the first unique commander !xj arrives and no triforce window is active, set non-persisted xj_commander_triforce_active true, store a seen map containing that commander in xj_commander_triforce_seen_json, set xj_commander_triforce_deadline_utc to now plus 5000ms, and start the XJ - Commander Triforce Window timer.",
-        "While the triforce window is active, count only the first !xj from each commander role and ignore duplicate !xj calls from a commander already in xj_commander_triforce_seen_json.",
-        "If all three commander roles are seen before the 5-second window closes, increment non-persisted xj_commander_triforce_count by one for the current stream, update persisted xj_commander_triforce_high_score only if the new current-stream count is higher than the stored high score, play xj-rev-limiter via overlay.audio.play, and clear xj_commander_triforce_active, xj_commander_triforce_seen_json, and xj_commander_triforce_deadline_utc.",
+        "When the first unique commander role arrives and no triforce window is active, set non-persisted xj_commander_triforce_active true, store a seen map containing that commander role plus any other matching commander roles from the same !xj in xj_commander_triforce_seen_json, set xj_commander_triforce_deadline_utc to now plus 10000ms, and start the XJ - Commander Triforce Window timer.",
+        "While the triforce window is active, count only the first !xj from each commander role and ignore duplicate !xj calls for commander roles already in xj_commander_triforce_seen_json.",
+        "If all three commander roles are seen before the 10-second window closes, increment non-persisted xj_commander_triforce_count by one for the current stream, update persisted xj_commander_triforce_high_score only if the new current-stream count is higher than the stored high score, send chat a short achievement message with the current-stream count and high score, mention when a new high score was just set, play xj-rev-limiter via overlay.audio.play, and clear xj_commander_triforce_active, xj_commander_triforce_seen_json, and xj_commander_triforce_deadline_utc.",
         "When the XJ - Commander Triforce Window timer fires without all three commanders seen, clear xj_commander_triforce_active, xj_commander_triforce_seen_json, and xj_commander_triforce_deadline_utc without changing xj_commander_triforce_count, xj_commander_triforce_high_score, or playing audio."
       ],
       "failureBehavior": [
@@ -216,6 +218,8 @@ Expected asset locations in the overlay app:
 | The Director XJ piece | images/xj-right.png |
 | Rev-limiter audio | audio/xj-rev-limiter.mp3 |
 
+Commander piece images are 640×640 px and should be spawned at 640×640 to preserve aspect ratio. The three horizontal positions (`x=320`, `x=960`, `x=1600`) align the square left/middle/right pieces across a 1920 px canvas.
+
 The repo may not contain all binary assets yet. If missing, the C# action can publish successfully while the overlay cannot display or play the intended media.
 
 Movement timing note: XJ is a spawn-then-immediate-move effect. Keep a publisher-side settle delay before `overlay.move` so first-time asset loading does not leave the Jeep off-screen. The overlay renderer has a pending-move safety net, but future moving-asset effects should still follow the same pattern documented in `Apps/stream-overlay/docs/asset-system.md`.
@@ -231,8 +235,8 @@ Core runtime values:
 | `current_water_wizard` | Active Water Wizard username; commander `!xj` maps to the left XJ piece. |
 | `current_captain_stretch` | Active Captain Stretch username; commander `!xj` maps to the middle XJ piece. |
 | `current_the_director` | Active The Director username; commander `!xj` maps to the right XJ piece. |
-| `xj_commander_triforce_active` | Non-persisted bool; true while the 5-second commander combo window is open. |
+| `xj_commander_triforce_active` | Non-persisted bool; true while the 10-second commander combo window is open. |
 | `xj_commander_triforce_seen_json` | Non-persisted JSON state of commander roles already counted in the active window. |
-| `xj_commander_triforce_deadline_utc` | Non-persisted Unix ms deadline for the active 5-second window. |
+| `xj_commander_triforce_deadline_utc` | Non-persisted Unix ms deadline for the active 10-second window. |
 | `xj_commander_triforce_count` | Non-persisted current-stream triforce count incremented when all three commanders type `!xj` within the window. |
 | `xj_commander_triforce_high_score` | Persisted all-time triforce high score; update only when `xj_commander_triforce_count` exceeds the stored value. |
