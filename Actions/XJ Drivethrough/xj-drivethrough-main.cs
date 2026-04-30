@@ -1,5 +1,5 @@
 // ACTION-CONTRACT: Actions/XJ Drivethrough/AGENTS.md#xj-drivethrough-main.cs
-// ACTION-CONTRACT-SHA256: a1a20c877db299322e444d6b1c91f211a57c14e37c0cfc70f0ecc28c25d1ffe7
+// ACTION-CONTRACT-SHA256: 437f251f7a493f09249451a4c3be925d450f72d6062dddf0caca153c1ddefc14
 
 using System;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ public class CPHInline
     private const string VAR_XJ_ACTIVE = "xj_drivethrough_active";
     private const int XJ_CHANCE_MIN = 1;
     private const int XJ_CHANCE_MAX_EXCLUSIVE = 101;
-    private const int XJ_TRIGGER_THRESHOLD = 85;
+    private const int XJ_TRIGGER_THRESHOLD = 20;
     private const int WAIT_SPAWN_SETTLE_MS = 750;
     private const int WAIT_POST_DRIVE_MS = 500;
     private static readonly Random ChanceRandom = new Random();
@@ -94,16 +94,18 @@ public class CPHInline
             return RunCommanderPiece(piece, LOG_PREFIX);
         }
 
-        return RunNonCommanderDrivethrough(LOG_PREFIX);
+        return RunNonCommanderDrivethrough(user, LOG_PREFIX);
     }
 
-    private bool RunNonCommanderDrivethrough(string logPrefix)
+    private bool RunNonCommanderDrivethrough(string user, string logPrefix)
     {
         int chanceRoll;
         lock (ChanceRandom)
         {
             chanceRoll = ChanceRandom.Next(XJ_CHANCE_MIN, XJ_CHANCE_MAX_EXCLUSIVE);
         }
+
+        CPH.SendMessage($"@{user} rolled {chanceRoll}/100 for !xj. Need over {XJ_TRIGGER_THRESHOLD}.");
 
         if (chanceRoll <= XJ_TRIGGER_THRESHOLD)
         {

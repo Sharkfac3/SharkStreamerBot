@@ -28,6 +28,7 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-29 | pi | lower XJ threshold and add roll chat | uncommitted |
 | 2026-04-29 | pi | thin stream-start comments | uncommitted |
 | 2026-04-29 | pi | thin follower-new comments | uncommitted |
 | 2026-04-29 | pi | document clone movement cooldown | uncommitted |
@@ -37,7 +38,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-04-29 | pi | thin Water Wizard hydrate comments | uncommitted |
 | 2026-04-29 | pi | thin Water Wizard redeem comments | uncommitted |
 | 2026-04-29 | pi | thin Water Wizard orb comments | uncommitted |
-| 2026-04-29 | pi | thin Water Wizard hail comments | uncommitted |
 
 ---
 
