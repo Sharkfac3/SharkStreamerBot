@@ -1,5 +1,5 @@
 // ACTION-CONTRACT: Actions/XJ Drivethrough/AGENTS.md#xj-drivethrough-main.cs
-// ACTION-CONTRACT-SHA256: 437f251f7a493f09249451a4c3be925d450f72d6062dddf0caca153c1ddefc14
+// ACTION-CONTRACT-SHA256: 5b2ee14aceee17d37509beaecd0d91591eeda3932f32b67dc10169c4e27ef5a4
 
 using System;
 using System.Collections.Generic;
@@ -74,7 +74,7 @@ public class CPHInline
     private const string VAR_TRIFORCE_DEADLINE_UTC = "xj_commander_triforce_deadline_utc";
     private const string VAR_TRIFORCE_COUNT        = "xj_commander_triforce_count";
     private const string VAR_TRIFORCE_HIGH_SCORE   = "xj_commander_triforce_high_score";
-    private const int XJ_COMMANDER_TRIFORCE_WINDOW_MS = 5000;
+    private const int XJ_COMMANDER_TRIFORCE_WINDOW_MS = 10000;
 
     public bool Execute()
     {
@@ -87,11 +87,11 @@ public class CPHInline
             return true;
         }
 
-        CommanderPiece piece = GetCommanderPieceForUser(user);
-        if (piece != null)
+        List<CommanderPiece> pieces = GetCommanderPiecesForUser(user);
+        if (pieces.Count > 0)
         {
-            CPH.LogWarn($"{LOG_PREFIX} Active commander {user} triggered {piece.AssetId}.");
-            return RunCommanderPiece(piece, LOG_PREFIX);
+            CPH.LogWarn($"{LOG_PREFIX} Active commander {user} triggered {pieces.Count} XJ piece(s).");
+            return RunCommanderPieces(pieces, LOG_PREFIX);
         }
 
         return RunNonCommanderDrivethrough(user, LOG_PREFIX);
@@ -179,33 +179,36 @@ public class CPHInline
         return true;
     }
 
-    private bool RunCommanderPiece(CommanderPiece piece, string logPrefix)
+    private bool RunCommanderPieces(List<CommanderPiece> pieces, string logPrefix)
     {
         try
         {
-            HandleCommanderTriforce(piece.Role, logPrefix);
+            HandleCommanderTriforce(pieces, logPrefix);
 
-            string spawnPayload =
-                "{" +
-                "\"assetId\":\"" + piece.AssetId + "\"," +
-                "\"src\":\"" + piece.Source + "\"," +
-                "\"position\":{\"x\":" + piece.X + ",\"y\":" + XJ_Y + "}," +
-                "\"width\":" + XJ_COMMANDER_WIDTH + "," +
-                "\"height\":" + XJ_COMMANDER_HEIGHT + "," +
-                "\"depth\":" + XJ_DEPTH + "," +
-                "\"enterAnimation\":\"none\"," +
-                "\"enterDuration\":0," +
-                "\"lifetime\":" + XJ_COMMANDER_DISPLAY_MS + "," +
-                "\"exitAnimation\":\"none\"," +
-                "\"exitDuration\":0" +
-                "}";
-            if (!PublishBrokerMessage(TOPIC_OVERLAY_SPAWN, spawnPayload))
+            foreach (CommanderPiece piece in pieces)
             {
-                CPH.LogError($"{logPrefix} Failed to spawn commander XJ piece {piece.AssetId}.");
-                return true;
-            }
+                string spawnPayload =
+                    "{" +
+                    "\"assetId\":\"" + piece.AssetId + "\"," +
+                    "\"src\":\"" + piece.Source + "\"," +
+                    "\"position\":{\"x\":" + piece.X + ",\"y\":" + XJ_Y + "}," +
+                    "\"width\":" + XJ_COMMANDER_WIDTH + "," +
+                    "\"height\":" + XJ_COMMANDER_HEIGHT + "," +
+                    "\"depth\":" + XJ_DEPTH + "," +
+                    "\"enterAnimation\":\"none\"," +
+                    "\"enterDuration\":0," +
+                    "\"lifetime\":" + XJ_COMMANDER_DISPLAY_MS + "," +
+                    "\"exitAnimation\":\"none\"," +
+                    "\"exitDuration\":0" +
+                    "}";
+                if (!PublishBrokerMessage(TOPIC_OVERLAY_SPAWN, spawnPayload))
+                {
+                    CPH.LogError($"{logPrefix} Failed to spawn commander XJ piece {piece.AssetId}.");
+                    continue;
+                }
 
-            CPH.LogWarn($"{logPrefix} Commander XJ piece {piece.AssetId} spawned with overlay lifetime {XJ_COMMANDER_DISPLAY_MS}ms.");
+                CPH.LogWarn($"{logPrefix} Commander XJ piece {piece.AssetId} spawned with overlay lifetime {XJ_COMMANDER_DISPLAY_MS}ms.");
+            }
         }
         catch (Exception ex)
         {
@@ -215,7 +218,7 @@ public class CPHInline
         return true;
     }
 
-    private void HandleCommanderTriforce(string role, string logPrefix)
+    private void HandleCommanderTriforce(List<CommanderPiece> pieces, string logPrefix)
     {
         bool active = (CPH.GetGlobalVar<bool?>(VAR_TRIFORCE_ACTIVE, false) ?? false);
         long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -229,13 +232,21 @@ public class CPHInline
         }
 
         Dictionary<string, bool> seen = active ? ReadSeenMap() : new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
-        if (seen.ContainsKey(role))
+        bool addedAnyRole = false;
+        foreach (CommanderPiece piece in pieces)
         {
-            CPH.LogWarn($"{logPrefix} Duplicate commander role {role} ignored for active triforce window.");
-            return;
+            if (seen.ContainsKey(piece.Role))
+            {
+                CPH.LogWarn($"{logPrefix} Duplicate commander role {piece.Role} ignored for active triforce window.");
+                continue;
+            }
+
+            seen[piece.Role] = true;
+            addedAnyRole = true;
         }
 
-        seen[role] = true;
+        if (!addedAnyRole)
+            return;
 
         if (!active)
         {
@@ -276,18 +287,20 @@ public class CPHInline
         CPH.LogWarn($"{logPrefix} Commander triforce timer fired without all three commanders. State cleared.");
     }
 
-    private CommanderPiece GetCommanderPieceForUser(string user)
+    private List<CommanderPiece> GetCommanderPiecesForUser(string user)
     {
+        var pieces = new List<CommanderPiece>();
+
         if (MatchesGlobalUser(user, VAR_CURRENT_WATER_WIZARD))
-            return new CommanderPiece(ROLE_WATER_WIZARD, XJ_LEFT_ASSET_ID, XJ_LEFT_SRC, XJ_COMMANDER_LEFT_X);
+            pieces.Add(new CommanderPiece(ROLE_WATER_WIZARD, XJ_LEFT_ASSET_ID, XJ_LEFT_SRC, XJ_COMMANDER_LEFT_X));
 
         if (MatchesGlobalUser(user, VAR_CURRENT_CAPTAIN_STRETCH))
-            return new CommanderPiece(ROLE_CAPTAIN_STRETCH, XJ_CENTER_ASSET_ID, XJ_CENTER_SRC, XJ_COMMANDER_CENTER_X);
+            pieces.Add(new CommanderPiece(ROLE_CAPTAIN_STRETCH, XJ_CENTER_ASSET_ID, XJ_CENTER_SRC, XJ_COMMANDER_CENTER_X));
 
         if (MatchesGlobalUser(user, VAR_CURRENT_THE_DIRECTOR))
-            return new CommanderPiece(ROLE_THE_DIRECTOR, XJ_RIGHT_ASSET_ID, XJ_RIGHT_SRC, XJ_COMMANDER_RIGHT_X);
+            pieces.Add(new CommanderPiece(ROLE_THE_DIRECTOR, XJ_RIGHT_ASSET_ID, XJ_RIGHT_SRC, XJ_COMMANDER_RIGHT_X));
 
-        return null;
+        return pieces;
     }
 
     private bool MatchesGlobalUser(string user, string globalVar)
