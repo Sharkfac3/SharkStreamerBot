@@ -36,3 +36,4 @@ Apps/info-service/data/
 # Apps/production-manager
 Apps/production-manager/dist/
 Apps/production-manager/node_modules/
+WORKING.md

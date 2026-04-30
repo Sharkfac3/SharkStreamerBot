@@ -41,6 +41,7 @@ When working anywhere under `Actions/`:
 - Use Streamer.bot's `CPHInline` style unless a local guide explicitly says otherwise.
 - Do not add external NuGet/package dependencies to runtime scripts.
 - Preserve existing chat command names, global keys, timer names, OBS source names, and Mix It Up command IDs unless the operator explicitly asks for a migration.
+- When chat output directly addresses, thanks, warns, assigns, or lists a specific Twitch user, format the name as `@username` so Twitch mention notifications/highlights work. Use the helper pattern in `Actions/Helpers/chat-input.md` and avoid `@` for role names, character names, or generic labels.
 - Check `Actions/SHARED-CONSTANTS.md` before adding or renaming shared values.
 - Be explicit about persisted vs. non-persisted globals when using `CPH.SetGlobalVar`.
 - Prefer small, local changes over broad refactors; live stream reliability comes first.

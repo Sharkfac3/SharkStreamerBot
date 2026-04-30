@@ -1,5 +1,5 @@
 // ACTION-CONTRACT: Actions/Commanders/AGENTS.md#commanders.cs
-// ACTION-CONTRACT-SHA256: b623d8ef3324dad145fed85de28897e39a4ffcb848356a82ff585f9fe47b9ebf
+// ACTION-CONTRACT-SHA256: 0914d690de6a1101a07abb53124bc19cf2c0c2b331fabd230437a5a37dbced10
 
 using System;
 using System.Collections.Generic;
@@ -27,6 +27,7 @@ public class CPHInline
      *
      * Key outputs/side effects:
      * - Sends one chat message listing active Captain Stretch, The Director, and Water Wizard slots.
+     * - Prefixes listed commander usernames with @ so Twitch sends mention notifications.
      * - Sends a fallback message when all commander slots are open.
      * - Does not create or change any global variables.
      */
@@ -39,13 +40,13 @@ public class CPHInline
         var activeSlots = new List<string>();
 
         if (!string.IsNullOrWhiteSpace(captainStretch))
-            activeSlots.Add($"Captain Stretch: {captainStretch}");
+            activeSlots.Add($"Captain Stretch: {FormatMention(captainStretch)}");
 
         if (!string.IsNullOrWhiteSpace(director))
-            activeSlots.Add($"The Director: {director}");
+            activeSlots.Add($"The Director: {FormatMention(director)}");
 
         if (!string.IsNullOrWhiteSpace(waterWizard))
-            activeSlots.Add($"Water Wizard: {waterWizard}");
+            activeSlots.Add($"Water Wizard: {FormatMention(waterWizard)}");
 
         if (activeSlots.Count == 0)
         {
@@ -61,5 +62,14 @@ public class CPHInline
     {
         string value = CPH.GetGlobalVar<string>(globalName, false) ?? string.Empty;
         return value.Trim();
+    }
+
+    private string FormatMention(string userName)
+    {
+        string trimmed = (userName ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(trimmed))
+            return string.Empty;
+
+        return "@" + trimmed.TrimStart('@');
     }
 }

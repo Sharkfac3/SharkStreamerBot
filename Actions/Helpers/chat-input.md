@@ -59,6 +59,25 @@ private (string User, string UserId) GetSender()
 }
 ```
 
+## Chat mentions / user notifications
+
+When a Streamer.bot action sends a chat message that directly addresses, thanks, warns, assigns, or lists a specific Twitch user, format that username as `@username`. Twitch uses the `@` mention form for the expected user notification/highlight behavior.
+
+Use this helper for any chat-facing user mention. It trims stored display names and prevents accidental double-`@@` if a value already includes the prefix.
+
+```csharp
+private string FormatMention(string userName)
+{
+    string trimmed = (userName ?? string.Empty).Trim();
+    if (string.IsNullOrWhiteSpace(trimmed))
+        return string.Empty;
+
+    return "@" + trimmed.TrimStart('@');
+}
+```
+
+Do not add `@` for role names, character names, generic labels, or non-chat identifiers. Keep it for actual Twitch users the message is talking to or about.
+
 ## Related references
 
 - [Verified CPH API Method Signatures](cph-api-signatures.md)

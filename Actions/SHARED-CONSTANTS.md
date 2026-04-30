@@ -429,9 +429,9 @@ Operator notes:
 - `VAR_XJ_ACTIVE`         = `xj_drivethrough_active` *(non-persisted bool; true while sequence is running)*
 - `XJ_CHANCE_MIN`         = `1` *(inclusive lower bound for random chance rolls)*
 - `XJ_CHANCE_MAX_EXCLUSIVE` = `101` *(exclusive upper bound; produces rolls 1-100)*
-- `XJ_TRIGGER_THRESHOLD`  = `20` *(roll must be greater than this; 21-100 trigger the drivethrough)*
 - `XJ_COMMANDER_WIDTH`    = `640` *(commander piece display width in pixels; matches 640×640 source assets)*
 - `XJ_COMMANDER_HEIGHT`   = `640` *(commander piece display height in pixels; matches 640×640 source assets)*
+- `XJ_TRIGGER_THRESHOLD`  = `75` *(roll must be greater than this; 76-100 trigger the drivethrough)*
 
 Used in:
 - `Actions/XJ Drivethrough/xj-drivethrough-main.cs`

@@ -40,7 +40,7 @@ public class CPHInline
     private const string VAR_XJ_ACTIVE = "xj_drivethrough_active";
     private const int XJ_CHANCE_MIN = 1;
     private const int XJ_CHANCE_MAX_EXCLUSIVE = 101;
-    private const int XJ_TRIGGER_THRESHOLD = 20;
+    private const int XJ_TRIGGER_THRESHOLD = 75;
     private const int WAIT_SPAWN_SETTLE_MS = 750;
     private const int WAIT_POST_DRIVE_MS = 500;
     private static readonly Random ChanceRandom = new Random();
