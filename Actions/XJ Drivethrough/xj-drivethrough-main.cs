@@ -1,5 +1,5 @@
 // ACTION-CONTRACT: Actions/XJ Drivethrough/AGENTS.md#xj-drivethrough-main.cs
-// ACTION-CONTRACT-SHA256: 5b2ee14aceee17d37509beaecd0d91591eeda3932f32b67dc10169c4e27ef5a4
+// ACTION-CONTRACT-SHA256: 538dcd3db05658751f07e41153a3203d333781e2a9c78f46cf41553ceea48f4a
 
 using System;
 using System.Collections.Generic;
@@ -61,7 +61,7 @@ public class CPHInline
     private const string XJ_CENTER_SRC         = "images/xj-middle.png";
     private const string XJ_RIGHT_SRC          = "images/xj-right.png";
     private const int XJ_COMMANDER_WIDTH       = 640;
-    private const int XJ_COMMANDER_HEIGHT      = 250;
+    private const int XJ_COMMANDER_HEIGHT      = 640;
     private const int XJ_COMMANDER_LEFT_X      = 320;
     private const int XJ_COMMANDER_CENTER_X    = 960;
     private const int XJ_COMMANDER_RIGHT_X     = 1600;
@@ -264,13 +264,16 @@ public class CPHInline
             int count = (CPH.GetGlobalVar<int?>(VAR_TRIFORCE_COUNT, false) ?? 0) + 1;
             int highScore = CPH.GetGlobalVar<int?>(VAR_TRIFORCE_HIGH_SCORE, true) ?? 0;
             CPH.SetGlobalVar(VAR_TRIFORCE_COUNT, count, false);
-            if (count > highScore)
+            bool newHighScore = count > highScore;
+            int displayedHighScore = newHighScore ? count : highScore;
+            if (newHighScore)
                 CPH.SetGlobalVar(VAR_TRIFORCE_HIGH_SCORE, count, true);
 
+            SendTriforceAchievementMessage(count, displayedHighScore, newHighScore);
             PlayRevLimiter();
             ClearTriforceState();
             CPH.DisableTimer(TIMER_XJ_COMMANDER_TRIFORCE_WINDOW);
-            CPH.LogWarn($"{logPrefix} Commander triforce complete. Current stream count={count}, high score={Math.Max(count, highScore)}.");
+            CPH.LogWarn($"{logPrefix} Commander triforce complete. Current stream count={count}, high score={displayedHighScore}, new high score={newHighScore}.");
         }
     }
 
@@ -346,6 +349,17 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_TRIFORCE_ACTIVE, false, false);
         CPH.SetGlobalVar(VAR_TRIFORCE_SEEN_JSON, "{}", false);
         CPH.SetGlobalVar(VAR_TRIFORCE_DEADLINE_UTC, 0L, false);
+    }
+
+    private void SendTriforceAchievementMessage(int count, int highScore, bool newHighScore)
+    {
+        if (newHighScore)
+        {
+            CPH.SendMessage($"TRIFORCE COMPLETE! The Commanders assembled the XJ. Current stream: {count}. NEW HIGH SCORE: {highScore}!");
+            return;
+        }
+
+        CPH.SendMessage($"TRIFORCE COMPLETE! The Commanders assembled the XJ. Current stream: {count}. High score: {highScore}.");
     }
 
     private void PlayRevLimiter()
@@ -441,3 +455,4 @@ public class CPHInline
         return true;
     }
 }
+

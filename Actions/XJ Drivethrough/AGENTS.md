@@ -190,7 +190,7 @@ The following contract is the source of truth for the script behavior. Update th
         "Treat xj_commander_triforce_count as the non-persisted current-stream count and xj_commander_triforce_high_score as the persisted all-time high score.",
         "When the first unique commander role arrives and no triforce window is active, set non-persisted xj_commander_triforce_active true, store a seen map containing that commander role plus any other matching commander roles from the same !xj in xj_commander_triforce_seen_json, set xj_commander_triforce_deadline_utc to now plus 10000ms, and start the XJ - Commander Triforce Window timer.",
         "While the triforce window is active, count only the first !xj from each commander role and ignore duplicate !xj calls for commander roles already in xj_commander_triforce_seen_json.",
-        "If all three commander roles are seen before the 10-second window closes, increment non-persisted xj_commander_triforce_count by one for the current stream, update persisted xj_commander_triforce_high_score only if the new current-stream count is higher than the stored high score, play xj-rev-limiter via overlay.audio.play, and clear xj_commander_triforce_active, xj_commander_triforce_seen_json, and xj_commander_triforce_deadline_utc.",
+        "If all three commander roles are seen before the 10-second window closes, increment non-persisted xj_commander_triforce_count by one for the current stream, update persisted xj_commander_triforce_high_score only if the new current-stream count is higher than the stored high score, send chat a short achievement message with the current-stream count and high score, mention when a new high score was just set, play xj-rev-limiter via overlay.audio.play, and clear xj_commander_triforce_active, xj_commander_triforce_seen_json, and xj_commander_triforce_deadline_utc.",
         "When the XJ - Commander Triforce Window timer fires without all three commanders seen, clear xj_commander_triforce_active, xj_commander_triforce_seen_json, and xj_commander_triforce_deadline_utc without changing xj_commander_triforce_count, xj_commander_triforce_high_score, or playing audio."
       ],
       "failureBehavior": [
@@ -217,6 +217,8 @@ Expected asset locations in the overlay app:
 | Captain Stretch XJ piece | images/xj-middle.png |
 | The Director XJ piece | images/xj-right.png |
 | Rev-limiter audio | audio/xj-rev-limiter.mp3 |
+
+Commander piece images are 640×640 px and should be spawned at 640×640 to preserve aspect ratio. The three horizontal positions (`x=320`, `x=960`, `x=1600`) align the square left/middle/right pieces across a 1920 px canvas.
 
 The repo may not contain all binary assets yet. If missing, the C# action can publish successfully while the overlay cannot display or play the intended media.
 
