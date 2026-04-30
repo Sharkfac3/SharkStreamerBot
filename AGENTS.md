@@ -57,7 +57,7 @@ After code changes: include paste targets, setup steps, and validation output vi
 | File | Purpose |
 |---|---|
 | [Actions/SHARED-CONSTANTS.md](Actions/SHARED-CONSTANTS.md) | Canonical globals, OBS sources, timer names. |
-| [Actions/HELPER-SNIPPETS.md](Actions/HELPER-SNIPPETS.md) | Reusable C# patterns. |
+| [Actions/Helpers/AGENTS.md](Actions/Helpers/AGENTS.md) | Reusable C# patterns. |
 | [Creative/Brand/BRAND-IDENTITY.md](Creative/Brand/BRAND-IDENTITY.md) | Brand vision, mission, values, and metaphor. |
 | [Creative/Brand/CHARACTER-CODEX.md](Creative/Brand/CHARACTER-CODEX.md) | Canonical character identities. |
 | [Tools/AgentTree/AGENTS.md](Tools/AgentTree/AGENTS.md) | Manifest/validator route for agent-tree tooling. |

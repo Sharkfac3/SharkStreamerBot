@@ -58,7 +58,7 @@ Read these first for Mix It Up tooling work:
 4. [Tools/MixItUp/Overlays/README.md](./Overlays/README.md) — overlay source area.
 5. [Tools/MixItUp/Shared/README.md](./Shared/README.md) — reusable support area.
 6. [Tools/MixItUp/Api/get_commands.py](./Api/get_commands.py) — command discovery helper.
-7. [Actions/HELPER-SNIPPETS.md](../../Actions/HELPER-SNIPPETS.md) — shared wait pattern for Mix It Up unlock timing.
+7. [Actions/Helpers/mixitup-command-api.md](../../Actions/Helpers/mixitup-command-api.md) — shared wait pattern for Mix It Up unlock timing.
 
 ## Local Workflow
 
@@ -178,7 +178,7 @@ var payload = new {
 
 ### Timing and wait behavior
 
-After calling a Mix It Up command that triggers TTS or an overlay animation, insert a wait proportional to content length to avoid overlap with subsequent actions. Use the Mix It Up unlock wait pattern in [Actions/HELPER-SNIPPETS.md](../../Actions/HELPER-SNIPPETS.md).
+After calling a Mix It Up command that triggers TTS or an overlay animation, insert a wait proportional to content length to avoid overlap with subsequent actions. Use the Mix It Up unlock wait pattern in [Actions/Helpers/mixitup-command-api.md](../../Actions/Helpers/mixitup-command-api.md).
 
 Standard unlock buffer for commands that trigger animations with queued audio: 31 seconds.
 

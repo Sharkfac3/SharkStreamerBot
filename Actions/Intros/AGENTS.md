@@ -56,7 +56,7 @@ Use the app-local and tool-local guides as the preferred setup and protocol refe
 Before changing scripts, read:
 
 - [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) for Info Service / Assets constants.
-- [Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md) for C# helper patterns.
+- [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md) for C# helper patterns.
 - [Apps/info-service/AGENTS.md](../../Apps/info-service/AGENTS.md) and [Apps/info-service/INFO-SERVICE-PLAN.md](../../Apps/info-service/INFO-SERVICE-PLAN.md) for current collection schemas and REST routes.
 - [Tools/MixItUp/AGENTS.md](../../Tools/MixItUp/AGENTS.md) for the current Custom Intro Mix It Up command convention and API payload shape.
 - [Apps/info-service/README.md](../../Apps/info-service/README.md) for app-side startup and data ownership.

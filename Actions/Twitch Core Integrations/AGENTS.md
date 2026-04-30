@@ -52,7 +52,7 @@ Activate `brand-steward` before changing public follow/sub/watch-streak text, Mi
 Read the following before editing scripts:
 
 - [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md)
-- [Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md)
+- [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md)
 - [Actions/Squad/AGENTS.md](../Squad/AGENTS.md) when changing stream-start resets for Squad or mini-game lock state
 - [Actions/LotAT/AGENTS.md](../LotAT/AGENTS.md) when changing stream-start resets for LotAT-related state
 - [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) when public copy changes

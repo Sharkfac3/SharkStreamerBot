@@ -63,7 +63,7 @@ All script docs use the same template sections:
 - `Creative/Marketing/README.md`
 
 ### Reusable Patterns
-- `Actions/HELPER-SNIPPETS.md`
+- `Actions/Helpers/AGENTS.md`
 
 ### Commanders
 - `Actions/Commanders/AGENTS.md`
@@ -97,7 +97,7 @@ Any new mini-game (inside or outside `Actions/Squad/`) must follow this contract
 4. For single-action mini-games, release lock in a `finally` block.
 5. Keep lock vars/reset behavior synchronized with:
    - `Actions/Twitch Core Integrations/stream-start.cs`
-   - `Actions/HELPER-SNIPPETS.md`
+   - `Actions/Helpers/AGENTS.md`
 
 ## Commander Model Reminder
 - Three commander slots exist (Captain Stretch, The Director, Water Wizard).

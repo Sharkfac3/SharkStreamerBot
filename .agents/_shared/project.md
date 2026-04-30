@@ -35,7 +35,7 @@ SharkFac3 is building an R&D company focused on off-road racing products in publ
 |---|---|
 | [WORKING.md](../../WORKING.md) | Active agent work, task queue, and conflict tracking. |
 | [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) | Canonical global variable, OBS source, and timer names. |
-| [Actions/HELPER-SNIPPETS.md](../../Actions/HELPER-SNIPPETS.md) | Reusable C# patterns. |
+| [Actions/Helpers/AGENTS.md](../../Actions/Helpers/AGENTS.md) | Reusable C# patterns. |
 | [Creative/Brand/BRAND-IDENTITY.md](../../Creative/Brand/BRAND-IDENTITY.md) | Brand vision, mission, values, and neurodivergent metaphor. |
 | [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) | Tone and language conventions by output context. |
 | [Creative/Brand/CHARACTER-CODEX.md](../../Creative/Brand/CHARACTER-CODEX.md) | Canonical character identities. |

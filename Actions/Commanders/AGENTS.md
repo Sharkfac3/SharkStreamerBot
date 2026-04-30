@@ -46,11 +46,11 @@ Activate the `brand-steward` role before changing public commander copy, charact
 
 Read the relevant commander README before editing scripts:
 
-- [Actions/Commanders/Captain Stretch/README.md](Captain%20Stretch/README.md)
-- [Actions/Commanders/The Director/README.md](The%20Director/README.md)
-- [Actions/Commanders/Water Wizard/README.md](Water%20Wizard/README.md)
+- [Actions/Commanders/Captain Stretch/AGENTS.md](Captain%20Stretch/AGENTS.md)
+- [Actions/Commanders/The Director/AGENTS.md](The%20Director/AGENTS.md)
+- [Actions/Commanders/Water Wizard/AGENTS.md](Water%20Wizard/AGENTS.md)
 - [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md)
-- [Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md)
+- [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md)
 - [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) when public copy changes
 - [Creative/Brand/CHARACTER-CODEX.md](../../Creative/Brand/CHARACTER-CODEX.md) when commander characterization changes
 
@@ -191,9 +191,9 @@ Brand handoff triggers: public chat copy, reward wording, command help text, com
 - New loop-control commands must preserve the existing commander assignment model.
 
 ### Commander Docs
-- `Captain Stretch/README.md`
-- `The Director/README.md`
-- `Water Wizard/README.md`
+- `Captain Stretch/AGENTS.md`
+- `The Director/AGENTS.md`
+- `Water Wizard/AGENTS.md`
 
 ### Shared Constants
 - Cross-script key sync reference: `Actions/SHARED-CONSTANTS.md`

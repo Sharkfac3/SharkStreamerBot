@@ -38,7 +38,7 @@ Prepare the following:
 - Target Streamer.bot group and action names.
 - Any manual UI changes such as triggers, global variables, arguments, timers, or OBS source/action wiring.
 - Smoke-test plan from the [validation workflow](validation.md).
-- Constants references from [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) and helper patterns from [Actions/HELPER-SNIPPETS.md](../../Actions/HELPER-SNIPPETS.md) when scripts changed.
+- Constants references from [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) and helper patterns from [Actions/Helpers/AGENTS.md](../../Actions/Helpers/AGENTS.md) when scripts changed.
 
 ## Procedure
 
@@ -93,7 +93,7 @@ Also include:
 - Change Summary workflow: [change-summary.md](change-summary.md)
 - Validation workflow: [validation.md](validation.md)
 - Actions shared constants: [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md)
-- Helper snippets: [Actions/HELPER-SNIPPETS.md](../../Actions/HELPER-SNIPPETS.md)
+- Helper snippets: [Actions/Helpers/AGENTS.md](../../Actions/Helpers/AGENTS.md)
 
 ## Role-Specific Notes
 

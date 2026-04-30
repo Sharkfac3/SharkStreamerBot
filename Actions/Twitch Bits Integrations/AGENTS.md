@@ -49,7 +49,7 @@ Activate `brand-steward` before changing public cheer/readout text, automatic re
 Read the following before editing scripts:
 
 - [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md)
-- [Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md)
+- [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md)
 - [Actions/Twitch Core Integrations/AGENTS.md](../Twitch%20Core%20Integrations/AGENTS.md) when changes affect stream-start reset or shared Twitch event conventions
 - [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) when public copy changes
 

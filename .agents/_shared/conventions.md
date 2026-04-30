@@ -34,7 +34,7 @@ Read [WORKING.md](../../WORKING.md) before starting. Follow [coordination](../wo
 ## Code and Docs Style
 
 - Keep changes focused and preserve live-stream reliability.
-- For `Actions/` work, use constants from [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) and reusable patterns from [Actions/HELPER-SNIPPETS.md](../../Actions/HELPER-SNIPPETS.md).
+- For `Actions/` work, use constants from [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) and reusable patterns from [Actions/Helpers/AGENTS.md](../../Actions/Helpers/AGENTS.md).
 - Prefer local domain guides over old central role skill files.
 - Use Markdown links for files the next agent should follow.
 - Avoid adding new Pi wrapper skills; use manifest-backed local guides and role/workflow docs instead.

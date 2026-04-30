@@ -19,7 +19,6 @@ This folder contains reusable Streamer.bot inline C# helper snippets split by co
 
 - Keep helper files documentation-only and copy/paste-ready.
 - Do not assume Streamer.bot actions can import files from this folder at runtime.
-- Keep [Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md) as the compatibility index for broad legacy references.
 
 ## Purpose
 
@@ -40,6 +39,6 @@ Folder index for reusable Streamer.bot C# helper snippets. These files contain c
 | [timers.md](timers.md) | Timer enable/disable/reset/interval-update patterns. |
 | [triggers/](triggers/README.md) | Canonical Streamer.bot trigger catalog — args, version, caveats — mirrored from upstream nav 1:1. |
 
-## Compatibility note
+## Note
 
-[Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md) is retained as a thin compatibility index for legacy references. New work should use the concept-specific files above. Per-feature `Trigger Variables` blocks are being migrated to per-script `Args Consumed` tables; canonical args live in `triggers/`.
+Per-feature `Trigger Variables` blocks are being migrated to per-script `Args Consumed` tables; canonical args live in `triggers/`.

@@ -52,7 +52,7 @@ Read these first for Streamer.bot tooling work:
 
 1. [Tools/StreamerBot/README.md](./README.md) — folder purpose and boundaries.
 2. [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) — canonical global variable, OBS source, and timer names.
-3. [Actions/HELPER-SNIPPETS.md](../../Actions/HELPER-SNIPPETS.md) — reusable C# patterns for action scripts.
+3. [Actions/Helpers/AGENTS.md](../../Actions/Helpers/AGENTS.md) — reusable C# patterns for action scripts.
 4. [.agents/workflows/coordination.md](../../.agents/workflows/coordination.md) — contribution workflow and coordination expectations.
 
 ## Local Workflow

@@ -39,7 +39,7 @@ Use these references as applicable:
 |---|---|
 | [Tools/AgentTree/validate.py](../../Tools/AgentTree/validate.py) | Agent-tree schema, coverage, link, frontmatter, orphan, and naming checks. |
 | [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) | Canonical Streamer.bot globals, OBS source names, timer names, and reset expectations. |
-| [Actions/HELPER-SNIPPETS.md](../../Actions/HELPER-SNIPPETS.md) | Reusable C# patterns and safe script idioms. |
+| [Actions/Helpers/AGENTS.md](../../Actions/Helpers/AGENTS.md) | Reusable C# patterns and safe script idioms. |
 
 ## Procedure
 

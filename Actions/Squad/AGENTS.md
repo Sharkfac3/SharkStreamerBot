@@ -54,7 +54,7 @@ Read the specific game README before editing scripts:
 - [Actions/Squad/Pedro/README.md](Pedro/README.md)
 - [Actions/Squad/Toothless/README.md](Toothless/README.md)
 - [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md)
-- [Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md)
+- [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md)
 - [Actions/Helpers/mini-game-lock.md](../Helpers/mini-game-lock.md) and [Actions/Helpers/mini-game-contract.md](../Helpers/mini-game-contract.md)
 - [Apps/stream-overlay/](../../Apps/stream-overlay/) when overlay publish behavior changes
 - [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) when public copy changes
@@ -143,7 +143,7 @@ Duck, Pedro, and Toothless each have an `overlay-publish.cs` reference template 
 - Cross-script key/timer/OBS sync reference: `Actions/SHARED-CONSTANTS.md`
 
 ### Helper Snippets
-- Reusable copy/paste patterns: `Actions/HELPER-SNIPPETS.md` (compatibility index) and `Actions/Helpers/` (concept-specific helper index)
+- Reusable copy/paste patterns: `Actions/Helpers/AGENTS.md`
 - Required mini-game contract: `Actions/Helpers/mini-game-contract.md`
 
 ---

@@ -44,7 +44,7 @@ Activate `brand-steward` before changing public command wording, chat-facing fee
 Before changing scripts, read:
 
 - [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) for the Destroyer and Overlay / Broker constants.
-- [Actions/HELPER-SNIPPETS.md](../HELPER-SNIPPETS.md) for reusable C# patterns.
+- [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md) for reusable C# patterns.
 - [Actions/Overlay/AGENTS.md](../Overlay/AGENTS.md) for broker publisher rules and overlay handoffs.
 - [Apps/stream-overlay/AGENTS.md](../../Apps/stream-overlay/AGENTS.md) for route/ownership, [protocol](../../Apps/stream-overlay/docs/protocol.md) for broker changes, and [asset system](../../Apps/stream-overlay/docs/asset-system.md) for asset behavior changes.
 - [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) if public copy changes.
