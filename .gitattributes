@@ -1,0 +1,25 @@
+# Normalize text files to LF in the repository.
+# This prevents Windows/WSL/editor/agent rewrites from creating noisy whole-file diffs.
+* text=auto eol=lf
+
+# Keep Windows command/script files CRLF when checked out.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Treat common binary assets as binary so Git never attempts line-ending conversion.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.mp3 binary
+*.wav binary
+*.ogg binary
+*.mp4 binary
+*.mov binary
+*.zip binary
+*.7z binary
+*.gz binary
+*.pdf binary

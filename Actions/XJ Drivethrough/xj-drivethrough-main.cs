@@ -1,5 +1,5 @@
 // ACTION-CONTRACT: Actions/XJ Drivethrough/AGENTS.md#xj-drivethrough-main.cs
-// ACTION-CONTRACT-SHA256: 437f251f7a493f09249451a4c3be925d450f72d6062dddf0caca153c1ddefc14
+// ACTION-CONTRACT-SHA256: 7a37c176f5f453bef3311e571f49bdf57bcec58ddd7a78db1320d4bb3940a8cb
 
 using System;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ public class CPHInline
     private const string VAR_XJ_ACTIVE = "xj_drivethrough_active";
     private const int XJ_CHANCE_MIN = 1;
     private const int XJ_CHANCE_MAX_EXCLUSIVE = 101;
-    private const int XJ_TRIGGER_THRESHOLD = 20;
+    private const int XJ_TRIGGER_THRESHOLD = 75;
     private const int WAIT_SPAWN_SETTLE_MS = 750;
     private const int WAIT_POST_DRIVE_MS = 500;
     private static readonly Random ChanceRandom = new Random();
@@ -428,3 +428,4 @@ public class CPHInline
         return true;
     }
 }
+

@@ -429,7 +429,7 @@ Operator notes:
 - `VAR_XJ_ACTIVE`         = `xj_drivethrough_active` *(non-persisted bool; true while sequence is running)*
 - `XJ_CHANCE_MIN`         = `1` *(inclusive lower bound for random chance rolls)*
 - `XJ_CHANCE_MAX_EXCLUSIVE` = `101` *(exclusive upper bound; produces rolls 1-100)*
-- `XJ_TRIGGER_THRESHOLD`  = `20` *(roll must be greater than this; 21-100 trigger the drivethrough)*
+- `XJ_TRIGGER_THRESHOLD`  = `75` *(roll must be greater than this; 76-100 trigger the drivethrough)*
 
 Used in:
 - `Actions/XJ Drivethrough/xj-drivethrough-main.cs`

@@ -17,7 +17,7 @@ status: active
 
 ## Purpose
 
-This folder owns the XJ Drivethrough Streamer.bot action. For non-commanders, the action rolls a 1-100 chance gate and, on rolls above 20, drives a Jeep Cherokee XJ image across the overlay while playing a rev-limiter audio clip through the overlay audio system.
+This folder owns the XJ Drivethrough Streamer.bot action. For non-commanders, the action rolls a 1-100 chance gate and, on rolls above 75, drives a Jeep Cherokee XJ image across the overlay while playing a rev-limiter audio clip through the overlay audio system.
 
 The feature is a Streamer.bot runtime bridge into the stream overlay. Successful non-commander chance rolls publish generic overlay spawn, move, audio-play, audio-stop, and remove messages through the broker. Failed non-commander chance rolls log and exit without touching the re-entry guard or broker.
 
@@ -57,7 +57,7 @@ Before changing scripts, read:
 ## Local Workflow
 
 1. Preserve the single-action sequence unless the operator explicitly asks for a multi-action workflow.
-2. Preserve the non-commander chance gate unless the operator explicitly asks to change trigger frequency. Current non-commander behavior rolls 1-100 inclusive and only runs on rolls greater than 20 (21-100).
+2. Preserve the non-commander chance gate unless the operator explicitly asks to change trigger frequency. Current non-commander behavior rolls 1-100 inclusive and only runs on rolls greater than 75 (76-100).
 3. Keep the non-commander re-entry guard reliable. `xj_drivethrough_active` must be cleared on every terminal path after the active slot is claimed; failed chance rolls should exit before claiming it.
 4. Commander `!xj` handling must identify active commanders from the shared commander slot globals in [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md), not hard-coded usernames.
 5. Keep broker constants and topic strings aligned with [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) and the overlay app contract.
@@ -170,7 +170,7 @@ The following contract is the source of truth for the script behavior. Update th
       "runtimeBehavior": [
         "Read the triggering Twitch user from Streamer.bot command args and compare it case-insensitively against current_water_wizard, current_captain_stretch, and current_the_director.",
         "For non-commanders, roll 1-100 inclusive before claiming the re-entry guard and send chat a short message showing the user's roll and threshold.",
-        "For non-commanders, exit with no broker messages when the roll is 20 or lower.",
+        "For non-commanders, exit with no broker messages when the roll is 75 or lower.",
         "For non-commanders, claim non-persisted xj_drivethrough_active only after the chance gate passes.",
         "For non-commanders, drop duplicate requests while xj_drivethrough_active is true.",
         "For non-commanders, spawn the XJ asset off-screen left with no enter animation.",
@@ -227,7 +227,7 @@ Core runtime values:
 | `xj_drivethrough_active` | Non-persisted guard that prevents overlapping drivethrough sequences. |
 | `XJ_CHANCE_MIN = 1` | Inclusive lower bound for chance rolls. |
 | `XJ_CHANCE_MAX_EXCLUSIVE = 101` | Exclusive upper bound for chance rolls, producing 1-100. |
-| `XJ_TRIGGER_THRESHOLD = 20` | Non-commander rolls must be greater than this value; 21-100 trigger the sequence. |
+| `XJ_TRIGGER_THRESHOLD = 75` | Non-commander rolls must be greater than this value; 76-100 trigger the sequence. |
 | `current_water_wizard` | Active Water Wizard username; commander `!xj` maps to the left XJ piece. |
 | `current_captain_stretch` | Active Captain Stretch username; commander `!xj` maps to the middle XJ piece. |
 | `current_the_director` | Active The Director username; commander `!xj` maps to the right XJ piece. |

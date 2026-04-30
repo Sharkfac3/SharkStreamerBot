@@ -114,7 +114,7 @@ Active commanders cannot support themselves with their own support command. On c
       ],
       "runtimeBehavior": [
         "Read the three non-persisted commander slot globals defensively.",
-        "Send one chat message listing only slots that currently have non-blank commander names.",
+        "Send one chat message listing only slots that currently have non-blank commander names, prefixing each listed commander username with @ for Twitch mention notifications.",
         "If all three slots are blank, send a short fallback message that the commander deck is open.",
         "Do not create, mutate, or persist any globals."
       ],
@@ -255,7 +255,7 @@ Tells chat who currently holds each commander slot.
 - Reads `current_water_wizard`.
 
 #### Key Outputs / Side Effects
-- If any commander slots are active, sends one chat message listing active slot holders.
+- If any commander slots are active, sends one chat message listing active slot holders with `@` before each username for Twitch mention notifications.
 - If no commander slots are active, sends a short open-deck fallback message.
 - Does not create or change any global variables.
 
