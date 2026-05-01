@@ -32,7 +32,7 @@ GENERATED_BLOCK_RE = re.compile(r"<!-- GENERATED:([^:]+):start -->\n(.*?)<!-- GE
 FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 PATH_ROOTS = (
     ".agents/", "Actions/", "Apps/", "Tools/", "Creative/",
-    "Projects/", "AGENTS.md", "CLAUDE.md", "WORKING.md", "README.md",
+    "Projects/", "AGENTS.md", "CLAUDE.md", "README.md",
 )
 DOMAIN_ROOTS = ("Actions", "Apps", "Tools", "Creative")
 DERIVED_BLOCKS = {
@@ -301,7 +301,12 @@ def run(repo: Path, report_path: Path | None = None) -> tuple[list[CheckResult],
     skill_ids = {s.get("id") for s in skills}
     domain_ids = {d.get("id") for d in domains}
     workflow_ids = {w.get("id") for w in workflows}
-    declared_paths = {p for p in [*(s.get("location") for s in skills), *(c.get("path") for c in co_locations), *(w.get("path") for w in workflows)] if p}
+    declared_paths = {p for p in [
+        *(s.get("location") for s in skills),
+        *(c.get("path") for c in co_locations),
+        *(w.get("path") for w in workflows),
+        *(d.get("agentDoc") for d in domains),
+    ] if p}
 
     # Folder coverage.
     for root_name in DOMAIN_ROOTS:

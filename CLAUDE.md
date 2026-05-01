@@ -10,6 +10,6 @@ owner: ops
 
 Use [AGENTS.md](AGENTS.md) and [.agents/ENTRY.md](.agents/ENTRY.md) as the canonical agent entrypoints for this repo.
 
-Before editing, check [WORKING.md](WORKING.md). For changed files, follow the relevant workflows under [.agents/workflows/](.agents/workflows/).
+For changed files, follow the relevant workflows under [.agents/workflows/](.agents/workflows/).
 
 This file intentionally contains no separate routing rules.

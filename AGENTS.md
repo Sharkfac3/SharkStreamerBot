@@ -16,8 +16,8 @@ Read [.agents/ENTRY.md](.agents/ENTRY.md) first. It is the manifest-backed unive
 Then:
 
 1. Pick the correct role or local domain route from the routing summary below.
-3. Read the role overview and any local `AGENTS.md` guide for the folder you will edit.
-4. After changed files, follow [change-summary](.agents/workflows/change-summary.md) and relevant validation/sync workflows.
+2. Read the role overview and any local `AGENTS.md` guide for the folder you will edit.
+3. After changed files, follow [change-summary](.agents/workflows/change-summary.md) and relevant validation/sync workflows.
 
 ## Quick Role Routing
 

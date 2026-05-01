@@ -17,10 +17,10 @@ SharkStreamerBot is the technical and creative infrastructure for SharkFac3's li
 
 1. Read [project.md](_shared/project.md) for repo-wide context and priorities.
 2. Choose a role from the manifest-backed table below.
-4. Read that role overview.
-5. Read the local `AGENTS.md` file for the folder you will edit, if one exists.
-6. Follow required workflows under [workflows/](workflows/).
-7. Add living context only when the discovery is not better stored in a local domain guide.
+3. Read that role overview.
+4. Read the local `AGENTS.md` file for the folder you will edit, if one exists.
+5. Follow required workflows under [workflows/](workflows/).
+6. Add living context only when the discovery is not better stored in a local domain guide.
 
 ## Roles
 

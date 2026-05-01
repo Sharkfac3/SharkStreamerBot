@@ -1,7 +1,7 @@
 ---
 id: coordination
 type: workflow
-description: WORKING.md coordination protocol and multi-agent conflict avoidance procedure.
+description: Multi-agent conflict avoidance and contribution rules.
 status: active
 owner: ops
 appliesTo:
@@ -18,84 +18,46 @@ sourceOfTruth: true
 
 ## Purpose
 
-Use this workflow to prevent file conflicts between agents and to keep the operator informed about active work. It consolidates the shared coordination procedure and the contribution rules for direct-vs-branch work in this repo.
+Prevent file conflicts between agents and keep the operator informed about active work.
 
 ## When to Run
 
-Run coordination at task start and task finish. Re-run it whenever the planned edit set changes materially or when another active agent may overlap your files.
+At task start and finish. Re-run if the planned edit set changes materially.
 
-Use direct-to-main for small, focused, single-domain changes where scope is understood. Use a worktree branch for multi-file, experimental, risky, or parallel work, following operator instructions. Agents in this reflow project do not perform git operations unless explicitly told otherwise.
+## Branch vs Direct-to-Main
 
-## Inputs
-
-Required references:
-
-| Reference | Use |
-|---|---|
-| [WORKING.md](../../WORKING.md) | Active work table, task queue, conflict registry, and recently completed log. |
-| [AGENTS.md](../../AGENTS.md) | Root agent routing and project coordination pointers. |
-| [.agents/ENTRY.md](../ENTRY.md) | Agent-tree entrypoint and shared context index. |
+Use direct-to-main for small, focused, single-domain changes with understood scope. Use a worktree branch for multi-file, experimental, risky, or parallel work. Agents do not perform git operations unless explicitly told to.
 
 ## Procedure
 
-1. Before editing, read [WORKING.md](../../WORKING.md).
-2. Check the Active Work table for overlapping paths or domains.
-3. If another agent is editing the same file or a conflicting area, stop and notify the operator before making changes.
-4. Add your row to Active Work with:
-   - agent name,
-   - short task description,
-   - primary domain,
-   - expected files or a scouting placeholder,
-   - start date.
-5. Keep the Files Being Edited column current enough that another agent can detect conflicts.
-6. During work, do not add tasks to the queue yourself. Flag future work in the handoff or change summary for the operator to decide.
-7. At task finish, remove your Active Work row.
-8. Add a Recently Completed row with date, agent, task, and commit value. If no commit was made by the agent, use the project’s current uncommitted convention.
-9. Keep the Recently Completed section trimmed to the last ten rows when adding a new row.
-10. Include coordination status in the final [change-summary workflow](change-summary.md) output when files changed.
+1. Before editing, identify the files you plan to touch.
+2. If another agent is known to be editing the same file or domain, stop and notify the operator before making changes.
+3. Do not add tasks to the task queue yourself. Flag future work in the handoff or change summary for the operator to decide.
+4. Include coordination status in the final [change-summary workflow](change-summary.md) output when files changed.
 
-## Validation / Done Criteria
+## Done Criteria
 
-Coordination is complete when:
-
-- [ ] Active work was checked before edits.
-- [ ] No conflicting active file edits were present, or the operator resolved the conflict.
-- [ ] Active Work was updated at start.
-- [ ] Active Work was cleared at finish.
-- [ ] Recently Completed was updated when the task completed.
-- [ ] Future work was reported to the operator rather than added to the task queue.
+- [ ] Planned files identified before editing.
+- [ ] No known conflicting active edits, or operator resolved the conflict.
+- [ ] Future work flagged to operator rather than self-queued.
 
 ## Output / Handoff
 
-At minimum, the final handoff or change summary should note:
+The final handoff or change summary should note:
 
-- Whether [WORKING.md](../../WORKING.md) was checked.
-- Whether conflicts were found.
-- Whether the Active Work row was cleared.
-- Any unresolved coordination or operator-review items.
+- Whether potential conflicts were considered.
+- Whether any conflicts were found and how they were resolved.
+- Any unresolved coordination items for operator review.
 
 For branch work, use the standard [change-summary workflow](change-summary.md) plus a one-paragraph branch purpose statement before merge review.
 
 ## Related Routes
 
 - Ops role: [ops role overview](../roles/ops/role.md)
-- Change Summary workflow: [change-summary.md](change-summary.md)
-- Validation workflow: [validation.md](validation.md)
-- Sync workflow: [sync.md](sync.md)
-- Root coordination board: [WORKING.md](../../WORKING.md)
+- Change Summary: [change-summary.md](change-summary.md)
+- Validation: [validation.md](validation.md)
+- Sync: [sync.md](sync.md)
 
-## Role-Specific Notes
+## Conflict Resolution
 
-### Conflict resolution
-
-If two branches or agents changed the same file, the later branch resolves conflicts. Actions conflicts require operator final call. Creative brand or lore conflicts require canon review through [canon-guardian.md](canon-guardian.md). Shared constants conflicts should stop and be flagged to the operator rather than auto-resolved.
-
-### Direct-to-main versus branch
-
-Direct-to-main is the default for small and clear changes. Branch work is for multi-file, experimental, risky, or likely-conflicting work. Follow the operator’s chosen mode for prompt-driven migration tasks.
-
-## Failure Modes
-
-- Active Work already lists a conflicting file: stop before editing.
-- Scope expands beyond registered files: update the Active Work row before continuing.
-- Task discovers future work: report it in the final summary; do not modify the operator-managed queue.
+Actions conflicts require operator final call. Creative brand or lore conflicts require canon review through [canon-guardian.md](canon-guardian.md). Shared constants conflicts should stop and be flagged to the operator rather than auto-resolved.

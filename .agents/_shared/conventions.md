@@ -10,7 +10,7 @@ owner: ops
 
 ## Task Coordination
 
-Read [WORKING.md](../../WORKING.md) before starting. Follow [coordination](../workflows/coordination.md) for active-work registration, conflict checks, and finish-state updates.
+Follow [coordination](../workflows/coordination.md) for conflict checks and multi-agent handoffs.
 
 ## File Routing
 
@@ -21,7 +21,6 @@ Read [WORKING.md](../../WORKING.md) before starting. Follow [coordination](../wo
 | [Tools/](../../Tools/) | Local utilities, validators, sync helpers, and external integration scripts. |
 | [Creative/](../../Creative/) | Brand, art, marketing, worldbuilding, and creative source docs. |
 | [../](../) | Agent roles, workflows, manifest routing, and shared agent context. |
-| Pi skill mirror | Retired 2026-04 at cutover; use local `AGENTS.md` guides and `.agents/` roles/workflows instead. |
 
 ## Naming
 

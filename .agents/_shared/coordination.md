@@ -9,8 +9,6 @@ sourceOfTruth: .agents/workflows/coordination.md
 
 # Shared Coordination Pointer
 
-The canonical agent coordination procedure now lives in [Workflow: coordination](../workflows/coordination.md).
-
-Use that workflow and [WORKING.md](../../WORKING.md) for active-work registration, conflict checks, task finish updates, and multi-agent handoffs.
+The canonical agent coordination procedure lives in [Workflow: coordination](../workflows/coordination.md).
 
 This file remains only as a compatibility pointer for older links into the shared agent context.
