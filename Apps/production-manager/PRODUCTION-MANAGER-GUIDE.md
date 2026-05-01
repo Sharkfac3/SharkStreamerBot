@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The app gives the operator a browser UI for viewing service health and editing info-service collections without hand-editing JSON. The current implemented page manages `user-intros`; pending-intro fulfillment remains planned.
+The app gives the operator a browser UI for viewing service health and editing info-service collections without hand-editing JSON. The implemented intro pages manage `user-intros` records and fulfill or reject captured `pending-intros` redemptions.
 
 ## Runtime Contract
 
@@ -30,6 +30,7 @@ The app gives the operator a browser UI for viewing service health and editing i
 | [src/App.tsx](src/App.tsx) | App shell and route/page selection. |
 | [src/pages/HealthPage.tsx](src/pages/HealthPage.tsx) | Calls `GET /health` on info-service. |
 | [src/pages/UserIntrosPage.tsx](src/pages/UserIntrosPage.tsx) | `user-intros` table, create/edit/delete form, and soft-disable toggle. |
+| [src/pages/PendingIntrosPage.tsx](src/pages/PendingIntrosPage.tsx) | `pending-intros` review table, fulfill workflow, and reject action. |
 | [src/index.css](src/index.css) | Tailwind directives and global styles. |
 
 ## Setup and Commands
@@ -51,6 +52,7 @@ Run [Apps/info-service/](../info-service/) at `http://127.0.0.1:8766` before exp
 |---|---|---|
 | Health | `/` | Fetches info-service health, uptime, and loaded collections. |
 | User Intros | `/user-intros` | Lists all `user-intros`; create/edit/delete records; toggle `enabled`. |
+| Pending Intros | `/pending-intros` | Lists captured `pending-intros`; fulfill pending records into `user-intros`; reject ineligible records. |
 
 ## Info-Service Integration
 
@@ -66,13 +68,13 @@ Current UI behavior should preserve these policies:
 
 ## Pending Intros Fulfillment
 
-A dedicated pending-intros workflow is still planned. When implemented, it should:
+The Pending Intros page:
 
-1. List `pending-intros` records with `status === 'pending'`.
-2. Let the operator fulfill by assigning one or more asset filenames and creating/updating the matching `user-intros` record.
-3. Mark the pending record `fulfilled` and set `resolvedUtc`.
-4. Let the operator reject duplicates or ineligible submissions by setting `status` to `rejected` and `resolvedUtc`.
-5. Avoid reverse transitions; edit `user-intros` directly for post-fulfillment rework.
+1. Lists all `pending-intros` records with `status === 'pending'` sorted and highlighted first.
+2. Shows user login, user ID, redemption ID, user input, reward title, status, and redeem time.
+3. Lets the operator fulfill a pending record by assigning a `soundFile`, optional `gifFile`, and `enabled` value. Fulfillment creates or updates `/info/user-intros/:userId` and then updates `/info/pending-intros/:redeemId` to `status: 'fulfilled'` with `resolvedUtc`.
+4. Lets the operator reject pending records by updating `/info/pending-intros/:redeemId` to `status: 'rejected'` with `resolvedUtc`.
+5. Avoids reverse transitions in the UI; edit `user-intros` directly for post-fulfillment rework.
 
 ## shadcn/ui Status
 

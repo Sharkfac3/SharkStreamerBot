@@ -25,7 +25,7 @@ npm run dev
 
 Dev server: `http://127.0.0.1:5174` (127.0.0.1 only — no LAN exposure, no auth needed).
 
-Requires `info-service` running at `http://127.0.0.1:8766` for the Health page to show live data. If info-service is not running the Health page will display an error — expected.
+Requires `info-service` running at `http://127.0.0.1:8766` for the Health and intro management pages to show live data. If info-service is not running the pages will display an error — expected.
 
 See [PRODUCTION-MANAGER-GUIDE.md](PRODUCTION-MANAGER-GUIDE.md) for the app-local admin workflow guide and [Apps/info-service/INFO-SERVICE-PLAN.md](../info-service/INFO-SERVICE-PLAN.md) for backend schemas and REST protocol.
 
@@ -50,7 +50,4 @@ npm run typecheck
 |------|------|---------|
 | Health | `/` | Fetches `GET /health` from info-service; shows status, uptime, and collections. |
 | User Intros | `/user-intros` | Table of all user-intros records; create/edit/delete via modal form; soft-disable toggle. |
-
-## Pending
-
-- **Pending Intros fulfillment page** (C10.5): table of `pending-intros` records + fulfill/reject workflow. Blocked on operator decision for Open Question Q14 in `humans/info-service/COORDINATION.md`.
+| Pending Intros | `/pending-intros` | Table of pending-intros records; fulfill into user-intros or reject resolved redemptions. |
