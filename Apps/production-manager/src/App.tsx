@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import HealthPage from './pages/HealthPage';
+import PendingIntrosPage from './pages/PendingIntrosPage';
 import UserIntrosPage from './pages/UserIntrosPage';
 
-type Page = 'health' | 'user-intros';
+type Page = 'health' | 'user-intros' | 'pending-intros';
 
 export default function App() {
   const [page, setPage] = useState<Page>('health');
@@ -30,8 +31,20 @@ export default function App() {
         >
           User Intros
         </button>
+        <button
+          onClick={() => setPage('pending-intros')}
+          className={`text-sm font-medium px-3 py-1.5 rounded-md transition-colors ${
+            page === 'pending-intros'
+              ? 'bg-gray-800 text-gray-50'
+              : 'text-gray-400 hover:text-gray-200'
+          }`}
+        >
+          Pending Intros
+        </button>
       </nav>
-      {page === 'health' ? <HealthPage /> : <UserIntrosPage />}
+      {page === 'health' && <HealthPage />}
+      {page === 'user-intros' && <UserIntrosPage />}
+      {page === 'pending-intros' && <PendingIntrosPage />}
     </div>
   );
 }
