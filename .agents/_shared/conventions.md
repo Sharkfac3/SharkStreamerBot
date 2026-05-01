@@ -39,6 +39,28 @@ Read [WORKING.md](../../WORKING.md) before starting. Follow [coordination](../wo
 - Use Markdown links for files the next agent should follow.
 - Avoid adding new Pi wrapper skills; use manifest-backed local guides and role/workflow docs instead.
 
+## Runtime Environment
+
+This repo runs in both **Windows** (native shell) and **WSL** (Linux shell). Python command differs:
+
+| Environment | Python command |
+|---|---|
+| Windows (cmd / PowerShell / Git Bash via `python.exe`) | `python` |
+| WSL (bash/zsh) | `python3` |
+
+**Before running any Python:** detect environment with:
+```bash
+python3 --version &>/dev/null && PYTHON=python3 || PYTHON=python
+$PYTHON your_script.py
+```
+
+Or check WSL directly:
+```bash
+[[ -n "$WSL_DISTRO_NAME" ]] && PYTHON=python3 || PYTHON=python
+```
+
+Never hardcode `python` or `python3`; always detect first.
+
 ## Git and Sync Notes
 
 Agents do not perform git operations unless explicitly asked. For Streamer.bot C# changes, document paste targets and sync status through [sync](../workflows/sync.md) and [change-summary](../workflows/change-summary.md).
