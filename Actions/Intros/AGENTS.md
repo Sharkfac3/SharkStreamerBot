@@ -18,7 +18,7 @@ status: active
 
 ## Purpose
 
-This folder owns the Streamer.bot actions for custom viewer intros. It captures custom-intro redemptions into the local info-service and plays approved intro audio on a viewer's first chat of the stream.
+This folder owns the Streamer.bot actions for custom viewer intros. It captures custom-intro redemptions into the local info-service and plays approved intro audio when Streamer.bot's `Twitch -> Chat -> First Words` trigger fires for a viewer; with First Words reset per stream, this is the viewer's first chat of the stream.
 
 The route crosses three systems:
 
@@ -30,7 +30,7 @@ The route crosses three systems:
 
 Use this guide when editing or reviewing files under [Actions/Intros/](./):
 
-- [first-chat-intro.cs](first-chat-intro.cs) — reads the `user-intros` collection and dispatches approved intro audio on First Chat.
+- [first-chat-intro.cs](first-chat-intro.cs) — reads the `user-intros` collection and dispatches approved intro audio from the `Twitch -> Chat -> First Words` trigger.
 - [redeem-capture.cs](redeem-capture.cs) — writes Custom Intro channel-point redemptions into the `pending-intros` collection.
 
 Activate `app-dev` when collection schemas, info-service routes, production-manager fulfillment, or app runtime behavior changes.
@@ -65,11 +65,11 @@ Before changing scripts, read:
 
 ## Local Workflow
 
-1. Identify the side of the flow being changed: redemption capture, first-chat playback, info-service data contract, or Mix It Up playback setup.
+1. Identify the side of the flow being changed: redemption capture, First Words playback, info-service data contract, or Mix It Up playback setup.
 2. Preserve the info-service base URL and collection names unless a coordinated app-dev migration updates [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) and app docs.
 3. Keep Streamer.bot trigger arguments defensive. Missing `userId` or `redeemId` must log and no-op safely.
 4. Preserve idempotency in [redeem-capture.cs](redeem-capture.cs). Duplicate `redeemId` records should not create duplicate pending entries.
-5. Preserve the first-chat no-op behavior for missing records, disabled intros, missing sound files, HTTP errors, or malformed JSON.
+5. Preserve the First Words playback no-op behavior for missing records, disabled intros, missing sound files, HTTP errors, or malformed JSON.
 6. Keep audio playback delegated to the `Intros - Play Custom Intro` Streamer.bot action unless the operator explicitly requests direct Mix It Up API integration.
 7. If changing asset subpaths or collection names, update [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) and app-side protocol docs together when in scope.
 8. For public instructions or reward descriptions, chain to `brand-steward` before finalizing text.
@@ -88,7 +88,7 @@ For script changes:
 - Confirm info-service is running at http://127.0.0.1:8766.
 - Smoke test GET /health for the info-service.
 - For redemption capture, trigger a test Custom Intro redemption and confirm a `pending-intros` record appears.
-- For first-chat playback, create or use a `user-intros` record with `enabled` set true and a valid sound file, then trigger First Chat behavior.
+- For First Words playback, create or use a `user-intros` record with `enabled` set true and a valid sound file, then trigger Streamer.bot `Twitch -> Chat -> First Words` behavior.
 - Confirm `intro_sound_file_path` is set before the `Intros - Play Custom Intro` action runs.
 - Confirm Mix It Up receives the path and plays the expected local audio file.
 
@@ -100,6 +100,80 @@ For script changes:
 - Do not change public reward copy or intro policy without `brand-steward` review.
 - Do not store or expose private notes from info-service records in chat or overlay output.
 
+## Action Contracts
+
+<!-- ACTION-CONTRACTS:START -->
+```json
+{
+  "version": 1,
+  "contracts": [
+    {
+      "script": "first-chat-intro.cs",
+      "action": "Intros - First Chat Intro",
+      "purpose": "Play an approved custom intro sound for a viewer when their First Words trigger fires.",
+      "triggers": ["Twitch -> Chat -> First Words"],
+      "globals": ["intro_sound_file_path"],
+      "timers": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": ["http://127.0.0.1:8766"],
+      "requiredLiterals": [
+        "user-intros",
+        "enabled",
+        "soundFile",
+        "C:\\Users\\sharkfac3\\Workspace\\coding\\SharkStreamerBot\\Assets",
+        "user-intros\\sound\\",
+        "Intros - Play Custom Intro"
+      ],
+      "runtimeBehavior": [
+        "Read userId from the First Words trigger and no-op when it is missing.",
+        "GET the user-intros record for userId from the info-service.",
+        "No-op unless the record exists, enabled is true, soundFile is non-empty, and the resolved sound file exists.",
+        "Set non-persisted intro_sound_file_path to the resolved asset path, then run Intros - Play Custom Intro synchronously."
+      ],
+      "failureBehavior": [
+        "Log and return true for missing userId, 404 records, non-200 responses, HTTP exceptions, malformed JSON, disabled intros, empty soundFile, or missing local files."
+      ],
+      "pasteTarget": "Streamer.bot Execute C# Code action: Intros - First Chat Intro"
+    },
+    {
+      "script": "redeem-capture.cs",
+      "action": "Intros - Redeem Capture",
+      "purpose": "Capture Custom Intro channel-point redemptions into the pending-intros info-service collection.",
+      "triggers": ["Twitch -> Channel Reward -> Reward Redemption"],
+      "globals": [],
+      "timers": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": ["http://127.0.0.1:8766"],
+      "requiredLiterals": [
+        "pending-intros",
+        "redemptionId",
+        "rewardName",
+        "rawInput",
+        "status",
+        "pending"
+      ],
+      "runtimeBehavior": [
+        "Read userId, userLogin, redemptionId, rewardName, and rawInput from the Reward Redemption trigger.",
+        "No-op when redemptionId is missing.",
+        "GET the pending-intros record by redemptionId and no-op when it already exists.",
+        "POST a pending record keyed by redemptionId with user, reward, input, redeemUtc, and status fields."
+      ],
+      "failureBehavior": [
+        "Log and return true for missing redemptionId, duplicate records, duplicate-check HTTP exceptions, POST non-success responses, or POST exceptions."
+      ],
+      "pasteTarget": "Streamer.bot Execute C# Code action: Intros - Redeem Capture"
+    }
+  ]
+}
+```
+<!-- ACTION-CONTRACTS:END -->
+
 ## Handoff Notes
 
 Use the terminal workflows after changes:
@@ -110,7 +184,7 @@ Use the terminal workflows after changes:
 
 For code changes, list Streamer.bot paste targets for each edited script and include any operator setup required for:
 
-- First Chat trigger wiring.
+- `Twitch -> Chat -> First Words` trigger wiring, including First Words reset timing if per-stream first-chat behavior is desired.
 - Custom Intro channel-point redemption trigger wiring.
 - The `Intros - Play Custom Intro` action chain.
 - Mix It Up `Custom Intro` command setup.
@@ -123,7 +197,7 @@ Current flow:
 | Runtime event | Repo file | External dependency | Result |
 |---|---|---|---|
 | Custom Intro channel-point redemption | [redeem-capture.cs](redeem-capture.cs) | [Apps/info-service/](../../Apps/info-service/) | Creates a `pending-intros` record keyed by redemption ID. |
-| First Chat | [first-chat-intro.cs](first-chat-intro.cs) | [Apps/info-service/](../../Apps/info-service/) and Mix It Up | Plays enabled custom intro audio for the viewer. |
+| `Twitch -> Chat -> First Words` | [first-chat-intro.cs](first-chat-intro.cs) | [Apps/info-service/](../../Apps/info-service/) and Mix It Up | Plays enabled custom intro audio for the viewer; per-stream first-chat behavior depends on resetting First Words for the stream. |
 
 Info-service collections used by this route:
 

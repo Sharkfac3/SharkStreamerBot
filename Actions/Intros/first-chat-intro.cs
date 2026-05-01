@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Intros/AGENTS.md#first-chat-intro.cs
+// ACTION-CONTRACT-SHA256: c24eddd42d08191fdbe084f2f92e987174da4b41ac8ac0cc85d8de415ad255bb
+
 using System;
 using System.Net;
 using System.Net.Http;
@@ -125,6 +128,12 @@ public class CPHInline
 
         string fullPath = System.IO.Path.Combine(ASSETS_ROOT, SOUND_SUBPATH, soundFile);
         CPH.LogInfo($"[first-chat-intro] userId={userId} dispatching intro. Path: {fullPath}");
+
+        if (!System.IO.File.Exists(fullPath))
+        {
+            CPH.LogInfo($"[first-chat-intro] userId={userId} intro sound file missing at path: {fullPath} — no-op.");
+            return true;
+        }
 
         CPH.SetGlobalVar(VAR_SOUND_FILE_PATH, fullPath, false);
         CPH.RunAction(MIXITUP_ACTION_NAME, true);

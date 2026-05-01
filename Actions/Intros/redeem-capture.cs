@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Intros/AGENTS.md#redeem-capture.cs
+// ACTION-CONTRACT-SHA256: b788de14d96b50a5b526d72a36f209309ea391f8b48de1e6aa3c02ea5e7b1fed
+
 using System;
 using System.Net.Http;
 using System.Text;
@@ -21,8 +24,8 @@ public class CPHInline
      * Required SB trigger args:
      * - userId       — Twitch numeric userId (string)
      * - userLogin    — Twitch login (lowercase string)
-     * - redeemId     — channel-point redemption ID (string)
-     * - rewardTitle  — reward display name (string)
+     * - redemptionId — channel-point redemption ID (string); stored as redeemId
+     * - rewardName   — reward display name (string); stored as rewardTitle
      * - rawInput     — user-supplied message; may be empty/null
      *
      * Key outputs/side effects:
@@ -39,8 +42,8 @@ public class CPHInline
 
         CPH.TryGetArg("userId",      out userId);
         CPH.TryGetArg("userLogin",   out userLogin);
-        CPH.TryGetArg("redeemId",    out redeemId);
-        CPH.TryGetArg("rewardTitle", out rewardTitle);
+        CPH.TryGetArg("redemptionId", out redeemId);
+        CPH.TryGetArg("rewardName",   out rewardTitle);
         CPH.TryGetArg("rawInput",    out userInput);
 
         userId      = userId      ?? "";

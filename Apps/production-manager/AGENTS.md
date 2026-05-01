@@ -110,5 +110,4 @@ Current pages:
 |---|---|---|---|
 | Health | root route | [src/pages/HealthPage.tsx](src/pages/HealthPage.tsx) | `GET /health` |
 | User Intros | user-intros route | [src/pages/UserIntrosPage.tsx](src/pages/UserIntrosPage.tsx) | `GET/POST/PUT/DELETE /info/user-intros/:key` |
-
-Pending work: add a `pending-intros` fulfillment page after operator workflow decisions are finalized.
+| Pending Intros | pending-intros route | [src/pages/PendingIntrosPage.tsx](src/pages/PendingIntrosPage.tsx) | `GET/PUT /info/pending-intros/:key`, `PUT /info/user-intros/:key` |
