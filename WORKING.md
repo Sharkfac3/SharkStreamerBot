@@ -27,6 +27,8 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 
 | Date | Agent | Task | Commit |
 |------|-------|------|--------|
+| 2026-04-30 | pi | fix agent-tree link integrity failures | uncommitted |
+| 2026-04-30 | pi | create Intros gap-fill prompts | uncommitted |
 | 2026-04-29 | pi | fix multi-commander XJ handling | uncommitted |
 | 2026-04-29 | pi | change XJ triforce window to 10 seconds | uncommitted |
 | 2026-04-29 | pi | lower XJ threshold and add roll chat | uncommitted |
@@ -35,8 +37,6 @@ Ordered by priority. Agents pull from the top. Operator manages this list.
 | 2026-04-29 | pi | document clone movement cooldown | uncommitted |
 | 2026-04-29 | pi | thin clone empire move comments | uncommitted |
 | 2026-04-29 | pi | thin clone empire main comments | uncommitted |
-| 2026-04-29 | pi | thin clone empire join comments | uncommitted |
-| 2026-04-29 | pi | thin Water Wizard hydrate comments | uncommitted |
 
 ---
 

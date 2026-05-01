@@ -137,7 +137,7 @@ Brand handoff triggers: public game help, flavor text, character metaphor shifts
 ## Script Reference
 
 ### Overlay Integration
-Duck, Pedro, and Toothless each have an `overlay-publish.cs` reference template in their folder. These are **not standalone deployed actions** — copy the `Publish*` methods into the target game scripts at integration time. See each game's README for the integration map.
+Duck, Pedro, and Toothless each have an overlay publish reference template in their folder: [Duck](Duck/overlay-publish.cs), [Pedro](Pedro/overlay-publish.cs), and [Toothless](Toothless/overlay-publish.cs). These are **not standalone deployed actions** — copy the `Publish*` methods into the target game scripts at integration time. See each game's README for the integration map.
 
 ### Shared Constants
 - Cross-script key/timer/OBS sync reference: `Actions/SHARED-CONSTANTS.md`

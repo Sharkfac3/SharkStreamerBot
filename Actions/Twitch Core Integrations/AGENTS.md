@@ -296,7 +296,7 @@ Each of the 5 simple subscription events has its own dedicated script. Every scr
 - Logs warning/error messages when configuration is incomplete or the Mix It Up call fails.
 
 #### Operator Notes
-- `subscription-dispatcher.cs` is the old shared template these replaced — it can be deleted from Streamer.bot once all 5 dedicated actions are wired.
+- The old shared subscription dispatcher template these replaced can be deleted from Streamer.bot once all 5 dedicated actions are wired.
 - See the Trigger Variables section below for the full list of available args per event.
 
 ---

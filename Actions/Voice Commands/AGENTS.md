@@ -187,7 +187,7 @@ Sets the global stream mode to `workspace`.
 - None.
 
 #### Operator Notes
-- `stream-start.cs` also sets this as the default mode at stream start.
+- [stream-start.cs](../Twitch%20Core%20Integrations/stream-start.cs) also sets this as the default mode at stream start.
 
 ---
 

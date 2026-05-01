@@ -235,7 +235,7 @@ Scripts that connect Streamer.bot to the stream overlay broker and publish overl
 - The broker must be running before this fires. Start order: broker → OBS → Streamer.bot.
 - If connection fails, stream-start continues; only overlay commands are affected.
 - To retry mid-stream: trigger this action from a mod command or hotkey.
-- Normal stream-start no longer needs this as a separate sub-action if the updated `stream-start.cs` is pasted.
+- Normal stream-start no longer needs this as a separate sub-action if the updated [stream-start.cs](../Twitch%20Core%20Integrations/stream-start.cs) is pasted.
 
 ---
 
@@ -295,7 +295,7 @@ Scripts that connect Streamer.bot to the stream overlay broker and publish overl
 - If nothing appears on screen, check:
   1. Is the broker running? (`http://localhost:8765/health` — should show Streamer.bot in clients list)
   2. Is the overlay loaded in OBS? (browser source URL matches overlay dev/prod URL)
-  3. Does the test image file exist under `overlay/public/images/`?
+  3. Does the test image file exist under the [overlay public images folder](../../Apps/stream-overlay/packages/overlay/public/images/)?
   4. Streamer.bot log — did `[BrokerPublish]` log `Sent topic=overlay.spawn`?
 
 ---
@@ -352,7 +352,7 @@ In Streamer.bot UI: **Servers/Clients → WebSocket Clients → right-click → 
 
 This entry must be **first in the list** (index 0). If you add other clients, adjust `BROKER_WS_INDEX` in the scripts.
 
-### 2. Use updated `stream-start.cs` for normal startup connection
+### 2. Use updated [stream-start.cs](../Twitch%20Core%20Integrations/stream-start.cs) for normal startup connection
 
 Paste the updated `Actions/Twitch Core Integrations/stream-start.cs` into the Streamer.bot stream-start action. It now connects/registers with the overlay broker automatically if needed.
 
@@ -388,7 +388,7 @@ No separate reset snippet is needed after pasting the updated `Actions/Twitch Co
 2. Paste into your `CPHInline` class.
 3. Build your payload as a JSON string (string concatenation or the `SerializeJson` helper from `Actions/Helpers/json-no-external-libraries.md`).
 4. Call `PublishBrokerMessage("overlay.spawn", payloadJson)`.
-5. Topic strings: use the constants from `@stream-overlay/shared/topics.ts` — see `Actions/SHARED-CONSTANTS.md → Overlay / Broker` for the C# string equivalents.
+5. Topic strings: use the constants from [topics.ts](../../Apps/stream-overlay/packages/shared/src/topics.ts) — see [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md), Overlay / Broker, for the C# string equivalents.
 
 For the full list of topics and payload shapes, see:
 - `Apps/stream-overlay/docs/protocol.md`

@@ -260,4 +260,4 @@ Both scripts are triggered via Twitch → Channel Reward → Reward Redemption.
 - Once that action is exported into the repo, place it in this folder so the project stays aligned with Streamer.bot.
 
 ## Related: Custom Intro Redemptions
-Custom Intro channel-point redemptions are **not** handled in this folder. `redeem-capture.cs` (in `Actions/Intros/`) captures the redemption and writes a pending-intro record to the info-service. Playback is triggered later via `first-chat-intro.cs` on the viewer's next first-chat event.
+Custom Intro channel-point redemptions are **not** handled in this folder. [redeem-capture.cs](../Intros/redeem-capture.cs) captures the redemption and writes a pending-intro record to the info-service. Playback is triggered later via [first-chat-intro.cs](../Intros/first-chat-intro.cs) on the viewer's next first-chat event.

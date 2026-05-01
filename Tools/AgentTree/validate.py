@@ -136,7 +136,7 @@ def is_internal_target(target: str) -> bool:
     if target.startswith("#"):
         return False
     parsed = urlparse(target)
-    if parsed.scheme in {"http", "https", "mailto", "tel"}:
+    if parsed.scheme in {"http", "https", "mailto", "tel", "ws", "wss"}:
         return False
     return True
 
