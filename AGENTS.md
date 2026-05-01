@@ -15,8 +15,7 @@ Read [.agents/ENTRY.md](.agents/ENTRY.md) first. It is the manifest-backed unive
 
 Then:
 
-1. Check [WORKING.md](WORKING.md) for active work and file conflicts.
-2. Pick the correct role or local domain route from the routing summary below.
+1. Pick the correct role or local domain route from the routing summary below.
 3. Read the role overview and any local `AGENTS.md` guide for the folder you will edit.
 4. After changed files, follow [change-summary](.agents/workflows/change-summary.md) and relevant validation/sync workflows.
 
@@ -48,7 +47,7 @@ Then:
 
 ## Coordination
 
-Before starting: read [WORKING.md](WORKING.md) and follow [coordination](.agents/workflows/coordination.md).
+Before starting: follow [coordination](.agents/workflows/coordination.md).
 
 After code changes: include paste targets, setup steps, and validation output via [change-summary](.agents/workflows/change-summary.md).
 

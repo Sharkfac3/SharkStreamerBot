@@ -16,8 +16,7 @@ SharkStreamerBot is the technical and creative infrastructure for SharkFac3's li
 ## How to Navigate
 
 1. Read [project.md](_shared/project.md) for repo-wide context and priorities.
-2. Check [WORKING.md](../WORKING.md) before editing anything.
-3. Choose a role from the manifest-backed table below.
+2. Choose a role from the manifest-backed table below.
 4. Read that role overview.
 5. Read the local `AGENTS.md` file for the folder you will edit, if one exists.
 6. Follow required workflows under [workflows/](workflows/).
@@ -46,7 +45,7 @@ SharkStreamerBot is the technical and creative infrastructure for SharkFac3's li
 | [project.md](_shared/project.md) | Repo-wide business context, domains, priorities, and scope rules. |
 | [conventions.md](_shared/conventions.md) | Repo-wide file routing and documentation conventions. |
 | [coordination.md](_shared/coordination.md) | Compatibility pointer to the canonical coordination workflow. |
-| [coordination](workflows/coordination.md) | Active WORKING protocol and conflict avoidance. |
+| [coordination](workflows/coordination.md) | Coordination workflow and conflict avoidance. |
 | [change-summary](workflows/change-summary.md) | Terminal handoff format after changed files. |
 | [sync](workflows/sync.md) | Streamer.bot paste/sync procedure. |
 | [validation](workflows/validation.md) | Validator and check-selection procedure. |
