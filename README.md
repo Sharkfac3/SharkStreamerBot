@@ -5,7 +5,7 @@ This repo stores:
 - **standalone TypeScript apps** in `Apps/` (stream overlay, info service, production manager)
 - **local/external tooling** in `Tools/`
 - **creative scaffolding** in `Creative/`
-- **agent knowledge tree** in `.agents/` (roles, workflows, shared context, manifest routing)
+- **agent knowledge tree** in `.agents/` (roles, workflows, shared context, routing)
 
 > Important: scripts are not auto-deployed. After edits, copy/paste each changed script into its matching Streamer.bot action.
 
@@ -21,7 +21,7 @@ It identifies the available roles, how to navigate context on demand, and where 
 - `Apps/` — standalone TypeScript apps: `stream-overlay/` (Phaser OBS browser source + WebSocket broker), `info-service/` (file-backed REST API for per-viewer data, port 8766), `production-manager/` (React admin UI, port 5174 dev / 4174 preview).
 - `Tools/` — Mix It Up utilities, Streamer.bot support tooling, overlays, validators, and related local scripts.
 - `Creative/` — art-generation, world-building, marketing, and other reusable creative scaffolding.
-- `.agents/` — shared agent knowledge tree (roles, workflows, shared context, manifest routing). Agent-agnostic — used by all agents.
+- `.agents/` — shared agent knowledge tree (roles, workflows, shared context, routing). Agent-agnostic — used by all agents.
 
 ## Documentation Standard
 
@@ -50,7 +50,7 @@ All script docs use the same template sections:
 
 ### Architecture / Routing
 - `AGENTS.md` — root agent entry and quick role routing
-- `.agents/ENTRY.md` — manifest-backed agent entrypoint
+- `.agents/ENTRY.md` — agent entrypoint
 - `.agents/_shared/project.md` — repo-wide context, domains, priorities
 - `.agents/_shared/conventions.md` — file routing and naming conventions
 - `Tools/README.md`

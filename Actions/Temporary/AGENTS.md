@@ -17,7 +17,7 @@ status: active
 
 This folder owns temporary Streamer.bot C# scripts that bridge a short-lived focus timer flow to Mix It Up. The current files start and end the `Temp Focus Timer` timer and trigger temporary Mix It Up action groups.
 
-Ownership note: this route remains standalone in the manifest as `actions-temporary`. Operationally, the scripts are related to focus/rest experimentation, but they are not the same state machine as [Actions/Rest Focus Loop/](../Rest%20Focus%20Loop/) and should not be silently covered by that route without a later explicit migration.
+Ownership note: this route remains standalone as `actions-temporary`. Operationally, the scripts are related to focus/rest experimentation, but they are not the same state machine as [Actions/Rest Focus Loop/](../Rest%20Focus%20Loop/) and should not be silently covered by that route without a later explicit migration.
 
 ## When to Activate
 
@@ -54,7 +54,7 @@ Before changing scripts, read:
 3. Keep Mix It Up calls compatible with the shared convention: `Platform = Twitch`, `Arguments`, `SpecialIdentifiers`, and `IgnoreRequirements = false`.
 4. Replace placeholder Mix It Up command IDs only with operator-confirmed command IDs.
 5. Keep scripts self-contained and paste-ready for Streamer.bot inline C#.
-6. If a script graduates into the durable rest/focus system, do not change manifest coverage in the same prompt unless explicitly requested. Flag the migration need in the handoff.
+6. If a script graduates into the durable rest/focus system, do not change route ownership in the same prompt unless explicitly requested. Flag the migration need in the handoff.
 
 ## Validation
 
@@ -75,7 +75,7 @@ For script changes:
 
 ## Boundaries / Out of Scope
 
-- Do not treat this folder as covered by [Actions/Rest Focus Loop/](../Rest%20Focus%20Loop/) during this prompt; manifest coverage remains separate.
+- Do not treat this folder as covered by [Actions/Rest Focus Loop/](../Rest%20Focus%20Loop/) during this prompt; route ownership remains separate.
 - Do not add durable rest/focus state variables here.
 - Do not rename or remove the temporary timer without explicit operator approval.
 - Do not implement app-side or Mix It Up tooling changes here.

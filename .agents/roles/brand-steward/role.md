@@ -38,7 +38,7 @@ Use [Creative/Brand/AGENTS.md](../../../Creative/Brand/AGENTS.md) for identity/v
 - [coordination](../../workflows/coordination.md) before starting.
 - [canon-guardian](../../workflows/canon-guardian.md) for canon-sensitive work.
 - [change-summary](../../workflows/change-summary.md) after changed files.
-- [validation](../../workflows/validation.md) for manifest/doc route changes.
+- [validation](../../workflows/validation.md) for agent-doc route changes.
 
 ## Chain To
 

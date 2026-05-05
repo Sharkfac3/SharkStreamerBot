@@ -1,13 +1,12 @@
 ---
 id: validation
 type: workflow
-description: Validator command selection, schema checks, and drift-check procedure.
+description: Validator command selection and validation reporting procedure.
 status: active
 owner: ops
 appliesTo:
   - validation
-  - schema-check
-  - drift-check
+  - agent-doc-check
 skills:
   - ops
 terminal: false
@@ -37,7 +36,7 @@ Use these references as applicable:
 
 | Reference | Use |
 |---|---|
-| [Tools/AgentTree/validate.py](../../Tools/AgentTree/validate.py) | Agent-tree schema, coverage, link, frontmatter, orphan, and naming checks. |
+| [Tools/AgentTree/validate.py](../../Tools/AgentTree/validate.py) | Agent-tree coverage, link, frontmatter, and naming checks. |
 | [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) | Canonical Streamer.bot globals, OBS source names, timer names, and reset expectations. |
 | [Actions/Helpers/AGENTS.md](../../Actions/Helpers/AGENTS.md) | Reusable C# patterns and safe script idioms. |
 
@@ -104,7 +103,7 @@ If the task asks for a handoff file, include validator output there as well.
 
 ### Agent-tree routing
 
-The agent-tree validator is the default gate for manifest, role, workflow, and local `AGENTS.md` changes. Treat nonzero validator exits as blockers unless the active task explicitly defines a narrower acceptance criterion.
+The agent-tree validator is the default gate for role, workflow, and local `AGENTS.md` changes. Treat nonzero validator exits as blockers unless the active task explicitly defines a narrower acceptance criterion.
 
 ### Streamer.bot scripts
 
