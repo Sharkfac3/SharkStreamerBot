@@ -1,7 +1,7 @@
 ---
 id: agent-entry
 type: shared
-description: Central .agents entrypoint with manifest-backed routing summary.
+description: Central .agents entrypoint with routing summary.
 status: active
 owner: ops
 generated: false
@@ -16,7 +16,7 @@ SharkStreamerBot is the technical and creative infrastructure for SharkFac3's li
 ## How to Navigate
 
 1. Read [project.md](_shared/project.md) for repo-wide context and priorities.
-2. Choose a role from the manifest-backed table below.
+2. Choose a role from the table below.
 3. Read that role overview.
 4. Read the local `AGENTS.md` file for the folder you will edit, if one exists.
 5. Follow required workflows under [workflows/](workflows/).
@@ -24,7 +24,6 @@ SharkStreamerBot is the technical and creative infrastructure for SharkFac3's li
 
 ## Roles
 
-<!-- GENERATED:agents-roles:start -->
 | Role | Folder | When to Activate |
 |---|---|---|
 | `streamerbot-dev` | `.agents/roles/streamerbot-dev/` | Streamer.bot C# runtime actions and Streamer.bot-side integrations under Actions/. |
@@ -36,7 +35,6 @@ SharkStreamerBot is the technical and creative infrastructure for SharkFac3's li
 | `app-dev` | `.agents/roles/app-dev/` | Standalone stream interaction apps, dashboards, overlays, brokers, and TypeScript app tooling. |
 | `product-dev` | `.agents/roles/product-dev/` | Product documentation, technical knowledge articles, specs, and future customer-facing product content. |
 | `ops` | `.agents/roles/ops/` | Validation, sync workflow, change summaries, local tooling, and operational repo maintenance. |
-<!-- GENERATED:agents-roles:end -->
 
 ## Shared Context
 
@@ -52,6 +50,3 @@ SharkStreamerBot is the technical and creative infrastructure for SharkFac3's li
 
 Domain/protocol knowledge now lives beside the domain it describes, for example [Apps/info-service/AGENTS.md](../Apps/info-service/AGENTS.md) and [Tools/MixItUp/AGENTS.md](../Tools/MixItUp/AGENTS.md).
 
-## Manifest
-
-The target routing source is [manifest.json](manifest.json). Generated routing summaries should stay aligned with that manifest.

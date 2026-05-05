@@ -18,10 +18,10 @@ Treat this folder as the live-stream runtime layer: Twitch events, chat commands
 
 When working anywhere under `Actions/`:
 
-1. Check `WORKING.md` for active edits and file conflicts.
+1. Follow the repo coordination workflow for active edits and file conflicts.
 2. Read this file.
-3. Read `Actions/SHARED-CONSTANTS.md` for canonical global var, timer, OBS source, and broker topic names.
-4. Read `Actions/Helpers/AGENTS.md` for reusable Streamer.bot C# patterns.
+3. Read [Actions/SHARED-CONSTANTS.md](SHARED-CONSTANTS.md) for canonical global var, timer, OBS source, and broker topic names.
+4. Read [Actions/Helpers/AGENTS.md](Helpers/AGENTS.md) for reusable Streamer.bot C# patterns.
 5. Read the local folder `AGENTS.md` for the action group you will edit.
 6. After changing C# scripts, include Streamer.bot paste targets and validation/smoke-test notes in your handoff.
 
@@ -33,8 +33,8 @@ When working anywhere under `Actions/`:
 
 ## Domain Rules
 
-- Local `Actions/**/AGENTS.md` action contracts are the source of truth for how Streamer.bot action scripts must operate. Update the contract first when behavior changes, then make the `.cs` script conform to it.
-- Every edited `Actions/**/*.cs` script must have a matching machine-readable action contract in the nearest local `AGENTS.md`, plus a current `ACTION-CONTRACT` / `ACTION-CONTRACT-SHA256` stamp generated from that contract.
+- Local action-group `AGENTS.md` action contracts under Actions are the source of truth for how Streamer.bot action scripts must operate. Update the contract first when behavior changes, then make the `.cs` script conform to it.
+- Every edited C# script under Actions must have a matching machine-readable action contract in the nearest local `AGENTS.md`, plus a current `ACTION-CONTRACT` / `ACTION-CONTRACT-SHA256` stamp generated from that contract.
 - If an operator requests behavior that conflicts with an existing action contract, treat the contract change as part of the same task; do not silently implement behavior that the contract does not describe.
 - Keep `Actions/` focused on Streamer.bot runtime scripts and action-group docs.
 - Scripts should remain pasteable into Streamer.bot `Execute C# Code` actions.

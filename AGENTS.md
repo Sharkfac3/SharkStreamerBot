@@ -1,7 +1,7 @@
 ---
 id: root-agent-doc
 type: shared
-description: Root universal agent entry and generated quick routing surface.
+description: Root universal agent entry and quick routing surface.
 status: active
 owner: ops
 generated: false
@@ -11,7 +11,7 @@ generated: false
 
 ## Start Here
 
-Read [.agents/ENTRY.md](.agents/ENTRY.md) first. It is the manifest-backed universal entry point for Claude, Pi, and future agents.
+Read [.agents/ENTRY.md](.agents/ENTRY.md) first. It is the universal entry point for Claude, Pi, and future agents.
 
 Then:
 
@@ -21,7 +21,6 @@ Then:
 
 ## Quick Role Routing
 
-<!-- GENERATED:agents-quick-role-routing:start -->
 | You're working on | Role | Agent Tree |
 |---|---|---|
 | Any `.cs` script under `Actions/` | `streamerbot-dev` | `.agents/roles/streamerbot-dev/role.md` |
@@ -33,7 +32,6 @@ Then:
 | Stream interaction apps | `app-dev` | `.agents/roles/app-dev/role.md` |
 | Product docs, specs, knowledge articles, and customer-facing product content | `product-dev` | `.agents/roles/product-dev/role.md` |
 | Validation, sync, change summary, tooling | `ops` | `.agents/roles/ops/role.md` |
-<!-- GENERATED:agents-quick-role-routing:end -->
 
 ## Project Domains
 
@@ -43,7 +41,7 @@ Then:
 | Apps | [Apps/](Apps/) | Standalone TypeScript apps and app-local guides. |
 | Tools | [Tools/](Tools/) | Local utilities, validators, Mix It Up helpers, and sync tooling. |
 | Creative | [Creative/](Creative/) | Brand, art, marketing, worldbuilding, and creative guides. |
-| Agent Tree | [.agents/](.agents/) | Manifest, role overviews, workflows, and shared agent context. |
+| Agent Tree | [.agents/](.agents/) | Role overviews, workflows, and shared agent context. |
 
 ## Coordination
 
@@ -59,4 +57,4 @@ After code changes: include paste targets, setup steps, and validation output vi
 | [Actions/Helpers/AGENTS.md](Actions/Helpers/AGENTS.md) | Reusable C# patterns. |
 | [Creative/Brand/BRAND-IDENTITY.md](Creative/Brand/BRAND-IDENTITY.md) | Brand vision, mission, values, and metaphor. |
 | [Creative/Brand/CHARACTER-CODEX.md](Creative/Brand/CHARACTER-CODEX.md) | Canonical character identities. |
-| [Tools/AgentTree/AGENTS.md](Tools/AgentTree/AGENTS.md) | Manifest/validator route for agent-tree tooling. |
+| [Tools/AgentTree/AGENTS.md](Tools/AgentTree/AGENTS.md) | Validator route for agent-tree tooling. |

@@ -89,7 +89,7 @@ For script changes:
 - Do not move commander override command behavior into this folder; keep it in [Actions/Commanders/](../Commanders/).
 - Do not rename timer names, global variables, phases, or Streamer.bot action names without explicit operator approval.
 - Do not change rest/focus public messaging without `brand-steward` review.
-- Do not merge [Actions/Temporary/](../Temporary/) into this route during this coverage-fill prompt; keep manifest coverage separate unless a later prompt explicitly changes route ownership.
+- Do not merge [Actions/Temporary/](../Temporary/) into this route during focused maintenance unless a later prompt explicitly changes route ownership.
 
 ## Handoff Notes
 

@@ -37,7 +37,7 @@ Chain from [Actions/XJ Drivethrough/AGENTS.md](../../../Actions/XJ%20Drivethroug
 
 - [coordination](../../workflows/coordination.md) before starting.
 - [change-summary](../../workflows/change-summary.md) after changed files.
-- [validation](../../workflows/validation.md) when docs are manifest-routed or tooling-adjacent.
+- [validation](../../workflows/validation.md) when docs are routing-related or tooling-adjacent.
 
 ## Chain To
 

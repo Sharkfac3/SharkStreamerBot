@@ -97,7 +97,7 @@ Do not use this folder to:
 - store Mix It Up-specific API helpers or overlays; those belong in [Tools/MixItUp/](../MixItUp/)
 - store creative scaffolding, lore, art prompts, or marketing content
 - make behavior-changing runtime edits without routing through `streamerbot-dev`
-- treat deprecated v1 routing tools as the source of truth for manifest v2
+- treat deprecated v1 routing tools as the source of truth for current routing docs
 
 ## Handoff Notes
 

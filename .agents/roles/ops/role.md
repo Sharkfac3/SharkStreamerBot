@@ -11,18 +11,18 @@ workflows: coordination, change-summary, sync, validation
 
 ## Purpose
 
-Own operational safety for the repo: coordination, validation, sync/paste guidance, generated routing surfaces, and local tooling upkeep.
+Own operational safety for the repo: coordination, validation, sync/paste guidance, routing docs, and local tooling upkeep.
 
 ## Owns
 
-- Agent-tree validation and manifest routing through [Tools/AgentTree/AGENTS.md](../../../Tools/AgentTree/AGENTS.md).
+- Agent-tree validation and routing checks through [Tools/AgentTree/AGENTS.md](../../../Tools/AgentTree/AGENTS.md).
 - Streamer.bot sync/validation tooling through [Tools/StreamerBot/AGENTS.md](../../../Tools/StreamerBot/AGENTS.md).
 - Shared workflows under [../../workflows/](../../workflows/).
 - Repo-wide agent entrypoints and shared context under [../../](../../).
 
 ## When to Activate
 
-Activate for validation, sync workflow, change summaries, manifest/routing updates, local tool coverage, generated docs, or multi-agent coordination issues.
+Activate for validation, sync workflow, change summaries, routing updates, local tool coverage, docs, or multi-agent coordination issues.
 
 ## Do Not Activate For
 

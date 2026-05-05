@@ -20,11 +20,11 @@ Follow [coordination](../workflows/coordination.md) for conflict checks and mult
 | [Apps/](../../Apps/) | Standalone TypeScript app code and app-local docs. |
 | [Tools/](../../Tools/) | Local utilities, validators, sync helpers, and external integration scripts. |
 | [Creative/](../../Creative/) | Brand, art, marketing, worldbuilding, and creative source docs. |
-| [../](../) | Agent roles, workflows, manifest routing, and shared agent context. |
+| [../](../) | Agent roles, workflows, and shared agent context. |
 
 ## Naming
 
-- Manifest IDs use kebab-case.
+- Frontmatter IDs use kebab-case.
 - Local domain agent guides are named `AGENTS.md`.
 - Role overviews live at `.agents/roles/<role>/role.md`.
 - Reusable procedures live at `.agents/workflows/<workflow-id>.md`.
@@ -36,7 +36,7 @@ Follow [coordination](../workflows/coordination.md) for conflict checks and mult
 - For `Actions/` work, use constants from [Actions/SHARED-CONSTANTS.md](../../Actions/SHARED-CONSTANTS.md) and reusable patterns from [Actions/Helpers/AGENTS.md](../../Actions/Helpers/AGENTS.md).
 - Prefer local domain guides over old central role skill files.
 - Use Markdown links for files the next agent should follow.
-- Avoid adding new Pi wrapper skills; use manifest-backed local guides and role/workflow docs instead.
+- Avoid adding new Pi wrapper skills; use local AGENTS.md guides and role/workflow docs instead.
 
 ## Runtime Environment
 

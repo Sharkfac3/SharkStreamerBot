@@ -27,7 +27,7 @@ SharkFac3 is building an R&D company focused on off-road racing products in publ
 | Apps | [Apps/](../../Apps/) | Standalone TypeScript apps: stream overlay, info-service, and production manager. |
 | Tools | [Tools/](../../Tools/) | Local utilities, validators, Mix It Up helpers, and sync tooling. |
 | Creative | [Creative/](../../Creative/) | Brand docs, character art, marketing, worldbuilding, lore, and creative scaffolding. |
-| Agent Tree | [../](../) | Agent roles, workflows, manifest routing, and repo-wide shared context. |
+| Agent Tree | [../](../) | Agent roles, workflows, and repo-wide shared context. |
 
 ## Key References
 

@@ -1,16 +1,9 @@
 #!/usr/bin/env python3
-"""Validate the agent routing tree against .agents/manifest.json.
-
-This is the Phase E acceptance gate for the agent-tree reflow. It is intentionally
-strict: planned target paths are reported as failures until migrations create the
-files or mark coverage explicitly.
-"""
+"""Validate the agent routing tree using AGENTS.md frontmatter."""
 
 from __future__ import annotations
 
 import argparse
-import json
-import os
 import re
 import sys
 from dataclasses import dataclass
@@ -18,26 +11,17 @@ from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import unquote, urlparse
 
-try:
-    import jsonschema  # type: ignore
-except Exception:  # pragma: no cover - environment dependent
-    jsonschema = None
-
 ID_RE = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 DOMAIN_ID_RE = re.compile(r"^(actions|apps|tools|creative|docs|root)-[a-z0-9]+(?:-[a-z0-9]+)*$")
 MD_LINK_RE = re.compile(r"(?<!!)(?:\[[^\]]*\]|\[[^\]]*\]\[[^\]]*\])\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 REF_LINK_RE = re.compile(r"^\s*\[[^\]]+\]:\s+(\S+)", re.M)
 BACKTICK_RE = re.compile(r"`([^`\n]+)`")
-GENERATED_BLOCK_RE = re.compile(r"<!-- GENERATED:([^:]+):start -->\n(.*?)<!-- GENERATED:\1:end -->", re.S)
 FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 PATH_ROOTS = (
     ".agents/", "Actions/", "Apps/", "Tools/", "Creative/",
     "Projects/", "AGENTS.md", "CLAUDE.md", "README.md",
 )
 DOMAIN_ROOTS = ("Actions", "Apps", "Tools", "Creative")
-DERIVED_BLOCKS = {
-    "AGENTS.md": ["agents-quick-role-routing"],
-}
 
 
 @dataclass
@@ -84,10 +68,6 @@ def rel(repo: Path, path: Path) -> str:
 
 def line_for_offset(text: str, offset: int) -> int:
     return text.count("\n", 0, offset) + 1
-
-
-def load_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def add(failures: list[Failure], check: str, message: str, path: str | None = None, line: int | None = None) -> None:
@@ -174,61 +154,34 @@ def resolve_doc_target(repo: Path, source: Path, target: str) -> Path | None:
     return (source.parent / target).resolve()
 
 
-def render_table(lines: list[str]) -> str:
-    return "\n".join(lines) + "\n"
-
-
-def render_quick_routing(manifest: dict[str, Any]) -> str:
-    skill_loc = {s["id"]: s["location"] for s in manifest.get("skills", [])}
-    lines = ["| You're working on | Role | Agent Tree |", "|---|---|---|"]
-    for row in manifest.get("quick_routing", []):
-        route = row.get("route", row.get("role"))
-        lines.append(f"| {row['work']} | `{row['role']}` | `{skill_loc.get(route, route)}` |")
-    return render_table(lines)
-
-
-def render_roles_table(manifest: dict[str, Any]) -> str:
-    lines = ["| Role | Folder | When to Activate |", "|---|---|---|"]
-    for skill in manifest.get("skills", []):
-        loc = skill.get("location", "")
-        if loc.startswith(".agents/roles/") and loc.endswith("/role.md"):
-            lines.append(f"| `{skill['id']}` | `{str(Path(loc).parent).replace(os.sep, '/')}/` | {skill['description']} |")
-    return render_table(lines)
-
-
-def table_after_heading(text: str, heading: str) -> str | None:
-    m = re.search(rf"^##\s+{re.escape(heading)}\s*$", text, re.M)
-    if not m:
-        return None
-    rest = text[m.end():]
-    lines = rest.splitlines()
-    start = None
-    for i, line in enumerate(lines):
-        if line.strip().startswith("|"):
-            start = i
-            break
-        if line.startswith("## "):
-            return None
-    if start is None:
-        return None
-    out = []
-    for line in lines[start:]:
-        if not line.strip().startswith("|"):
-            break
-        out.append(line)
-    return "\n".join(out) + "\n"
-
-
-def parse_frontmatter(text: str) -> dict[str, str]:
+def parse_frontmatter(text: str) -> dict[str, Any]:
     m = FRONTMATTER_RE.match(text)
     if not m:
         return {}
-    values: dict[str, str] = {}
+    values: dict[str, Any] = {}
+    current_key: str | None = None
     for line in m.group(1).splitlines():
-        if ":" not in line or line.startswith(" "):
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        if line.startswith((" ", "\t")):
+            if stripped.startswith("- ") and current_key:
+                if not isinstance(values.get(current_key), list):
+                    values[current_key] = []
+                values[current_key].append(stripped[2:].strip().strip('"\''))
+            continue
+        if ":" not in line:
+            current_key = None
             continue
         key, value = line.split(":", 1)
-        values[key.strip()] = value.strip().strip('"\'')
+        current_key = key.strip()
+        value = value.strip()
+        if value == "[]":
+            values[current_key] = []
+        elif value:
+            values[current_key] = value.strip('"\'')
+        else:
+            values[current_key] = []
     return values
 
 
@@ -269,44 +222,54 @@ def collect_doc_refs(repo: Path, md_files: Iterable[Path], failures: list[Failur
     return referenced
 
 
+def discover_agent_docs(repo: Path) -> tuple[list[Path], list[Path]]:
+    agents_docs = sorted(p for p in repo.rglob("AGENTS.md") if ".git" not in p.parts)
+    dot_agents_docs = sorted((repo / ".agents").rglob("*.md")) if (repo / ".agents").is_dir() else []
+    return agents_docs, dot_agents_docs
+
+
+def has_covering_agents_doc(repo: Path, domain_root: Path, folder: Path) -> bool:
+    current = folder
+    while True:
+        if (current / "AGENTS.md").is_file():
+            return True
+        if current == domain_root or current == repo:
+            break
+        current = current.parent
+    return False
+
+
 def run(repo: Path, report_path: Path | None = None) -> tuple[list[CheckResult], list[Failure]]:
     failures: list[Failure] = []
-    results: dict[str, CheckResult] = {name: CheckResult(name) for name in [
-        "schema", "folder-coverage", "link-integrity", "drift", "stub-presence", "orphan", "naming"
-    ]}
+    order = ["frontmatter", "folder-coverage", "link-integrity", "naming", "id-uniqueness"]
+    results: dict[str, CheckResult] = {name: CheckResult(name) for name in order}
 
-    manifest_path = repo / ".agents" / "manifest.json"
-    schema_path = repo / ".agents" / "manifest.schema.json"
-    manifest = load_json(manifest_path)
-    schema = load_json(schema_path)
+    agents_docs, dot_agents_docs = discover_agent_docs(repo)
+    all_agent_docs = sorted(set(agents_docs + dot_agents_docs))
+    frontmatter_by_path: dict[Path, dict[str, Any]] = {}
 
-    # Schema check.
-    results["schema"].checked += 1
-    if jsonschema is None:
-        add(failures, "schema", "python package `jsonschema` is not available; install it or use the project environment", rel(repo, manifest_path))
-    else:
-        try:
-            jsonschema.Draft202012Validator.check_schema(schema)
-            errors = sorted(jsonschema.Draft202012Validator(schema).iter_errors(manifest), key=lambda e: list(e.path))
-            for err in errors:
-                loc = "/".join(str(p) for p in err.path) or "<root>"
-                add(failures, "schema", f"schema violation at {loc}: {err.message}", rel(repo, manifest_path))
-        except Exception as exc:
-            add(failures, "schema", f"schema validation crashed: {exc}", rel(repo, manifest_path))
+    # Frontmatter.
+    required_fm = {"id", "type", "description", "status"}
+    frontmatter_targets = sorted(set(agents_docs + [p for p in dot_agents_docs if p.match("**/roles/*/role.md")]))
+    for path in frontmatter_targets:
+        results["frontmatter"].checked += 1
+        source_rel = rel(repo, path)
+        fm = parse_frontmatter(path.read_text(encoding="utf-8", errors="replace"))
+        frontmatter_by_path[path] = fm
+        if not fm:
+            add(failures, "frontmatter", "missing YAML frontmatter", source_rel, 1)
+            continue
+        missing = sorted(required_fm - set(fm))
+        if path.match("**/.agents/roles/*/role.md") and "owner" not in fm:
+            missing.append("owner")
+        if missing:
+            add(failures, "frontmatter", f"missing required frontmatter: {', '.join(missing)}", source_rel, 1)
 
-    skills = manifest.get("skills", [])
-    domains = manifest.get("domains", [])
-    co_locations = manifest.get("co_locations", [])
-    workflows = manifest.get("workflows", [])
-    skill_ids = {s.get("id") for s in skills}
-    domain_ids = {d.get("id") for d in domains}
-    workflow_ids = {w.get("id") for w in workflows}
-    declared_paths = {p for p in [
-        *(s.get("location") for s in skills),
-        *(c.get("path") for c in co_locations),
-        *(w.get("path") for w in workflows),
-        *(d.get("agentDoc") for d in domains),
-    ] if p}
+    # Parse frontmatter for every discovered doc so naming can inspect ids without
+    # broadening the frontmatter-required check beyond AGENTS.md and role overviews.
+    for path in all_agent_docs:
+        if path not in frontmatter_by_path:
+            frontmatter_by_path[path] = parse_frontmatter(path.read_text(encoding="utf-8", errors="replace"))
 
     # Folder coverage.
     for root_name in DOMAIN_ROOTS:
@@ -316,151 +279,58 @@ def run(repo: Path, report_path: Path | None = None) -> tuple[list[CheckResult],
         for child in sorted(p for p in root.iterdir() if p.is_dir()):
             results["folder-coverage"].checked += 1
             child_rel = rel(repo, child) + "/"
-            match = [d for d in domains if d.get("path", "").rstrip("/") == child_rel.rstrip("/")]
-            if not match:
-                add(failures, "folder-coverage", "first-level domain folder has no manifest domain route", child_rel)
-            else:
-                d = match[0]
-                if not d.get("agentDoc") and not d.get("coveredBy"):
-                    add(failures, "folder-coverage", "domain route has neither agentDoc nor coveredBy", ".agents/manifest.json")
-    for skill in skills:
-        results["folder-coverage"].checked += 1
-        loc = skill.get("location")
-        if loc and not (repo / loc).exists():
-            add(failures, "folder-coverage", f"skill `{skill.get('id')}` location does not exist: `{loc}`", loc)
-    for coloc in co_locations:
-        results["folder-coverage"].checked += 1
-        path = coloc.get("path")
-        if path and not (repo / path).exists():
-            add(failures, "folder-coverage", f"declared co-location `{path}` does not exist", path)
-    for domain in domains:
-        results["folder-coverage"].checked += 1
-        path = domain.get("path")
-        if path and not (repo / path).exists():
-            add(failures, "folder-coverage", f"domain path does not exist: `{path}`", path)
+            if not has_covering_agents_doc(repo, root, child):
+                add(failures, "folder-coverage", "first-level domain folder has no AGENTS.md coverage", child_rel)
 
     # Link integrity.
-    md_files = [p for p in (repo / ".agents").rglob("*.md")]
-    for extra in (repo / "AGENTS.md", repo / "CLAUDE.md"):
-        if extra.exists():
-            md_files.append(extra)
-    # Include declared co-located docs that already exist.
-    for p in declared_paths:
-        if str(p).endswith(".md") and (repo / p).exists():
-            path = repo / p
-            if path not in md_files:
-                md_files.append(path)
+    md_files = list(all_agent_docs)
+    claude = repo / "CLAUDE.md"
+    if claude.exists():
+        md_files.append(claude)
+    md_files = sorted(set(md_files))
     results["link-integrity"].checked = len(md_files)
-    referenced = collect_doc_refs(repo, md_files, failures)
+    collect_doc_refs(repo, md_files, failures)
 
-    # Drift detection.
-    agents_path = repo / "AGENTS.md"
-    if agents_path.exists():
-        text = agents_path.read_text(encoding="utf-8")
-        results["drift"].checked += 1
-        blocks = {m.group(1): m.group(2) for m in GENERATED_BLOCK_RE.finditer(text)}
-        expected = render_quick_routing(manifest)
-        body = blocks.get("agents-quick-role-routing")
-        if body is None:
-            add(failures, "drift", "missing GENERATED block `agents-quick-role-routing`", "AGENTS.md")
-        elif body != expected:
-            add(failures, "drift", "GENERATED block `agents-quick-role-routing` is stale relative to .agents/manifest.json", "AGENTS.md")
-    for doc, heading, expected in [
-        (repo / ".agents" / "ENTRY.md", "Roles", render_roles_table(manifest)),
-    ]:
-        results["drift"].checked += 1
-        if not doc.exists():
-            add(failures, "drift", "derived routing doc is missing", rel(repo, doc))
+    # Naming.
+    for path, fm in sorted(frontmatter_by_path.items(), key=lambda item: rel(repo, item[0])):
+        fid = fm.get("id")
+        if not fid:
             continue
-        actual = table_after_heading(doc.read_text(encoding="utf-8"), heading)
-        if actual is None:
-            add(failures, "drift", f"could not find markdown table under `## {heading}`", rel(repo, doc))
-        elif actual != expected:
-            add(failures, "drift", f"`## {heading}` table is stale relative to .agents/manifest.json", rel(repo, doc))
+        results["naming"].checked += 1
+        source_rel = rel(repo, path)
+        if not isinstance(fid, str) or not ID_RE.fullmatch(fid):
+            add(failures, "naming", f"frontmatter id `{fid}` is not kebab-case", source_rel, 1)
+        if path.name == "AGENTS.md" and any(root in path.parts for root in DOMAIN_ROOTS):
+            domain_rel = rel(repo, path.parent) + "/"
+            expected = expected_domain_id(domain_rel)
+            if expected:
+                if not DOMAIN_ID_RE.fullmatch(str(fid)):
+                    add(failures, "naming", f"domain route id `{fid}` does not match domain route pattern", source_rel, 1)
+                if fid != expected:
+                    add(failures, "naming", f"domain id `{fid}` should normalize from path `{domain_rel}` as `{expected}`", source_rel, 1)
+        if path.name == "AGENTS.md" and not path_exists_case_sensitive(repo, source_rel):
+            add(failures, "naming", f"path casing does not match filesystem exactly: `{source_rel}`", source_rel)
 
-    # Stub presence / frontmatter.
-    required_fm = {"id", "type", "description", "status"}
-    for skill in skills:
-        results["stub-presence"].checked += 1
-        loc = skill.get("location")
-        sid = skill.get("id")
-        if not loc:
-            add(failures, "stub-presence", f"skill `{sid}` has no location", ".agents/manifest.json")
+    # ID uniqueness among AGENTS.md files.
+    ids: dict[str, list[Path]] = {}
+    for path in agents_docs:
+        results["id-uniqueness"].checked += 1
+        fid = frontmatter_by_path.get(path, {}).get("id")
+        if isinstance(fid, str) and fid:
+            ids.setdefault(fid, []).append(path)
+    for fid, paths in sorted(ids.items()):
+        if len(paths) < 2:
             continue
-        path = repo / loc
-        if not path.exists():
-            add(failures, "stub-presence", f"entry file for skill `{sid}` is missing", loc)
-            continue
-        if path.suffix.lower() != ".md":
-            continue
-        fm = parse_frontmatter(path.read_text(encoding="utf-8", errors="replace"))
-        missing = sorted(required_fm - set(fm))
-        if missing:
-            add(failures, "stub-presence", f"entry file for skill `{sid}` missing required frontmatter: {', '.join(missing)}", loc, 1)
-        if fm.get("id") and fm.get("id") != sid:
-            add(failures, "stub-presence", f"frontmatter id `{fm.get('id')}` does not match manifest skill id `{sid}`", loc, 1)
-
-    # Orphan check.
-    declared = {str(p) for p in declared_paths}
-    referenced.update(declared)
-    for path in sorted((repo / ".agents").rglob("*")):
-        if not path.is_file():
-            continue
-        r = rel(repo, path)
-        results["orphan"].checked += 1
-        if r in {".agents/manifest.json", ".agents/manifest.schema.json"}:
-            continue
-        if r not in referenced:
-            add(failures, "orphan", "file under .agents/ is not declared in manifest and has no inbound doc/path reference", r)
-
-    # Naming check.
-    for skill in skills:
-        results["naming"].checked += 1
-        sid = skill.get("id", "")
-        loc = skill.get("location", "")
-        if not ID_RE.fullmatch(sid):
-            add(failures, "naming", f"skill id `{sid}` is not kebab-case", ".agents/manifest.json")
-        if loc and not path_exists_case_sensitive(repo, loc) and (repo / loc).exists():
-            add(failures, "naming", f"path casing does not match filesystem exactly: `{loc}`", loc)
-        if loc.startswith(".agents/roles/"):
-            parts = Path(loc).parts
-            if len(parts) >= 4 and parts[2] != sid:
-                add(failures, "naming", f"role skill `{sid}` location folder `{parts[2]}` does not match id", loc)
-    for workflow in workflows:
-        results["naming"].checked += 1
-        wid = workflow.get("id", "")
-        wpath = workflow.get("path", "")
-        if not ID_RE.fullmatch(wid):
-            add(failures, "naming", f"workflow id `{wid}` is not kebab-case", ".agents/manifest.json")
-        if wpath != f".agents/workflows/{wid}.md":
-            add(failures, "naming", f"workflow `{wid}` path should be `.agents/workflows/{wid}.md`, got `{wpath}`", ".agents/manifest.json")
-    for domain in domains:
-        results["naming"].checked += 1
-        did = domain.get("id", "")
-        dpath = domain.get("path", "")
-        agent_doc = domain.get("agentDoc", "")
-        if not DOMAIN_ID_RE.fullmatch(did):
-            add(failures, "naming", f"domain route id `{did}` does not match domain route pattern", ".agents/manifest.json")
-        expected = expected_domain_id(dpath)
-        if expected and did != expected:
-            add(failures, "naming", f"domain id `{did}` should normalize from path `{dpath}` as `{expected}`", ".agents/manifest.json")
-        if agent_doc and Path(agent_doc).name != "AGENTS.md":
-            add(failures, "naming", f"domain agent doc should be named AGENTS.md, got `{agent_doc}`", agent_doc)
-    for alias in manifest.get("aliases", []):
-        results["naming"].checked += 1
-        aid = alias.get("id", "")
-        target = alias.get("target")
-        if not ID_RE.fullmatch(aid):
-            add(failures, "naming", f"alias id `{aid}` is not kebab-case", ".agents/manifest.json")
-        if target not in skill_ids and target not in domain_ids and target not in workflow_ids:
-            add(failures, "naming", f"alias `{aid}` target `{target}` is not a known skill/domain/workflow id", ".agents/manifest.json")
+        locations = ", ".join(rel(repo, path) for path in paths)
+        for path in paths:
+            add(failures, "id-uniqueness", f"frontmatter id `{fid}` is duplicated by: {locations}", rel(repo, path), 1)
 
     # Fill failure counts.
     for failure in failures:
         if failure.check in results:
             results[failure.check].failures += 1
 
-    ordered = [results[name] for name in ["schema", "folder-coverage", "link-integrity", "drift", "stub-presence", "orphan", "naming"]]
+    ordered = [results[name] for name in order]
     if report_path:
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text("\n".join(f.format() for f in failures) + ("\n" if failures else ""), encoding="utf-8")
@@ -480,7 +350,7 @@ def print_summary(results: list[CheckResult], failures: list[Failure], report_pa
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Validate .agents/manifest.json and agent-tree routing docs.")
+    parser = argparse.ArgumentParser(description="Validate the agent routing tree using AGENTS.md frontmatter.")
     parser.add_argument("--repo", type=Path, default=None, help="Repository root (auto-detected by default).")
     parser.add_argument("--report", type=Path, default=None, help="Optional path to write the full failure list.")
     args = parser.parse_args(argv)
