@@ -93,6 +93,7 @@ Aim for roughly 80-120 lines of markdown (excluding frontmatter). `Actions/AGENT
 ## Constraints
 
 - **Only create `Apps/AGENTS.md`.** Do not modify any existing file.
+- **Ignore `node_modules/` entirely.** Each app has a `node_modules/` directory with thousands of dependency files. Do not read, explore, reference, or link to anything inside `node_modules/`. They are not project source files.
 - Use relative markdown links from `Apps/` (e.g., `[info-service/AGENTS.md](info-service/AGENTS.md)`).
 - Do not invent information beyond what is in the required reading files and this prompt.
 - Do not add commentary, explanations, or meta-notes inside the file — only the guide content.
