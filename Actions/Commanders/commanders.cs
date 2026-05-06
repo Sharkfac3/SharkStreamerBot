@@ -1,5 +1,5 @@
 // ACTION-CONTRACT: Actions/Commanders/AGENTS.md#commanders.cs
-// ACTION-CONTRACT-SHA256: 0914d690de6a1101a07abb53124bc19cf2c0c2b331fabd230437a5a37dbced10
+// ACTION-CONTRACT-SHA256: f1d82177c03f60f6643e1ca525d332a517fdabbdd455ddb7e5f7e51705e17e6f
 
 using System;
 using System.Collections.Generic;
@@ -73,3 +73,4 @@ public class CPHInline
         return "@" + trimmed.TrimStart('@');
     }
 }
+

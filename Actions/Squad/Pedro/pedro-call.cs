@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Pedro/pedro-call.cs
+// ACTION-CONTRACT-SHA256: 0a2e738a892f25762b8a7ef7f2dba750c365f3518798ce4ec4a06ed10f5199d1
+
 using System;
 
 public class CPHInline

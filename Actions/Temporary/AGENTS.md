@@ -15,88 +15,76 @@ status: active
 
 ## Purpose
 
-This folder owns temporary Streamer.bot C# scripts that bridge a short-lived focus timer flow to Mix It Up. The current files start and end the `Temp Focus Timer` timer and trigger temporary Mix It Up action groups.
+Short-lived or experimental Streamer.bot C# scripts live here while they are being evaluated. Scripts in this folder may be removed or promoted to a permanent folder when the behavior stabilizes.
 
-Ownership note: this route remains standalone as `actions-temporary`. Operationally, the scripts are related to focus/rest experimentation, but they are not the same state machine as [Actions/Rest Focus Loop/](../Rest%20Focus%20Loop/) and should not be silently covered by that route without a later explicit migration.
+The current scripts are temporary focus-timer bridges being evaluated before any possible migration into [Actions/Rest Focus Loop/](../Rest%20Focus%20Loop/).
 
 ## When to Activate
 
-Use this guide when editing or reviewing files under [Actions/Temporary/](./):
+Use this guide when editing or reviewing:
 
-- [temp-focus-timer-start.cs](temp-focus-timer-start.cs) — triggers the temporary lock-in Mix It Up action and enables `Temp Focus Timer`.
-- [temp-focus-timer-end.cs](temp-focus-timer-end.cs) — triggers the timer-end Mix It Up action when `Temp Focus Timer` completes.
+- [temp-focus-timer-start.cs](temp-focus-timer-start.cs)
+- [temp-focus-timer-end.cs](temp-focus-timer-end.cs)
 
-This folder is for temporary operational bridges only. If a temporary script becomes permanent, either move its guidance into a durable route in a later scoped prompt or explicitly document why it remains here.
+## Ownership
 
-## Primary Owner
+`streamerbot-dev` owns runtime behavior here; follow shared ownership, validation, sync, and handoff rules in [Actions/AGENTS.md](../AGENTS.md).
 
-`streamerbot-dev` owns the C# runtime behavior, Streamer.bot timer wiring, Mix It Up API call shape, and paste readiness for this folder.
+## Script Summary
 
-## Secondary Owners / Chain To
+| Script | Summary |
+|---|---|
+| [temp-focus-timer-start.cs](temp-focus-timer-start.cs) | Temporary voice-command/manual bridge that calls the “Temporary Lock In Timer” Mix It Up command and enables the `Temp Focus Timer` Streamer.bot timer. |
+| [temp-focus-timer-end.cs](temp-focus-timer-end.cs) | Timer-end bridge for `Temp Focus Timer` that calls the “Commander - Captain Stretch - Lock In Timer - End” Mix It Up command. |
 
-- `ops` — chain for Mix It Up command discovery, validation, sync, and final handoff workflow.
-- `brand-steward` — chain only if public-facing timer wording, alert text, TTS, or viewer-facing copy changes.
+Keep `Temp Focus Timer` and placeholder Mix It Up command IDs unchanged unless the operator explicitly provides replacements. If these scripts graduate, flag the migration rather than silently treating this folder as part of Rest Focus Loop.
 
-## Required Reading
+## Action Contracts
 
-Before changing scripts, read:
-
-- [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) for the Temporary timer constant.
-- [Actions/Helpers/mixitup-command-api.md](../Helpers/mixitup-command-api.md) for the Streamer.bot C# Mix It Up API helper pattern.
-- [Tools/MixItUp/AGENTS.md](../../Tools/MixItUp/AGENTS.md) for current Mix It Up API payload conventions and command-tooling guidance.
-- [Actions/Rest Focus Loop/AGENTS.md](../Rest%20Focus%20Loop/AGENTS.md) only when evaluating whether temporary focus behavior should be retired or migrated into the durable rest/focus loop.
-- [Tools/MixItUp/README.md](../../Tools/MixItUp/README.md) when discovering or refreshing Mix It Up command IDs.
-
-## Local Workflow
-
-1. Treat this folder as a temporary bridge, not a feature system with long-term state.
-2. Preserve the `Temp Focus Timer` timer name unless the operator explicitly requests a rename.
-3. Keep Mix It Up calls compatible with the shared convention: `Platform = Twitch`, `Arguments`, `SpecialIdentifiers`, and `IgnoreRequirements = false`.
-4. Replace placeholder Mix It Up command IDs only with operator-confirmed command IDs.
-5. Keep scripts self-contained and paste-ready for Streamer.bot inline C#.
-6. If a script graduates into the durable rest/focus system, do not change route ownership in the same prompt unless explicitly requested. Flag the migration need in the handoff.
-
-## Validation
-
-For documentation-only changes, run:
-
-```bash
-python3 Tools/AgentTree/validate.py
+<!-- ACTION-CONTRACTS:START -->
+```json
+{
+  "version": 1,
+  "contracts": [
+    {
+      "script": "temp-focus-timer-end.cs",
+      "action": "Temp Focus Timer End",
+      "purpose": "Contracts expected runtime behavior for temp-focus-timer-end.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented temp-focus-timer-end.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for temp-focus-timer-end.cs"
+    },
+    {
+      "script": "temp-focus-timer-start.cs",
+      "action": "Temp Focus Timer Start",
+      "purpose": "Contracts expected runtime behavior for temp-focus-timer-start.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented temp-focus-timer-start.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for temp-focus-timer-start.cs"
+    }
+  ]
+}
 ```
-
-For script changes:
-
-- Manually review C# for Streamer.bot inline compatibility.
-- Confirm the Streamer.bot timer named `Temp Focus Timer` exists.
-- Confirm [temp-focus-timer-end.cs](temp-focus-timer-end.cs) is wired to the timer-end event.
-- Trigger [temp-focus-timer-start.cs](temp-focus-timer-start.cs) and verify the timer starts.
-- Let the timer complete and verify [temp-focus-timer-end.cs](temp-focus-timer-end.cs) runs.
-- Verify Mix It Up command IDs are not placeholders before production use.
-
-## Boundaries / Out of Scope
-
-- Do not treat this folder as covered by [Actions/Rest Focus Loop/](../Rest%20Focus%20Loop/) during this prompt; route ownership remains separate.
-- Do not add durable rest/focus state variables here.
-- Do not rename or remove the temporary timer without explicit operator approval.
-- Do not implement app-side or Mix It Up tooling changes here.
-
-## Handoff Notes
-
-Use the terminal workflows after changes:
-
-- [change-summary](../../.agents/workflows/change-summary.md)
-- [sync](../../.agents/workflows/sync.md)
-- [validation](../../.agents/workflows/validation.md)
-
-For code changes, list paste targets for both temporary scripts if either behavior changes. Include timer setup, command ID placeholders, and whether the operator should review retirement or migration into the Rest Focus Loop route.
-
-## Runtime Notes
-
-Current scripts:
-
-| Script | Trigger | Side effect |
-|---|---|---|
-| [temp-focus-timer-start.cs](temp-focus-timer-start.cs) | Voice command or manual Streamer.bot action | Calls temporary lock-in Mix It Up command and enables `Temp Focus Timer`. |
-| [temp-focus-timer-end.cs](temp-focus-timer-end.cs) | Timer end for `Temp Focus Timer` | Calls Captain Stretch lock-in timer-end Mix It Up command. |
-
-Current ownership classification: standalone `actions-temporary` route, operationally adjacent to Rest Focus Loop but not a covered-by child route.
+<!-- ACTION-CONTRACTS:END -->

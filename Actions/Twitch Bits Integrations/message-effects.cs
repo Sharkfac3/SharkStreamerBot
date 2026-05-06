@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Bits Integrations/AGENTS.md#message-effects.cs
+// ACTION-CONTRACT-SHA256: 7f8fb66dddb0821eb8da84d44d5db3562a614afd3bdfd41a45eb14de24aea0c0
+
 using System;
 using System.Net.Http;
 using System.Text;

@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Commanders/Captain Stretch/AGENTS.md#captain-stretch-thank.cs
+// ACTION-CONTRACT-SHA256: 5d5041632101af38c9f34cec59cd2e044a850d503a9da9085c20bfb9e1419121
+
 using System;
 
 public class CPHInline

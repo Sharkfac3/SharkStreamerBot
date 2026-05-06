@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Duck/duck-call.cs
+// ACTION-CONTRACT-SHA256: 20a2d3b4aa45f2ce6569eb112d47942584fa38dd5749cefa8a16998dbfb053c9
+
 using System;
 using System.Net.Http;
 using System.Text;

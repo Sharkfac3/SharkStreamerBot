@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Toothless/toothless-main.cs
+// ACTION-CONTRACT-SHA256: 132082626b04224a467928d7222a9c0e8b9b4ebf80a9bdd167dbc83f05cc44ef
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

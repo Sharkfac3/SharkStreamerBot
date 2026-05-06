@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Bits Integrations/AGENTS.md#gigantify-emote.cs
+// ACTION-CONTRACT-SHA256: ab7ad5a76802761ec63e500450c1686659a65413ace9226617500adfacde5542
+
 using System;
 using System.Net.Http;
 using System.Text;

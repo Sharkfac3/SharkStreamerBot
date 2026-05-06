@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Commanders/The Director/AGENTS.md#the-director-award.cs
+// ACTION-CONTRACT-SHA256: 6a391a07b67a5a8e69d33cfb15bdb0d36b40a471fe2c4ac41ef8f59472c9f4f0
+
 using System;
 
 public class CPHInline

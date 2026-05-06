@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Commanders/Water Wizard/AGENTS.md#water-wizard-hail.cs
+// ACTION-CONTRACT-SHA256: 556b6b4ecec85dd28d5b343ad7b9c59183b644da1ff0843ff058253113a89d0a
+
 using System;
 
 public class CPHInline

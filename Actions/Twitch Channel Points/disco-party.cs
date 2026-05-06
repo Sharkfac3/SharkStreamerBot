@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Channel Points/AGENTS.md#disco-party.cs
+// ACTION-CONTRACT-SHA256: 1e6b99db95ead2e1b1716cacf4dfa0f984d4f3e89f0de8ba9a6fc26d68677af7
+
 using System;
 using System.Net.Http;
 using System.Text;

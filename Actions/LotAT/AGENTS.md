@@ -18,21 +18,15 @@ status: active
 
 ## Purpose
 
-[Actions/LotAT/](./) contains the Streamer.bot C# runtime engine for Legends of the ASCII Temple (LotAT) v1.
+[Actions/LotAT/](./) contains the Streamer.bot C# runtime engine for **Legends of the ASCII Temple (LotAT) v1**, a multi-phase turn-based chat game.
 
-This folder owns live session execution only:
+This folder owns live session execution only: starting a run, loading the current story JSON, opening/closing phase windows, tracking roster/votes, entering nodes, resolving runtime mechanics, ending safely, and publishing state to the overlay.
 
-- starting one LotAT run from the configured trigger
-- loading the single runtime story copy at [Creative/WorldBuilding/Storylines/loaded/current-story.json](../../Creative/WorldBuilding/Storylines/loaded/current-story.json)
-- opening and closing the join window
-- tracking the session roster and voting state
-- entering story nodes and resolving node mechanics
-- handling commander and dice pre-vote windows
-- collecting authored decision-command votes
-- ending and cleaning up safely
-- publishing LotAT overlay events through the broker helper template
+Story content stays in [Creative/WorldBuilding/](../../Creative/WorldBuilding/). Story review/loading tooling stays in [Tools/LotAT/](../../Tools/LotAT/). Overlay rendering stays in [Apps/stream-overlay/](../../Apps/stream-overlay/).
 
-Story content stays in [Creative/WorldBuilding/](../../Creative/WorldBuilding/). Story review/loading tooling stays in [Tools/LotAT/](../../Tools/LotAT/).
+## Ownership
+
+Primary owner: `lotat-tech`. For shared Streamer.bot action ownership, validation, sync, boundaries, and handoff expectations, also follow [Actions/AGENTS.md](../AGENTS.md).
 
 ## When to Activate
 
@@ -41,117 +35,58 @@ Use this guide when working on:
 - any C# script in [Actions/LotAT/](./)
 - LotAT runtime globals, timers, stage transitions, voting, or teardown behavior
 - Streamer.bot trigger/action ordering for LotAT scripts
-- the runtime side of LotAT overlay publishing from C#
+- runtime-side LotAT overlay publishing from C#
 - implementation changes required by story schema or command-contract updates
 
-Also load this guide when a task starts in another domain but changes how the live LotAT engine consumes, starts, or advances stories.
-
-## Primary Owner
-
-Primary owner: `lotat-tech`.
-
-`lotat-tech` owns the runtime contract, schema/command boundaries, session lifecycle, state model, voting behavior, and whether a proposed engine behavior is compatible with LotAT v1.
-
-## Secondary Owners / Chain To
-
-| Role | Chain when |
-|---|---|
-| `streamerbot-dev` | Editing C# actions, Streamer.bot API calls, timers, trigger wiring, global variable resets, or copy/paste deployment notes. |
-| `lotat-writer` | A runtime/schema decision requires story JSON changes, adventure updates, or writer-facing guidance. |
-| `app-dev` | LotAT broker topics, payload shapes, or overlay rendering behavior changes. |
-| `ops` | Running validation, preparing sync/paste notes, or producing the final change summary. |
-| `brand-steward` | Runtime changes alter public chat copy, canon, cast meaning, or the Starship Shamples metaphor. Use the [canon-guardian workflow](../../.agents/workflows/canon-guardian.md) for canon-level changes. |
+Also load this guide when another domain changes how the live LotAT engine consumes, starts, or advances stories.
 
 ## Required Reading
 
-Read these first for runtime work:
+Read these first for LotAT runtime work:
 
-1. [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) — shared LotAT contract across runtime, tooling, story, and overlay domains.
-2. [Actions/LotAT/runtime-contract.md](./runtime-contract.md) — runtime globals, timers, commands, story-file contract, flow, and v1 boundaries.
-3. [Actions/LotAT/operator-setup.md](./operator-setup.md) — Streamer.bot timer/trigger setup and live-test checklist.
-4. [Actions/LotAT/implementation-map.md](./implementation-map.md) — script inventory, trigger/input expectations, and paste/sync notes.
-5. [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) — canonical global variable and timer names.
-6. [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md) — reusable Streamer.bot C# helper index.
-7. [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md) — story pipeline/tooling responsibilities.
-8. [Apps/stream-overlay/packages/shared/src/protocol.ts](../../Apps/stream-overlay/packages/shared/src/protocol.ts) and [Apps/stream-overlay/packages/shared/src/topics.ts](../../Apps/stream-overlay/packages/shared/src/topics.ts) before changing overlay payloads or topic names.
+1. [Actions/AGENTS.md](../AGENTS.md) — parent Streamer.bot action rules, shared constants/helper routing, validation, sync, and handoff expectations.
+2. [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) — shared LotAT contract across runtime, tooling, story, and overlay domains.
+3. [runtime-contract.md](./runtime-contract.md) — runtime globals, timers, state variables, commands, story-file contract, flow, and v1 boundaries.
+4. [operator-setup.md](./operator-setup.md) — Streamer.bot timer/trigger setup and live-test checklist.
+5. [implementation-map.md](./implementation-map.md) — full script dependency map, trigger/input expectations, and paste/sync notes.
+6. [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md) — story pipeline/tooling responsibilities when runtime changes affect story contracts.
+7. [Apps/stream-overlay/packages/shared/src/protocol.ts](../../Apps/stream-overlay/packages/shared/src/protocol.ts) and [Apps/stream-overlay/packages/shared/src/topics.ts](../../Apps/stream-overlay/packages/shared/src/topics.ts) before changing overlay payloads or topic names.
 
 ## Local Workflow
 
-1. Confirm the task is runtime implementation, not story authoring.
-2. Read [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) for shared contract facts; do not restate or redefine them here.
-3. Read the relevant split runtime doc: [runtime contract](./runtime-contract.md), [operator setup](./operator-setup.md), or [implementation map](./implementation-map.md).
-4. Preserve the runtime/story boundary: runtime session state belongs in C# actions and Streamer.bot globals; authored story data belongs in JSON and the creative/story pipeline.
-5. Keep start-time runtime checks minimal-safe. Full schema/graph validation belongs upstream in the story pipeline and reviewer tooling.
-6. If adding or renaming globals or timer names, update [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md), [Actions/Twitch Core Integrations/stream-start.cs](../Twitch%20Core%20Integrations/stream-start.cs), and the contract docs in the same implementation pass.
-7. If changing the story command contract, coordinate with [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md) and update the authoritative story contract plus the shared LotAT contract before treating the engine change as complete.
-8. If changing overlay publishing, update the C# publisher helper/template in [overlay-publish.cs](./overlay-publish.cs) and verify the app-side protocol in [Apps/stream-overlay/packages/shared/src/protocol.ts](../../Apps/stream-overlay/packages/shared/src/protocol.ts).
-9. Finish with the [change-summary workflow](../../.agents/workflows/change-summary.md), including paste targets and validation output.
+1. Confirm the task is runtime implementation, not story authoring, story tooling, or overlay rendering.
+2. Preserve the runtime/story boundary: C# actions and Streamer.bot globals hold runtime session state; authored story data belongs in JSON and the creative/story pipeline.
+3. Keep start-time runtime checks minimal-safe. Full schema/graph validation belongs upstream in the story pipeline and reviewer tooling.
+4. Treat the normal phase sequence as load-bearing: **join → dice roll → decision → node entry → (timeout handlers at each phase) → end session**.
+5. If changing story command behavior, coordinate with [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md) and update the authoritative story contract before treating the engine change as complete.
+6. If changing overlay publishing, update [overlay-publish.cs](./overlay-publish.cs) and verify the app-side protocol/topic definitions.
 
-## Validation
+## Runtime Phase Map
 
-For documentation/agent-tree changes in this folder, run:
+For the full script dependency map, trigger expectations, paste targets, and gotchas, use [implementation-map.md](./implementation-map.md). For state variable definitions, use [runtime-contract.md](./runtime-contract.md).
 
-```bash
-python3 Tools/AgentTree/validate.py
-```
+| Phase | Script | Notes |
+|---|---|---|
+| Start | `lotat-start-main.cs` | Game entry point |
+| Join | `lotat-join.cs` | Player registration |
+| Join timeout | `lotat-join-timeout.cs` | Closes join window |
+| Dice roll | `lotat-dice-roll.cs` | Rolls for active players |
+| Dice timeout | `lotat-dice-timeout.cs` | Resolves on timer |
+| Decision input | `lotat-decision-input.cs` | Collects player decisions |
+| Decision resolve | `lotat-decision-resolve.cs` | Applies decisions |
+| Decision timeout | `lotat-decision-timeout.cs` | Resolves on timer |
+| Commander input | `lotat-commander-input.cs` | Commander action input (JSON parser) |
+| Commander timeout | `lotat-commander-timeout.cs` | Resolves on timer |
+| Node enter | `lotat-node-enter.cs` | Applies node effects |
+| End session | `lotat-end-session.cs` | Tears down game state |
+| Overlay | `overlay-publish.cs` | Publishes state to overlay |
 
-For Streamer.bot runtime changes, also check the relevant workflow docs:
+## LotAT-Specific Notes
 
-- [validation workflow](../../.agents/workflows/validation.md)
-- [sync workflow](../../.agents/workflows/sync.md)
-- [change-summary workflow](../../.agents/workflows/change-summary.md)
-
-Runtime validation expectations for LotAT script changes:
-
-- confirm all changed scripts remain copy/paste-ready for Streamer.bot
-- confirm changed globals exist in [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md)
-- confirm reset-sensitive globals and all four LotAT timers are handled in [stream-start.cs](../Twitch%20Core%20Integrations/stream-start.cs)
-- smoke test or reason through: start, join, zero-join end, non-zero join, node entry, commander path, dice path, decision vote, early close, ending cleanup, and fault abort
-
-## Boundaries / Out of Scope
-
-Do not use this folder to:
-
-- write adventures, lore, or story content; route that to `lotat-writer` in [Creative/WorldBuilding/](../../Creative/WorldBuilding/)
-- modify the story viewer or local pipeline tooling; route that to [Tools/LotAT/AGENTS.md](../../Tools/LotAT/AGENTS.md)
-- add visual overlay rendering logic; route that to `app-dev` under [Apps/stream-overlay/](../../Apps/stream-overlay/)
-- integrate `!offering` into LotAT v1 without a new explicit contract decision recorded in [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md)
-- add operator force-close, manual advance, late join, leave-session, or rich recovery tooling as hidden v1 behavior
-- move story content into C# scripts
-
-## Handoff Notes
-
-After changes, report:
-
-- changed files and exact Streamer.bot paste targets
-- trigger/timer/action-order setup changes, if any
-- new or changed globals and where they reset
-- story schema/contract changes that require `lotat-writer` follow-up
-- overlay protocol changes that require `app-dev` follow-up
-- canon/public-copy changes that require the [canon-guardian workflow](../../.agents/workflows/canon-guardian.md)
-- validation commands run and their output
-
-## Runtime Notes
-
-See [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) for shared LotAT facts such as commands, timers, participation rules, offering boundary, and overlay event contract.
-
-Use the local split docs for runtime-specific details:
-
-- [runtime-contract.md](./runtime-contract.md) — globals, timers, stage flow, and v1 limitations.
-- [operator-setup.md](./operator-setup.md) — exact Streamer.bot timer and trigger wiring.
-- [implementation-map.md](./implementation-map.md) — script map, trigger/input expectations, and implementation gotchas.
-
-## Paste / Sync Targets
-
-Any edited C# file under [Actions/LotAT/](./) is a Streamer.bot paste target. Include each changed script in the final [sync workflow](../../.agents/workflows/sync.md) output.
-
-Also flag operator setup changes for:
-
-- timer names or durations
-- trigger wiring
-- action group ordering
-- new global variables
-- updates to the loaded runtime story prerequisite
+- `overlay-publish.cs` is the runtime publisher that sends LotAT state to the overlay; app-side rendering lives outside this folder.
+- `lotat-commander-input.cs` contains the canonical hand-rolled JSON parser example for no-external-library Streamer.bot C#; see [Actions/Helpers/json-no-external-libraries.md](../Helpers/json-no-external-libraries.md).
+- The loaded runtime story is [Creative/WorldBuilding/Storylines/loaded/current-story.json](../../Creative/WorldBuilding/Storylines/loaded/current-story.json).
+- V1 intentionally excludes offering integration, boost-state integration, late join/leave flow, operator force-close/manual-advance tools, and full runtime schema validation.
 
 ## Known Gotchas
 
@@ -165,50 +100,265 @@ Also flag operator setup changes for:
 - Commander and dice outcomes are narrative-only in v1; they do not change chaos, branching, vote eligibility, or vote resolution.
 - `Actions/Squad/offering.cs` and offering globals are legacy/provisional experimentation, not LotAT v1 mechanics.
 
----
+## Validation, Boundaries, and Handoff
 
-## Folder Overview
+Follow [Actions/AGENTS.md](../AGENTS.md) for shared validation, sync, boundary, paste-target, and final handoff requirements. For LotAT C# script changes, include exact Streamer.bot paste targets, timer/trigger changes, new or changed globals, story-contract impacts, overlay protocol impacts, and validation output.
 
-`Actions/LotAT/` contains the current Streamer.bot runtime engine for **Legends of the ASCII Temple (LotAT) v1**.
+## Action Contracts
 
-This folder owns live session execution only:
-
-- start a LotAT run
-- open and close the `!join` window
-- freeze the participant roster
-- enter story nodes from the loaded runtime JSON
-- optionally run commander or dice pre-vote windows
-- collect and resolve authored decision-command votes
-- end and clean up the session safely
-
-For shared facts used across runtime, tooling, story authoring, and overlay presentation, see [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md).
-
-### Documentation map
-
-| File | Use |
-|---|---|
-| [runtime-contract.md](runtime-contract.md) | Runtime globals, timers, commands, story-file contract, session flow, and v1 boundaries. |
-| [operator-setup.md](operator-setup.md) | Streamer.bot timer/trigger wiring, prerequisites, and live-test checklist. |
-| [implementation-map.md](implementation-map.md) | Script inventory, trigger/input expectations, paste/sync notes, and implementation gotchas. |
-| [AGENTS.md](AGENTS.md) | Agent routing, local workflow, validation, boundaries, and handoff expectations for this folder. |
-| [.agents/_shared/lotat-contract.md](../../.agents/_shared/lotat-contract.md) | Cross-domain LotAT contract index. |
-
-### Current runtime boundary
-
-The checked-in runtime consumes the single loaded story copy at:
-
-- [Creative/WorldBuilding/Storylines/loaded/current-story.json](../../Creative/WorldBuilding/Storylines/loaded/current-story.json)
-
-Story content stays in [Creative/WorldBuilding/](../../Creative/WorldBuilding/). Story review/loading tooling stays in [Tools/LotAT/](../../Tools/LotAT/). Overlay rendering stays in [Apps/stream-overlay/](../../Apps/stream-overlay/).
-
-### Implementation status
-
-The runtime is functional-first and documents current script behavior, not a promise of future mechanics. V1 intentionally excludes offering integration, boost-state integration, late join/leave flow, operator force-close/manual-advance tools, and full runtime schema validation.
-
-See [runtime-contract.md](runtime-contract.md) for the exact current behavior and [operator-setup.md](operator-setup.md) before live testing.
-
-### Streamer.bot paste targets
-
-Any edited C# file under this folder is a Streamer.bot paste target. Include the specific script names and target action/group names in the final change summary.
-
-Documentation-only changes, including this file and the linked split docs, have no Streamer.bot paste target.
+<!-- ACTION-CONTRACTS:START -->
+```json
+{
+  "version": 1,
+  "contracts": [
+    {
+      "script": "lotat-commander-input.cs",
+      "action": "Lotat Commander Input",
+      "purpose": "Contracts expected runtime behavior for lotat-commander-input.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-commander-input.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-commander-input.cs"
+    },
+    {
+      "script": "lotat-commander-timeout.cs",
+      "action": "Lotat Commander Timeout",
+      "purpose": "Contracts expected runtime behavior for lotat-commander-timeout.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-commander-timeout.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-commander-timeout.cs"
+    },
+    {
+      "script": "lotat-decision-input.cs",
+      "action": "Lotat Decision Input",
+      "purpose": "Contracts expected runtime behavior for lotat-decision-input.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-decision-input.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-decision-input.cs"
+    },
+    {
+      "script": "lotat-decision-resolve.cs",
+      "action": "Lotat Decision Resolve",
+      "purpose": "Contracts expected runtime behavior for lotat-decision-resolve.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-decision-resolve.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-decision-resolve.cs"
+    },
+    {
+      "script": "lotat-decision-timeout.cs",
+      "action": "Lotat Decision Timeout",
+      "purpose": "Contracts expected runtime behavior for lotat-decision-timeout.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-decision-timeout.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-decision-timeout.cs"
+    },
+    {
+      "script": "lotat-dice-roll.cs",
+      "action": "Lotat Dice Roll",
+      "purpose": "Contracts expected runtime behavior for lotat-dice-roll.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-dice-roll.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-dice-roll.cs"
+    },
+    {
+      "script": "lotat-dice-timeout.cs",
+      "action": "Lotat Dice Timeout",
+      "purpose": "Contracts expected runtime behavior for lotat-dice-timeout.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-dice-timeout.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-dice-timeout.cs"
+    },
+    {
+      "script": "lotat-end-session.cs",
+      "action": "Lotat End Session",
+      "purpose": "Contracts expected runtime behavior for lotat-end-session.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-end-session.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-end-session.cs"
+    },
+    {
+      "script": "lotat-join-timeout.cs",
+      "action": "Lotat Join Timeout",
+      "purpose": "Contracts expected runtime behavior for lotat-join-timeout.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-join-timeout.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-join-timeout.cs"
+    },
+    {
+      "script": "lotat-join.cs",
+      "action": "Lotat Join",
+      "purpose": "Contracts expected runtime behavior for lotat-join.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-join.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-join.cs"
+    },
+    {
+      "script": "lotat-node-enter.cs",
+      "action": "Lotat Node Enter",
+      "purpose": "Contracts expected runtime behavior for lotat-node-enter.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-node-enter.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-node-enter.cs"
+    },
+    {
+      "script": "lotat-start-main.cs",
+      "action": "Lotat Start Main",
+      "purpose": "Contracts expected runtime behavior for lotat-start-main.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented lotat-start-main.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for lotat-start-main.cs"
+    },
+    {
+      "script": "overlay-publish.cs",
+      "action": "Overlay Publish",
+      "purpose": "Contracts expected runtime behavior for overlay-publish.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented overlay-publish.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for overlay-publish.cs"
+    }
+  ]
+}
+```
+<!-- ACTION-CONTRACTS:END -->

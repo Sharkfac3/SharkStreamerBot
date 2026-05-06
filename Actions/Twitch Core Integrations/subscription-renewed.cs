@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/AGENTS.md#subscription-renewed.cs
+// ACTION-CONTRACT-SHA256: 57e6e0a3502fe9f63e87906bc2ff8b9db2d4e8e538d2ba92e6be939178b63fbc
+
 using System;
 using System.Net.Http;
 using System.Text;

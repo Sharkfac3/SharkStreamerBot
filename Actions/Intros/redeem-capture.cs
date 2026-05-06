@@ -1,5 +1,5 @@
 // ACTION-CONTRACT: Actions/Intros/AGENTS.md#redeem-capture.cs
-// ACTION-CONTRACT-SHA256: b788de14d96b50a5b526d72a36f209309ea391f8b48de1e6aa3c02ea5e7b1fed
+// ACTION-CONTRACT-SHA256: 6c1e985641dcb7463ee456289363f7fc5f8486d7b32ea80728657e55fbff45a7
 
 using System;
 using System.Net.Http;
@@ -156,3 +156,4 @@ public class CPHInline
         return sb.ToString();
     }
 }
+

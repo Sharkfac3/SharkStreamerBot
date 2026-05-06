@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Voice Commands/AGENTS.md#scene-chat.cs
+// ACTION-CONTRACT-SHA256: 8d05983f3430ea592d2b1240f62416e7523da71d63c7a22ac78b7a8638d8f186
+
 public class CPHInline
 {
     // Shared mode variable key.

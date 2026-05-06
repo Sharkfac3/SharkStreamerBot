@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Duck/duck-resolve.cs
+// ACTION-CONTRACT-SHA256: e8c9d37c2b85eec56c168dddd1e94c98015ab9ccfd3bd7bd42d2de1b1ac30a56
+
 using System;
 
 public class CPHInline

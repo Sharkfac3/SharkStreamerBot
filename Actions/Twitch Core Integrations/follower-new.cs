@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/AGENTS.md#follower-new.cs
+// ACTION-CONTRACT-SHA256: 5b3c20a3a4aab5f75e7a1d2a005b278f6d13453ecb0b38649ae4967666af5969
+
 using System;
 using System.Net.Http;
 using System.Text;

@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/LotAT/AGENTS.md#lotat-commander-timeout.cs
+// ACTION-CONTRACT-SHA256: 1c5a54acb65a4ace35fc0ac9185ea3fb282e4059605eda54094257c57cb991bf
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;

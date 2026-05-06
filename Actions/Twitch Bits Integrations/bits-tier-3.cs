@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Bits Integrations/AGENTS.md#bits-tier-3.cs
+// ACTION-CONTRACT-SHA256: 2f2b080bfff4f90ac6c3b1c6453a20960ff3d028ed833afc0b1bb58021a484d3
+
 using System;
 using System.Net.Http;
 using System.Text;

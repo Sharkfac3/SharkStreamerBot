@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/AGENTS.md#subscription-gift.cs
+// ACTION-CONTRACT-SHA256: 9dc0f0f76201d993f172c5c9b912b3cd40cc2a4ec02b8e00366cadcc89a771ef
+
 using System;
 using System.Net.Http;
 using System.Text;

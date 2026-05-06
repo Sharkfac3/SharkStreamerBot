@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Commanders/AGENTS.md#commander-help.cs
+// ACTION-CONTRACT-SHA256: a7048ab47eb922d024461199a891221179c25ef52726045bd1d2335e1bedef33
+
 using System;
 using System.Collections.Generic;
 

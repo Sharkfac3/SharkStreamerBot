@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Hype Train/AGENTS.md#hype-train-start.cs
+// ACTION-CONTRACT-SHA256: acfaa59af94c5a852feef6ce18c2338d401d9cf07272367ddff36b55eba0456f
+
 using System;
 using System.Globalization;
 using System.Net.Http;

@@ -31,6 +31,14 @@ When working anywhere under `Actions/`:
 2. **Script docs** — local `AGENTS.md` and the feature README's `## Args Consumed` table for the `.cs` file.
 3. **Upstream** — https://docs.streamer.bot/api/triggers (last resort; if the catalog is wrong, fix the catalog first).
 
+## Shared Required Reading
+
+Every session working under Actions/ must read:
+- `Actions/SHARED-CONSTANTS.md` — canonical global var, timer, OBS source, and broker topic names
+- `Actions/Helpers/AGENTS.md` — reusable Streamer.bot C# patterns
+
+Local AGENTS.md files list additional required reading specific to that folder only.
+
 ## Domain Rules
 
 - Local action-group `AGENTS.md` action contracts under Actions are the source of truth for how Streamer.bot action scripts must operate. Update the contract first when behavior changes, then make the `.cs` script conform to it.
@@ -46,6 +54,23 @@ When working anywhere under `Actions/`:
 - Be explicit about persisted vs. non-persisted globals when using `CPH.SetGlobalVar`.
 - Prefer small, local changes over broad refactors; live stream reliability comes first.
 - Avoid duplicate helper implementations when a pattern already exists in `Actions/Helpers/`.
+
+## Universal Script Rules
+
+These apply to every .cs script under Actions/ and are not restated in local guides:
+
+- Scripts are self-contained: do not assume shared runtime files can be imported at runtime.
+- Read runtime state defensively via `CPH.TryGetArg` or Streamer.bot globals; protect against missing or malformed inputs.
+
+## Shared Ownership Rules
+
+`streamerbot-dev` owns all C# runtime behavior under `Actions/` by default.
+
+`brand-steward` review is required before any change to: public chat output, TTS/spoken text,
+overlay copy, command names visible to chat, or event announcement wording — across all folders.
+Local AGENTS.md files only list secondary owners when the folder adds exceptions to this rule.
+
+`ops` handles validation, paste/sync workflow, and agent-tree maintenance across all folders.
 
 ## Folder Routing
 
@@ -130,6 +155,17 @@ Contract rules:
 3. Run `python3 Tools/StreamerBot/Validation/action_contracts.py --script "Actions/<folder>/<script>.cs" --stamp` after contract updates to refresh the script stamp.
 4. Run the same command without `--stamp` as validation, or run `python3 Tools/StreamerBot/Validation/action_contracts.py --changed` before handoff.
 5. Do not treat script comments or implementation as the source of truth when they conflict with the local action contract; fix the contract or fix the script so they align.
+
+## Validation and Handoff
+
+After editing any Actions/**/*.cs file:
+1. Run `python Tools/StreamerBot/Validation/action_contracts.py --changed` to check contract alignment.
+2. Include Streamer.bot paste targets in your handoff.
+3. Note smoke-test steps for the changed action.
+
+After editing an ACTION-CONTRACTS block in any AGENTS.md:
+1. Run `python Tools/StreamerBot/Validation/action_contracts.py --stamp` to refresh SHA256 stamps in .cs files.
+2. Run `--all` to confirm clean state.
 
 ## Sync and Handoff Expectations
 

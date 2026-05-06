@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Clone/clone-empire-start.cs
+// ACTION-CONTRACT-SHA256: 486e85f6c2e6225b72cb94eb854cd406ac2bd480e04ae5365b4a0f0f4b49e1d3
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
