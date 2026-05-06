@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Rest Focus Loop/AGENTS.md#rest-focus-loop-start.cs
+// ACTION-CONTRACT-SHA256: 4b641201e412d6014c53172ac08e409a8bce05c63211af1a7b1f45dffa8cd89f
+
 using System;
 
 public class CPHInline

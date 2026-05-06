@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Voice Commands/AGENTS.md#mode-garage.cs
+// ACTION-CONTRACT-SHA256: 09d0818bd315a97d9265f82c22f1cd25fee9b83d1796881c9cb83c399ba0b994
+
 public class CPHInline
 {
     // Shared mode variable key.

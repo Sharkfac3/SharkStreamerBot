@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/LotAT/AGENTS.md#lotat-commander-input.cs
+// ACTION-CONTRACT-SHA256: bae2102a8b0ecd5aa4b7e5666490c5dff317e733e79d5b7858f5adbd066d25b9
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;

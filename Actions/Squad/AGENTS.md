@@ -16,221 +16,414 @@ status: active
 
 ## Purpose
 
-This folder owns Streamer.bot C# actions for Squad mini-games and interactions: Clone, Duck, Pedro, Toothless, the `!game` help command, and offering-token behavior.
+Squad hosts four Streamer.bot mini-games and shared Squad interactions for SharkFac3's stream: Clone Empire, Duck Call, Pedro, Toothless, plus offering-token behavior and the `!game` help command.
 
-Squad work prioritizes reliable chat-triggered interactions, fair mini-game state handling, safe global-variable use, and compatibility with overlay rendering where present.
+Use this guide for work under `Actions/Squad/`. Game-specific mechanics live in each subfolder README; do not duplicate or replace those docs here.
 
-## When to Activate
+## Ownership
 
-Use this guide when editing or reviewing files under [Actions/Squad/](./), including:
+`streamerbot-dev` owns Squad C# runtime behavior and Streamer.bot paste readiness. Follow the parent action standards in [Actions/AGENTS.md](../AGENTS.md).
 
-- [Actions/Squad/Clone/](Clone/) scripts
-- [Actions/Squad/Duck/](Duck/) scripts
-- [Actions/Squad/Pedro/](Pedro/) scripts
-- [Actions/Squad/Toothless/](Toothless/) scripts
-- [Actions/Squad/offering.cs](offering.cs)
-- [Actions/Squad/squad-game-help.cs](squad-game-help.cs)
-- README or operator documentation in this folder
-
-Activate `app-dev` when a change alters overlay publish payloads, broker topics, rendering contracts, or copied overlay-publish templates.
-
-## Primary Owner
-
-`streamerbot-dev` owns the C# runtime behavior, mini-game lock use, Streamer.bot paste readiness, chat trigger expectations, global variable contracts, and Streamer.bot-side overlay publishing calls.
-
-## Secondary Owners / Chain To
-
-- `app-dev` — chain for overlay rendering, `squad.*` broker message payloads, or app-side protocol changes.
-- `lotat-tech` — chain if offering behavior is being promoted into approved LotAT runtime mechanics instead of remaining separate experimental offering work.
-- `brand-steward` — chain for public-facing help text, flavor text, character interpretation, or chat copy changes.
-- `ops` — chain only for validation, paste/sync workflow, or agent-tree maintenance beyond this local guide.
+Chain to `app-dev` for overlay payloads or `squad.*` broker topic changes; chain to `brand-steward` for public copy or character/flavor changes.
 
 ## Required Reading
 
-Read the specific game README before editing scripts:
+Read the docs for the file you will edit:
 
-- [Actions/Squad/Clone/README.md](Clone/README.md)
-- [Actions/Squad/Duck/README.md](Duck/README.md)
-- [Actions/Squad/Pedro/README.md](Pedro/README.md)
-- [Actions/Squad/Toothless/README.md](Toothless/README.md)
-- [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md)
-- [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md)
-- [Actions/Helpers/mini-game-lock.md](../Helpers/mini-game-lock.md) and [Actions/Helpers/mini-game-contract.md](../Helpers/mini-game-contract.md)
-- [Apps/stream-overlay/](../../Apps/stream-overlay/) when overlay publish behavior changes
-- [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) when public copy changes
+- [Actions/AGENTS.md](../AGENTS.md) — required parent action standards, validation, sync, and handoff expectations.
+- [Actions/Helpers/mini-game-lock.md](../Helpers/mini-game-lock.md) — required global mini-game lock pattern.
+- [Actions/Helpers/mini-game-contract.md](../Helpers/mini-game-contract.md) — mini-game runtime checklist.
+- The relevant game README from the routing table below.
+- [Apps/stream-overlay/](../../Apps/stream-overlay/) when overlay publish behavior changes.
+- [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) when public copy changes.
+
+## Subfolder Routing
+
+| Subfolder | Game | README |
+|---|---|---|
+| Clone/ | Clone Empire (grid survival) | [Clone/README.md](Clone/README.md) |
+| Duck/ | Duck Call (quack race) | [Duck/README.md](Duck/README.md) |
+| Pedro/ | Pedro event | [Pedro/README.md](Pedro/README.md) |
+| Toothless/ | Toothless event | [Toothless/README.md](Toothless/README.md) |
+
+## Shared Scripts
+
+| Script | Purpose |
+|---|---|
+| `offering.cs` | Shared Squad state management |
+| `squad-game-help.cs` | Shared helpers for all Squad games |
+
+`offering.cs` manages shared Squad state and experimental offering-token behavior across the Squad area. Do not promote it into canonical LotAT runtime behavior without `lotat-tech` review.
+
+`squad-game-help.cs` provides shared `!game` help for all four games. Update it when the user-facing game list or help text changes.
 
 ## Local Workflow
 
-1. Identify the mini-game or interaction: Clone, Duck, Pedro, Toothless, Offering, or shared help.
-2. Preserve the [mini-game lock](../Helpers/mini-game-lock.md) and [mini-game contract checklist](../Helpers/mini-game-contract.md). Avoid overlapping game runs unless the existing game intentionally allows repeated triggers.
-3. Prefer `userId` as the canonical player key. It is stable when display names change.
-4. Read inputs defensively from Streamer.bot trigger args and global variables.
-5. Keep scripts self-contained and paste-ready. Do not assume shared runtime files can be imported by Streamer.bot actions.
-6. Update the Script Reference section in this file when trigger variables, state variables, timers, overlay publishing, or operator wiring changes.
-7. If adding a new Squad global variable, add/reset it in stream-start behavior and [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) when in scope; otherwise flag the required follow-up in the handoff.
+1. Identify whether the change belongs to Clone, Duck, Pedro, Toothless, `offering.cs`, or `squad-game-help.cs`.
+2. Read the relevant subfolder README before changing game-specific mechanics.
+3. Preserve the global [mini-game lock](../Helpers/mini-game-lock.md): Squad games must acquire the lock before active play and release it on success, failure, timeout, and fault paths.
+4. Preserve the mini-game script pattern used by Squad games: the call/main/resolve pattern means a trigger/call script starts or joins interaction, a `main` script owns core game state, a `resolve` or tick script ends the run, and overlay-publish helpers emit broker messages when integrated.
+5. Prefer `userId` as the canonical player key for roster/state entries.
+6. Keep shared changes in `offering.cs` and `squad-game-help.cs` compatible with all four games.
 
-Squad script map:
+## Squad-Specific Notes
 
-| Area | Scripts |
-|---|---|
-| Clone | [clone-empire-main.cs](Clone/clone-empire-main.cs), [clone-empire-join.cs](Clone/clone-empire-join.cs), [clone-empire-start.cs](Clone/clone-empire-start.cs), [clone-empire-move.cs](Clone/clone-empire-move.cs), [clone-empire-tick.cs](Clone/clone-empire-tick.cs) |
-| Duck | [duck-main.cs](Duck/duck-main.cs), [duck-call.cs](Duck/duck-call.cs), [duck-resolve.cs](Duck/duck-resolve.cs) |
-| Pedro | [pedro-main.cs](Pedro/pedro-main.cs), [pedro-call.cs](Pedro/pedro-call.cs), [pedro-resolve.cs](Pedro/pedro-resolve.cs) |
-| Toothless | [toothless-main.cs](Toothless/toothless-main.cs) |
-| Shared | [squad-game-help.cs](squad-game-help.cs), [offering.cs](offering.cs) |
-
-Game-specific notes:
-
-- Clone uses `Clone - Join Window` and `Clone - Game Tick` timers. Acquire the lock in [clone-empire-main.cs](Clone/clone-empire-main.cs) and release it in [clone-empire-tick.cs](Clone/clone-empire-tick.cs) on terminal paths.
-- Duck uses the Duck Call Window timer. Acquire the lock in [duck-main.cs](Duck/duck-main.cs) and release it in [duck-resolve.cs](Duck/duck-resolve.cs).
+- Clone uses join-window and game-tick behavior; lock acquisition starts the run and release happens on terminal tick paths.
+- Duck uses a call window; acquire in the main/start path and release in resolve.
 - Pedro secret unlocks may fire Mix It Up multiple times per stream by design. Do not add a one-per-stream guard unless explicitly requested.
-- Toothless rolls are instant rarity outcomes. Preserve rarity-state tracking and OBS source behavior.
-- Offering is separate experimental offering work. Do not infer approved LotAT runtime contracts from [offering.cs](offering.cs) alone.
+- Toothless rolls resolve immediately; preserve rarity-state tracking and OBS source behavior.
+- Duck, Pedro, and Toothless have overlay publish reference templates in their folders. These are not standalone deployed Streamer.bot actions; copy the publish methods into target scripts only when integrating.
+- Published broker topics currently include `squad.clone.*`, `squad.duck.*`, `squad.pedro.*`, and `squad.toothless.*`; coordinate app-side before changing topic names or payload shapes.
 
-Overlay publishing:
+## Boundaries
 
-- Duck, Pedro, and Toothless have overlay publish reference templates in their game folders.
-- These templates are not standalone deployed Streamer.bot actions. Copy relevant publish methods into the target game scripts at integration time.
-- Published broker topics include `squad.duck.start`, `squad.duck.update`, `squad.duck.end`, `squad.pedro.start`, `squad.pedro.update`, `squad.pedro.end`, `squad.clone.start`, `squad.clone.update`, `squad.clone.end`, `squad.toothless.start`, and `squad.toothless.end`.
-- Toothless has no update topic because rolls resolve immediately.
+For universal C# rules, shared constants, validation, sync, and handoff format, follow [Actions/AGENTS.md](../AGENTS.md).
 
-## Validation
+Squad-specific boundaries:
 
-For script changes, perform the narrowest safe validation available:
-
-- Review edited C# for Streamer.bot paste readiness: one `Execute()` entry point per action, no external runtime imports, and no dependency on repo-only helper files.
-- Verify global names, OBS names, timers, and Mix It Up command names against [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md).
-- Verify mini-game lock acquire/release behavior on all success, failure, timeout, and fault paths.
-- If overlay payloads change, coordinate with app-side overlay validation under [Apps/stream-overlay/](../../Apps/stream-overlay/).
-- Run shared-constants validation when constants or documented references change:
-
-```bash
-python3 Tools/StreamerBot/validate-shared-constants.py
-```
-
-For agent-doc changes, follow [validation](../../.agents/workflows/validation.md) and run the agent-tree validator with the task-requested report path. Record command output in the handoff or final change summary.
-
-## Boundaries / Out of Scope
-
+- Do not edit subfolder READMEs unless explicitly asked; they are the game mechanics source of truth.
 - Do not rewrite multiple games when a targeted fix is sufficient.
 - Do not rename chat commands, timers, broker topics, global variables, or OBS sources unless explicitly requested.
 - Do not treat Pedro repeated secret-unlock fires as a bug.
-- Do not promote [offering.cs](offering.cs) into canonical LotAT runtime behavior without `lotat-tech` review.
 - Do not change overlay protocol contracts without `app-dev` review.
 
-## Handoff Notes
+## Handoff
 
-After changes, follow these workflows:
+Follow [Actions/AGENTS.md](../AGENTS.md) for validation, sync, paste-target, and change-summary requirements.
 
-- [change-summary](../../.agents/workflows/change-summary.md) — terminal summary with changed files, paste targets, setup steps, and validation output.
-- [sync](../../.agents/workflows/sync.md) — repo-to-Streamer.bot manual paste expectations.
-- [validation](../../.agents/workflows/validation.md) — validation command selection and failure reporting.
+Paste targets are the edited `.cs` files under `Actions/Squad/`. Operator must manually paste changed script contents into matching Streamer.bot actions and verify trigger wiring for chat commands, timers, and overlay-publish integration.
 
-Paste targets are the edited `.cs` files under [Actions/Squad/](./). Operator must manually paste changed script contents into the matching Streamer.bot actions and verify trigger wiring for chat commands, timers, and any overlay-publish integration.
+## Action Contracts
 
-App handoff triggers: any change to overlay publish methods, `squad.*` topics, payload shapes, asset names expected by the overlay, broker connection behavior, or visual timing assumptions.
-
-Brand handoff triggers: public game help, flavor text, character metaphor shifts, community-facing command wording, or messages intended to become stream catchphrases.
-
----
-
-## Script Reference
-
-### Overlay Integration
-Duck, Pedro, and Toothless each have an overlay publish reference template in their folder: [Duck](Duck/overlay-publish.cs), [Pedro](Pedro/overlay-publish.cs), and [Toothless](Toothless/overlay-publish.cs). These are **not standalone deployed actions** — copy the `Publish*` methods into the target game scripts at integration time. See each game's README for the integration map.
-
-### Shared Constants
-- Cross-script key/timer/OBS sync reference: `Actions/SHARED-CONSTANTS.md`
-
-### Helper Snippets
-- Reusable copy/paste patterns: `Actions/Helpers/AGENTS.md`
-- Required mini-game contract: `Actions/Helpers/mini-game-contract.md`
-
----
-
-### Script: `squad-game-help.cs`
-
-#### Purpose
-Handles the `!game` command. `!game` lists all available Squad mini-games in chat; `!game <name>` explains the rules of the named mini-game.
-
-#### Expected Trigger / Input
-- Chat command wired to `!game`.
-- Reads `user`, `input0` (first word after command).
-
-#### Required Runtime Variables
-- None (read-only; no globals written).
-
-#### Key Outputs / Side Effects
-- Sends one chat message: either the full game list or the rules for the named game.
-
-#### Mix It Up Actions
-- None.
-
-#### OBS Interactions
-- None.
-
-#### Operator Notes
-- Wire to the `!game` chat command trigger.
-- Add new games to the `helpMessages` dictionary inside the script as they are built.
-
----
-
-### Script: `offering.cs`
-
-#### Purpose
-Handles offering tokens and applies boost changes, including legacy / experimental LotAT-linked steal behavior.
-
-#### Expected Trigger / Input
-- Chat/user input that provides an offering token/member target.
-
-#### Required Runtime Variables
-- Reads `lotat_active`.
-- Reads/writes `lotat_announcement_sent` (one-time announcement latch).
-- Reads `lotat_offering_steal_chance` (clamped 0..100).
-- Reads `lotat_steal_multiplier` (minimum 1).
-- Reads/writes `boost_<member>_<userId>` (clamped final value 0..30).
-
-#### Key Outputs / Side Effects
-- Adjusts per-user per-member boost values.
-- Applies LotAT steal modifier when active.
-
-#### Mix It Up Actions
-- None.
-
-#### OBS Interactions
-- None.
-
-#### Wait Behavior
-- None.
-
-#### Chat / Log Output
-- Sends one-time LotAT active announcement.
-- Sends unknown-token flavor message when token is invalid.
-- Sends result message with delta and resulting boost.
-
-#### Operator Notes
-- Keep token/member naming aligned with existing chat commands.
-- Preserve boost key format (`boost_<member>_<userId>`) for compatibility.
-- For current LotAT v1 planning, treat this script as **separate experimental offering work**, not as an approved LotAT runtime mechanic.
-- Do not infer LotAT story/runtime contract rules from this script alone.
-
----
-
-## Trigger Variables
-
-Access in C# via `CPH.TryGetArg("variableName", out T value)`.
-
-### Chat Message (primary trigger for all Squad mini-games)
-
-Squad games are triggered via Twitch → Chat → Message (or a Command trigger for `!` commands).
-
-| Variable | Type | Notes |
-|---|---|---|
-| `user` | string | Display name of the user who sent the message |
-| `userId` | string | Twitch user ID — canonical player identifier in all Squad games |
-| `message` | string | Full chat message text |
-| `rawInput` | string | Fallback if `message` is empty |
-| `msgId` | string | Unique message ID — use for duplicate detection (Pedro uses this) |
-| `input0` | string | First word after the command trigger (if using a Command trigger) |
-
-> `userId` is the preferred player key — stable even if a user changes their display name. Clone, Duck, Pedro, and Offering all key roster/state entries on `userId`.
+<!-- ACTION-CONTRACTS:START -->
+```json
+{
+  "version": 1,
+  "contracts": [
+    {
+      "script": "Clone/clone-empire-join.cs",
+      "action": "Clone Empire Join",
+      "purpose": "Contracts expected runtime behavior for Clone/clone-empire-join.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Clone/clone-empire-join.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Clone/clone-empire-join.cs"
+    },
+    {
+      "script": "Clone/clone-empire-main.cs",
+      "action": "Clone Empire Main",
+      "purpose": "Contracts expected runtime behavior for Clone/clone-empire-main.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Clone/clone-empire-main.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Clone/clone-empire-main.cs"
+    },
+    {
+      "script": "Clone/clone-empire-move.cs",
+      "action": "Clone Empire Move",
+      "purpose": "Contracts expected runtime behavior for Clone/clone-empire-move.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Clone/clone-empire-move.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Clone/clone-empire-move.cs"
+    },
+    {
+      "script": "Clone/clone-empire-start.cs",
+      "action": "Clone Empire Start",
+      "purpose": "Contracts expected runtime behavior for Clone/clone-empire-start.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Clone/clone-empire-start.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Clone/clone-empire-start.cs"
+    },
+    {
+      "script": "Clone/clone-empire-tick.cs",
+      "action": "Clone Empire Tick",
+      "purpose": "Contracts expected runtime behavior for Clone/clone-empire-tick.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Clone/clone-empire-tick.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Clone/clone-empire-tick.cs"
+    },
+    {
+      "script": "Duck/duck-call.cs",
+      "action": "Duck Call",
+      "purpose": "Contracts expected runtime behavior for Duck/duck-call.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Duck/duck-call.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Duck/duck-call.cs"
+    },
+    {
+      "script": "Duck/duck-main.cs",
+      "action": "Duck Main",
+      "purpose": "Contracts expected runtime behavior for Duck/duck-main.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Duck/duck-main.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Duck/duck-main.cs"
+    },
+    {
+      "script": "Duck/duck-resolve.cs",
+      "action": "Duck Resolve",
+      "purpose": "Contracts expected runtime behavior for Duck/duck-resolve.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Duck/duck-resolve.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Duck/duck-resolve.cs"
+    },
+    {
+      "script": "Duck/overlay-publish.cs",
+      "action": "Overlay Publish",
+      "purpose": "Contracts expected runtime behavior for Duck/overlay-publish.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Duck/overlay-publish.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Duck/overlay-publish.cs"
+    },
+    {
+      "script": "Pedro/overlay-publish.cs",
+      "action": "Overlay Publish",
+      "purpose": "Contracts expected runtime behavior for Pedro/overlay-publish.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Pedro/overlay-publish.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Pedro/overlay-publish.cs"
+    },
+    {
+      "script": "Pedro/pedro-call.cs",
+      "action": "Pedro Call",
+      "purpose": "Contracts expected runtime behavior for Pedro/pedro-call.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Pedro/pedro-call.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Pedro/pedro-call.cs"
+    },
+    {
+      "script": "Pedro/pedro-main.cs",
+      "action": "Pedro Main",
+      "purpose": "Contracts expected runtime behavior for Pedro/pedro-main.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Pedro/pedro-main.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Pedro/pedro-main.cs"
+    },
+    {
+      "script": "Pedro/pedro-resolve.cs",
+      "action": "Pedro Resolve",
+      "purpose": "Contracts expected runtime behavior for Pedro/pedro-resolve.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Pedro/pedro-resolve.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Pedro/pedro-resolve.cs"
+    },
+    {
+      "script": "Toothless/overlay-publish.cs",
+      "action": "Overlay Publish",
+      "purpose": "Contracts expected runtime behavior for Toothless/overlay-publish.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Toothless/overlay-publish.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Toothless/overlay-publish.cs"
+    },
+    {
+      "script": "Toothless/toothless-main.cs",
+      "action": "Toothless Main",
+      "purpose": "Contracts expected runtime behavior for Toothless/toothless-main.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented Toothless/toothless-main.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for Toothless/toothless-main.cs"
+    },
+    {
+      "script": "offering.cs",
+      "action": "Offering",
+      "purpose": "Contracts expected runtime behavior for offering.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented offering.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for offering.cs"
+    },
+    {
+      "script": "squad-game-help.cs",
+      "action": "Squad Game Help",
+      "purpose": "Contracts expected runtime behavior for squad-game-help.cs.",
+      "triggers": [],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Runs the documented squad-game-help.cs Streamer.bot action behavior."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for squad-game-help.cs"
+    }
+  ]
+}
+```
+<!-- ACTION-CONTRACTS:END -->

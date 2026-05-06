@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/LotAT/AGENTS.md#overlay-publish.cs
+// ACTION-CONTRACT-SHA256: b96892a12948418d3a55f3c886d182d91f9a400dc20e7d40660ca09205e5c2c3
+
 using System;
 using System.Collections.Generic;
 

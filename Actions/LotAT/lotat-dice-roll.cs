@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/LotAT/AGENTS.md#lotat-dice-roll.cs
+// ACTION-CONTRACT-SHA256: 9196105ace7f7cda4dc70abea81ec4cc8b41dd868cc57d1191eeef8d34c1c398
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;

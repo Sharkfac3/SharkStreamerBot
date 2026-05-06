@@ -1,3 +1,7 @@
+// ACTION-CONTRACT: Actions/Commanders/The Director/AGENTS.md#the-director-redeem.cs
+// ACTION-CONTRACT-SHA256: e34f6a79ac24ee6984310ff822218086646d1aedf1170d997980e81b8ea2bcb8
+
+// Documented Mix It Up endpoint literal: http://localhost:8911/api/v2/commands/{commandId}
 using System;
 using System.Net.Http;
 using System.Text;

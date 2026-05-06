@@ -1,3 +1,7 @@
+// ACTION-CONTRACT: Actions/Commanders/The Director/AGENTS.md#the-director-checkchat.cs
+// ACTION-CONTRACT-SHA256: 17ec5b7707fdbc050d8505a12181d6d493b3e77556a5d8933478abbfa5fbe4b1
+
+// Documented Mix It Up endpoint literal: http://localhost:8911/api/v2/commands/{commandId}
 using System;
 using System.Net.Http;
 using System.Text;

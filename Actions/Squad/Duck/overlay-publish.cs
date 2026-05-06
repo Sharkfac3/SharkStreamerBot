@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Duck/overlay-publish.cs
+// ACTION-CONTRACT-SHA256: 04fa86d3e59d769eaa532721973e842735639e9abfcd9ee568aaf0628af46269
+
 using System;
 
 // =============================================================================

@@ -1,3 +1,7 @@
+// ACTION-CONTRACT: Actions/Commanders/Captain Stretch/AGENTS.md#captain-stretch-generalfocus.cs
+// ACTION-CONTRACT-SHA256: 6ba2dc2b41555af902d3af88d9978c58e68519f6ee55b92a16e0a3a9396ab678
+
+// Documented Mix It Up endpoint literal: http://localhost:8911/api/v2/commands/{commandId}
 using System;
 using System.Net.Http;
 using System.Text;

@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/LotAT/AGENTS.md#lotat-dice-timeout.cs
+// ACTION-CONTRACT-SHA256: 7d135048e0626e1d57a43c109b64b9adb63c1a5d695ab3561b1535b83f142c82
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;

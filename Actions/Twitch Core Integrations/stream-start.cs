@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/AGENTS.md#stream-start.cs
+// ACTION-CONTRACT-SHA256: 94e70f7c6375a9282390571fba3b839341006b9486e2c0babbadb53371b78fbb
+
 using System;
 using System.Collections.Generic;
 

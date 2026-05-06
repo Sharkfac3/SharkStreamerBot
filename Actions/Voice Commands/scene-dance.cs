@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Voice Commands/AGENTS.md#scene-dance.cs
+// ACTION-CONTRACT-SHA256: 65e5de1c4e8c187c24145f4712a970c54e0c686d4886478f36fd44feef062f8f
+
 public class CPHInline
 {
     // Shared mode variable key.

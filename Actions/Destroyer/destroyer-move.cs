@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Destroyer/AGENTS.md#destroyer-move.cs
+// ACTION-CONTRACT-SHA256: c37c6eaea2d8541b875ecc88d8dffcb9106cceda0a46bd0df58aa97671f0a7b5
+
 using System;
 
 public class CPHInline

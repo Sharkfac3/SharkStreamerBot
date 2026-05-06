@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Rest Focus Loop/AGENTS.md#rest-focus-pre-focus-end.cs
+// ACTION-CONTRACT-SHA256: c6bdd7c923d5a32b1a6268bd7958155d16ac2de50dc879d3ae8e8ff8cc8f4ed8
+
 using System;
 using System.Net.Http;
 using System.Text;

@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Squad/AGENTS.md#offering.cs
+// ACTION-CONTRACT-SHA256: 195e3b5f6d42850d3147dd156988e40773160cff4499ee15f047af7e5c30b5b5
+
 using System;
 using System.Collections.Generic;
 

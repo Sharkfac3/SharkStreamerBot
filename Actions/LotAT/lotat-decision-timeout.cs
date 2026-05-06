@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/LotAT/AGENTS.md#lotat-decision-timeout.cs
+// ACTION-CONTRACT-SHA256: 503cfd87874c5e27243752e2f0050b68dfe3022eaee822bf9bae42dbd35e9768
+
 using System;
 
 public class CPHInline

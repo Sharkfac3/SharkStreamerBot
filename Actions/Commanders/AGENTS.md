@@ -31,26 +31,21 @@ Use this guide when editing or reviewing files under [Actions/Commanders/](./), 
 - [Actions/Commanders/Water Wizard/](Water%20Wizard/) scripts
 - Script Reference or operator documentation in this folder
 
-Activate the `brand-steward` role before changing public commander copy, character voice, command names presented to chat, or lore/character positioning.
-
 ## Primary Owner
 
 `streamerbot-dev` owns the C# runtime behavior, Streamer.bot paste readiness, global variable use, command wiring expectations, and compatibility with existing channel-point and chat-command triggers.
 
 ## Secondary Owners / Chain To
 
-- `brand-steward` — chain for public chat text, commander character voice, reward descriptions, naming, or any change to Captain Stretch, The Director, or Water Wizard identity.
-- `ops` — chain only for validation, paste/sync workflow, or agent-tree maintenance beyond this local guide.
+Chain to `brand-steward` for any change to commander character name, role description, or reward copy.
 
 ## Required Reading
 
-Read the relevant commander README before editing scripts:
+Read [Actions/AGENTS.md](../AGENTS.md) plus the relevant commander README before editing scripts:
 
 - [Actions/Commanders/Captain Stretch/AGENTS.md](Captain%20Stretch/AGENTS.md)
 - [Actions/Commanders/The Director/AGENTS.md](The%20Director/AGENTS.md)
 - [Actions/Commanders/Water Wizard/AGENTS.md](Water%20Wizard/AGENTS.md)
-- [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md)
-- [Actions/Helpers/AGENTS.md](../Helpers/AGENTS.md)
 - [Creative/Brand/BRAND-VOICE.md](../../Creative/Brand/BRAND-VOICE.md) when public copy changes
 - [Creative/Brand/CHARACTER-CODEX.md](../../Creative/Brand/CHARACTER-CODEX.md) when commander characterization changes
 
@@ -59,10 +54,7 @@ Read the relevant commander README before editing scripts:
 1. Identify the commander and trigger type: channel-point redeem, commander-only command, support command, or shared help.
 2. Preserve the commander slot model: Captain Stretch, The Director, and Water Wizard are independent slots and may all be active simultaneously.
 3. Preserve chat-facing command names unless the operator explicitly requests a rename.
-4. Read current state through `CPH.TryGetArg` or Streamer.bot globals defensively; protect against missing or malformed inputs.
-5. Keep scripts self-contained and paste-ready. Do not assume shared runtime files can be imported by Streamer.bot actions.
-6. Update the Script Reference section in this file when trigger variables, command behavior, state variables, or operator wiring changes.
-7. If a new global variable, OBS source, timer, or command contract is introduced, update [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md) when in scope or flag it in the handoff when out of scope.
+4. Update the Script Reference section in this file when trigger variables, command behavior, state variables, or operator wiring changes.
 
 Commander script map:
 
@@ -83,6 +75,24 @@ Support command rules:
 
 Active commanders cannot support themselves with their own support command. On commander redeem, compare the outgoing tenure counter to the persistent high score for that role.
 
+## SHARED-STATE
+
+Current commander slot globals:
+
+| Role | Active slot global |
+|---|---|
+| Captain Stretch | `current_captain_stretch` |
+| The Director | `current_the_director` |
+| Water Wizard | `current_water_wizard` |
+
+Support tenure counters and persistent high-score keys:
+
+| Role | Tenure counter | High score | High-score holder |
+|---|---|---|---|
+| Captain Stretch | `captain_stretch_thank_count` | `captain_stretch_thank_high_score` | `captain_stretch_thank_high_score_user` |
+| The Director | `the_director_award_count` | `the_director_award_high_score` | `the_director_award_high_score_user` |
+| Water Wizard | `water_wizard_hail_count` | `water_wizard_hail_high_score` | `water_wizard_hail_high_score_user` |
+
 ## Action Contracts
 
 <!-- ACTION-CONTRACTS:START -->
@@ -94,7 +104,9 @@ Active commanders cannot support themselves with their own support command. On c
       "script": "commanders.cs",
       "action": "Commanders - Active Commanders",
       "purpose": "Responds to the !commanders chat command with the currently active Captain Stretch, The Director, and Water Wizard slot holders.",
-      "triggers": ["Twitch -> Chat Command -> !commanders"],
+      "triggers": [
+        "Twitch -> Chat Command -> !commanders"
+      ],
       "globals": [
         "current_captain_stretch",
         "current_the_director",
@@ -113,16 +125,33 @@ Active commanders cannot support themselves with their own support command. On c
         "!commanderhelp"
       ],
       "runtimeBehavior": [
-        "Read the three non-persisted commander slot globals defensively.",
-        "Send one chat message listing only slots that currently have non-blank commander names, prefixing each listed commander username with @ for Twitch mention notifications.",
-        "If all three slots are blank, send a short fallback message that the commander deck is open.",
-        "Do not create, mutate, or persist any globals."
-      ],
-      "failureBehavior": [
-        "Treat missing or blank commander globals as open slots.",
-        "Return true after sending the roster or open-deck fallback message."
+        "Reads all commander slot globals defensively.",
+        "Sends active slot holders with Twitch @mentions.",
+        "Sends open-deck fallback when all slots are blank.",
+        "Does not create, mutate, or persist globals."
       ],
       "pasteTarget": "Streamer.bot Execute C# Code action for !commanders"
+    },
+    {
+      "script": "commander-help.cs",
+      "action": "Commanders - Help",
+      "purpose": "Displays commander help/routing information for chat.",
+      "triggers": [
+        "Twitch -> Chat Command -> !commanders"
+      ],
+      "globals": [],
+      "obsSources": [],
+      "obsScenes": [],
+      "timers": [],
+      "mixItUpCommandIds": [],
+      "overlayTopics": [],
+      "serviceUrls": [],
+      "requiredLiterals": [],
+      "runtimeBehavior": [
+        "Sends compact commander help text to chat."
+      ],
+      "failureBehavior": [],
+      "pasteTarget": "Streamer.bot Execute C# Code action for commander help"
     }
   ]
 }
@@ -131,36 +160,15 @@ Active commanders cannot support themselves with their own support command. On c
 
 ## Validation
 
-For script changes, perform the narrowest safe validation available:
-
-- Review the edited C# for Streamer.bot paste readiness: one `Execute()` entry point, no external imports beyond what Streamer.bot supports, and no dependencies on repo-only helper files.
-- Verify all global names, OBS names, timers, and Mix It Up command names against [Actions/SHARED-CONSTANTS.md](../SHARED-CONSTANTS.md).
-- Run shared-constants validation when constants or documented references change:
-
-```bash
-python3 Tools/StreamerBot/validate-shared-constants.py
-```
-
-For agent-doc changes, follow [validation](../../.agents/workflows/validation.md) and run the agent-tree validator with the task-requested report path. Record command output in the handoff or final change summary.
+See Actions/AGENTS.md for universal validation, boundary, and handoff rules.
 
 ## Boundaries / Out of Scope
 
-- Do not rename chat commands, Twitch rewards, global variables, or high-score keys unless explicitly requested.
-- Do not collapse the three commander slots into a single active commander model.
-- Do not change brand voice or character identity without `brand-steward` review.
-- Do not migrate Twitch, Squad, Voice Commands, LotAT, overlay app, or creative-domain behavior from this guide.
+See Actions/AGENTS.md for universal validation, boundary, and handoff rules.
 
 ## Handoff Notes
 
-After changes, follow these workflows:
-
-- [change-summary](../../.agents/workflows/change-summary.md) — terminal summary with changed files, paste targets, setup steps, and validation output.
-- [sync](../../.agents/workflows/sync.md) — repo-to-Streamer.bot manual paste expectations.
-- [validation](../../.agents/workflows/validation.md) — validation command selection and failure reporting.
-
-Paste targets are the edited `.cs` files under [Actions/Commanders/](./). Operator must manually paste changed script contents into the matching Streamer.bot actions and verify trigger wiring for channel-point redeems or chat commands.
-
-Brand handoff triggers: public chat copy, reward wording, command help text, commander identity, or character/lore changes. Include exactly which strings changed and whether `brand-steward` reviewed them.
+See Actions/AGENTS.md for universal validation, boundary, and handoff rules.
 
 ---
 
@@ -194,9 +202,6 @@ Brand handoff triggers: public chat copy, reward wording, command help text, com
 - `Captain Stretch/AGENTS.md`
 - `The Director/AGENTS.md`
 - `Water Wizard/AGENTS.md`
-
-### Shared Constants
-- Cross-script key sync reference: `Actions/SHARED-CONSTANTS.md`
 
 ---
 

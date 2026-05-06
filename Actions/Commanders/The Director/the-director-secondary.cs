@@ -1,3 +1,7 @@
+// ACTION-CONTRACT: Actions/Commanders/The Director/AGENTS.md#the-director-secondary.cs
+// ACTION-CONTRACT-SHA256: b92a23955e621a1149c9f6c4353b6f873c95059f5fec99f296fc19b2ee3e4a1c
+
+// Documented Mix It Up endpoint literal: http://localhost:8911/api/v2/commands/{commandId}
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Channel Points/AGENTS.md#explain-current-task.cs
+// ACTION-CONTRACT-SHA256: d165d03e67eb83ae741cbae06f40b7f6ff35665ff240866b229aaa12dc5aec9f
+
 using System;
 using System.Globalization;
 using System.Net.Http;

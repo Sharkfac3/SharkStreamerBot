@@ -1,3 +1,6 @@
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/AGENTS.md#watch-streak.cs
+// ACTION-CONTRACT-SHA256: 5ea767abdcc719daf08ab5372e918cb8f50d7e0f27b9b71d41b6e9d3e5422411
+
 using System;
 using System.Net.Http;
 using System.Text;

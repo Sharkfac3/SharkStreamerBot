@@ -1,3 +1,7 @@
+// ACTION-CONTRACT: Actions/Commanders/Water Wizard/AGENTS.md#water-wizard-redeem.cs
+// ACTION-CONTRACT-SHA256: 1b62ae87788abbd2b29101f12156b7040db93898f54740d9a21d24869f36cb39
+
+// Documented Mix It Up endpoint literal: http://localhost:8911/api/v2/commands/{commandId}
 using System;
 using System.Net.Http;
 using System.Text;
