@@ -33,6 +33,4 @@ Each project folder contains:
 
 ## Current Projects
 
-| Project | Folder | Status |
-|---|---|---|
-| Actions Scaffolding Refactor | [actions-scaffolding-refactor/](actions-scaffolding-refactor/) | active |
+_None active._
