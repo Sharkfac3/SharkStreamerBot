@@ -1,5 +1,5 @@
 // ACTION-CONTRACT: Actions/Intros/AGENTS.md#redeem-capture.cs
-// ACTION-CONTRACT-SHA256: 6c1e985641dcb7463ee456289363f7fc5f8486d7b32ea80728657e55fbff45a7
+// ACTION-CONTRACT-SHA256: 5e5b8dd5350ae01dfe83b0725f2709cc0bc54472762b6c5c284332d9cfd1dedf
 
 using System;
 using System.Net.Http;
@@ -23,7 +23,8 @@ public class CPHInline
      *
      * Required SB trigger args:
      * - userId       — Twitch numeric userId (string)
-     * - userLogin    — Twitch login (lowercase string)
+     * - userName     — Twitch login (lowercase string); stored as userLogin
+     * - user          — Twitch display name fallback if userName/userLogin is unavailable
      * - redemptionId — channel-point redemption ID (string); stored as redeemId
      * - rewardName   — reward display name (string); stored as rewardTitle
      * - rawInput     — user-supplied message; may be empty/null
@@ -40,21 +41,23 @@ public class CPHInline
         string rewardTitle = "";
         string userInput   = "";
 
-        CPH.TryGetArg("userId",      out userId);
-        CPH.TryGetArg("userLogin",   out userLogin);
-        CPH.TryGetArg("redemptionId", out redeemId);
-        CPH.TryGetArg("rewardName",   out rewardTitle);
-        CPH.TryGetArg("rawInput",    out userInput);
-
-        userId      = userId      ?? "";
-        userLogin   = userLogin   ?? "";
-        redeemId    = redeemId    ?? "";
-        rewardTitle = rewardTitle ?? "";
-        userInput   = userInput   ?? "";
+        userId      = GetStringArg("userId");
+        userLogin   = GetStringArg("userLogin", "userName", "user");
+        redeemId    = GetStringArg("redemptionId");
+        rewardTitle = GetStringArg("rewardName", "rewardTitle");
+        userInput   = GetStringArg("rawInput", "userInput", "input0", "message");
 
         if (string.IsNullOrWhiteSpace(redeemId))
         {
             CPH.LogInfo($"[redeem-capture] Missing redeemId — cannot capture redeem. userId={userId}");
+            return true;
+        }
+
+        if (string.IsNullOrWhiteSpace(userId) ||
+            string.IsNullOrWhiteSpace(userLogin) ||
+            string.IsNullOrWhiteSpace(rewardTitle))
+        {
+            CPH.LogInfo($"[redeem-capture] Missing required field — userId='{userId}' userLogin='{userLogin}' rewardTitle='{rewardTitle}' redeemId='{redeemId}'. Not posting.");
             return true;
         }
 
@@ -129,6 +132,17 @@ public class CPHInline
         }
 
         return true;
+    }
+
+    private string GetStringArg(params string[] names)
+    {
+        foreach (string name in names)
+        {
+            if (CPH.TryGetArg(name, out object value) && value != null)
+                return (value.ToString() ?? "").Trim();
+        }
+
+        return "";
     }
 
     private static string EscapeJsonString(string value)

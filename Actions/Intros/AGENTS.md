@@ -114,18 +114,19 @@ Chain to `app-dev` for info-service schema/routes/data behavior, `brand-steward`
         "pending-intros",
         "redemptionId",
         "rewardName",
+        "userName",
         "rawInput",
         "status",
         "pending"
       ],
       "runtimeBehavior": [
-        "Reads redemption/user/reward/input fields from Reward Redemption.",
+        "Reads redemption/user/reward/input fields from Reward Redemption, including userName as the Twitch login fallback for userLogin.",
         "No-ops when redemptionId is missing.",
         "GETs pending-intros by redemptionId and skips duplicates.",
         "POSTs a pending record keyed by redemptionId."
       ],
       "failureBehavior": [
-        "No-ops for missing redemptionId, duplicates, HTTP exceptions, or failed POST responses."
+        "No-ops for missing redemptionId, missing required record fields, duplicates, HTTP exceptions, or failed POST responses."
       ],
       "pasteTarget": "Streamer.bot Execute C# Code action: Intros - Redeem Capture"
     }

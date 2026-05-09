@@ -76,8 +76,9 @@ public class CPHInline
      * Expected trigger/input:
      * - Streamer.bot action wired to the "disco party" channel point redeem.
      * - No chat args required.
-     * - Reads the standard Twitch reward redemption `user` trigger variable so the
-     *   redeeming username can be passed into Mix It Up as a special identifier.
+     * - Reads the standard Twitch reward redemption user variables (`user`, with
+     *   `userName` / `userLogin` fallbacks) so the redeeming username can be passed
+     *   into Mix It Up as a special identifier.
      *
      * Required runtime variables (all global, non-persisted):
      * - stream_mode        — set by mode-garage / mode-workspace / mode-gamer scripts
@@ -271,11 +272,22 @@ public class CPHInline
     /// </summary>
     private string GetRedeemingUser()
     {
-        string user = "";
-        if (!CPH.TryGetArg("user", out user) || string.IsNullOrWhiteSpace(user))
-            return "";
+        return GetStringArg("user", "userName", "userLogin");
+    }
 
-        return user.Trim();
+    /// <summary>
+    /// Reads the first available Streamer.bot argument as a trimmed string.
+    /// Reward Redemption commonly exposes display name as `user` and login as `userName`.
+    /// </summary>
+    private string GetStringArg(params string[] names)
+    {
+        foreach (string name in names)
+        {
+            if (CPH.TryGetArg(name, out object value) && value != null)
+                return (value.ToString() ?? "").Trim();
+        }
+
+        return "";
     }
 
     /// <summary>

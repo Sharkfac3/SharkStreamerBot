@@ -26,6 +26,9 @@ upstream: https://docs.streamer.bot/api/triggers/twitch/channel-reward
 | `gigantifiedEmoteName` | string | Name of the gigantified emote (not available for all reward types). |
 | `gigantifiedEmoteUrl` | string | Image URL of the gigantified emote (not available for all reward types). |
 | `rewardCost` | int | Channel point cost of the reward. |
+| `user` | string | Redeeming user's display name from the shared Twitch User group. |
+| `userId` | string | Redeeming user's Twitch user ID from the shared Twitch User group. |
+| `userName` | string | Redeeming user's lowercase login from the shared Twitch User group; use this when a schema needs login. |
 | `rewardType` | string | Type of reward: `send_highlighted_message`, `random_sub_emote_unlock`, `chosen_sub_emote_unlock`, `chosen_modified_sub_emote_unlock`, `single_message_bypass_sub_mode`, `message_effect`, `gigantify_an_emote`, `celebration`. |
 | `unlockedEmoteId` | string | ID of the unlocked emote (not available for all reward types). |
 | `unlockedEmoteName` | string | Name of the unlocked emote (not available for all reward types). |
@@ -34,6 +37,7 @@ upstream: https://docs.streamer.bot/api/triggers/twitch/channel-reward
 ### Caveats
 
 - Emote and userInput variables are only populated for applicable `rewardType` values.
+- Observed channel reward payloads expose the redeemer login as `userName`, not `userLogin`. Use fallback lookup (`userLogin`, `userName`, `user`) when sharing helper code across trigger types.
 
 ### Used in repo
 
@@ -59,6 +63,9 @@ upstream: https://docs.streamer.bot/api/triggers/twitch/channel-reward
 | `rawInput` | string | Text entered by the user (if user input enabled on the reward). |
 | `rawInputEscaped` | string | Escaped version of user text (if user input enabled). |
 | `redemptionId` | string | Unique ID for this redemption. |
+| `user` | string | Redeeming user's display name from the shared Twitch User group. |
+| `userId` | string | Redeeming user's Twitch user ID from the shared Twitch User group. |
+| `userName` | string | Redeeming user's lowercase login from the shared Twitch User group; use this when a schema needs login. |
 | `rewardCost` | number | Cost of the reward in channel points. |
 | `rewardId` | string | Unique ID of the reward. |
 | `rewardName` | string | Name of the reward. |
@@ -68,6 +75,7 @@ upstream: https://docs.streamer.bot/api/triggers/twitch/channel-reward
 ### Caveats
 
 - `rawInput` and `rawInputEscaped` only populate when user input is enabled for the reward.
+- Reward Redemption exposes the redeemer login as `userName`, not `userLogin`, in observed Streamer.bot payloads. Use fallback lookup (`userLogin`, `userName`, `user`) when sharing helper code across trigger types.
 - Requires selecting a specific reward in SB trigger config (or use "Any").
 - EventSub-based trigger.
 
@@ -93,6 +101,9 @@ upstream: https://docs.streamer.bot/api/triggers/twitch/channel-reward
 |---|---|---|
 | `rawInputEscaped` | string | Escaped text entered by the user (if user input enabled). |
 | `redemptionId` | string | Unique ID for this redemption. |
+| `user` | string | Redeeming user's display name from the shared Twitch User group. |
+| `userId` | string | Redeeming user's Twitch user ID from the shared Twitch User group. |
+| `userName` | string | Redeeming user's lowercase login from the shared Twitch User group; use this when a schema needs login. |
 | `rewardCost` | number | Cost of the reward in channel points. |
 | `rewardId` | string | Unique ID of the reward. |
 | `rewardName` | string | Name of the reward. |
@@ -101,6 +112,7 @@ upstream: https://docs.streamer.bot/api/triggers/twitch/channel-reward
 
 ### Caveats
 
+- Observed channel reward payloads expose the redeemer login as `userName`, not `userLogin`. Use fallback lookup (`userLogin`, `userName`, `user`) when sharing helper code across trigger types.
 - EventSub-based trigger.
 
 ### Used in repo
