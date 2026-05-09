@@ -29,6 +29,7 @@ The key sequence is: `rest-focus-loop-start.cs` starts the loop → timer fires 
 ## Required Reading
 
 - [Actions/AGENTS.md](../AGENTS.md) for shared constants, helper-pattern routing, contracts, validation, and handoff rules.
+- [Actions/constants/effects.md](../constants/effects.md) for canonical rest/focus loop globals, phases, and timer names.
 - [Actions/Helpers/timers.md](../Helpers/timers.md) and [Actions/Helpers/cph-api-signatures.md](../Helpers/cph-api-signatures.md) for timer API notes.
 - [Actions/Commanders/Water Wizard/water-wizard-castrest.cs](../Commanders/Water%20Wizard/water-wizard-castrest.cs) when changing rest override behavior.
 - [Actions/Commanders/Captain Stretch/captain-stretch-generalfocus.cs](../Commanders/Captain%20Stretch/captain-stretch-generalfocus.cs) when changing focus override behavior.
@@ -43,6 +44,8 @@ The key sequence is: `rest-focus-loop-start.cs` starts the loop → timer fires 
 - `CPH.SetTimerInterval(string, int)` is a production dependency but remains worth smoke-testing in the operator's Streamer.bot build.
 
 ## Runtime Map
+
+Canonical names for the timers and globals below live in [Actions/constants/effects.md](../constants/effects.md).
 
 Required timers:
 
@@ -71,107 +74,4 @@ Follow [Actions/AGENTS.md](../AGENTS.md) for shared boundaries, action-script va
 
 ## Action Contracts
 
-<!-- ACTION-CONTRACTS:START -->
-```json
-{
-  "version": 1,
-  "contracts": [
-    {
-      "script": "rest-focus-focus-end.cs",
-      "action": "Rest Focus Focus End",
-      "purpose": "Contracts expected runtime behavior for rest-focus-focus-end.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented rest-focus-focus-end.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for rest-focus-focus-end.cs"
-    },
-    {
-      "script": "rest-focus-loop-start.cs",
-      "action": "Rest Focus Loop Start",
-      "purpose": "Contracts expected runtime behavior for rest-focus-loop-start.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented rest-focus-loop-start.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for rest-focus-loop-start.cs"
-    },
-    {
-      "script": "rest-focus-pre-focus-end.cs",
-      "action": "Rest Focus Pre Focus End",
-      "purpose": "Contracts expected runtime behavior for rest-focus-pre-focus-end.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented rest-focus-pre-focus-end.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for rest-focus-pre-focus-end.cs"
-    },
-    {
-      "script": "rest-focus-pre-rest-end.cs",
-      "action": "Rest Focus Pre Rest End",
-      "purpose": "Contracts expected runtime behavior for rest-focus-pre-rest-end.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented rest-focus-pre-rest-end.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for rest-focus-pre-rest-end.cs"
-    },
-    {
-      "script": "rest-focus-rest-end.cs",
-      "action": "Rest Focus Rest End",
-      "purpose": "Contracts expected runtime behavior for rest-focus-rest-end.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented rest-focus-rest-end.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for rest-focus-rest-end.cs"
-    }
-  ]
-}
-```
-<!-- ACTION-CONTRACTS:END -->
+Contracts for all 5 Rest Focus Loop scripts live in [contracts.md](contracts.md).

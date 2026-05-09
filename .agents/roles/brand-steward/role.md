@@ -33,6 +33,8 @@ Activate for chat text, stream titles, announcements, reward copy, marketing cop
 
 Use [Creative/Brand/AGENTS.md](../../../Creative/Brand/AGENTS.md) for identity/voice/canon, [Creative/Marketing/AGENTS.md](../../../Creative/Marketing/AGENTS.md) for public/community strategy, and [Creative/WorldBuilding/AGENTS.md](../../../Creative/WorldBuilding/AGENTS.md) when LotAT canon is involved.
 
+For Actions review work, see [actions-scope.md](actions-scope.md).
+
 ## Required Workflows
 
 - [coordination](../../workflows/coordination.md) before starting.
