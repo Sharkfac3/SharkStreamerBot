@@ -39,38 +39,17 @@ Every session working under Actions/ must read:
 
 Local AGENTS.md files list additional required reading specific to that folder only.
 
-## Domain Rules
+## Rules
 
-- Local action-group `AGENTS.md` action contracts under Actions are the source of truth for how Streamer.bot action scripts must operate. Update the contract first when behavior changes, then make the `.cs` script conform to it.
-- Every edited C# script under Actions must have a matching machine-readable action contract in the nearest local `AGENTS.md`, plus a current `ACTION-CONTRACT` / `ACTION-CONTRACT-SHA256` stamp generated from that contract.
-- If an operator requests behavior that conflicts with an existing action contract, treat the contract change as part of the same task; do not silently implement behavior that the contract does not describe.
-- Keep `Actions/` focused on Streamer.bot runtime scripts and action-group docs.
-- Scripts should remain pasteable into Streamer.bot `Execute C# Code` actions.
-- Use Streamer.bot's `CPHInline` style unless a local guide explicitly says otherwise.
-- Do not add external NuGet/package dependencies to runtime scripts.
-- Preserve existing chat command names, global keys, timer names, OBS source names, and Mix It Up command IDs unless the operator explicitly asks for a migration.
-- When chat output directly addresses, thanks, warns, assigns, or lists a specific Twitch user, format the name as `@username` so Twitch mention notifications/highlights work. Use the helper pattern in `Actions/Helpers/chat-input.md` and avoid `@` for role names, character names, or generic labels.
-- Check `Actions/SHARED-CONSTANTS.md` before adding or renaming shared values.
-- Be explicit about persisted vs. non-persisted globals when using `CPH.SetGlobalVar`.
-- Prefer small, local changes over broad refactors; live stream reliability comes first.
-- Avoid duplicate helper implementations when a pattern already exists in `Actions/Helpers/`.
+Domain rules and universal script rules for all work under `Actions/` live in [RULES.md](RULES.md). Read it before making any changes.
 
-## Universal Script Rules
+## Ownership
 
-These apply to every .cs script under Actions/ and are not restated in local guides:
+Domain-level ownership rules and role matrix live in [OWNERSHIP.md](OWNERSHIP.md). Per-folder ownership is in each folder's AGENTS.md.
 
-- Scripts are self-contained: do not assume shared runtime files can be imported at runtime.
-- Read runtime state defensively via `CPH.TryGetArg` or Streamer.bot globals; protect against missing or malformed inputs.
+## Contract Schema and Validation
 
-## Shared Ownership Rules
-
-`streamerbot-dev` owns all C# runtime behavior under `Actions/` by default.
-
-`brand-steward` review is required before any change to: public chat output, TTS/spoken text,
-overlay copy, command names visible to chat, or event announcement wording — across all folders.
-Local AGENTS.md files only list secondary owners when the folder adds exceptions to this rule.
-
-`ops` handles validation, paste/sync workflow, and agent-tree maintenance across all folders.
+Contract format specification, field definitions, and validation instructions live in [CONTRACT-SCHEMA.md](CONTRACT-SCHEMA.md). Load it when writing or validating a script contract.
 
 ## Folder Routing
 
@@ -115,74 +94,4 @@ Streamer.bot is used here as the live orchestration layer:
 | `Actions/Helpers/mixitup-command-api.md` | Mix It Up command API payload and call patterns. |
 | `Actions/Helpers/json-no-external-libraries.md` | JSON handling patterns that avoid external dependencies. |
 
-## Action Contracts
 
-Action-group `AGENTS.md` files may include a required machine-readable source-of-truth block for scripts in that folder:
-
-````md
-<!-- ACTION-CONTRACTS:START -->
-```json
-{
-  "version": 1,
-  "contracts": [
-    {
-      "script": "example.cs",
-      "action": "Streamer.bot action name",
-      "purpose": "What this action is supposed to do.",
-      "triggers": ["Twitch -> Chat Message"],
-      "globals": ["exampleGlobal"],
-      "timers": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": ["Step-by-step required runtime behavior."],
-      "failureBehavior": ["Required safe failure behavior."],
-      "pasteTarget": "Matching Streamer.bot Execute C# Code action"
-    }
-  ]
-}
-```
-<!-- ACTION-CONTRACTS:END -->
-````
-
-Contract rules:
-
-1. Read the nearest local `AGENTS.md` before editing an action script.
-2. Add or update the contract before changing behavior, trigger expectations, globals, timers, OBS names, Mix It Up IDs, overlay topics, service URLs, paste targets, or failure behavior.
-3. Run `python3 Tools/StreamerBot/Validation/action_contracts.py --script "Actions/<folder>/<script>.cs" --stamp` after contract updates to refresh the script stamp.
-4. Run the same command without `--stamp` as validation, or run `python3 Tools/StreamerBot/Validation/action_contracts.py --changed` before handoff.
-5. Do not treat script comments or implementation as the source of truth when they conflict with the local action contract; fix the contract or fix the script so they align.
-
-## Validation and Handoff
-
-After editing any Actions/**/*.cs file:
-1. Run `python Tools/StreamerBot/Validation/action_contracts.py --changed` to check contract alignment.
-2. Include Streamer.bot paste targets in your handoff.
-3. Note smoke-test steps for the changed action.
-
-After editing an ACTION-CONTRACTS block in any AGENTS.md:
-1. Run `python Tools/StreamerBot/Validation/action_contracts.py --stamp` to refresh SHA256 stamps in .cs files.
-2. Run `--all` to confirm clean state.
-
-## Sync and Handoff Expectations
-
-For changed C# files, include in your final summary:
-
-- Streamer.bot action name or likely paste target.
-- Trigger expectations, if changed or newly added.
-- Globals, timers, OBS sources, broker topics, or Mix It Up command IDs touched.
-- Validation performed, such as script review, local grep checks, or smoke-test recommendations.
-- Any required operator setup in Streamer.bot, OBS, Mix It Up, or local apps.
-
-If a change affects shared names, update `Actions/SHARED-CONSTANTS.md` and all listed consumers before handoff.
-
-## Boundaries
-
-- App implementation belongs in `Apps/`, not `Actions/`.
-- Mix It Up export/import tooling belongs in `Tools/MixItUp/`, not `Actions/`.
-- Streamer.bot support tooling belongs in `Tools/StreamerBot/`, not `Actions/`.
-- Brand/canon/story/art content belongs in `Creative/` unless it is embedded runtime copy for an action.
-- Repo-wide workflow and architecture docs belong in `.agents/`.

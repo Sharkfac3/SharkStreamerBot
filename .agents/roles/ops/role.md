@@ -34,6 +34,8 @@ Activate for validation, sync workflow, change summaries, routing updates, local
 
 Use [Tools/AgentTree/AGENTS.md](../../../Tools/AgentTree/AGENTS.md), [Tools/StreamerBot/AGENTS.md](../../../Tools/StreamerBot/AGENTS.md), and [Tools/MixItUp/AGENTS.md](../../../Tools/MixItUp/AGENTS.md) for repo architecture routing.
 
+For Actions validation and maintenance, see [actions-scope.md](actions-scope.md).
+
 ## Required Workflows
 
 - [coordination](../../workflows/coordination.md) before starting.

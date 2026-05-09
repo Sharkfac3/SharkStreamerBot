@@ -43,6 +43,7 @@ Chain to `brand-steward` for any change to commander character name, role descri
 
 Read [Actions/AGENTS.md](../AGENTS.md) plus the relevant commander README before editing scripts:
 
+- [Actions/constants/commanders.md](../constants/commanders.md) — canonical commander slot globals, support counters, cooldown vars, and high-score keys.
 - [Actions/Commanders/Captain Stretch/AGENTS.md](Captain%20Stretch/AGENTS.md)
 - [Actions/Commanders/The Director/AGENTS.md](The%20Director/AGENTS.md)
 - [Actions/Commanders/Water Wizard/AGENTS.md](Water%20Wizard/AGENTS.md)
@@ -54,7 +55,7 @@ Read [Actions/AGENTS.md](../AGENTS.md) plus the relevant commander README before
 1. Identify the commander and trigger type: channel-point redeem, commander-only command, support command, or shared help.
 2. Preserve the commander slot model: Captain Stretch, The Director, and Water Wizard are independent slots and may all be active simultaneously.
 3. Preserve chat-facing command names unless the operator explicitly requests a rename.
-4. Update the Script Reference section in this file when trigger variables, command behavior, state variables, or operator wiring changes.
+4. Update [script-reference.md](script-reference.md) when trigger variables, command behavior, state variables, or operator wiring changes.
 
 Commander script map:
 
@@ -77,6 +78,8 @@ Active commanders cannot support themselves with their own support command. On c
 
 ## SHARED-STATE
 
+Canonical commander names for the globals below live in [Actions/constants/commanders.md](../constants/commanders.md).
+
 Current commander slot globals:
 
 | Role | Active slot global |
@@ -93,71 +96,6 @@ Support tenure counters and persistent high-score keys:
 | The Director | `the_director_award_count` | `the_director_award_high_score` | `the_director_award_high_score_user` |
 | Water Wizard | `water_wizard_hail_count` | `water_wizard_hail_high_score` | `water_wizard_hail_high_score_user` |
 
-## Action Contracts
-
-<!-- ACTION-CONTRACTS:START -->
-```json
-{
-  "version": 1,
-  "contracts": [
-    {
-      "script": "commanders.cs",
-      "action": "Commanders - Active Commanders",
-      "purpose": "Responds to the !commanders chat command with the currently active Captain Stretch, The Director, and Water Wizard slot holders.",
-      "triggers": [
-        "Twitch -> Chat Command -> !commanders"
-      ],
-      "globals": [
-        "current_captain_stretch",
-        "current_the_director",
-        "current_water_wizard"
-      ],
-      "timers": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [
-        "Captain Stretch",
-        "The Director",
-        "Water Wizard",
-        "!commanderhelp"
-      ],
-      "runtimeBehavior": [
-        "Reads all commander slot globals defensively.",
-        "Sends active slot holders with Twitch @mentions.",
-        "Sends open-deck fallback when all slots are blank.",
-        "Does not create, mutate, or persist globals."
-      ],
-      "pasteTarget": "Streamer.bot Execute C# Code action for !commanders"
-    },
-    {
-      "script": "commander-help.cs",
-      "action": "Commanders - Help",
-      "purpose": "Displays commander help/routing information for chat.",
-      "triggers": [
-        "Twitch -> Chat Command -> !commanders"
-      ],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Sends compact commander help text to chat."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for commander help"
-    }
-  ]
-}
-```
-<!-- ACTION-CONTRACTS:END -->
-
 ## Validation
 
 See Actions/AGENTS.md for universal validation, boundary, and handoff rules.
@@ -170,142 +108,10 @@ See Actions/AGENTS.md for universal validation, boundary, and handoff rules.
 
 See Actions/AGENTS.md for universal validation, boundary, and handoff rules.
 
----
+## Action Contracts
+
+Contracts for all Commanders scripts live in [contracts.md](contracts.md). Load it when validating or updating a script contract.
 
 ## Script Reference
 
-### Model Rules
-- Three commander slots exist:
-  - Captain Stretch
-  - The Director
-  - Water Wizard
-- All three commander slots can be active simultaneously.
-- Redeem behavior should remain backward-compatible unless intentionally changed.
-
-### Support Command Rules
-- Chat can support active commanders with:
-  - `!hail` (Water Wizard)
-  - `!thank` (Captain Stretch)
-  - `!award` (The Director)
-- Active commander cannot support themselves with their own support command.
-- Each support command increments a per-tenure counter.
-- On commander redeem, outgoing tenure counter is compared to persistent high score for that role.
-
-### Commander-Only Command Rules
-- Water Wizard can run `!hydrate`, `!orb`, and `!castrest` when the relevant feature window is active.
-- Captain Stretch can run `!stretch`, `!shrimp`, and `!generalfocus` when the relevant feature window is active.
-- The Director can run `!checkchat`, `!toad`, `!primary`, and `!secondary`.
-- Unauthorized callers should get short guidance that points them back to the active commander support command.
-- New loop-control commands must preserve the existing commander assignment model.
-
-### Commander Docs
-- `Captain Stretch/AGENTS.md`
-- `The Director/AGENTS.md`
-- `Water Wizard/AGENTS.md`
-
----
-
-### Script: `commander-help.cs`
-
-#### Purpose
-Gives the caller a short, commander-specific help message in chat.
-
-#### Expected Trigger / Input
-- Chat command or action trigger for a commander help command (operator chooses the exact command name, such as `!commanderhelp`).
-- Reads `user`.
-
-#### Required Runtime Variables
-- Reads `current_captain_stretch`.
-- Reads `current_the_director`.
-- Reads `current_water_wizard`.
-
-#### Key Outputs / Side Effects
-- If caller is the active Captain Stretch, explains `!stretch` and `!shrimp`.
-- If caller is the active The Director, explains `!checkchat`, `!toad`, `!primary`, and `!secondary`.
-- If caller is the active Water Wizard, explains `!hydrate` and `!orb`.
-- If caller holds multiple commander roles, sends one short help message for each matching role.
-- If caller is not an active commander, sends a short guidance message telling them to redeem first.
-
-#### Mix It Up Actions
-- None.
-
-#### OBS Interactions
-- None directly.
-
-#### Wait Behavior
-- None.
-
-#### Chat / Log Output
-- Sends short role-specific command summaries in chat.
-- Sends a short fallback guidance message for non-commanders.
-
-#### Operator Notes
-- Wire this script to the chat command name you want to use.
-- This script is read-only: it does not create or change any global variables.
-
----
-
-### Script: `commanders.cs`
-
-#### Purpose
-Tells chat who currently holds each commander slot.
-
-#### Expected Trigger / Input
-- Chat command trigger: `!commanders`.
-- Does not require caller input.
-
-#### Required Runtime Variables
-- Reads `current_captain_stretch`.
-- Reads `current_the_director`.
-- Reads `current_water_wizard`.
-
-#### Key Outputs / Side Effects
-- If any commander slots are active, sends one chat message listing active slot holders with `@` before each username for Twitch mention notifications.
-- If no commander slots are active, sends a short open-deck fallback message.
-- Does not create or change any global variables.
-
-#### Mix It Up Actions
-- None.
-
-#### OBS Interactions
-- None directly.
-
-#### Wait Behavior
-- None.
-
-#### Chat / Log Output
-- Sends one short active-roster or fallback message in chat.
-
-#### Operator Notes
-- Wire this script to the `!commanders` chat command.
-- This script is read-only: it does not create or change any global variables.
-
----
-
-## Trigger Variables
-
-Access in C# via `CPH.TryGetArg("variableName", out T value)`.
-
-### Channel Reward Redemption (commander role redeems)
-
-Commander role assignment is triggered via Twitch → Channel Reward → Reward Redemption.
-
-| Variable | Type | Notes |
-|---|---|---|
-| `user` | string | Display name of the redeeming user — becomes the new commander |
-| `userId` | string | Twitch user ID |
-| `rewardName` | string | Name of the channel point reward |
-| `rewardId` | string | Unique reward identifier |
-| `rawInput` | string | Optional user text input (if the reward prompts for it) |
-
-### Chat Message (support commands: !thank, !award, !hail)
-
-Support commands are triggered via Twitch → Chat → Message or a Command trigger.
-
-| Variable | Type | Notes |
-|---|---|---|
-| `user` | string | Display name of the user running the command |
-| `userId` | string | Twitch user ID |
-| `message` | string | Full chat message |
-| `rawInput` | string | Fallback if `message` is empty |
-| `msgId` | string | Unique message ID — use for duplicate detection |
+Detailed per-script documentation lives in [script-reference.md](script-reference.md). Load it when implementing or reviewing a specific commander script.
