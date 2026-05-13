@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Clone/clone-empire-move.cs
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Clone/clone-empire-move.cs
 // ACTION-CONTRACT-SHA256: 722a6b4abab25b379fe45587ab3efbbcc3809496f0240530579b781bdbedafab
 
 using System;
@@ -884,3 +884,6 @@ public class CPHInline
         return builder.ToString();
     }
 }
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Clone/clone-empire-move.cs
+// ACTION-CONTRACT-SHA256: 722a6b4abab25b379fe45587ab3efbbcc3809496f0240530579b781bdbedafab
+

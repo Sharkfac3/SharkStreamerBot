@@ -111,3 +111,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Commanders/Water Wizard/AGENTS.md#water-wizard-redeem.cs
+// ACTION-CONTRACT-SHA256: 1b62ae87788abbd2b29101f12156b7040db93898f54740d9a21d24869f36cb39
+

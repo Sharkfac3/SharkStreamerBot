@@ -162,3 +162,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Commanders/The Director/AGENTS.md#the-director-primary.cs
+// ACTION-CONTRACT-SHA256: 7f4dadced40e618af4c57477b61c5f78e8da3a37301178dbeb15d6090969bf2a
+

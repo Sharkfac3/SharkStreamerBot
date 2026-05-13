@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Twitch Hype Train/AGENTS.md#hype-train-end.cs
+// ACTION-CONTRACT: Actions/Twitch Hype Train/contracts.md#hype-train-end.cs
 // ACTION-CONTRACT-SHA256: 6fac7937118adff3d90fb920745c80d4e3ddfab5adecdee97ce94b44c8a37cce
 
 using System;
@@ -174,3 +174,6 @@ public class CPHInline
             || commandId.IndexOf("replace", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 }
+// ACTION-CONTRACT: Actions/Twitch Hype Train/contracts.md#hype-train-end.cs
+// ACTION-CONTRACT-SHA256: 6fac7937118adff3d90fb920745c80d4e3ddfab5adecdee97ce94b44c8a37cce
+

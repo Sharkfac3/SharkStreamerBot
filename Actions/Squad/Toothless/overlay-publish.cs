@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Toothless/overlay-publish.cs
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Toothless/overlay-publish.cs
 // ACTION-CONTRACT-SHA256: b40fd9bddd76fcd4d684ebd14b466f8b7a41fb87072e9b4dce046c070f970290
 
 using System;
@@ -136,3 +136,6 @@ public class CPHInline
         return s.Replace("\\", "\\\\").Replace("\"", "\\\"");
     }
 }
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Toothless/overlay-publish.cs
+// ACTION-CONTRACT-SHA256: b40fd9bddd76fcd4d684ebd14b466f8b7a41fb87072e9b4dce046c070f970290
+

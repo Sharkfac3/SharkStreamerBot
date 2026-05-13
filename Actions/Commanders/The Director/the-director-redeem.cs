@@ -108,3 +108,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Commanders/The Director/AGENTS.md#the-director-redeem.cs
+// ACTION-CONTRACT-SHA256: e34f6a79ac24ee6984310ff822218086646d1aedf1170d997980e81b8ea2bcb8
+

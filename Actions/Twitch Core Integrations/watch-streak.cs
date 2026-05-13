@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Twitch Core Integrations/AGENTS.md#watch-streak.cs
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/contracts.md#watch-streak.cs
 // ACTION-CONTRACT-SHA256: 5ea767abdcc719daf08ab5372e918cb8f50d7e0f27b9b71d41b6e9d3e5422411
 
 using System;
@@ -136,3 +136,6 @@ public class CPHInline
             || commandId.IndexOf("replace", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 }
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/contracts.md#watch-streak.cs
+// ACTION-CONTRACT-SHA256: 5ea767abdcc719daf08ab5372e918cb8f50d7e0f27b9b71d41b6e9d3e5422411
+

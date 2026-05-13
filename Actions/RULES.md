@@ -13,8 +13,8 @@ These rules govern all agent and developer work under `Actions/`. They are enfor
 
 ## Domain Rules
 
-- Local action-group `AGENTS.md` action contracts under Actions are the source of truth for how Streamer.bot action scripts must operate. Update the contract first when behavior changes, then make the `.cs` script conform to it.
-- Every edited C# script under Actions must have a matching machine-readable action contract in the nearest local `AGENTS.md`, plus a current `ACTION-CONTRACT` / `ACTION-CONTRACT-SHA256` stamp generated from that contract.
+- Local action-group `contracts.md` action contracts under Actions are the source of truth for how Streamer.bot action scripts must operate. Update the contract first when behavior changes, then make the `.cs` script conform to it.
+- Every edited C# script under Actions must have a matching machine-readable action contract in the nearest local `contracts.md` (or legacy `AGENTS.md` fallback), plus a current `ACTION-CONTRACT` / `ACTION-CONTRACT-SHA256` stamp generated from that contract.
 - If an operator requests behavior that conflicts with an existing action contract, treat the contract change as part of the same task; do not silently implement behavior that the contract does not describe.
 - Keep `Actions/` focused on Streamer.bot runtime scripts and action-group docs.
 - Scripts should remain pasteable into Streamer.bot `Execute C# Code` actions.

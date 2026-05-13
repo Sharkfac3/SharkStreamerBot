@@ -48,7 +48,7 @@ Contract rules:
 
 1. Read the nearest local `AGENTS.md` before editing an action script.
 2. Add or update the contract before changing behavior, trigger expectations, globals, timers, OBS names, Mix It Up IDs, overlay topics, service URLs, paste targets, or failure behavior.
-3. Run `python3 Tools/StreamerBot/Validation/action_contracts.py --script "Actions/<folder>/<script>.cs" --stamp` after contract updates to refresh the script stamp.
+3. Run `python3 Tools/StreamerBot/Validation/action_contracts.py --script "Actions/<folder>/<script>.cs" --stamp` after contract updates to refresh the script stamp from the local `contracts.md` source (or legacy `AGENTS.md` fallback).
 4. Run the same command without `--stamp` as validation, or run `python3 Tools/StreamerBot/Validation/action_contracts.py --changed` before handoff.
 5. Do not treat script comments or implementation as the source of truth when they conflict with the local action contract; fix the contract or fix the script so they align.
 
@@ -60,7 +60,7 @@ After editing any Actions/**/*.cs file:
 3. Note smoke-test steps for the changed action.
 
 After editing an ACTION-CONTRACTS block in any `contracts.md` file:
-1. Run `python Tools/StreamerBot/Validation/action_contracts.py --stamp` to refresh SHA256 stamps in .cs files.
+1. Run `python3 Tools/StreamerBot/Validation/action_contracts.py --changed --stamp` for changed scripts, or `python3 Tools/StreamerBot/Validation/action_contracts.py --all --stamp` when doing a repo-wide contract refresh.
 2. Run `--all` to confirm clean state.
 
 ## Sync and Handoff Expectations

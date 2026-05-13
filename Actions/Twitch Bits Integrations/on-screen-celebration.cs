@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Twitch Bits Integrations/AGENTS.md#on-screen-celebration.cs
+// ACTION-CONTRACT: Actions/Twitch Bits Integrations/contracts.md#on-screen-celebration.cs
 // ACTION-CONTRACT-SHA256: 13a52b9c9fb184a06ae9d535a912612f0161a9bfe2f6fb0e836df6b72d897aaf
 
 using System;
@@ -176,3 +176,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Twitch Bits Integrations/contracts.md#on-screen-celebration.cs
+// ACTION-CONTRACT-SHA256: 13a52b9c9fb184a06ae9d535a912612f0161a9bfe2f6fb0e836df6b72d897aaf
+

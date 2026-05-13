@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Overlay/AGENTS.md#test-overlay.cs
+// ACTION-CONTRACT: Actions/Overlay/contracts.md#test-overlay.cs
 // ACTION-CONTRACT-SHA256: cb0b35783a7cf89b2abbc9beca40732f034acb82950598ef25d267c756162f57
 
 using System;
@@ -206,3 +206,6 @@ public class CPHInline
         return true;
     }
 }
+// ACTION-CONTRACT: Actions/Overlay/contracts.md#test-overlay.cs
+// ACTION-CONTRACT-SHA256: cb0b35783a7cf89b2abbc9beca40732f034acb82950598ef25d267c756162f57
+

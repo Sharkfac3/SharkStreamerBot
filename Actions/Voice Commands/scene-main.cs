@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Voice Commands/AGENTS.md#scene-main.cs
+// ACTION-CONTRACT: Actions/Voice Commands/contracts.md#scene-main.cs
 // ACTION-CONTRACT-SHA256: 791b40884b06bdcaeadfe492acaae1546c605609baae3cb250c9523d6f2e0a8f
 
 public class CPHInline
@@ -83,3 +83,6 @@ public class CPHInline
         return $"{modePrefix}: {SCENE_SECTION_LABEL}";
     }
 }
+// ACTION-CONTRACT: Actions/Voice Commands/contracts.md#scene-main.cs
+// ACTION-CONTRACT-SHA256: 791b40884b06bdcaeadfe492acaae1546c605609baae3cb250c9523d6f2e0a8f
+

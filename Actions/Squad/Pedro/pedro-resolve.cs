@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Pedro/pedro-resolve.cs
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Pedro/pedro-resolve.cs
 // ACTION-CONTRACT-SHA256: 53b59c5ffba67301154e47df2589b38ae8a434640e58cd80eafc5396de4be93b
 
 using System;
@@ -176,3 +176,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Pedro/pedro-resolve.cs
+// ACTION-CONTRACT-SHA256: 53b59c5ffba67301154e47df2589b38ae8a434640e58cd80eafc5396de4be93b
+

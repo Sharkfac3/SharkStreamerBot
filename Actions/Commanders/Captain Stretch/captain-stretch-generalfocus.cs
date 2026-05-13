@@ -252,3 +252,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Commanders/Captain Stretch/AGENTS.md#captain-stretch-generalfocus.cs
+// ACTION-CONTRACT-SHA256: 6ba2dc2b41555af902d3af88d9978c58e68519f6ee55b92a16e0a3a9396ab678
+
