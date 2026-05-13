@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/LotAT/AGENTS.md#lotat-decision-timeout.cs
+// ACTION-CONTRACT: Actions/LotAT/contracts.md#lotat-decision-timeout.cs
 // ACTION-CONTRACT-SHA256: 503cfd87874c5e27243752e2f0050b68dfe3022eaee822bf9bae42dbd35e9768
 
 using System;
@@ -175,3 +175,6 @@ public class CPHInline
         CPH.SetGlobalVar(VAR_LOTAT_SESSION_LAST_END_STATE, "", false);
     }
 }
+// ACTION-CONTRACT: Actions/LotAT/contracts.md#lotat-decision-timeout.cs
+// ACTION-CONTRACT-SHA256: 503cfd87874c5e27243752e2f0050b68dfe3022eaee822bf9bae42dbd35e9768
+

@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Pedro/overlay-publish.cs
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Pedro/overlay-publish.cs
 // ACTION-CONTRACT-SHA256: 1cceee130637c4af85cfc3e3f16683367aa7ec353e2b9321f8e3aabc6512d2e3
 
 using System;
@@ -150,3 +150,6 @@ public class CPHInline
         return s.Replace("\\", "\\\\").Replace("\"", "\\\"");
     }
 }
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Pedro/overlay-publish.cs
+// ACTION-CONTRACT-SHA256: 1cceee130637c4af85cfc3e3f16683367aa7ec353e2b9321f8e3aabc6512d2e3
+

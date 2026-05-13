@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Temporary/AGENTS.md#temp-focus-timer-end.cs
+// ACTION-CONTRACT: Actions/Temporary/contracts.md#temp-focus-timer-end.cs
 // ACTION-CONTRACT-SHA256: 6ea33bc83b607abc39375a697e7bbcccaed89b713b2f0524e933ea971d4407e7
 
 using System;
@@ -84,3 +84,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Temporary/contracts.md#temp-focus-timer-end.cs
+// ACTION-CONTRACT-SHA256: 6ea33bc83b607abc39375a697e7bbcccaed89b713b2f0524e933ea971d4407e7
+

@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Commanders/AGENTS.md#commander-help.cs
+// ACTION-CONTRACT: Actions/Commanders/contracts.md#commander-help.cs
 // ACTION-CONTRACT-SHA256: a7048ab47eb922d024461199a891221179c25ef52726045bd1d2335e1bedef33
 
 using System;
@@ -74,3 +74,6 @@ public class CPHInline
             && string.Equals(a.Trim(), b.Trim(), StringComparison.OrdinalIgnoreCase);
     }
 }
+// ACTION-CONTRACT: Actions/Commanders/contracts.md#commander-help.cs
+// ACTION-CONTRACT-SHA256: a7048ab47eb922d024461199a891221179c25ef52726045bd1d2335e1bedef33
+

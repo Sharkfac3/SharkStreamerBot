@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/XJ Drivethrough/AGENTS.md#xj-drivethrough-main.cs
+// ACTION-CONTRACT: Actions/XJ Drivethrough/contracts.md#xj-drivethrough-main.cs
 // ACTION-CONTRACT-SHA256: 3193135fdccf00763497065ed20db5d346d2f6477c6fb7371da076fc9e391733
 
 using System;
@@ -456,4 +456,7 @@ public class CPHInline
     }
 }
 
+
+// ACTION-CONTRACT: Actions/XJ Drivethrough/contracts.md#xj-drivethrough-main.cs
+// ACTION-CONTRACT-SHA256: 3193135fdccf00763497065ed20db5d346d2f6477c6fb7371da076fc9e391733
 

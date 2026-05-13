@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Twitch Core Integrations/AGENTS.md#subscription-pay-it-forward.cs
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/contracts.md#subscription-pay-it-forward.cs
 // ACTION-CONTRACT-SHA256: c3f9eda58fa753c0958c94085eff936b738248a6028310492189b4316ff4479f
 
 using System;
@@ -128,3 +128,6 @@ public class CPHInline
         return value ?? "";
     }
 }
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/contracts.md#subscription-pay-it-forward.cs
+// ACTION-CONTRACT-SHA256: c3f9eda58fa753c0958c94085eff936b738248a6028310492189b4316ff4479f
+

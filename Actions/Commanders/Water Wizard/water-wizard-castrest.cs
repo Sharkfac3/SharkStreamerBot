@@ -261,3 +261,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Commanders/Water Wizard/AGENTS.md#water-wizard-castrest.cs
+// ACTION-CONTRACT-SHA256: 84b038400bfaf70cf292273aa9dc7de76c2a5ea9eff4cdaf10b5188224aaca3b
+

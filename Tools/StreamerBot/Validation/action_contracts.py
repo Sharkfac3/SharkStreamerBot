@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-"""Validate Streamer.bot action scripts against AGENTS.md action contracts.
+"""Validate Streamer.bot action scripts against local action contracts.
 
-Local Actions/**/AGENTS.md files can contain a machine-readable contract block:
+Preferred source-of-truth contract blocks live in local Actions/**/contracts.md files.
+Legacy blocks in Actions/**/AGENTS.md are still supported as a fallback.
+
+Local contract files can contain a machine-readable contract block:
 
 <!-- ACTION-CONTRACTS:START -->
 ```json
@@ -31,7 +34,7 @@ Local Actions/**/AGENTS.md files can contain a machine-readable contract block:
 
 A script is considered aligned only when it has a current source/stamp header:
 
-// ACTION-CONTRACT: Actions/Example/AGENTS.md#example.cs
+// ACTION-CONTRACT: Actions/Example/contracts.md#example.cs
 // ACTION-CONTRACT-SHA256: <sha256 of canonical contract json>
 
 Use --stamp to insert or refresh the stamp after updating the source contract.
@@ -57,8 +60,7 @@ FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL)
 CONTRACT_LINE_RE = re.compile(r"^\s*//\s*ACTION-CONTRACT:\s*(.+?)\s*$", re.MULTILINE)
 HASH_LINE_RE = re.compile(r"^\s*//\s*ACTION-CONTRACT-SHA256:\s*([a-fA-F0-9]{64})\s*$", re.MULTILINE)
 STAMP_BLOCK_RE = re.compile(
-    r"\A(?P<prefix>(?:\ufeff)?(?:\s*//.*\n|\s*/\*.*?\*/\s*)*)"
-    r"(?://\s*ACTION-CONTRACT:\s*.+?\n//\s*ACTION-CONTRACT-SHA256:\s*[a-fA-F0-9]{64}\s*\n\n?)?",
+    r"\A(?:\ufeff)?(?://\s*ACTION-CONTRACT:\s*.+?\n//\s*ACTION-CONTRACT-SHA256:\s*[a-fA-F0-9]{64}\s*\n+)?",
     re.DOTALL,
 )
 
@@ -115,54 +117,57 @@ def run_git_changed(base_ref: str | None) -> list[Path]:
     return sorted((REPO_ROOT / name for name in names), key=lambda p: repo_rel(p))
 
 
-def find_nearest_agents(script_path: Path) -> Path | None:
+def find_nearest_contract_source(script_path: Path) -> Path | None:
     current = script_path.parent
     while current == ACTIONS_DIR or ACTIONS_DIR in current.parents:
-        candidate = current / "AGENTS.md"
-        if candidate.exists():
-            return candidate
+        preferred = current / "contracts.md"
+        if preferred.exists():
+            return preferred
+        fallback = current / "AGENTS.md"
+        if fallback.exists():
+            return fallback
         if current == ACTIONS_DIR:
             break
         current = current.parent
     return None
 
 
-def extract_contract_doc(agents_path: Path) -> dict[str, Any]:
-    text = agents_path.read_text(encoding="utf-8")
+def extract_contract_doc(source_path: Path) -> dict[str, Any]:
+    text = source_path.read_text(encoding="utf-8")
     if START_MARKER not in text or END_MARKER not in text:
-        raise ValueError(f"{repo_rel(agents_path)} has no {START_MARKER} block")
+        raise ValueError(f"{repo_rel(source_path)} has no {START_MARKER} block")
     block = text.split(START_MARKER, 1)[1].split(END_MARKER, 1)[0]
     fence = FENCE_RE.search(block)
     raw = fence.group(1) if fence else block.strip()
     try:
         data = json.loads(raw)
     except json.JSONDecodeError as exc:
-        raise ValueError(f"{repo_rel(agents_path)} action contract JSON is invalid: {exc}") from exc
+        raise ValueError(f"{repo_rel(source_path)} action contract JSON is invalid: {exc}") from exc
     if data.get("version") != 1:
-        raise ValueError(f"{repo_rel(agents_path)} action contract block must declare version 1")
+        raise ValueError(f"{repo_rel(source_path)} action contract block must declare version 1")
     if not isinstance(data.get("contracts"), list):
-        raise ValueError(f"{repo_rel(agents_path)} action contract block must contain contracts[]")
+        raise ValueError(f"{repo_rel(source_path)} action contract block must contain contracts[]")
     return data
 
 
 def get_contract_for_script(script_path: Path) -> ContractRef:
-    agents_path = find_nearest_agents(script_path)
-    if not agents_path:
-        raise ValueError(f"{repo_rel(script_path)} has no nearest AGENTS.md")
-    data = extract_contract_doc(agents_path)
-    script_rel = script_path.relative_to(agents_path.parent).as_posix()
+    source_path = find_nearest_contract_source(script_path)
+    if not source_path:
+        raise ValueError(f"{repo_rel(script_path)} has no nearest contracts.md or AGENTS.md")
+    data = extract_contract_doc(source_path)
+    script_rel = script_path.relative_to(source_path.parent).as_posix()
     matches = [item for item in data["contracts"] if isinstance(item, dict) and item.get("script") == script_rel]
     if not matches:
-        raise ValueError(f"{repo_rel(script_path)} has no action contract in {repo_rel(agents_path)} for script '{script_rel}'")
+        raise ValueError(f"{repo_rel(script_path)} has no action contract in {repo_rel(source_path)} for script '{script_rel}'")
     if len(matches) > 1:
-        raise ValueError(f"{repo_rel(agents_path)} has duplicate action contracts for script '{script_rel}'")
+        raise ValueError(f"{repo_rel(source_path)} has duplicate action contracts for script '{script_rel}'")
     contract = matches[0]
     missing = [field for field in REQUIRED_CONTRACT_FIELDS if not contract.get(field)]
     if missing:
-        raise ValueError(f"{repo_rel(agents_path)} contract for '{script_rel}' is missing required fields: {', '.join(missing)}")
+        raise ValueError(f"{repo_rel(source_path)} contract for '{script_rel}' is missing required fields: {', '.join(missing)}")
     if not isinstance(contract.get("runtimeBehavior"), list) or not contract["runtimeBehavior"]:
-        raise ValueError(f"{repo_rel(agents_path)} contract for '{script_rel}' must have non-empty runtimeBehavior[]")
-    return ContractRef(agents_path=agents_path, script_path=script_path, contract=contract)
+        raise ValueError(f"{repo_rel(source_path)} contract for '{script_rel}' must have non-empty runtimeBehavior[]")
+    return ContractRef(agents_path=source_path, script_path=script_path, contract=contract)
 
 
 def iter_literals(contract: dict[str, Any]) -> Iterable[tuple[str, str]]:
@@ -217,12 +222,8 @@ def stamp_ref(ref: ContractRef) -> bool:
     text = ref.script_path.read_text(encoding="utf-8-sig")
     stamp = f"// ACTION-CONTRACT: {ref.source_label}\n// ACTION-CONTRACT-SHA256: {ref.digest}\n\n"
     match = STAMP_BLOCK_RE.match(text)
-    if match:
-        prefix = match.group("prefix") or ""
-        remainder = text[match.end():]
-        new_text = prefix + stamp + remainder.lstrip("\n")
-    else:
-        new_text = stamp + text
+    remainder = text[match.end():] if match else text
+    new_text = stamp + remainder.lstrip("\n")
     if new_text != text:
         ref.script_path.write_text(new_text, encoding="utf-8")
         return True
@@ -245,13 +246,13 @@ def collect_scripts(args: argparse.Namespace) -> list[Path]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate Actions .cs files against nearest AGENTS.md action contracts.")
+    parser = argparse.ArgumentParser(description="Validate Actions .cs files against nearest contracts.md action contracts (with AGENTS.md fallback).")
     scope = parser.add_mutually_exclusive_group()
     scope.add_argument("--changed", action="store_true", help="validate changed Actions/**/*.cs files from git diff/untracked state (default)")
     scope.add_argument("--all", action="store_true", help="validate every Actions/**/*.cs script")
     parser.add_argument("--base-ref", help="optional git base ref for --changed, e.g. origin/main")
     parser.add_argument("--script", dest="scripts", action="append", help="specific script path to validate; may be repeated")
-    parser.add_argument("--stamp", action="store_true", help="insert/update ACTION-CONTRACT stamps from AGENTS.md contracts before validating")
+    parser.add_argument("--stamp", action="store_true", help="insert/update ACTION-CONTRACT stamps from local contract files before validating")
     parser.add_argument("--no-literal-check", action="store_true", help="skip documented literal presence checks")
     parser.add_argument("--no-stamp-required", action="store_true", help="do not require script stamp lines")
     args = parser.parse_args()

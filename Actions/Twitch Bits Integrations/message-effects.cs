@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Twitch Bits Integrations/AGENTS.md#message-effects.cs
+// ACTION-CONTRACT: Actions/Twitch Bits Integrations/contracts.md#message-effects.cs
 // ACTION-CONTRACT-SHA256: 7f8fb66dddb0821eb8da84d44d5db3562a614afd3bdfd41a45eb14de24aea0c0
 
 using System;
@@ -245,3 +245,6 @@ public class CPHInline
         return message.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
     }
 }
+// ACTION-CONTRACT: Actions/Twitch Bits Integrations/contracts.md#message-effects.cs
+// ACTION-CONTRACT-SHA256: 7f8fb66dddb0821eb8da84d44d5db3562a614afd3bdfd41a45eb14de24aea0c0
+

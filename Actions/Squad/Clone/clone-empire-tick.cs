@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Clone/clone-empire-tick.cs
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Clone/clone-empire-tick.cs
 // ACTION-CONTRACT-SHA256: 90e16a8d5c54485437984eb1b1d69df1bee70fbdec15e2ca34deeb56b429c6c1
 
 using System;
@@ -930,3 +930,6 @@ public class CPHInline
         return builder.ToString();
     }
 }
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Clone/clone-empire-tick.cs
+// ACTION-CONTRACT-SHA256: 90e16a8d5c54485437984eb1b1d69df1bee70fbdec15e2ca34deeb56b429c6c1
+

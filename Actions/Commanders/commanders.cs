@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Commanders/AGENTS.md#commanders.cs
+// ACTION-CONTRACT: Actions/Commanders/contracts.md#commanders.cs
 // ACTION-CONTRACT-SHA256: f1d82177c03f60f6643e1ca525d332a517fdabbdd455ddb7e5f7e51705e17e6f
 
 using System;
@@ -73,4 +73,7 @@ public class CPHInline
         return "@" + trimmed.TrimStart('@');
     }
 }
+
+// ACTION-CONTRACT: Actions/Commanders/contracts.md#commanders.cs
+// ACTION-CONTRACT-SHA256: f1d82177c03f60f6643e1ca525d332a517fdabbdd455ddb7e5f7e51705e17e6f
 

@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Rest Focus Loop/AGENTS.md#rest-focus-rest-end.cs
+// ACTION-CONTRACT: Actions/Rest Focus Loop/contracts.md#rest-focus-rest-end.cs
 // ACTION-CONTRACT-SHA256: 593ab92229913e34c970c8c41a6a108307fa14c025371fe3b5b3a902abaff83e
 
 using System;
@@ -166,3 +166,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Rest Focus Loop/contracts.md#rest-focus-rest-end.cs
+// ACTION-CONTRACT-SHA256: 593ab92229913e34c970c8c41a6a108307fa14c025371fe3b5b3a902abaff83e
+

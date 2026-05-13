@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Rest Focus Loop/AGENTS.md#rest-focus-loop-start.cs
+// ACTION-CONTRACT: Actions/Rest Focus Loop/contracts.md#rest-focus-loop-start.cs
 // ACTION-CONTRACT-SHA256: 4b641201e412d6014c53172ac08e409a8bce05c63211af1a7b1f45dffa8cd89f
 
 using System;
@@ -124,3 +124,6 @@ public class CPHInline
         CPH.LogError($"[{logPrefix}] Recovery triggered after failing to arm timer '{targetTimerName}' for phase '{targetPhase}'. The loop has been marked inactive and all loop timers were disabled. Verify the timer exists and that SetTimerInterval is supported in this Streamer.bot build, then restart the loop.");
     }
 }
+// ACTION-CONTRACT: Actions/Rest Focus Loop/contracts.md#rest-focus-loop-start.cs
+// ACTION-CONTRACT-SHA256: 4b641201e412d6014c53172ac08e409a8bce05c63211af1a7b1f45dffa8cd89f
+

@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Intros/AGENTS.md#first-chat-intro.cs
+// ACTION-CONTRACT: Actions/Intros/contracts.md#first-chat-intro.cs
 // ACTION-CONTRACT-SHA256: a70bc7f3383d0858b27dc4385e38ab82b9b23cce731eb0bf8c78baeca5c8a1db
 
 using System;
@@ -141,4 +141,7 @@ public class CPHInline
         return true;
     }
 }
+
+// ACTION-CONTRACT: Actions/Intros/contracts.md#first-chat-intro.cs
+// ACTION-CONTRACT-SHA256: a70bc7f3383d0858b27dc4385e38ab82b9b23cce731eb0bf8c78baeca5c8a1db
 

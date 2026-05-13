@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Voice Commands/AGENTS.md#mode-workspace.cs
+// ACTION-CONTRACT: Actions/Voice Commands/contracts.md#mode-workspace.cs
 // ACTION-CONTRACT-SHA256: ec9b0811d175820eb774286bc23f119e5abe68d4b3900092a9f6d77c70df2a1c
 
 public class CPHInline
@@ -31,3 +31,6 @@ public class CPHInline
         return true;
     }
 }
+// ACTION-CONTRACT: Actions/Voice Commands/contracts.md#mode-workspace.cs
+// ACTION-CONTRACT-SHA256: ec9b0811d175820eb774286bc23f119e5abe68d4b3900092a9f6d77c70df2a1c
+

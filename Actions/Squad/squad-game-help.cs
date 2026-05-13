@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Squad/AGENTS.md#squad-game-help.cs
+// ACTION-CONTRACT: Actions/Squad/contracts.md#squad-game-help.cs
 // ACTION-CONTRACT-SHA256: 72afca9cf283b5c98662f294cf4810c93f53613f14ece00fe49b9a25a1b453e3
 
 using System;
@@ -64,3 +64,6 @@ public class CPHInline
         return string.Empty;
     }
 }
+// ACTION-CONTRACT: Actions/Squad/contracts.md#squad-game-help.cs
+// ACTION-CONTRACT-SHA256: 72afca9cf283b5c98662f294cf4810c93f53613f14ece00fe49b9a25a1b453e3
+

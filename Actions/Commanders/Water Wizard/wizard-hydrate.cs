@@ -233,3 +233,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Commanders/Water Wizard/AGENTS.md#wizard-hydrate.cs
+// ACTION-CONTRACT-SHA256: 797a163ca8f6190db572d69f516c0d720fb9c162317952027368e02e99cd7c22
+

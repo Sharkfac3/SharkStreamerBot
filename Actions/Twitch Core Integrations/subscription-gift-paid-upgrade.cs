@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Twitch Core Integrations/AGENTS.md#subscription-gift-paid-upgrade.cs
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/contracts.md#subscription-gift-paid-upgrade.cs
 // ACTION-CONTRACT-SHA256: 3a9c989984b9db2f62502eced2f94876c1b13b23f625995f9223259a3b431cc6
 
 using System;
@@ -128,3 +128,6 @@ public class CPHInline
         return value ?? "";
     }
 }
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/contracts.md#subscription-gift-paid-upgrade.cs
+// ACTION-CONTRACT-SHA256: 3a9c989984b9db2f62502eced2f94876c1b13b23f625995f9223259a3b431cc6
+

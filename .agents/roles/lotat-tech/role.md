@@ -31,7 +31,7 @@ Activate for LotAT C# engine changes, story schema or validation changes, story 
 
 ## Common Routes
 
-Use [Actions/LotAT/AGENTS.md](../../../Actions/LotAT/AGENTS.md) for runtime scripts and [Tools/LotAT/AGENTS.md](../../../Tools/LotAT/AGENTS.md) for story pipeline, schema, validation, and viewer work. Chain into [Creative/WorldBuilding/AGENTS.md](../../../Creative/WorldBuilding/AGENTS.md) when technical changes affect authored story content.
+Use [Actions/LotAT/AGENTS.md](../../../Actions/LotAT/AGENTS.md) for runtime scripts and [Tools/LotAT/AGENTS.md](../../../Tools/LotAT/AGENTS.md) for story pipeline, schema, validation, and viewer work. For Actions/ work, see [actions-scope.md](actions-scope.md) for a scoped reading list. Chain into [Creative/WorldBuilding/AGENTS.md](../../../Creative/WorldBuilding/AGENTS.md) when technical changes affect authored story content.
 
 ## Required Workflows
 

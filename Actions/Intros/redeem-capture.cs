@@ -1,5 +1,5 @@
-// ACTION-CONTRACT: Actions/Intros/AGENTS.md#redeem-capture.cs
-// ACTION-CONTRACT-SHA256: 6c1e985641dcb7463ee456289363f7fc5f8486d7b32ea80728657e55fbff45a7
+// ACTION-CONTRACT: Actions/Intros/contracts.md#redeem-capture.cs
+// ACTION-CONTRACT-SHA256: 5e5b8dd5350ae01dfe83b0725f2709cc0bc54472762b6c5c284332d9cfd1dedf
 
 using System;
 using System.Net.Http;
@@ -23,7 +23,8 @@ public class CPHInline
      *
      * Required SB trigger args:
      * - userId       — Twitch numeric userId (string)
-     * - userLogin    — Twitch login (lowercase string)
+     * - userName     — Twitch login (lowercase string); stored as userLogin
+     * - user          — Twitch display name fallback if userName/userLogin is unavailable
      * - redemptionId — channel-point redemption ID (string); stored as redeemId
      * - rewardName   — reward display name (string); stored as rewardTitle
      * - rawInput     — user-supplied message; may be empty/null
@@ -40,21 +41,25 @@ public class CPHInline
         string rewardTitle = "";
         string userInput   = "";
 
-        CPH.TryGetArg("userId",      out userId);
-        CPH.TryGetArg("userLogin",   out userLogin);
-        CPH.TryGetArg("redemptionId", out redeemId);
-        CPH.TryGetArg("rewardName",   out rewardTitle);
-        CPH.TryGetArg("rawInput",    out userInput);
+        userId      = GetStringArg("userId");
+        userLogin   = GetStringArg("userLogin", "userName", "user");
+        redeemId    = GetStringArg("redemptionId");
+        rewardTitle = GetStringArg("rewardName", "rewardTitle");
+        userInput   = GetStringArg("rawInput", "userInput", "input0", "message");
 
-        userId      = userId      ?? "";
-        userLogin   = userLogin   ?? "";
-        redeemId    = redeemId    ?? "";
-        rewardTitle = rewardTitle ?? "";
-        userInput   = userInput   ?? "";
+        CPH.LogInfo($"[redeem-capture] Resolved args — userId='{userId}' userLogin='{userLogin}' rewardTitle='{rewardTitle}' redeemId='{redeemId}' userInputLength={userInput.Length}");
 
         if (string.IsNullOrWhiteSpace(redeemId))
         {
             CPH.LogInfo($"[redeem-capture] Missing redeemId — cannot capture redeem. userId={userId}");
+            return true;
+        }
+
+        if (string.IsNullOrWhiteSpace(userId) ||
+            string.IsNullOrWhiteSpace(userLogin) ||
+            string.IsNullOrWhiteSpace(rewardTitle))
+        {
+            CPH.LogInfo($"[redeem-capture] Missing required field — userId='{userId}' userLogin='{userLogin}' rewardTitle='{rewardTitle}' redeemId='{redeemId}'. Not posting.");
             return true;
         }
 
@@ -119,8 +124,8 @@ public class CPHInline
             {
                 string body = "";
                 try { body = postResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult(); } catch { }
-                string excerpt = body.Length > 200 ? body.Substring(0, 200) : body;
-                CPH.LogInfo($"[redeem-capture] POST error ({statusCode}) for redeemId={redeemId}: {excerpt}");
+                CPH.LogInfo($"[redeem-capture] POST error ({statusCode}) for redeemId={redeemId}: {body}");
+                CPH.LogInfo($"[redeem-capture] POST payload for redeemId={redeemId}: {jsonBody}");
             }
         }
         catch (Exception ex)
@@ -129,6 +134,31 @@ public class CPHInline
         }
 
         return true;
+    }
+
+    private string GetStringArg(params string[] names)
+    {
+        foreach (string name in names)
+        {
+            if (CPH.TryGetArg(name, out object value) && value != null)
+            {
+                string normalized = NormalizeArgValue(value.ToString() ?? "");
+                if (!string.IsNullOrEmpty(normalized))
+                    return normalized;
+            }
+        }
+
+        return "";
+    }
+
+    private static string NormalizeArgValue(string value)
+    {
+        string trimmed = (value ?? "").Trim();
+        if (trimmed == "\"\"" || trimmed == "''") return "";
+        if (trimmed.Equals("null", StringComparison.OrdinalIgnoreCase)) return "";
+        if (trimmed.Equals("undefined", StringComparison.OrdinalIgnoreCase)) return "";
+        if (trimmed.Equals("(null)", StringComparison.OrdinalIgnoreCase)) return "";
+        return trimmed;
     }
 
     private static string EscapeJsonString(string value)
@@ -156,4 +186,7 @@ public class CPHInline
         return sb.ToString();
     }
 }
+
+// ACTION-CONTRACT: Actions/Intros/contracts.md#redeem-capture.cs
+// ACTION-CONTRACT-SHA256: 5e5b8dd5350ae01dfe83b0725f2709cc0bc54472762b6c5c284332d9cfd1dedf
 

@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Voice Commands/AGENTS.md#mode-gamer.cs
+// ACTION-CONTRACT: Actions/Voice Commands/contracts.md#mode-gamer.cs
 // ACTION-CONTRACT-SHA256: 827ee27c9db3dafd076d89d58c7acb595c37d47e2ddab477f81d7a99b4181ede
 
 public class CPHInline
@@ -31,3 +31,6 @@ public class CPHInline
         return true;
     }
 }
+// ACTION-CONTRACT: Actions/Voice Commands/contracts.md#mode-gamer.cs
+// ACTION-CONTRACT-SHA256: 827ee27c9db3dafd076d89d58c7acb595c37d47e2ddab477f81d7a99b4181ede
+

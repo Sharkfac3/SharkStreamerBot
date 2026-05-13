@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/LotAT/AGENTS.md#lotat-decision-resolve.cs
+// ACTION-CONTRACT: Actions/LotAT/contracts.md#lotat-decision-resolve.cs
 // ACTION-CONTRACT-SHA256: 36f6af105b7976ce4d9f5549d6ae63012d7c2a4fe7ef3ae14b2babcd7a299d34
 
 using System;
@@ -987,3 +987,6 @@ public class CPHInline
     }
 
 }
+// ACTION-CONTRACT: Actions/LotAT/contracts.md#lotat-decision-resolve.cs
+// ACTION-CONTRACT-SHA256: 36f6af105b7976ce4d9f5549d6ae63012d7c2a4fe7ef3ae14b2babcd7a299d34
+

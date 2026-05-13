@@ -114,3 +114,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Commanders/Captain Stretch/AGENTS.md#captain-stretch-redeem.cs
+// ACTION-CONTRACT-SHA256: 6f44931552c5f0f5ba41ab499a5ecf2ed98357683e0bac12b66cbca9d2ea9305
+

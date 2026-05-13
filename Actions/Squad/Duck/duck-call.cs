@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Squad/AGENTS.md#Duck/duck-call.cs
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Duck/duck-call.cs
 // ACTION-CONTRACT-SHA256: 20a2d3b4aa45f2ce6569eb112d47942584fa38dd5749cefa8a16998dbfb053c9
 
 using System;
@@ -266,3 +266,6 @@ public class CPHInline
         }
     }
 }
+// ACTION-CONTRACT: Actions/Squad/contracts.md#Duck/duck-call.cs
+// ACTION-CONTRACT-SHA256: 20a2d3b4aa45f2ce6569eb112d47942584fa38dd5749cefa8a16998dbfb053c9
+

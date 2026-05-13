@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Twitch Core Integrations/AGENTS.md#subscription-counter-rollover.cs
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/contracts.md#subscription-counter-rollover.cs
 // ACTION-CONTRACT-SHA256: c8f9f4f6c3670f5c786b19b1a5020476869ffc3da86f46248c58b4fe565299c9
 
 using System;
@@ -141,3 +141,6 @@ public class CPHInline
         return value;
     }
 }
+// ACTION-CONTRACT: Actions/Twitch Core Integrations/contracts.md#subscription-counter-rollover.cs
+// ACTION-CONTRACT-SHA256: c8f9f4f6c3670f5c786b19b1a5020476869ffc3da86f46248c58b4fe565299c9
+

@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/Overlay/AGENTS.md#broker-disconnect.cs
+// ACTION-CONTRACT: Actions/Overlay/contracts.md#broker-disconnect.cs
 // ACTION-CONTRACT-SHA256: deb0534dcfb12787c7b1d7136077702c50ccd8e047ee5edf4c487106d3c84510
 
 using System;
@@ -65,3 +65,6 @@ public class CPHInline
         return true;
     }
 }
+// ACTION-CONTRACT: Actions/Overlay/contracts.md#broker-disconnect.cs
+// ACTION-CONTRACT-SHA256: deb0534dcfb12787c7b1d7136077702c50ccd8e047ee5edf4c487106d3c84510
+

@@ -31,6 +31,12 @@ Use this guide when editing or reviewing:
 
 `streamerbot-dev` owns runtime behavior here; follow shared ownership, validation, sync, and handoff rules in [Actions/AGENTS.md](../AGENTS.md).
 
+## Required Reading
+
+- [Actions/AGENTS.md](../AGENTS.md) for shared validation, sync, and handoff rules.
+- [Actions/constants/effects.md](../constants/effects.md) for canonical destroyer asset IDs, movement values, lifetime, and state globals.
+- [Actions/Overlay/AGENTS.md](../Overlay/AGENTS.md) when broker publish behavior or overlay message usage changes.
+
 ## Script Summary
 
 | Script / command | Summary |
@@ -42,50 +48,4 @@ Required asset: [Apps/stream-overlay/packages/overlay/public/images/destroyer.jp
 
 ## Action Contracts
 
-<!-- ACTION-CONTRACTS:START -->
-```json
-{
-  "version": 1,
-  "contracts": [
-    {
-      "script": "destroyer-move.cs",
-      "action": "Destroyer Move",
-      "purpose": "Contracts expected runtime behavior for destroyer-move.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented destroyer-move.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for destroyer-move.cs"
-    },
-    {
-      "script": "destroyer-spawn.cs",
-      "action": "Destroyer Spawn",
-      "purpose": "Contracts expected runtime behavior for destroyer-spawn.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented destroyer-spawn.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for destroyer-spawn.cs"
-    }
-  ]
-}
-```
-<!-- ACTION-CONTRACTS:END -->
+Contracts for destroyer-spawn.cs and destroyer-move.cs live in [contracts.md](contracts.md).

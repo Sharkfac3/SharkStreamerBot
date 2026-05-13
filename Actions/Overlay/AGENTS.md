@@ -38,6 +38,7 @@ Use this guide when editing or reviewing:
 ## Required Reading
 
 - [Actions/AGENTS.md](../AGENTS.md)
+- [Actions/constants/overlay-broker.md](../constants/overlay-broker.md) — canonical broker connection vars, WebSocket client index, and overlay/LotAT/Squad topic names.
 - [Actions/Helpers/overlay-broker.md](../Helpers/overlay-broker.md) for the `EnsureOverlayBrokerConnected` connect/register pattern
 - [Apps/stream-overlay/AGENTS.md](../../Apps/stream-overlay/AGENTS.md) and [Apps/stream-overlay/docs/protocol.md](../../Apps/stream-overlay/docs/protocol.md) when app-side protocol behavior is involved
 - [Apps/stream-overlay/packages/shared/src/topics.ts](../../Apps/stream-overlay/packages/shared/src/topics.ts) and [Apps/stream-overlay/packages/shared/src/protocol.ts](../../Apps/stream-overlay/packages/shared/src/protocol.ts) when topic or payload contracts change
@@ -62,88 +63,5 @@ Use this guide when editing or reviewing:
 
 ## Action Contracts
 
-<!-- ACTION-CONTRACTS:START -->
-```json
-{
-  "version": 1,
-  "contracts": [
-    {
-      "script": "broker-connect.cs",
-      "action": "Broker Connect",
-      "purpose": "Contracts expected runtime behavior for broker-connect.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented broker-connect.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for broker-connect.cs"
-    },
-    {
-      "script": "broker-disconnect.cs",
-      "action": "Broker Disconnect",
-      "purpose": "Contracts expected runtime behavior for broker-disconnect.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented broker-disconnect.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for broker-disconnect.cs"
-    },
-    {
-      "script": "broker-publish.cs",
-      "action": "Broker Publish",
-      "purpose": "Contracts expected runtime behavior for broker-publish.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented broker-publish.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for broker-publish.cs"
-    },
-    {
-      "script": "test-overlay.cs",
-      "action": "Test Overlay",
-      "purpose": "Contracts expected runtime behavior for test-overlay.cs.",
-      "triggers": [],
-      "globals": [],
-      "obsSources": [],
-      "obsScenes": [],
-      "timers": [],
-      "mixItUpCommandIds": [],
-      "overlayTopics": [],
-      "serviceUrls": [],
-      "requiredLiterals": [],
-      "runtimeBehavior": [
-        "Runs the documented test-overlay.cs Streamer.bot action behavior."
-      ],
-      "failureBehavior": [],
-      "pasteTarget": "Streamer.bot Execute C# Code action for test-overlay.cs"
-    }
-  ]
-}
-```
-<!-- ACTION-CONTRACTS:END -->
+Contracts for all Overlay scripts live in [contracts.md](contracts.md). Load it when validating or updating a script contract.
+

@@ -1,4 +1,4 @@
-// ACTION-CONTRACT: Actions/LotAT/AGENTS.md#lotat-join-timeout.cs
+// ACTION-CONTRACT: Actions/LotAT/contracts.md#lotat-join-timeout.cs
 // ACTION-CONTRACT-SHA256: 1fe32439046c9b4c4b1a64535db784b8869658117521e3ddd1ab8f50a819ce00
 
 using System;
@@ -966,3 +966,6 @@ public class CPHInline
     }
 
 }
+// ACTION-CONTRACT: Actions/LotAT/contracts.md#lotat-join-timeout.cs
+// ACTION-CONTRACT-SHA256: 1fe32439046c9b4c4b1a64535db784b8869658117521e3ddd1ab8f50a819ce00
+
