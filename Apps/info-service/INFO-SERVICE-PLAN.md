@@ -91,6 +91,8 @@ Expected shape:
 
 Binary intro assets live outside the service under repo-root `Assets/` and are also gitignored. Records store filenames only; consumers join those filenames with the configured assets root.
 
+Current optional intro asset slots are `soundFile` and `gifFile`. A record may use either slot or both.
+
 ## Single-Writer Policy
 
 `production-manager` is the only intended write client for operator edits. Streamer.bot has two exceptions:
@@ -157,7 +159,7 @@ Hard stop on boot if an on-disk collection `schemaVersion` does not match the co
 | `notes` | `string \| undefined` | no | Operator-facing notes only. Never show on stream. |
 | `updatedUtc` | `number` | yes | Unix milliseconds of last write to this record. |
 
-A first-chat playback consumer should require `enabled === true` and at least one usable asset field before dispatching an intro.
+A first-chat playback consumer should require `enabled === true` and at least one usable asset field before dispatching an intro. Current runtime consumers may resolve `soundFile`, `gifFile`, or both into local asset paths before dispatch.
 
 ### `pending-intros`
 
@@ -183,9 +185,13 @@ A first-chat playback consumer should require `enabled === true` and at least on
 
 Lifecycle:
 
-- `pending` to `fulfilled`: operator assigns assets/promotes to `user-intros`; `resolvedUtc` is set.
+- `pending` to `fulfilled`: operator assigns filename-only assets/promotes to `user-intros`; `resolvedUtc` is set.
 - `pending` to `rejected`: operator rejects the redeem; `resolvedUtc` is set.
 - No reverse transition. Edit the `user-intros` record directly if a fulfilled intro needs rework.
+
+## Future Extension Direction
+
+Keep intro asset storage filename-only and additive. Future versions may introduce more optional fields such as `videoFile` or richer overlay/action parameters for Mix It Up or other local consumers. Add those through a coordinated schema/version/runtime update rather than changing the meaning of `soundFile` or `gifFile`.
 
 ## REST Protocol
 

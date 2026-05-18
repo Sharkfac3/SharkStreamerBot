@@ -50,7 +50,7 @@ export default function PendingIntrosPage() {
   const [error, setError] = useState<string | undefined>();
   const [fulfillTarget, setFulfillTarget] = useState<PendingIntroRecord | null>(null);
   const [form, setForm] = useState({ ...EMPTY_FULFILL_FORM });
-  const [formErrors, setFormErrors] = useState<{ soundFile?: string }>({});
+  const [formError, setFormError] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
 
   function loadRecords() {
@@ -89,33 +89,32 @@ export default function PendingIntrosPage() {
   function openFulfill(record: PendingIntroRecord) {
     setFulfillTarget(record);
     setForm({ ...EMPTY_FULFILL_FORM });
-    setFormErrors({});
+    setFormError(undefined);
     setError(undefined);
   }
 
   function closeFulfill() {
     setFulfillTarget(null);
     setForm({ ...EMPTY_FULFILL_FORM });
-    setFormErrors({});
-  }
-
-  function validateFulfillForm(): boolean {
-    const errs: { soundFile?: string } = {};
-    if (!form.soundFile.trim()) errs.soundFile = 'Required';
-    setFormErrors(errs);
-    return Object.keys(errs).length === 0;
+    setFormError(undefined);
   }
 
   async function handleFulfill() {
-    if (!fulfillTarget || !validateFulfillForm()) return;
+    if (!fulfillTarget) return;
+    if (form.enabled && !form.soundFile.trim() && !form.gifFile.trim()) {
+      setFormError('Enabled intros need a soundFile, gifFile, or both.');
+      return;
+    }
+
     setSaving(true);
+    setFormError(undefined);
     setError(undefined);
 
     const now = Date.now();
     const userIntroPayload: UserIntroRecord = {
       userId: fulfillTarget.userId,
       userLogin: fulfillTarget.userLogin,
-      soundFile: form.soundFile.trim(),
+      soundFile: form.soundFile.trim() || undefined,
       gifFile: form.gifFile.trim() || undefined,
       enabled: form.enabled,
       updatedUtc: now,
@@ -279,14 +278,14 @@ export default function PendingIntrosPage() {
           <div className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-lg p-8">
             <h2 className="text-lg font-semibold text-gray-50 mb-2">Fulfill Pending Intro</h2>
             <p className="text-sm text-gray-400 mb-6">
-              Creates or updates the user-intros record for {fulfillTarget.userLogin} and marks this redeem fulfilled.
+              Creates or updates the user-intros record for {fulfillTarget.userLogin} and marks this redeem fulfilled. Use a sound file, a gif file, or both. Enabled intros need at least one asset.
             </p>
 
             <div className="space-y-4">
               <ReadOnlyField label="userId" value={fulfillTarget.userId} />
               <ReadOnlyField label="userLogin" value={fulfillTarget.userLogin} />
 
-              <Field label="soundFile *">
+              <Field label="soundFile">
                 <input
                   type="text"
                   value={form.soundFile}
@@ -294,7 +293,6 @@ export default function PendingIntrosPage() {
                   className="input-base"
                   placeholder="alice.mp3"
                 />
-                {formErrors.soundFile && <FieldError msg={formErrors.soundFile} />}
               </Field>
 
               <Field label="gifFile">
@@ -305,6 +303,10 @@ export default function PendingIntrosPage() {
                   className="input-base"
                   placeholder="alice.gif"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Filenames only. Runtime resolves sound under <code>Assets/user-intros/sound/</code> and gifs under <code>Assets/user-intros/gif/</code>.
+                </p>
+                {formError && <p className="text-xs text-red-400 mt-1">{formError}</p>}
               </Field>
 
               <Field label="enabled">
@@ -375,10 +377,6 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
       {children}
     </div>
   );
-}
-
-function FieldError({ msg }: { msg: string }) {
-  return <p className="text-xs text-red-400 mt-1">{msg}</p>;
 }
 
 function formatDate(value: number) {

@@ -10,7 +10,7 @@ status: active
 
 ## Purpose
 
-Houses self-contained execution projects. Each project is a collection of chunk prompts designed to be run independently in separate chat sessions, with progress tracked in a `progress.md` file.
+Houses self-contained execution projects. Each project is a collection of chunk prompts designed to be run independently in separate chat sessions, with progress tracked in a project-local progress file.
 
 ## Who Works Here
 
@@ -21,15 +21,15 @@ Projects are planned by `ops` and executed by whichever agent role each chunk ta
 Each project folder contains:
 - `README.md` — project scope, goal, phase map
 - `AGENTS.md` — executing agent role definition and constraints
-- `progress.md` — chunk status tracking (agents update this when done)
+- project progress file — chunk status tracking (agents update it when done)
 - `phases/<phase-name>/` — phase overview + numbered chunk prompt files
 
 ## Execution Model
 
 - Each chunk prompt is a complete, self-contained briefing
 - Run chunks in phase order, chunks in sequence within each phase
-- Check `progress.md` before starting any chunk
-- Update `progress.md` as the last step of every chunk
+- Check the project's progress file before starting any chunk
+- Update the project's progress file as the last step of every chunk
 
 ## Current Projects
 

@@ -45,6 +45,8 @@ Response:
 
 See [INFO-SERVICE-PLAN.md](INFO-SERVICE-PLAN.md) for architecture, field reference, schemas, and protocol details.
 
+`user-intros` records store filename-only asset references. Today the supported asset slots are `soundFile` and `gifFile`; an intro may use either or both.
+
 ## Routes
 
 | Method | Path | Purpose |

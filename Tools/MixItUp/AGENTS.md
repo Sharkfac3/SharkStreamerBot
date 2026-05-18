@@ -55,10 +55,11 @@ Read these first for Mix It Up tooling work:
 1. [Tools/MixItUp/README.md](./README.md) — folder purpose and routing examples.
 2. [Tools/MixItUp/Api/README.md](./Api/README.md) — API helper area.
 3. [Tools/MixItUp/Commands/README.md](./Commands/README.md) — command support area.
-4. [Tools/MixItUp/Overlays/README.md](./Overlays/README.md) — overlay source area.
-5. [Tools/MixItUp/Shared/README.md](./Shared/README.md) — reusable support area.
-6. [Tools/MixItUp/Api/get_commands.py](./Api/get_commands.py) — command discovery helper.
-7. [Actions/Helpers/mixitup-command-api.md](../../Actions/Helpers/mixitup-command-api.md) — shared wait pattern for Mix It Up unlock timing.
+4. [Tools/MixItUp/Commands/custom-intro-command.md](./Commands/custom-intro-command.md) — repo-tracked contract for the live `Custom Intro` command.
+5. [Tools/MixItUp/Overlays/README.md](./Overlays/README.md) — overlay source area.
+6. [Tools/MixItUp/Shared/README.md](./Shared/README.md) — reusable support area.
+7. [Tools/MixItUp/Api/get_commands.py](./Api/get_commands.py) — command discovery helper.
+8. [Actions/Helpers/mixitup-command-api.md](../../Actions/Helpers/mixitup-command-api.md) — shared wait pattern for Mix It Up unlock timing.
 
 ## Local Workflow
 
@@ -186,22 +187,25 @@ Standard unlock buffer for commands that trigger animations with queued audio: 3
 
 Mix It Up command name: `Custom Intro`.
 
-Triggered by Streamer.bot action: `Intros - Play Custom Intro`.
+Triggered directly by Streamer.bot script: `Actions/Intros/first-chat-intro.cs`.
 
-Argument contract:
+Authoritative repo spec: [Tools/MixItUp/Commands/custom-intro-command.md](./Commands/custom-intro-command.md).
 
-- Streamer.bot sets global variable `intro_sound_file_path` immediately before calling the intro playback action.
-- The sub-action chain reads that global variable and passes the full absolute sound-file path to the Mix It Up command.
-- Mix It Up plays the sound file through a Play Sound action that reads the passed special identifier or equivalent passthrough value.
-- No overlay work is involved; audio playback is owned by Mix It Up.
-- `IgnoreRequirements = false` is the default.
+Retired wrapper note: the old `Intros - Play Custom Intro` Streamer.bot wrapper is legacy-only and should not remain in the active first-chat intro path.
 
-Operator checklist:
+Contract summary:
 
-1. Create a Mix It Up command named exactly `Custom Intro`.
-2. Add a Play Sound action that reads the passed intro sound path.
-3. Ensure the audio file exists before enabling an intro in production-manager.
-4. Keep cooldowns disabled or harmless; first-chat behavior should fire at most once per viewer per stream session.
+- Purpose: playback only for the first-chat intro flow.
+- Required playback special identifiers: `intro_sound_file_path` and `intro_gif_file_path`.
+- Optional metadata may also be present in `SpecialIdentifiers` (for example `userid`), but playback logic should stay driven by the two asset-path fields unless a newer repo contract says otherwise.
+- Expected values: empty strings or full local absolute file paths.
+- Supported cases: sound-only, gif-only, sound+gif, or neither/no-op.
+- Keep branching simple: branch only on whether each value is empty.
+- Do not move filename resolution, user gating, or intro business logic into Mix It Up.
+- Keep compatibility with local absolute Windows file paths.
+- Upstream callers own payload correctness; Mix It Up should not cache or invent fallback media.
+
+Operator rule of thumb: if the command is doing more than "play the provided sound and/or show the provided gif," it is probably taking on logic that belongs upstream.
 
 ## Known Gotchas
 

@@ -11,6 +11,8 @@ parent: AGENTS.md
 
 These contracts are maintained by `streamerbot-dev`. Load this file when validating or updating a script contract. Do not edit contracts without also updating the SHA256 stamp in the corresponding `.cs` file.
 
+`first-chat-intro.cs` is the authoritative gatekeeper for first-chat custom intro playback. It owns: deciding whether any intro should run at all, resolving filename-based local assets into full paths, and dispatching the Mix It Up `Custom Intro` command directly via the helper-pattern API call when at least one local asset exists.
+
 ## Action Contracts
 
 <!-- ACTION-CONTRACTS:START -->
@@ -21,37 +23,45 @@ These contracts are maintained by `streamerbot-dev`. Load this file when validat
     {
       "script": "first-chat-intro.cs",
       "action": "Intros - First Chat Intro",
-      "purpose": "Play an approved custom intro sound for a viewer when their First Words trigger fires.",
+      "purpose": "Resolve approved custom intro assets for a viewer and dispatch the Mix It Up Custom Intro command directly when their First Words trigger fires.",
       "triggers": [
         "Twitch -> Chat -> First Words"
       ],
-      "globals": [
-        "intro_sound_file_path"
-      ],
+      "globals": [],
       "timers": [],
       "obsSources": [],
       "obsScenes": [],
-      "mixItUpCommandIds": [],
+      "mixItUpCommandIds": [
+        "REPLACE_WITH_CUSTOM_INTRO_COMMAND_ID"
+      ],
       "overlayTopics": [],
       "serviceUrls": [
-        "http://127.0.0.1:8766"
+        "http://127.0.0.1:8766",
+        "http://localhost:8911"
       ],
       "requiredLiterals": [
         "user-intros",
         "enabled",
         "soundFile",
+        "gifFile",
         "C:\\Users\\sharkfac3\\Workspace\\coding\\SharkStreamerBot\\Assets",
         "user-intros\\sound\\",
-        "Intros - Play Custom Intro"
+        "user-intros\\gif\\",
+        "http://localhost:8911",
+        "REPLACE_WITH_CUSTOM_INTRO_COMMAND_ID",
+        "intro_sound_file_path",
+        "intro_gif_file_path"
       ],
       "runtimeBehavior": [
         "Reads userId from First Words and no-ops when missing.",
         "GETs the user-intros record from info-service.",
-        "Requires enabled record, soundFile, and existing local asset.",
-        "Sets intro_sound_file_path, then runs Intros - Play Custom Intro synchronously."
+        "Requires an enabled record and at least one usable intro asset filename.",
+        "Normalizes soundFile and gifFile to filename-only values, then resolves them under the local Assets tree when present.",
+        "Supports sound-only, gif-only, and sound+gif dispatches.",
+        "Calls the Mix It Up command API directly with SpecialIdentifiers.intro_sound_file_path and SpecialIdentifiers.intro_gif_file_path when at least one asset exists locally."
       ],
       "failureBehavior": [
-        "No-ops for missing userId, missing records, disabled intros, bad HTTP, malformed JSON, or missing files."
+        "No-ops for missing userId, missing records, disabled intros, bad HTTP, malformed JSON, normalized-empty filenames, command ID not configured, Mix It Up call failure, or cases where no configured asset resolves to a local file."
       ],
       "pasteTarget": "Streamer.bot Execute C# Code action: Intros - First Chat Intro"
     },

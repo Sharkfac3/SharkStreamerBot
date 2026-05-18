@@ -14,7 +14,7 @@ ops handles validation, sync workflow, and routing doc maintenance in Actions/. 
 
 1. [Actions/AGENTS.md](../../../Actions/AGENTS.md) — domain entry
 2. [Actions/CONTRACT-SCHEMA.md](../../../Actions/CONTRACT-SCHEMA.md) — contract format spec
-3. The local `contracts.md` for the folder being validated
+3. The local contracts file for the folder being validated (for example, [Actions/Intros/contracts.md](../../../Actions/Intros/contracts.md))
 4. Run: `python3 Tools/StreamerBot/Validation/action_contracts.py --changed`
 
 ## Routing / Scaffolding Maintenance

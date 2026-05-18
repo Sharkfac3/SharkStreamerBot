@@ -35,7 +35,7 @@ export default function UserIntrosPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<UserIntroRecord | null>(null);
   const [form, setForm] = useState({ ...EMPTY_FORM });
-  const [formErrors, setFormErrors] = useState<{ userId?: string; userLogin?: string }>({});
+  const [formErrors, setFormErrors] = useState<{ userId?: string; userLogin?: string; assets?: string }>({});
   const [saving, setSaving] = useState(false);
 
   function loadRecords() {
@@ -87,9 +87,12 @@ export default function UserIntrosPage() {
   }
 
   function validateForm(): boolean {
-    const errs: { userId?: string; userLogin?: string } = {};
+    const errs: { userId?: string; userLogin?: string; assets?: string } = {};
     if (!form.userId.trim()) errs.userId = 'Required';
     if (!form.userLogin.trim()) errs.userLogin = 'Required';
+    if (form.enabled && !(form.soundFile ?? '').trim() && !(form.gifFile ?? '').trim()) {
+      errs.assets = 'Enabled intros need a soundFile, gifFile, or both.';
+    }
     setFormErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -142,8 +145,13 @@ export default function UserIntrosPage() {
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 px-6 py-10">
       <div className="max-w-5xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-semibold text-gray-50">User Intros</h1>
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-xl font-semibold text-gray-50">User Intros</h1>
+            <p className="text-sm text-gray-400 mt-1">
+              Manage approved intro records. Enabled intros need a sound file, a gif file, or both.
+            </p>
+          </div>
           <button
             onClick={openCreate}
             className="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
@@ -262,6 +270,10 @@ export default function UserIntrosPage() {
                   className="input-base"
                   placeholder="alice.gif"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Filenames only. Runtime resolves sound under <code>Assets/user-intros/sound/</code> and gifs under <code>Assets/user-intros/gif/</code>.
+                </p>
+                {formErrors.assets && <FieldError msg={formErrors.assets} />}
               </Field>
 
               <Field label="enabled">

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from dataclasses import dataclass
@@ -22,6 +23,8 @@ PATH_ROOTS = (
     "Projects/", "AGENTS.md", "CLAUDE.md", "README.md",
 )
 DOMAIN_ROOTS = ("Actions", "Apps", "Tools", "Creative")
+IGNORED_DIR_NAMES = {".git", "__pycache__", "node_modules"}
+IGNORED_PATH_PREFIXES = {(".claude", "worktrees")}
 
 
 @dataclass
@@ -64,6 +67,20 @@ def rel(repo: Path, path: Path) -> str:
         return path.resolve().relative_to(repo.resolve()).as_posix()
     except ValueError:
         return path.as_posix()
+
+
+def relative_parts(repo: Path, path: Path) -> tuple[str, ...]:
+    try:
+        return path.resolve().relative_to(repo.resolve()).parts
+    except ValueError:
+        return path.parts
+
+
+def is_ignored_path(repo: Path, path: Path) -> bool:
+    parts = relative_parts(repo, path)
+    if any(part in IGNORED_DIR_NAMES for part in parts):
+        return True
+    return any(parts[:len(prefix)] == prefix for prefix in IGNORED_PATH_PREFIXES)
 
 
 def line_for_offset(text: str, offset: int) -> int:
@@ -223,9 +240,21 @@ def collect_doc_refs(repo: Path, md_files: Iterable[Path], failures: list[Failur
 
 
 def discover_agent_docs(repo: Path) -> tuple[list[Path], list[Path]]:
-    agents_docs = sorted(p for p in repo.rglob("AGENTS.md") if ".git" not in p.parts)
-    dot_agents_docs = sorted((repo / ".agents").rglob("*.md")) if (repo / ".agents").is_dir() else []
-    return agents_docs, dot_agents_docs
+    agents_docs: list[Path] = []
+    for root, dirnames, filenames in os.walk(repo):
+        root_path = Path(root)
+        dirnames[:] = [
+            name for name in dirnames
+            if not is_ignored_path(repo, root_path / name)
+        ]
+        if "AGENTS.md" in filenames and not is_ignored_path(repo, root_path / "AGENTS.md"):
+            agents_docs.append(root_path / "AGENTS.md")
+
+    dot_agents_docs = sorted(
+        p for p in (repo / ".agents").rglob("*.md")
+        if not is_ignored_path(repo, p)
+    ) if (repo / ".agents").is_dir() else []
+    return sorted(agents_docs), dot_agents_docs
 
 
 def has_covering_agents_doc(repo: Path, domain_root: Path, folder: Path) -> bool:
@@ -276,7 +305,7 @@ def run(repo: Path, report_path: Path | None = None) -> tuple[list[CheckResult],
         root = repo / root_name
         if not root.exists():
             continue
-        for child in sorted(p for p in root.iterdir() if p.is_dir()):
+        for child in sorted(p for p in root.iterdir() if p.is_dir() and not is_ignored_path(repo, p)):
             results["folder-coverage"].checked += 1
             child_rel = rel(repo, child) + "/"
             if not has_covering_agents_doc(repo, root, child):
