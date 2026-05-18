@@ -26,7 +26,7 @@ After the above:
 ## Validating or Updating a Contract
 
 After the script step:
-6. The local `contracts.md` for the folder you are in
+6. The local contracts file for the folder you are in (for example, [Actions/Intros/contracts.md](../../../Actions/Intros/contracts.md))
 7. [Actions/CONTRACT-SCHEMA.md](../../../Actions/CONTRACT-SCHEMA.md) — contract format spec
 8. Run: `python3 Tools/StreamerBot/Validation/action_contracts.py --changed`
 
@@ -37,7 +37,7 @@ After the script step:
 
 ## Folder Map
 
-Load the local `AGENTS.md` for the folder you need. Load `contracts.md` when validating or changing runtime behavior.
+Load the local `AGENTS.md` for the folder you need. Load that folder's contracts file when validating or changing runtime behavior.
 
 | Folder | AGENTS.md | contracts.md |
 |---|---|---|

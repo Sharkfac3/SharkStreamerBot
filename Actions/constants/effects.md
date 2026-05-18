@@ -142,6 +142,8 @@ Operator notes:
 - `PRODUCTION_MANAGER_PORT` = `5174` — production-manager dev server port
 - `ASSETS_USER_INTROS_SOUND_SUBPATH` = `user-intros/sound/` — relative path from `ASSETS_ROOT` to user-intro sound files
 - `ASSETS_USER_INTROS_GIF_SUBPATH` = `user-intros/gif/` — relative path from `ASSETS_ROOT` to user-intro gif files
+- `INTRO_SPECIAL_ID_SOUND_FILE_PATH` = `intro_sound_file_path` — Mix It Up `Custom Intro` payload special identifier carrying the resolved absolute sound asset path
+- `INTRO_SPECIAL_ID_GIF_FILE_PATH` = `intro_gif_file_path` — Mix It Up `Custom Intro` payload special identifier carrying the resolved absolute gif asset path
 - `COLLECTION_USER_INTROS` = `"user-intros"` — collection name for the user-intros collection
 - `COLLECTION_PENDING_INTROS` = `"pending-intros"` — collection name for the pending-intros collection
 

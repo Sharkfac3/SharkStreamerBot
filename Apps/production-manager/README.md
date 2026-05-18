@@ -49,5 +49,5 @@ npm run typecheck
 | Page | Path | Purpose |
 |------|------|---------|
 | Health | `/` | Fetches `GET /health` from info-service; shows status, uptime, and collections. |
-| User Intros | `/user-intros` | Table of all user-intros records; create/edit/delete via modal form; soft-disable toggle. |
-| Pending Intros | `/pending-intros` | Table of pending-intros records; fulfill into user-intros or reject resolved redemptions. |
+| User Intros | `/user-intros` | Table of all user-intros records; create/edit/delete via modal form; enable intros with a sound file, gif file, or both. |
+| Pending Intros | `/pending-intros` | Table of pending-intros records; fulfill into user-intros or reject resolved redemptions, with filename-only sound/gif asset entry. |

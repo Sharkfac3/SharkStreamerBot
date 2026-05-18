@@ -15,7 +15,7 @@ Own Streamer.bot-side C# action work and keep live runtime behavior reliable, pa
 
 ## Owns
 
-- Runtime source-of-truth action contracts in local Actions `contracts.md` files.
+- Runtime source-of-truth action contracts in folder-local Actions contract files.
 - Runtime scripts under [Actions/](../../../Actions/) that conform to those contracts.
 - Streamer.bot paste/sync expectations for edited C# files.
 - Runtime use of [Actions/SHARED-CONSTANTS.md](../../../Actions/SHARED-CONSTANTS.md), [Actions/Helpers/AGENTS.md](../../../Actions/Helpers/AGENTS.md), and [Actions/CONTRACT-SCHEMA.md](../../../Actions/CONTRACT-SCHEMA.md).
@@ -35,7 +35,7 @@ Activate for any Streamer.bot C# action or runtime integration under [Actions/](
 
 Start with the local guide for the folder being edited, especially [Actions/Commanders/AGENTS.md](../../../Actions/Commanders/AGENTS.md), [Actions/Squad/AGENTS.md](../../../Actions/Squad/AGENTS.md), [Actions/LotAT/AGENTS.md](../../../Actions/LotAT/AGENTS.md), [Actions/Overlay/AGENTS.md](../../../Actions/Overlay/AGENTS.md), [Actions/Twitch Core Integrations/AGENTS.md](../../../Actions/Twitch%20Core%20Integrations/AGENTS.md), [Actions/Voice Commands/AGENTS.md](../../../Actions/Voice%20Commands/AGENTS.md), and adjacent folder guides under [Actions/](../../../Actions/).
 
-For a task-ordered reading guide, see [actions-scope.md](actions-scope.md).
+For a task-ordered reading guide, see [actions-scope.md](actions-scope.md), including where to load the relevant folder-specific contracts file.
 
 ## Required Workflows
 

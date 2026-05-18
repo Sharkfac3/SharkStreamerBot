@@ -6,6 +6,8 @@
 
 The app gives the operator a browser UI for viewing service health and editing info-service collections without hand-editing JSON. The implemented intro pages manage `user-intros` records and fulfill or reject captured `pending-intros` redemptions.
 
+For intro assets, the operator enters filename-only references. An intro may use a sound file, a gif file, or both.
+
 ## Runtime Contract
 
 | Item | Value |
@@ -62,9 +64,11 @@ Current UI behavior should preserve these policies:
 
 - Write `user-intros` through info-service REST routes rather than touching JSON files directly.
 - Store filenames only in records; do not store absolute asset paths in collection data.
+- Treat sound and gif as optional asset slots; enabled intros must have at least one configured asset.
 - Keep operator-only `notes` out of stream-visible output.
 - Treat `userId` as the stable key, not Twitch login or display name.
 - Expect optional `soundFile`, `gifFile`, `notes`, and `resolvedUtc` fields to be absent rather than `null`.
+- Keep wording and form help future-friendly: the current model supports sound and gif assets, and may later expand to video files or other Mix It Up / overlay-driven intro interactions.
 
 ## Pending Intros Fulfillment
 
@@ -72,9 +76,15 @@ The Pending Intros page:
 
 1. Lists all `pending-intros` records with `status === 'pending'` sorted and highlighted first.
 2. Shows user login, user ID, redemption ID, user input, reward title, status, and redeem time.
-3. Lets the operator fulfill a pending record by assigning a `soundFile`, optional `gifFile`, and `enabled` value. Fulfillment creates or updates `/info/user-intros/:userId` and then updates `/info/pending-intros/:redeemId` to `status: 'fulfilled'` with `resolvedUtc`.
+3. Lets the operator fulfill a pending record by assigning filename-only `soundFile`, filename-only `gifFile`, and `enabled` value. An intro can use either asset field or both; enabled intros require at least one asset. Fulfillment creates or updates `/info/user-intros/:userId` and then updates `/info/pending-intros/:redeemId` to `status: 'fulfilled'` with `resolvedUtc`.
 4. Lets the operator reject pending records by updating `/info/pending-intros/:redeemId` to `status: 'rejected'` with `resolvedUtc`.
 5. Avoids reverse transitions in the UI; edit `user-intros` directly for post-fulfillment rework.
+
+## Future Direction
+
+The current fulfillment model supports optional sound and gif assets because the first-chat runtime can dispatch either or both. Keep the stored fields filename-only and let runtime consumers resolve them under `Assets/`.
+
+Future intro expansion may add more optional asset or action fields such as video clips, richer Mix It Up overlay parameters, or other stream-side interactions. Add those as coordinated schema/runtime changes rather than overloading `soundFile` or `gifFile` semantics.
 
 ## shadcn/ui Status
 

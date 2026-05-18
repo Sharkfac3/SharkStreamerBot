@@ -54,9 +54,10 @@ Read these before changing admin behavior:
 3. Keep info-service schemas authoritative; do not duplicate incompatible schema rules in UI-only code.
 4. Preserve stable keys: use Twitch `userId` for `user-intros`, not login/display name.
 5. Store asset filenames in records, not absolute paths.
-6. Keep operator-only notes private; never route notes into public stream output.
-7. If route/schema assumptions change, update [PRODUCTION-MANAGER-GUIDE.md](PRODUCTION-MANAGER-GUIDE.md), [README.md](README.md), and the info-service guide together when in scope.
-8. For public wording or policy text, chain to `brand-steward` before finalizing.
+6. Treat `soundFile` and `gifFile` as independent optional asset slots; enabled intros should have at least one asset configured.
+7. Keep operator-only notes private; never route notes into public stream output.
+8. If route/schema assumptions change, update [PRODUCTION-MANAGER-GUIDE.md](PRODUCTION-MANAGER-GUIDE.md), [README.md](README.md), and the info-service guide together when in scope.
+9. For public wording or policy text, chain to `brand-steward` before finalizing.
 
 ## Validation
 
